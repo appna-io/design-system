@@ -1,0 +1,13 @@
+# FileUpload
+
+Drag-and-drop file picker with per-file progress, retry/cancel, and a consumer-provided `upload` function. Includes `<Dropzone />` as a headless primitive.
+
+<ExampleBlock for="Basic" title="Basic — selection only" />
+<ExampleBlock for="WithUploader" title="With uploader — simulated progress" />
+
+## API
+
+- `upload(file, { onProgress, signal })` — wire `fetch`, `axios`, or signed-URL flows.
+- `parallelUploads` — concurrent cap (default `3`).
+- `autoUpload` — start immediately after select (default `true`).
+- `enablePaste` — opt-in clipboard image paste.

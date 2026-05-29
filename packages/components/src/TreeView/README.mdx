@@ -1,0 +1,239 @@
+---
+title: TreeView
+status: Stable
+phase: 46
+---
+
+# TreeView
+
+`<TreeView />` is the canonical hierarchical-data primitive — file explorers, category
+pickers, JSON inspectors, taxonomy navigation. It ships the **full W3C ARIA TreeView
+keyboard pattern**, a roving tabindex, type-to-search, controlled / uncontrolled expansion
+and selection, and an async `loadChildren` slot for lazy file systems.
+
+> **Mental model**
+>
+> Tree is a `<ul role="tree">` of `<li role="treeitem">` rows; one row holds focus at a
+> time and the keyboard pattern dictates how focus moves between them. Selection,
+> expansion, and async loading are bolted on top of the focus pattern — never around it.
+
+## APIs
+
+Two equivalent APIs sharing the same DOM. Pick whichever fits the data you have.
+
+### Data-driven (default)
+
+```tsx
+<TreeView
+  ariaLabel="Project files"
+  data={[
+    { id: 'src', label: 'src', children: [
+      { id: 'src/Button.tsx', label: 'Button.tsx' },
+    ]},
+    { id: 'README.md', label: 'README.md' },
+  ]}
+  defaultExpanded={['src']}
+  onSelect={(id) => openFile(id)}
+/>
+```
+
+### Compound
+
+```tsx
+<TreeView ariaLabel="Mailbox">
+  <TreeView.Node id="inbox" label="Inbox" defaultExpanded>
+    <TreeView.Node id="inbox/today" label="Today" />
+    <TreeView.Node id="inbox/week"  label="This week" />
+  </TreeView.Node>
+  <TreeView.Node id="sent" label="Sent" />
+</TreeView>
+```
+
+Internally the compound form is walked once and converted to the same `TreeNodeData[]`
+shape — keyboard navigation, async loading, and selection math run from a single
+projection.
+
+---
+
+## Selection
+
+| `selectionMode` | Behaviour |
+| --- | --- |
+| `'none'` (rare) | Tree acts as a navigation tree only — no `aria-selected`, no callbacks. |
+| `'single'` (default) | Click / Enter / Space sets `selected`. ArrowDown moves focus **without** changing selection (per W3C). |
+| `'multiple'` | Click toggles selection (with `Ctrl`/`Cmd` for additive). `Ctrl/Cmd+A` selects all visible nodes. Pair with `showCheckboxes` to render a leading `<Checkbox>`. |
+
+```tsx
+<TreeView
+  selectionMode="multiple"
+  showCheckboxes
+  selected={selectedIds}
+  onSelectedChange={(next) => setSelectedIds(next as string[])}
+/>
+```
+
+Use `isRowSelectable` (via per-node `selectable: false`) for "group headers" that focus
+but never select.
+
+---
+
+## Expansion
+
+Uncontrolled:
+
+```tsx
+<TreeView data={data} defaultExpanded={['src', 'src/components']} />
+```
+
+Controlled:
+
+```tsx
+<TreeView data={data} expanded={expanded} onExpandedChange={setExpanded} />
+```
+
+Per-node uncontrolled (compound form):
+
+```tsx
+<TreeView.Node id="x" label="X" defaultExpanded>…</TreeView.Node>
+```
+
+---
+
+## Async children
+
+Provide `loadChildren(node)` and mark async-only branches with `hasChildren: true`. The
+tree dedupes in-flight loads per id and replaces the loading sentinel with the resolved
+children on success, or an error chip with a retry button on failure.
+
+```tsx
+<TreeView
+  data={[{ id: 'root', label: 'Cloud Drive', hasChildren: true }]}
+  loadChildren={(node) => fetch(`/api/tree?parent=${node.id}`).then((r) => r.json())}
+/>
+```
+
+The error path keeps the parent focused — consumers can retry with the inline button or
+re-trigger via `loadChildrenIfNeeded(node)` from a custom UI.
+
+---
+
+## Custom rendering
+
+`renderNode(node, state)` lets you build any per-row visual you want — icons, badges,
+metadata chips, status dots. Selection, focus, expansion math are all handled by the
+component; the `state` object is read-only context.
+
+```tsx
+<TreeView
+  data={files}
+  renderNode={(node, state) => (
+    <span className="flex items-center gap-2">
+      <span>{state.expanded ? '📂' : '📁'} {node.label}</span>
+      {node.meta?.modified && <Badge>·</Badge>}
+    </span>
+  )}
+/>
+```
+
+When `renderNode` is not provided, Tree renders the default chrome (chevron + optional
+icon + label). Provide `defaultIcon` / `expandedIcon` / `leafIcon` for a quick visual
+override without writing a full renderer.
+
+---
+
+## Keyboard (W3C TreeView pattern)
+
+| Key | Action |
+| --- | --- |
+| `ArrowDown` / `ArrowUp` | Move focus to next / previous visible row. Skips disabled nodes. |
+| `ArrowRight` (LTR) | Collapsed branch → expand. Expanded branch → focus first child. Leaf → no-op. |
+| `ArrowLeft` (LTR) | Expanded branch → collapse. Collapsed branch / leaf → focus parent. |
+| `Home` / `End` | Focus first / last visible row. |
+| `Enter` / `Space` | Single-mode → set selection. Multi-mode → toggle selection. Branch in `selectionMode="none"` → expand/collapse. `Enter` on a branch in single-mode also toggles expansion. |
+| `*` | Expand every sibling branch under the focused node's parent. |
+| Letters / digits | Type-to-search aggregator (500ms buffer). Jumps focus to the next visible row whose **string** label starts with the buffer. Non-string labels are skipped. |
+| `Ctrl/Cmd+A` | Multi-mode only — select all visible, selectable rows. |
+
+The pattern automatically swaps `ArrowLeft`/`ArrowRight` semantics in RTL via the
+browser's native direction-aware keyboard event flow.
+
+---
+
+## Accessibility
+
+- Root: `<ul role="tree" aria-label={ariaLabel} aria-multiselectable={selectionMode === 'multiple'}>`.
+- Row: `<li role="treeitem" aria-level={depth} aria-posinset aria-setsize aria-expanded aria-selected aria-disabled aria-busy tabIndex={focused ? 0 : -1}>`.
+- Children group: `<ul role="group">` nested inside its parent `<li>`.
+- One roving tabindex — the tree occupies a single tab stop.
+- Loading + error sentinels use `role="none"` so screen-reader navigation skips them; the
+  visible label still announces via the live region around the sentinel.
+- Decorative chevrons and icons are `aria-hidden="true"`; the accessible name comes from
+  the row's label `<span>` (or the consumer's `renderNode`).
+- Type-to-search keystrokes are captured and `preventDefault()`-ed only when they match a
+  searchable character — text editing inside `renderNode` controls is unaffected.
+
+Zero `jest-axe` violations across default, sortable, single + multi selection, async
+loading, disabled, custom render, compound, and RTL modes.
+
+---
+
+## Internationalization
+
+`<I18nProvider>` doesn't exist yet, so TreeView accepts a `translations` prop that
+overlays English defaults:
+
+```tsx
+<TreeView translations={{ expand: 'הרחב', collapse: 'כווץ', loading: 'טוען…' }} />
+```
+
+| Key | Default | Used for |
+| --- | --- | --- |
+| `expand` | "Expand" | reserved — chevron `aria-label` when surfaced |
+| `collapse` | "Collapse" | reserved |
+| `loading` | "Loading…" | async sentinel text + `Spinner` accessible name |
+| `loadError` | "Failed to load" | async-error label |
+| `retry` | "Retry" | retry button label |
+
+When `<I18nProvider>` lands, the same keys will be consumed from context with the prop
+acting as an override.
+
+---
+
+## RTL
+
+- Indent uses `paddingInlineStart` so depth flips automatically.
+- `ArrowLeft` / `ArrowRight` semantics swap in RTL via the browser's direction handling.
+- `showLines` connectors use `border-inline-start` so they sit on the logical start edge.
+
+---
+
+## Performance
+
+- `flattenTree` is memoized on `data` + `expanded` identity; the projection rebuilds
+  only when the visible row list could change.
+- Selection / expansion lookups are `O(1)` (`Set`).
+- Type-to-search is `O(visible)` per keystroke — no precomputed index needed at typical
+  tree sizes.
+
+### Out of scope (deferred)
+
+- **Virtualization** — TreeView V1 renders every visible row. Trees with 10k+ nodes
+  should wait for the post-V1 virtualized variant (which will reuse `flattenTree` as the
+  source row list).
+- **Drag-and-drop** — HTML5 DnD + keyboard pick-up/drop pattern documented in the plan;
+  follow-up lane.
+
+---
+
+## Anti-patterns
+
+- Don't render arbitrary interactive controls (buttons, links) **inside** a row — that
+  defeats the single-tab-stop pattern. Use `onSelect` / `onSelectedChange` for actions.
+- Don't drive the tree with a Set or Map in `selected` / `expanded`. The component
+  normalises both into Sets internally; the public contract is strings and string
+  arrays.
+- Don't pass `selectionMode="multiple"` without `getRowId`-equivalent stable `id`s on
+  every node — selection state lives on those ids.
+- Don't fork the visual chrome by overriding `treeItemRecipe` classes alone — write a
+  `renderNode` instead. Recipe overrides apply to every row uniformly, but `renderNode`
+  branches per node state.

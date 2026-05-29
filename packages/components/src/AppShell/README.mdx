@@ -1,0 +1,170 @@
+# AppShell
+
+`<AppShell />` is the canonical product-layout primitive — the outermost frame for any
+logged-in dashboard, admin console, docs site, or mail-style app. It composes four named
+slots (`header`, `sidebar`, `aside`, `footer`) plus main content into a CSS-Grid-driven
+shell with two layout variants, responsive sidebar collapse to a `<Drawer>` on mobile,
+optional desktop rail-collapse, RTL-aware logical positioning, a skip-to-content link, and
+a `useAppShell()` context hook for header components.
+
+- **Slot props, not subparts**: header / sidebar / aside / footer are passed as props, so
+  any component (yours, the DS's, a third party's) drops in.
+- **Two layout variants** — `default` (Notion / VS Code: sidebar full height) and `inset`
+  (GitHub / Linear: header full width).
+- **Responsive by default** — below `sidebarBreakpoint` (`md`), the sidebar moves into a
+  `<Drawer>`; the header's hamburger button toggles it via the context hook.
+- **Rail-collapse** — `sidebarCollapsed` swaps the sidebar between full and rail widths
+  with a CSS transition.
+- **Skip-to-content** link, focusable on Tab, lands focus directly inside `<main>`.
+
+## Anatomy
+
+```tsx
+import { AppShell, useAppShell } from 'apx-ds';
+
+function Hamburger() {
+  const { toggleSidebar } = useAppShell();
+  return <Button onClick={toggleSidebar} aria-label="Toggle menu">☰</Button>;
+}
+
+<AppShell
+  header={<TopBar />}
+  sidebar={<SidebarNav />}
+  footer={<Footer />}
+>
+  <PageContent />
+</AppShell>
+```
+
+## API
+
+| Prop                       | Values                                          | Default                   |
+| -------------------------- | ----------------------------------------------- | ------------------------- |
+| `layout`                   | `default` &middot; `inset`                      | `default`                 |
+| `header`                   | `ReactNode`                                     | —                         |
+| `sidebar`                  | `ReactNode`                                     | —                         |
+| `aside`                    | `ReactNode`                                     | —                         |
+| `footer`                   | `ReactNode`                                     | —                         |
+| `sidebarPosition`          | `start` &middot; `end` (logical, RTL-aware)     | `start`                   |
+| `sidebarWidth`             | `number` (px)                                   | `260`                     |
+| `sidebarCollapsedWidth`    | `number` (px)                                   | `64`                      |
+| `sidebarCollapsed`         | `boolean` (controlled)                          | —                         |
+| `defaultSidebarCollapsed`  | `boolean`                                       | `false`                   |
+| `sidebarBreakpoint`        | `sm` &middot; `md` &middot; `lg` &middot; `xl`  | `md`                      |
+| `sidebarMobileOpen`        | `boolean` (controlled)                          | —                         |
+| `defaultSidebarMobileOpen` | `boolean`                                       | `false`                   |
+| `sidebarLabel`             | `string`                                        | `"Primary navigation"`    |
+| `headerHeight`             | `number` (px)                                   | `56`                      |
+| `headerSticky`             | `boolean`                                       | `true`                    |
+| `headerVariant`            | `default` &middot; `bordered` &middot; `floating` | `default`               |
+| `headerOffset`             | `number` (px reserved above the grid)           | `0`                       |
+| `asidePosition`            | `start` &middot; `end`                          | `end`                     |
+| `asideWidth`               | `number` (px)                                   | `320`                     |
+| `asideOpen`                | `boolean` (controlled)                          | —                         |
+| `defaultAsideOpen`         | `boolean`                                       | `true`                    |
+| `asideLabel`               | `string`                                        | `"Details"`               |
+| `main`                     | `{ padding, maxWidth, centered }`               | `{ padding: 6, maxWidth: 'full', centered: true }` |
+| `skipToContent`            | `boolean`                                       | `true`                    |
+| `skipToContentLabel`       | `string`                                        | `"Skip to content"`       |
+
+`main.padding` accepts `0 \| 2 \| 4 \| 6 \| 8 \| 10 \| 12`. `main.maxWidth` accepts
+`full \| sm \| md \| lg \| xl \| 2xl \| 7xl`. Both are Tailwind-spacing-scale literal keys so
+the JIT scanner picks every variant up at build time.
+
+## `useAppShell()` hook
+
+Header / sidebar children call this hook to inspect or mutate shell state:
+
+| Field                | Type             | Notes                                                |
+| -------------------- | ---------------- | ---------------------------------------------------- |
+| `layout`             | `AppShellLayout` | Current layout variant                               |
+| `sidebarPosition`    | `start \| end`   | Resolved sidebar logical position                    |
+| `isMobile`           | `boolean`        | Whether the viewport is below `sidebarBreakpoint`    |
+| `isSidebarCollapsed` | `boolean`        | Desktop rail-collapse state                          |
+| `isSidebarOpen`      | `boolean`        | Mobile drawer open state                             |
+| `isAsideOpen`        | `boolean`        | Aside open state                                     |
+| `toggleSidebar()`    | `() => void`     | **Smart**: flips drawer on mobile, rail on desktop   |
+| `collapseSidebar()`  | `() => void`     | Force desktop rail-collapse                          |
+| `expandSidebar()`    | `() => void`     | Force desktop rail-expand                            |
+| `openSidebar()`      | `() => void`     | Open the mobile drawer                               |
+| `closeSidebar()`     | `() => void`     | Close the mobile drawer                              |
+| `toggleAside()`      | `() => void`     | Flip aside open state                                |
+| `openAside()`        | `() => void`     | Open the aside                                       |
+| `closeAside()`       | `() => void`     | Close the aside                                      |
+
+`toggleSidebar()` is the function header hamburger buttons should call — it picks the right
+behavior automatically based on viewport size.
+
+## Layout variants
+
+| Variant   | Header position                          | Used by                |
+| --------- | ---------------------------------------- | ---------------------- |
+| `default` | Header occupies the main column only; sidebar extends full height | Notion, Mantine, VS Code |
+| `inset`   | Header spans every column; sidebar starts below | GitHub, Linear, Vercel  |
+
+## Responsive behavior
+
+- The `sidebarBreakpoint` prop (default `md` = 768px) determines when the inline sidebar
+  collapses into a `<Drawer>`. Above the breakpoint, the sidebar sits in the grid; below,
+  it's removed from the grid and rendered into a drawer that the header hamburger opens.
+- `useAppShell().isMobile` reflects this state — header components can show / hide a
+  hamburger button accordingly.
+- `useAppShell().toggleSidebar()` does the right thing on either side of the breakpoint:
+  on mobile it toggles the drawer, on desktop it toggles the rail.
+
+## Examples
+
+<ExampleBlock for="BasicLayout" title="Basic — header + sidebar + footer dashboard" />
+<ExampleBlock for="InsetLayout" title="Inset — header spans every column" />
+<ExampleBlock for="CollapsibleSidebar" title="Collapsible — rail collapse via useAppShell()" />
+<ExampleBlock for="WithAside" title="With aside — controlled detail panel" />
+<ExampleBlock for="SidebarEnd" title="Sidebar end — logical-end side panel" />
+<ExampleBlock for="FloatingHeader" title="Floating header — detached chrome with shadow" />
+<ExampleBlock for="CenteredMain" title="Centered main — docs-site readability" />
+<ExampleBlock for="MinimalNoChrome" title="Minimal — main only" />
+
+## Accessibility
+
+- The `<main>` element is the only true landmark; it carries `tabIndex={-1}` so the
+  skip-to-content link can focus it directly without making it focusable to keyboard
+  navigation in normal use.
+- The header is wrapped in `<header role="banner">`.
+- The sidebar is wrapped in `<aside aria-label={sidebarLabel}>` (`"Primary navigation"` by
+  default — override if the sidebar is something other than navigation).
+- The aside slot is wrapped in `<aside aria-label={asideLabel}>` (`"Details"` by default).
+- The footer is wrapped in `<footer role="contentinfo">`.
+- The skip-to-content link is `sr-only` until focused, then becomes a visible pill at the
+  top-left of the viewport. Pressing Enter focuses and scrolls to `<main>`.
+- axe-core: zero violations across default / inset / sidebar-end / collapsed configurations.
+
+## RTL
+
+- `sidebarPosition` and `asidePosition` are **logical** (`start` / `end`), not physical
+  (`left` / `right`). Under `dir="rtl"`, `start` becomes the right side.
+- The sidebar / aside inner borders use `border-inline-start` / `border-inline-end` so the
+  visible separation always lands between the panel and main content, regardless of writing
+  direction.
+
+## Theming
+
+AppShell reads from `theme.components.AppShell.styleOverrides.{root, header, sidebar, aside, main, footer, skipLink}`. Every slot shares the same component key so a single theme block
+targets the whole family. Consumer `className` always wins via `tailwind-merge`.
+
+## Bundle
+
+Target: **< 5 KB gz** (excluding `<Drawer>`, which is externalized — it's already in the
+bundle if the consumer uses it elsewhere, and AppShell only pays its cost when
+`sidebarBreakpoint` actually triggers).
+
+## Do / Don't
+
+- **Do** pass slot props (`header={...}`) — they're easier to reason about than nested
+  children and the grid template is computed from "which slots are populated".
+- **Do** use `useAppShell()` inside your header / sidebar to read `isMobile` and call
+  `toggleSidebar()` — that's the canonical hamburger button pattern.
+- **Do** set `main.maxWidth` on docs / marketing surfaces to keep prose readable.
+- **Don't** nest one AppShell inside another. Use a `<Stack>` / `<Grid>` for sub-layouts.
+- **Don't** override `<main>`'s padding via `className` — use the `main.padding` prop so
+  the recipe variant stays consistent and theme-overridable.
+- **Don't** add your own skip-link — AppShell ships one. Set `skipToContent={false}` if you
+  truly need to suppress it.

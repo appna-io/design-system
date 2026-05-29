@@ -1,0 +1,32 @@
+import type { FileUploadTranslations } from './FileUpload.types';
+
+export const DEFAULT_FILE_UPLOAD_TRANSLATIONS: FileUploadTranslations = {
+  dropzoneLabel: 'Upload files',
+  dropzonePromptIdle: 'Drag files here or',
+  dropzonePromptDragOver: 'Drop here!',
+  dropzonePromptDragReject: "These files can't be uploaded",
+  browseButton: 'Browse…',
+  pasteHint: 'or paste an image (⌘V)',
+  acceptedTypes: (types) => `Accepted: ${types.join(', ')}`,
+  maxSizeHint: (max) => `Up to ${max} each`,
+  maxFilesHint: (max) => `Maximum ${max} files`,
+  errorTooLarge: (max) => `File must be smaller than ${max}`,
+  errorTooSmall: (min) => `File must be at least ${min}`,
+  errorWrongType: 'File type is not allowed',
+  errorTooManyFiles: (max) => `Maximum ${max} files allowed`,
+  status: {
+    pending: 'Pending',
+    uploading: 'Uploading',
+    success: 'Uploaded',
+    error: 'Failed',
+    cancelled: 'Cancelled',
+  },
+  uploadingFile: (name) => `Uploading ${name}`,
+  uploadComplete: (name) => `${name} uploaded`,
+  uploadFailed: (name) => `${name} failed to upload`,
+  retry: 'Retry',
+  cancel: 'Cancel',
+  remove: 'Remove',
+  removeAll: 'Remove all',
+  uploadAll: 'Upload all',
+};

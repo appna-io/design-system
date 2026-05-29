@@ -1,0 +1,153 @@
+# NavigationMenu
+
+`<NavigationMenu />` is the horizontal top-nav primitive — the menubar that sits inside a marketing
+header or a SaaS app's chrome. It pairs flat links with hoverable / clickable dropdown panels, and
+ships with the W3C Menubar keyboard pattern, an animated active-state indicator, and mega-menu
+support out of the box.
+
+- **Compound primitive**: `NavigationMenu.Item`, `.Trigger`, `.Link`, `.Content`, `.Group`,
+  `.Featured`, `.Indicator`.
+- **W3C Menubar keyboard pattern** — Arrow Left/Right between items (vertical: Up/Down), ArrowDown
+  to open a dropdown, ArrowUp to close, Home/End for first/last, Esc to close, type-to-search.
+- **Hover + click triggers** — `trigger="both"` is the default (mouse + touch + keyboard all work);
+  pin to `'hover'` or `'click'` for power-user surfaces.
+- **Mega-menu** — `<NavigationMenu.Content variant="mega" columns={3}>` widens the panel and lays
+  children in a grid. Use `<NavigationMenu.Group>` for labeled columns + `<NavigationMenu.Featured>`
+  for a promo slot.
+- **Animated indicator** — `indicator` prop turns on a single absolutely-positioned `<div>` that
+  slides between items via CSS transforms. Tracks (in priority): the open dropdown → the focused
+  trigger → the `activeHref`-matched item.
+- **Active-state matching** at the root via `activeHref` + `activeMatchStrategy` (`exact` /
+  `prefix`). Each Link self-decides `aria-current="page"` via the shared `isActiveHref` helper
+  (same one Sidebar uses).
+- **`asChild`** on `Link` / `Trigger` for router-Link integration.
+- **Mobile collapse** — `mobileBreakpoint="md"` hides the menu under `md`; AppShell's hamburger +
+  Drawer take over.
+- **i18n** — en / he / ar bundles, `<I18nProvider>`-aware. Override per-instance via `translations`.
+
+## Anatomy
+
+```tsx
+import { NavigationMenu } from 'apx-ds';
+
+function TopNav({ activeHref }: { activeHref: string }) {
+  return (
+    <NavigationMenu activeHref={activeHref} indicator>
+      <NavigationMenu.Item>
+        <NavigationMenu.Trigger>Product</NavigationMenu.Trigger>
+        <NavigationMenu.Content variant="mega" columns={3}>
+          <NavigationMenu.Group label="Build">
+            <NavigationMenu.Link href="/dev">Developers</NavigationMenu.Link>
+            <NavigationMenu.Link href="/themes">Designers</NavigationMenu.Link>
+          </NavigationMenu.Group>
+          <NavigationMenu.Group label="Resources">
+            <NavigationMenu.Link href="/docs">Docs</NavigationMenu.Link>
+          </NavigationMenu.Group>
+          <NavigationMenu.Featured>
+            <Card>…showcase content…</Card>
+          </NavigationMenu.Featured>
+        </NavigationMenu.Content>
+      </NavigationMenu.Item>
+
+      <NavigationMenu.Item>
+        <NavigationMenu.Link href="/pricing">Pricing</NavigationMenu.Link>
+      </NavigationMenu.Item>
+
+      <NavigationMenu.Item>
+        <NavigationMenu.Link href="/docs">Docs</NavigationMenu.Link>
+      </NavigationMenu.Item>
+    </NavigationMenu>
+  );
+}
+```
+
+## API — `<NavigationMenu>` root
+
+| Prop                  | Type                                                          | Default              | Notes                                                                 |
+| --------------------- | ------------------------------------------------------------- | -------------------- | --------------------------------------------------------------------- |
+| `variant`             | `default` &middot; `ghost` &middot; `pill`                   | `default`            | Visual chrome family.                                                 |
+| `size`                | `sm` &middot; `md` &middot; `lg`                              | `md`                 | Propagates to subparts.                                              |
+| `orientation`         | `horizontal` &middot; `vertical`                              | `horizontal`         | Layout axis — keyboard arrows swap accordingly.                       |
+| `trigger`             | `click` &middot; `hover` &middot; `both`                      | `both`               | Dropdown interaction mode.                                            |
+| `hoverDelay`          | `number`                                                      | `150`                | Ms before opening on pointer-enter.                                   |
+| `closeDelay`          | `number`                                                      | `250`                | Ms before closing on pointer-leave.                                   |
+| `indicator`           | `boolean`                                                     | `false`              | Render the animated underline / pill / bar.                           |
+| `indicatorVariant`    | `underline` &middot; `pill` &middot; `bar`                    | `underline`          | Indicator visual.                                                     |
+| `activeHref`          | `string`                                                      | —                    | Current URL path.                                                     |
+| `activeMatchStrategy` | `exact` &middot; `prefix`                                     | `exact`              | How Links decide they're active.                                      |
+| `value`               | `string` &middot; `null`                                      | —                    | Controlled open dropdown id.                                          |
+| `defaultValue`        | `string`                                                      | —                    | Initial open dropdown id.                                             |
+| `onValueChange`       | `(value: string \| null) => void`                             | —                    | Fires when the open dropdown changes.                                 |
+| `mobileBreakpoint`    | `sm` &middot; `md` &middot; `lg` &middot; `xl`                | —                    | Hide under this breakpoint (AppShell handoff).                       |
+| `translations`        | `Partial<NavigationMenuTranslations>`                         | —                    | Hard-coded translation override.                                      |
+| `ariaLabel`           | `string`                                                      | `"Main navigation"`  | `<nav>` accessible name.                                              |
+| `ariaLabelledBy`      | `string`                                                      | —                    | Alternative to `ariaLabel`.                                           |
+
+## Subparts
+
+| Component                   | Element            | Notes                                                                                       |
+| --------------------------- | ------------------ | ------------------------------------------------------------------------------------------- |
+| `<NavigationMenu.Item>`     | `<li role="none">` | Wraps a top-level entry. Auto-detects whether it has a Trigger / Link child.               |
+| `<NavigationMenu.Trigger>`  | `<button>`         | Focusable dropdown opener; auto-renders a chevron. Supports `asChild`.                     |
+| `<NavigationMenu.Link>`     | `<a>`              | Top-level or panel link. Sets `aria-current="page"` when active. Supports `asChild`.       |
+| `<NavigationMenu.Content>`  | `<div role="menu">`| Portalled dropdown panel. `variant="mega"` switches to grid layout.                        |
+| `<NavigationMenu.Group>`    | `<div>` + `<ul>`   | Labeled column inside a mega-menu. Renders an `<h3>` for the visible label.                |
+| `<NavigationMenu.Featured>` | `<div>`            | Promo / showcase slot inside a mega-menu.                                                  |
+| `<NavigationMenu.Indicator>`| `<div>`            | Auto-rendered when the root's `indicator` prop is on. Slides between items.                |
+
+## Keyboard
+
+Top-level (focus on a Trigger or Link):
+
+| Key                                    | Action                                                                                       |
+| -------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `ArrowLeft` / `ArrowRight` (LTR)        | Previous / next item. Wraps. Direction flips under RTL.                                     |
+| `ArrowDown`                             | If item has a dropdown → open + focus first link. Otherwise no-op.                          |
+| `ArrowUp`                               | If a dropdown is open under this item → close it.                                            |
+| `Home` / `End`                          | First / last item.                                                                           |
+| `Enter` / `Space`                       | Activate link / toggle dropdown.                                                             |
+| `Esc`                                   | Close any open dropdown; focus stays on trigger.                                             |
+| `Tab`                                   | Leave NavigationMenu (single tab stop for the entire menubar).                              |
+| Type-to-search                         | Type letters within 500ms to jump to a matching item.                                        |
+
+Inside an open dropdown:
+
+| Key                                    | Action                                                                                       |
+| -------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `ArrowDown` / `ArrowUp`                | Next / previous link in the panel.                                                           |
+| `ArrowLeft` / `ArrowRight`             | Close + focus previous / next top-level item.                                               |
+| `Enter` / `Space`                     | Activate the focused link.                                                                   |
+| `Esc`                                  | Close the panel; return focus to the trigger.                                                |
+| `Tab`                                  | Close the panel; let the browser's natural tab order take over.                              |
+
+## Accessibility
+
+- Root: `<nav aria-label="Main navigation">` (i18n-driven label) wrapping `<ul role="menubar">`.
+- Item: `<li role="none">` — purely structural, not focusable.
+- Trigger: `<button role="menuitem" aria-haspopup="menu" aria-expanded={open} aria-controls={contentId}>`.
+- Link: `<a role="menuitem" aria-current={isActive ? "page" : undefined}>`.
+- Content: `<div role="menu" aria-labelledby={triggerId}>` portalled at the body root.
+- Roving tabindex across all top-level items — exactly one is in the tab order at a time.
+- Indicator is `aria-hidden="true"`.
+- axe-core: 0 violations across all variants and orientations.
+
+## RTL
+
+- `flex-direction: row` flips browser-natively.
+- ArrowLeft / ArrowRight semantically swap.
+- Indicator x calculation handles RTL math (uses logical start / end).
+- Dropdown anchoring inherits Floating UI's RTL handling.
+- Logical-only padding / margin classes (`ms-*`, `me-*`, `start-*`, `end-*`).
+
+## i18n
+
+Three bundles ship out of the box: `DEFAULT_NAVIGATION_MENU_TRANSLATIONS` (en),
+`HE_NAVIGATION_MENU_TRANSLATIONS`, `AR_NAVIGATION_MENU_TRANSLATIONS`. Wire them via
+`<I18nProvider messages={{ navigationMenu: HE_NAVIGATION_MENU_TRANSLATIONS }}>` or pass them
+directly via `<NavigationMenu translations={…}>`.
+
+| Key                       | Default (en)            | Notes                                          |
+| ------------------------- | ----------------------- | ---------------------------------------------- |
+| `label`                   | "Main navigation"       | `<nav>` accessible name.                       |
+| `toggleSection`           | "Toggle {label} menu"   | Trigger sr-only label (only used when label is non-string). |
+| `activeItem`              | "current page"          | sr-only suffix after the active link.          |

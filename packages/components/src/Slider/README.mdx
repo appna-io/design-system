@@ -1,0 +1,163 @@
+## Overview
+
+`<Slider />` is the canonical numeric range input. One component, two modes:
+
+- **Single** — one thumb, returns `number`.
+- **Range** — N≥2 thumbs, returns `number[]` (sorted, constrained by `minStepsBetweenThumbs`).
+
+It implements the W3C Slider authoring pattern in full: each thumb is its own `role="slider"`,
+focusable, with arrow / page / home / end keyboard support. Pointer-down on the track jumps the
+nearest thumb. Vertical orientation reads **top-as-max** in both LTR and RTL.
+
+The thumb scale-up on drag and the fill width transitions are **pure CSS** — no Motion-library
+import. `prefers-reduced-motion` collapses them via Tailwind's `motion-reduce:` variant.
+
+## Anatomy
+
+```text
+[ track [ fill ] [ mark · mark · mark ] [ thumb ] [ value label ] ]
+                                          [ thumb ] [ value label ]      (range mode)
+```
+
+- **track** — the off-state rail. Variant changes its tone but not its length.
+- **fill** — the on-state colored portion. Single mode: `0% → thumb`. Range mode: `lo → hi`.
+- **thumb** — each `role="slider"`. `data-dragging` scales it up, `data-focus-visible` paints
+  the focus ring colored to match the active palette.
+- **mark** — small tick dot at a given mark value (optionally with a label).
+- **valueLabel** — floating value bubble above (horizontal) / beside (vertical) each thumb.
+
+The thumbs are the only interactive elements in the a11y tree. The track + fill + marks are
+`aria-hidden="true"`. The hidden `<input type="range">` siblings exist purely for form
+submission.
+
+## Examples
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="Range" />
+
+<ExampleBlock for="Marks" />
+
+<ExampleBlock for="Vertical" />
+
+<ExampleBlock for="ValueLabel" />
+
+<ExampleBlock for="FormattedValue" />
+
+<ExampleBlock for="Variants" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="Colors" />
+
+<ExampleBlock for="Disabled" />
+
+<ExampleBlock for="Invalid" />
+
+<ExampleBlock for="Continuous" />
+
+<ExampleBlock for="ManyThumbs" />
+
+## Props
+
+<PropsTable />
+
+## Accessibility
+
+- **Each thumb** is `role="slider"` with `aria-valuemin` / `aria-valuemax` / `aria-valuenow` /
+  `aria-valuetext` / `aria-orientation`. Each thumb is independently focusable via Tab.
+- **Range mode** wraps thumbs in `role="group"` with `aria-label` / `aria-labelledby` from the
+  root props, so screen readers announce the group name before each thumb's value.
+- **Per-thumb labels** default to `"Minimum value"` / `"Maximum value"` for two-thumb ranges and
+  `"Value N"` for N-thumb ranges. Override with `getThumbAriaLabel(index)`.
+- **Value text** is read from `aria-valuetext`. Use `getAriaValueText(value, index)` for
+  domain-specific strings ("$12.99", "1:42 remaining").
+- **W3C Slider keyboard pattern**:
+  - `←` / `→` → ±step (horizontal RTL mirrored automatically)
+  - `↑` / `↓` → ±step (always direction-agnostic)
+  - `Shift + arrow` → ±10 steps
+  - `PageUp` / `PageDown` → ±10 steps
+  - `Home` / `End` → min / max (clamped by neighbor thumbs in range mode)
+- **`invalid`** sets `aria-invalid` on every thumb and adds a danger ring.
+- **`disabled`** sets `aria-disabled` on every thumb, removes them from the tab order, and
+  blocks pointer + keyboard interaction.
+- **axe-core** passes across the 4 variants × 7 colors × 3 sizes matrix, plus disabled / invalid
+  / range / vertical / continuous states.
+- **Touch targets** meet WCAG 2.5.5 — the visible thumb is 14 / 18 / 22 px but the recipe pads
+  the hit area via `padding` on focus / hover so finger taps always have ≥ 24-px reach.
+
+## Theming
+
+```tsx
+<ThemeProvider
+  theme={defineTheme({
+    components: {
+      Slider: {
+        defaultProps: { variant: 'soft', size: 'lg', color: 'success' },
+        styleOverrides: {
+          track: 'shadow-inner',
+          thumb: 'shadow-md ring-offset-2',
+          fill: 'shadow-sm',
+          valueLabel: 'rounded-full bg-success text-success-contrast',
+        },
+      },
+    },
+  })}
+>
+  {children}
+</ThemeProvider>
+```
+
+Instance-level overrides win via `tailwind-merge`:
+
+```tsx
+<Slider className="opacity-90" sx={{ radius: 'lg' }}>
+  …
+</Slider>
+```
+
+## Pointer interaction
+
+- **Track click** — picks the nearest thumb (lowest-index tie-break), focuses it, jumps it to
+  the pointer position, and starts a drag.
+- **Thumb drag** — `pointerdown` on a thumb starts a drag without jumping the position; the
+  thumb tracks the pointer until release. Listeners are attached to `window`, so the drag
+  survives the pointer leaving the track (matches native `<input type="range">`).
+- **Continuous mode** (`step={null}`) — no snapping. The thumb follows the pointer position to
+  the fractional value. Useful for analog scrub bars; pair with `formatValue` to round just the
+  displayed text.
+
+## RTL
+
+- **Horizontal**: pointer X is mirrored automatically (rightward gesture still means "toward
+  max"). Arrow keys are mirrored to match. Use `<DirectionProvider dir="rtl">` or set
+  `<html dir="rtl">`.
+- **Vertical**: direction-agnostic. Top is always max in both LTR and RTL.
+
+## Form participation
+
+Pass `name` to emit hidden `<input type="range">` elements (one per thumb):
+
+```tsx
+<Slider name="volume" defaultValue={70} />          // FormData → volume=70
+<Slider name="price" mode="range" defaultValue={[10, 50]} />
+//   → FormData → price-min=10, price-max=50
+<Slider name="band" mode="range" defaultValue={[10, 30, 60]} />
+//   → FormData → band-0=10, band-1=30, band-2=60
+```
+
+The native `<input type="range">` is the right shape for form submission — every backend that
+already speaks form-encoded numbers reads these correctly without a schema change.
+
+## Do / Don't
+
+- **Do** use Slider for **bounded numeric input** where the bounds are meaningful (volume,
+  opacity, price filters, EQ bands).
+- **Do** pair `onChange` with `onChangeEnd` when the commit is expensive: render a preview
+  during drag, persist on release.
+- **Do** use `step={null}` for analog-feel scrubbers (audio playhead, color picker).
+- **Don't** use Slider for **unbounded numeric input** — that's `<NumberInput />` (Phase 29).
+- **Don't** use Slider for **categorical selection** — that's `<RadioGroup />` (Phase 11) or
+  `<ToggleGroup />` (Phase 30). Slider implies a continuous scale, even at low step counts.
+- **Don't** rely on the visible value label as the only way to read the value — assistive tech
+  reads `aria-valuetext`. If your formatted text matters, set `getAriaValueText`.

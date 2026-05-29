@@ -1,0 +1,69 @@
+# Getting started
+
+`apx-ds` is a themable, RTL-ready, fully overridable React component library. This page walks
+through installing it in a fresh Next.js app and wiring up the theme.
+
+<Callout type="info" title="Phase 4 preview">
+  The library is still under active development. Only the throwaway `Placeholder` component is
+  shipped today — the real `Button` arrives in Phase 5.
+</Callout>
+
+## Install
+
+```bash
+npm install apx-ds
+# or
+pnpm add apx-ds
+```
+
+## Wire up the provider
+
+In your root layout, mount `<ThemeProvider>` and inject `<ThemeScript />` in the document head to
+prevent FOUC:
+
+```tsx
+import { ThemeProvider, ThemeScript } from 'apx-ds';
+import 'apx-ds/styles/reset.css';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
+      <body>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+## Configure Tailwind
+
+`apx-ds` ships a Tailwind preset that maps DS tokens to Tailwind theme keys. Add it to your
+`tailwind.config.ts`:
+
+```ts
+import { apxTailwindPreset } from 'apx-ds/tailwind-preset';
+
+export default {
+  presets: [apxTailwindPreset],
+  content: ['./src/**/*.{ts,tsx,mdx}'],
+};
+```
+
+Once configured, class names like `bg-primary`, `text-fg`, `border-border` resolve via DS CSS
+variables and react to mode / variant / direction changes automatically.
+
+## Use a component
+
+```tsx
+import { Placeholder } from 'apx-ds';
+
+export default function Page() {
+  return <Placeholder tone="primary">Hello, apx</Placeholder>;
+}
+```
+
+Open the [components index](/components) to see everything that's available today.

@@ -1,0 +1,175 @@
+# Timeline
+
+`<Timeline />` ships the **chronological event list** — audit logs, activity feeds, order tracking, version history, release roadmaps. One primitive owns the dot/connector rhythm, the timestamp formatting, the tone semantics, and the optional disclosure pattern, so consumers stop hand-rolling these every time.
+
+```tsx
+import { Timeline } from 'apx-ds';
+
+<Timeline
+  items={[
+    { id: '1', title: 'Order placed',   timestamp: t1, tone: 'success' },
+    { id: '2', title: 'Shipped',        timestamp: t2, tone: 'info', active: true },
+    { id: '3', title: 'Out for delivery', timestamp: null, tone: 'neutral' },
+  ]}
+/>
+
+<Timeline aria-label="Repository activity">
+  <Timeline.Item tone="success" timestamp={t1}>
+    <Timeline.Title>Merged PR #142</Timeline.Title>
+    <Timeline.Description>Added the new dashboard tiles.</Timeline.Description>
+  </Timeline.Item>
+</Timeline>
+```
+
+---
+
+## When to reach for it
+
+- **Order tracking** — Placed → Packed → Shipped → Delivered.
+- **Activity feeds** — actor + verb + target + media.
+- **Audit logs** — security events, deploy history, config changes.
+- **Release roadmaps** — vertical or horizontal milestones.
+- **About / story pages** — alternating layout for marketing surfaces.
+
+When events are **forward-looking** (current + remaining steps), reach for **`<Stepper />`** instead — same visual DNA, different semantics.
+
+---
+
+## Prop-driven vs compound
+
+The two APIs share the same DOM. Pick prop-driven for uniform entries; pick compound when each entry needs bespoke markup.
+
+```tsx
+// Prop-driven
+<Timeline items={items} />
+
+// Compound — same render tree
+<Timeline>
+  {items.map((item) => (
+    <Timeline.Item key={item.id} tone={item.tone} timestamp={item.timestamp}>
+      <Timeline.Title>{item.title}</Timeline.Title>
+      <Timeline.Description>{item.description}</Timeline.Description>
+    </Timeline.Item>
+  ))}
+</Timeline>
+```
+
+When any `<Timeline.Item>` child is present, the `items` prop is ignored.
+
+---
+
+## Tones + `active`
+
+Five semantic tones (`info` / `success` / `warning` / `danger` / `neutral`) map to palette role tokens. The `active` flag is **separate** — it adds a soft pulsing ring for the "current" event without changing the tone, so "in transit (info, active)" reads as a teal dot with a teal ring, while "shipped (success)" reads as a solid green dot.
+
+```tsx
+<Timeline.Item tone="info" active>
+  <Timeline.Title>In transit</Timeline.Title>
+</Timeline.Item>
+```
+
+The pulse animation honors `prefers-reduced-motion` (it drops to a static ring).
+
+---
+
+## Timestamps
+
+```tsx
+timestampFormat="relative"   // "3 days ago"  (default)
+timestampFormat="absolute"   // "May 1, 2026, 08:14"
+timestampFormat={(d) => `T+${d.toISOString()}`}  // fully custom
+```
+
+| Input                  | Render                                                                                              |
+| ---------------------- | --------------------------------------------------------------------------------------------------- |
+| `Date`                 | `<time dateTime={iso}>{formatted}</time>` via `Intl.RelativeTimeFormat` / `Intl.DateTimeFormat`. |
+| `string`               | `<span>{string}</span>` — passthrough. Use for pre-formatted values like `"Yesterday"`.            |
+| `null` / `undefined`   | Slot collapses. Use `timestamp={null}` to indicate "not yet" for a pending event.                  |
+
+Pass `locale="de-DE"` to override the runtime locale per Timeline.
+
+---
+
+## Orientation & layout
+
+```tsx
+<Timeline orientation="vertical" />   // default — dot column on the leading edge
+<Timeline orientation="horizontal" /> // dot row across the top, content below
+<Timeline layout="alternating" />     // vertical only — zig-zag content sides
+<Timeline orientation="horizontal" responsive />  // collapses to vertical at `< md`
+```
+
+For responsive horizontal timelines, the divider/indicator orientation is fixed at runtime to the **horizontal** form on `md+` and the **vertical** form below `md`. CSS-only — no JS resize watchers.
+
+---
+
+## Collapsible items
+
+Opt-in via `collapsible` on the root. Each item's title becomes a `<button>` with `aria-expanded` + `aria-controls`; description and media are conditionally rendered.
+
+```tsx
+<Timeline collapsible aria-label="Audit log">
+  <Timeline.Item tone="warning" timestamp={t}>
+    <Timeline.Title>Password reset requested</Timeline.Title>
+    <Timeline.Description>Email sent to ahmad@example.com.</Timeline.Description>
+  </Timeline.Item>
+</Timeline>
+```
+
+Pair with `onItemClick={(id) => analytics.track('timeline.toggle', { id })}` to log the disclosure.
+
+---
+
+## Subcomponents
+
+| Subcomponent           | Renders                                  | Notes |
+| ---------------------- | ---------------------------------------- | ----- |
+| `Timeline.Item`        | `<li>`                                   | Carries tone, active, icon, timestamp. Owns disclosure state when collapsible. |
+| `Timeline.Title`       | `<span>` or `<button>` (collapsible)     | Auto-wires `aria-expanded` / `aria-controls`. |
+| `Timeline.Description` | `<p>` (hidden when collapsed)            | Body text. |
+| `Timeline.Media`       | `<div>` (hidden when collapsed)          | Renders images / embeds with constrained max-width. |
+| `Timeline.Timestamp`   | `<time>` or `<span>`                     | Pass `value=` to render or `children` to override formatting. |
+| `Timeline.Connector`   | `<span aria-hidden>`                     | Auto-rendered per item; consumers rarely use it directly. |
+
+---
+
+## Accessibility
+
+- Root is an `<ol>` with `aria-label`. Items are `<li>`.
+- Active item carries `aria-current="true"`.
+- Dot + connector are `aria-hidden="true"` — semantics live in the text.
+- Real `<time dateTime={iso}>` markup for `Date` timestamps so assistive tech can announce the absolute time.
+- Collapsible disclosure follows the **WAI-ARIA APG button pattern** — `aria-expanded` on the title button, `aria-controls` referencing the description region.
+- axe-core: 0 violations across all tone × orientation × layout × collapsible combinations.
+
+---
+
+## RTL
+
+- Vertical timeline: dot column hugs the logical-start edge.
+- Horizontal timeline: native `flex-row` flips with `dir="rtl"`.
+- Alternating layout: even items flip via grid column reorder — fully logical.
+- Timestamps via `Intl` are locale-correct (`"לפני 3 ימים"` in Hebrew, `"vor 3 Tagen"` in German).
+
+---
+
+## Performance
+
+- Stateless except per-item collapsed state when `collapsible`.
+- `formatTimestamp` runs once per item per render. For long-lived dashboards, lift the "now" tick into your data layer and pass a custom `timestampFormat` function that closes over your refresh state — Timeline stays the dumb display primitive.
+- No external date library. Pure `Intl`.
+
+---
+
+## Theming
+
+Slot names for `useThemedClasses` overrides: `Timeline.root`, `Timeline.item`, `Timeline.indicator`, `Timeline.dot`, `Timeline.connector`, `Timeline.content`, `Timeline.title`, `Timeline.description`, `Timeline.timestamp`, `Timeline.media`.
+
+---
+
+## Anti-patterns
+
+- ❌ Don't use Timeline for **forward-looking** flows — pick `<Stepper />`.
+- ❌ Don't wrap a Timeline in a `<ul>` — it's already an `<ol>` and nesting breaks accessibility.
+- ❌ Don't pre-format `Date` values as strings before passing them — let `timestampFormat` handle it so the `<time>` element gets a proper `dateTime` attribute.
+- ❌ Don't pass `tone="info"` to mean "current" — use `active` for emphasis; tone is for semantics.

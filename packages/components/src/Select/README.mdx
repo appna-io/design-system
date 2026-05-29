@@ -1,0 +1,293 @@
+## Overview
+
+`<Select />` is the canonical **form-control combobox** — the intersection of `<Input />`'s
+shell and `<Menu />`'s listbox. A single-select dropdown with the W3C Listbox + Combobox ARIA
+pattern, type-ahead, keyboard navigation, native form integration via a hidden `<input>`, and a
+trigger that matches Input / Textarea heights per size so they line up on the same form row.
+
+Select is the first component that lives at the boundary of two families. The trigger speaks
+form-control vocabulary (same 4 variants × 7 colors × 3 sizes as Input / Textarea); the listbox
+speaks overlay vocabulary (same `solid` / `outline` / `soft` × 7 colors as Popover / Menu). Both
+families' shared primitives compose without conflict — that's the cross-cutting DRY payoff this
+phase was designed to prove.
+
+## When to use
+
+- A short list of mutually-exclusive options bound to a form field: country, plan, language.
+- A category picker that needs grouping / labels / separators between sections.
+- Anywhere a native `<select>` would work but the design wants custom items (icons, two-line
+  rows, themed chrome).
+
+## When NOT to use
+
+- Multi-select with chips — use `<MultiSelect />` when it ships.
+- Typeable filter / autocomplete — use `<Combobox />` when it ships.
+- A free-form text input with suggestions — `<Combobox />`.
+- A non-form chooser (single-pick preference inside a Menu) — use `<Menu.RadioGroup>` instead.
+- The list is just actions, not values — use `<Menu />`.
+
+## Anatomy
+
+```text
+<Select>
+  <Select.Trigger />
+  <Select.Content>
+    <Select.Group>
+      <Select.Label>      section header     </Select.Label>
+      <Select.Item value="…"> option </Select.Item>
+    </Select.Group>
+    <Select.Separator />
+    <Select.Group>
+      <Select.Item value="…"> option </Select.Item>
+    </Select.Group>
+  </Select.Content>
+</Select>
+```
+
+- **`Select`** — state owner + context provider. Owns `value`, `open`, the item registry, the
+  persistent value→label cache (so the trigger renders the right label even when the listbox is
+  closed), and the lifecycle hooks (`useEscapeStack`, `useOutsideClick`). Renders a hidden
+  `<input type="hidden" name value>` when `name` is set so the field participates in `<form>`
+  submission.
+- **`Select.Trigger`** — `role="combobox"` + `aria-haspopup="listbox"`. Renders the selected
+  label (or placeholder) plus a chevron that rotates 180° when open. Reads visual axes from the
+  root via context — no axis props of its own.
+- **`Select.Content`** — portal-rendered, positioned, animated listbox. Defaults to
+  `matchTriggerWidth={true}` (Floating UI's `size` middleware syncs width to the trigger).
+  Carries its own visual axis (`solid` / `outline` / `soft`) independent of the trigger's
+  form-control variant.
+- **`Select.Item`** — `role="option"` with `aria-selected`. Fires selection for both keyboard
+  Enter/Space and mouse click. Renders a `<Check>` indicator on the logical end when selected.
+- **`Select.ItemIndicator`** — standalone indicator slot for custom check marks; the default
+  `<Select.Item>` renders its own Check, so most consumers won't reach for this directly.
+- **`Select.Group`** — `role="group"` wrapper. Pair with `<Select.Label>` for a section header.
+- **`Select.Label`** — non-interactive section heading. `role="presentation"`.
+- **`Select.Separator`** — `role="separator"` horizontal rule.
+
+## Variants
+
+### Trigger variants (form-control vocabulary)
+
+The Trigger reuses Input / Textarea's 4 × 7 matrix verbatim. Adding a color or variant happens
+once in `_shared/variantColorMatrix.ts` — Input, Textarea, and Select all pick it up. Select is
+the third consumer of the matrix, validating the Phase 8 extraction.
+
+| Variant     | Chrome                                                  |
+| ----------- | ------------------------------------------------------- |
+| `outline`   | 1px border + paper background. **Default.**             |
+| `solid`     | `bg-subtle` resting; pops to paper on focus.            |
+| `ghost`     | Borderless at rest; gains border + tint on hover/focus. |
+| `underline` | Bottom rule only; minimal chrome.                       |
+
+### Content variants (overlay vocabulary)
+
+Same 3 as Popover / Menu, defaulting to `solid`. Independent from the Trigger's form-control
+variant — mixing an `underline` trigger with a `solid` listbox is supported and reads naturally.
+
+### Sizes
+
+Trigger heights match Input / Textarea per size — **visual alignment on the same form row is a
+hard requirement.**
+
+| Size | Trigger height | Item padding | Font           |
+| ---- | -------------- | ------------ | -------------- |
+| `sm` | `h-8`          | `px-2 py-1`  | `text-xs`      |
+| `md` | `h-10`         | `px-2 py-1.5`| `text-sm`      |
+| `lg` | `h-12`         | `px-3 py-2`  | `text-base`    |
+
+## Form integration
+
+Pass `name` and the root renders `<input type="hidden" name={name} value={value}>` so the value
+posts with the surrounding form. `required` triggers native form validation when no value is set
+(combined with `:invalid` styling on the trigger via the `aria-invalid` bridge).
+
+```tsx
+<form>
+  <Select name="country" required placeholder="Pick a country">
+    <Select.Trigger />
+    <Select.Content>
+      <Select.Item value="fr">France</Select.Item>
+    </Select.Content>
+  </Select>
+  <button type="submit">Subscribe</button>
+</form>
+```
+
+## Behavior
+
+| Prop                 | Default | Effect                                                                |
+| -------------------- | ------- | --------------------------------------------------------------------- |
+| `closeOnEscape`      | `true`  | Esc closes the listbox.                                               |
+| `closeOnOutsideClick`| `true`  | Pointer-down outside trigger + content closes the listbox.            |
+| `matchTriggerWidth`  | `true`  | (on `<Select.Content>`) Listbox stretches to trigger width.           |
+| `loop`               | `true`  | Arrow-key wrap at top/bottom.                                         |
+| `typeAhead`          | `true`  | Type a prefix to jump to the matching item.                           |
+| `placeholder`        | —       | Shown in the trigger when no value is selected.                       |
+
+## Accessibility
+
+ARIA Listbox + Combobox pattern (W3C APG):
+
+- **Trigger** — `role="combobox"` + `aria-haspopup="listbox"` + `aria-expanded` + `aria-controls`
+  (only when open). `role="combobox"` is a *nameFromAuthor* role: pass `aria-label`,
+  `aria-labelledby`, or rely on the auto-fallback to `placeholder` for the accessible name. A
+  surrounding `<label htmlFor={triggerId}>` works the same way it would for `<input>`.
+- **Content** — `role="listbox"` + `aria-labelledby` the trigger + `aria-activedescendant` set to
+  the currently-highlighted item id while open (highlight, don't focus — same discipline as
+  Menu).
+- **Items** — `role="option"` + `aria-selected` + `aria-disabled` for disabled items +
+  `data-highlighted="true"` for the keyboard-highlighted row.
+- **`useFormFieldA11y`** wires `id` / `aria-invalid` / `aria-required` / `aria-describedby` from
+  the root onto the trigger — same hook Input / Textarea use.
+
+Keyboard:
+
+| Key                    | Action                                                                |
+| ---------------------- | --------------------------------------------------------------------- |
+| Space / Enter          | Toggle the listbox open / closed                                      |
+| ArrowDown / ArrowUp    | Open + seed highlight to the selected (or first / last enabled) item  |
+| ArrowDown / ArrowUp (open) | Cycle highlight; wraps with `loop=true`                           |
+| Home / End             | First / last enabled item                                             |
+| Enter / Space (open)   | Select highlighted item, close listbox                                |
+| Esc                    | Close without selecting                                               |
+| Tab / Shift+Tab        | Close + move focus to the next form field                             |
+| Printable character    | Type-ahead — prefix match within ~500 ms                              |
+| Same letter twice      | Cycle through items starting with that letter                         |
+
+Focus management:
+
+- Focus moves into Content on open (Content carries `tabIndex={-1}`).
+- Focus returns to the trigger on close.
+- The highlighted item auto-scrolls into view via `scrollIntoView({ block: 'nearest' })` so
+  keyboard nav past the visible window stays smooth.
+
+axe-core: zero violations across every trigger variant and sampled colors, plus disabled /
+invalid / grouped states.
+
+## Examples
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="WithGroups" />
+
+<ExampleBlock for="WithIcons" />
+
+<ExampleBlock for="Variants" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="Colors" />
+
+<ExampleBlock for="Disabled" />
+
+<ExampleBlock for="Invalid" />
+
+<ExampleBlock for="Required" />
+
+<ExampleBlock for="DisabledItems" />
+
+<ExampleBlock for="LongList" />
+
+<ExampleBlock for="MatchTriggerWidth" />
+
+<ExampleBlock for="PortalContainer" />
+
+<ExampleBlock for="InsideField" />
+
+<ExampleBlock for="Controlled" />
+
+## Theming
+
+```tsx
+defineTheme({
+  components: {
+    Select: {
+      defaultProps: { /* root behavior props — loop / typeAhead / closeOnEscape */ },
+      styleOverrides: {
+        trigger: 'shadow-sm',
+        triggerChevron: '',
+        content: 'shadow-xl',
+        item: 'rounded-md',
+        itemIndicator: '',
+        label: '',
+        group: '',
+        separator: 'bg-border-strong',
+      },
+    },
+  },
+});
+```
+
+Per-instance overrides via `<Select.Trigger className sx style />` and `<Select.Content className
+sx style />` merge on top of the theme overrides, which merge on top of the recipe — same
+precedence chain everywhere else in the DS, validated for compound components by Core 18's
+`defaultProps` wiring.
+
+## Engine consumption
+
+Select consumes the entire overlay + form-control surface — no new engine primitives requested.
+The one new shared utility added in this phase (`_shared/useListKeyboard.ts`) was promoted from
+`Menu/useMenuKeyboard.ts` because Select is now the second consumer of the same keyboard logic.
+
+| Primitive | Used for |
+|---|---|
+| `usePosition` | Position Content against trigger; **first DS consumer** of `matchTriggerWidth: true` (Floating UI's `size` middleware path). |
+| `<Portal>` | Render Content outside the DOM tree so z-index + overflow clip-paths can't trap the listbox. |
+| `useEscapeStack` | Esc closes the listbox. |
+| `useOutsideClick` | Pointer-down outside trigger + content closes. |
+| `useControllableState` | `value` / `defaultValue` / `onValueChange` and `open` / `defaultOpen` / `onOpenChange`. |
+| `mergeRefs` | Compose Floating UI's setReference + local ref + forwarded ref + root's trigger ref. |
+| `_shared/controlBase` | Trigger's form-control shell. |
+| `_shared/useFormFieldA11y` | `id` + `aria-invalid` + `aria-required` + `aria-describedby` bridging. |
+| `_shared/variantColorMatrix` | Trigger's 4 × 7 compound matrix — **third consumer**. |
+| `_shared/useListKeyboard` | Arrow / Home / End / Enter / Space / Esc / Tab / type-ahead — **second consumer** (Menu was the first). |
+
+Select **does not** use `useFocusTrap` — focus stays on Content and items are
+`aria-activedescendant`-tracked (not tab-focused). Same discipline Menu uses; consistent with the
+W3C Listbox pattern.
+
+`SelectPlacement = PopoverPlacement` — single source of truth for the 12-placement vocab; Modal /
+Menu / Select / future Combobox all alias from this canonical type.
+
+## Notes for consumers
+
+A few patterns surfaced during implementation; documented so the next overlay-plus-form-control
+author (Combobox, future) doesn't rediscover them:
+
+- **The listbox is always mounted, just hidden when closed.** Unlike Menu, which unmounts its
+  Content via AnimatePresence, Select keeps Content rendered with `visibility: hidden` +
+  `pointer-events: none` when closed. Reason: items have to register their `value → label`
+  mapping with the root *before* the user opens the listbox so the trigger can render the right
+  label for a controlled `defaultValue`. Toggling visibility is the simplest way to keep the
+  registration alive across open/close cycles.
+- **The trigger's accessible name comes from the author, not from contents.** `role="combobox"`
+  is a nameFromAuthor role. We auto-fall-back to `placeholder` for the accessible name when
+  neither `aria-label` nor `aria-labelledby` is provided, but a real `<label htmlFor>` is always
+  preferable.
+- **Value→label cache is keyed by value, not by item id.** Items can unmount + remount with new
+  React ids; as long as the value stays the same, the cache survives, so the trigger keeps
+  rendering the right label.
+
+## DRY notes
+
+- No `clsx` / `cn` imports — every class composition flows through `useThemedClasses`.
+- `useListKeyboard` lives in `_shared/`; Menu now imports from there too (single source of
+  truth for the keyboard hook). Future Combobox can reuse the same hook with optional filter
+  hooks.
+- `controlBase`, `useFormFieldA11y`, `variantColorMatrix` all sourced from `_shared/` — the
+  Trigger doesn't duplicate any form-control logic. Adding a new form-control color = one entry
+  in the matrix; Input, Textarea, and Select all light up.
+- `SelectPlacement = PopoverPlacement` — alias for the 12-placement vocab.
+- Compound assembly (`Object.assign`) follows Popover / Menu / Card verbatim.
+
+## Out of scope (V1)
+
+- **`<Select.Value>` subpart** — Trigger renders the value via the registry's label cache; a
+  separate `Value` subpart is V2 if a consumer needs to render the value outside the trigger.
+- **`position="item-aligned"`** — the legacy native `<select>` position where the selected item
+  overlays the trigger. We ship `position="popper"` only (anchored below).
+- **Multi-select / chips** — separate `<MultiSelect />` component.
+- **Typeable filter / autocomplete** — separate `<Combobox />` component, will reuse Select's
+  listbox + Input's text shell.
+- **Async-loaded items / virtualization** — V2; render-all-items is fine up to ~500 entries.
+- **Custom dropdown-aligned placement** — Floating UI handles it via standard placement props.

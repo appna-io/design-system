@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light dark;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* The Theme Studio is a `position: fixed` drawer pinned to `right: 0` and slid off-screen
+     with `translateX(100%)` when closed. Without clipping at the viewport, that off-screen
+     panel pushes the document wider and surfaces a horizontal scrollbar — scrolling right
+     reveals the supposedly-hidden drawer. `overflow-x: clip` prevents that without creating
+     a scroll container (so `position: sticky` on the sidebar/top-bar still works). */
+  overflow-x: clip;
+}
+
+/* Top-of-viewport route progress bar. Animates from 0 → ~90% width over ~12s while a route
+   transition is pending, then the React component fades it out on path change. The slow-out
+   curve makes a brief 200ms compile feel snappy and a 2-second one still show progress. */
+@keyframes route-progress {
+  0% {
+    transform: scaleX(0);
+  }
+  30% {
+    transform: scaleX(0.4);
+  }
+  60% {
+    transform: scaleX(0.7);
+  }
+  100% {
+    transform: scaleX(0.9);
+  }
+}
+
+/* Shiki light/dark crossfade. We render both themes server-side; the active mode picks one. */
+.renderer-code-light pre,
+.renderer-code-dark pre {
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+html[data-mode='dark'] .renderer-code-light,
+html:not([data-mode='dark']) .renderer-code-dark {
+  display: none;
+}
+
+/* Dotted preview background — visible in both light and dark via currentColor blending. */
+.renderer-preview {
+  background-image: radial-gradient(circle, var(--sds-palette-border) 1px, transparent 1px);
+  background-size: 12px 12px;
+  background-position: center;
+}

@@ -1,0 +1,144 @@
+# Spinner
+
+The standalone loading indicator. Drop `<Spinner />` anywhere — beside text, inside
+a button, as an EmptyState graphic — and it does the right thing with a few hundred
+bytes of CSS-driven motion. No JS render loops. No Motion library. No `useEffect`.
+
+## Why this exists
+
+The inline spinner pattern used to live in three different places:
+
+- `<Button loading>` rendered its own SVG spinner.
+- `<CircularProgress indeterminate>` had its own keyframe animation.
+- `<Toast variant="loading">` shipped a third copy.
+
+Promoting `<Spinner />` to a first-class export deduplicates these and gives
+consumers a building block for their own loading states. The three existing
+consumers can migrate at their leisure — Phase 39 ships the primitive without
+forcing a refactor.
+
+## Anatomy
+
+```
+   ●        ← <Spinner variant="ring" />   (default, SVG arc rotating)
+  ● ● ●     ← <Spinner variant="dots" />   (three staggered scaling dots)
+   ◉        ← <Spinner variant="pulse" />  (sonar disc, scale + fade)
+```
+
+## Variants
+
+| Variant | Glyph                                                  | When to reach for it                                |
+| ------- | ------------------------------------------------------ | --------------------------------------------------- |
+| `ring`  | SVG circle, partial arc rotating around a faint track  | **Default.** Universal loading icon.                |
+| `dots`  | Three dots scaling + fading on staggered delays        | "Thinking" feel — playful, conversational surfaces. |
+| `pulse` | Single disc expanding sonar-style                      | Subtle — pairs well with cards / empty states.      |
+
+All three are pure CSS. The ring uses Tailwind's built-in `animate-spin`; the
+other two use two custom keyframes registered in the DS Tailwind preset
+(`spinner-bounce` + `spinner-pulse`), so any consumer of the preset gets the
+animations for free without an extra `globals.css` import.
+
+## Sizes
+
+| Token  | Diameter | Common use                                           |
+| ------ | -------- | ---------------------------------------------------- |
+| `xs`   | 12 px    | Inside small badges / chips                          |
+| `sm`   | 16 px    | Inline with body text, inside small buttons          |
+| `md`   | 20 px    | **Default.** Standalone next to a label.             |
+| `lg`   | 32 px    | Card-level loading state                             |
+| `xl`   | 48 px    | Section-level loading state                          |
+| number | — px     | Escape hatch: `<Spinner size={120} />` for graphics. |
+
+## Speeds
+
+| Speed    | Duration  | Notes                                            |
+| -------- | --------- | ------------------------------------------------ |
+| `slow`   | 1200 ms   | "Deliberate, still working."                     |
+| `normal` |  800 ms   | **Default.** Matches Tailwind's `animate-spin`.  |
+| `fast`   |  500 ms   | "Almost done."                                   |
+
+Routed via inline `animation-duration`, so the keyframe utility class stays
+stable across every speed.
+
+## Examples
+
+<ExampleBlock for="Basic" title="Default — a single ring spinner" />
+<ExampleBlock for="Variants" title="ring / dots / pulse" />
+<ExampleBlock for="Sizes" title="Five size tokens plus numeric escape hatch" />
+<ExampleBlock for="Colors" title="Every palette role" />
+<ExampleBlock for="Speeds" title="slow / normal / fast" />
+<ExampleBlock for="Thickness" title="Ring stroke width — 1 / 2 / 3" />
+<ExampleBlock for="TrackOpacity" title="Ring background track opacity" />
+<ExampleBlock for="WithLabel" title="Label placement — hidden / end / bottom" />
+<ExampleBlock for="Inline" title="Inline with text — currentColor fallback" />
+<ExampleBlock for="EmptyState" title="Sized large for an EmptyState graphic" />
+<ExampleBlock for="AllVariants" title="Full matrix — every variant × every size" />
+
+## Props
+
+| Prop             | Type                                                                  | Default     | Notes                                                                |
+| ---------------- | --------------------------------------------------------------------- | ----------- | -------------------------------------------------------------------- |
+| `variant`        | `'ring' \| 'dots' \| 'pulse'`                                         | `'ring'`    | Visual style. Responsive via `{ base, md }` shape.                   |
+| `size`           | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| number`                      | `'md'`      | Diameter. Numeric = px.                                              |
+| `color`          | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'info' \| 'neutral'` | — | Palette role. Omit to inherit `currentColor`. |
+| `thickness`      | `1 \| 2 \| 3`                                                         | `2`         | Ring stroke width. `ring` variant only.                              |
+| `speed`          | `'slow' \| 'normal' \| 'fast'`                                        | `'normal'`  | Mapped to 1200 / 800 / 500 ms inline.                                |
+| `trackOpacity`   | `number` (0..1)                                                       | `0.2`       | Ring background track opacity. `ring` variant only.                  |
+| `label`          | `string`                                                              | `'Loading'` | Accessible label. Visible when `labelPlacement !== 'hidden'`.        |
+| `labelPlacement` | `'hidden' \| 'end' \| 'bottom'`                                       | `'hidden'`  | Where the label renders. `hidden` is sr-only.                        |
+| `className`      | `string`                                                              | —           | Merged via `tailwind-merge`. Last-wins.                              |
+| `sx`             | `Sx`                                                                  | —           | Theme-aware inline style.                                            |
+
+## Accessibility
+
+- **Wrapper announces.** `<Spinner />` carries `role="status"` + `aria-busy="true"` +
+  `aria-live="polite"`. Screen readers announce the loading state without taking focus.
+- **Label semantics adapt to placement.** When `labelPlacement="hidden"` the label is
+  applied as `aria-label` on the wrapper and **no inner span is rendered** — avoids
+  double-announcement. When `labelPlacement="end" | "bottom"` the visible label text
+  becomes the announcement (no wrapper `aria-label`).
+- **The animated glyph is `aria-hidden`.** SVG, dot row, pulse disc — all hidden from
+  AT. Only the wrapper (or its visible label child) is in the accessibility tree.
+- **`prefers-reduced-motion`.** All three variants halt under reduced motion via the
+  Tailwind `motion-reduce:` variant. The label still announces. The glyph stays
+  visible as a static representation.
+- **axe-core.** Zero violations across the `variant × color × labelPlacement` matrix.
+- **`currentColor` fallback.** Drop `<Spinner />` (no `color` prop) inside a
+  `<Button color="primary">` or an `<a>` and it inherits the surrounding text color
+  automatically. The single most common pattern needs no role override.
+
+## Theming
+
+```ts
+defineTheme({
+  components: {
+    Spinner: {
+      defaultProps: { variant: 'dots', speed: 'slow' },
+      styleOverrides: {
+        root: 'gap-3', // wider visible gap when a label is rendered
+        label: 'font-medium',
+      },
+    },
+  },
+});
+```
+
+## Integration with existing components
+
+| Consumer                  | Today                          | After Phase 39 (opt-in)                                            |
+| ------------------------- | ------------------------------ | ------------------------------------------------------------------ |
+| `<Button loading>`        | inline SVG spinner             | `<Spinner size="sm" color="inverse" labelPlacement="hidden" />`    |
+| `<CircularProgress indeterminate>` | own keyframe animation | optionally delegates to `<Spinner variant="ring">`                  |
+| `<Toast variant="loading">` | inline SVG                  | renders `<Spinner size="sm" />`                                     |
+
+Phase 39 ships the primitive only — the three consumers can migrate in follow-up PRs
+without breaking anything.
+
+## Out of scope (future phases)
+
+- **`<Spinner.Overlay>`** — full-page loading overlay; lives in EmptyState (Phase 42)
+  / Modal compositions, not in the primitive.
+- **Custom keyframes** — three variants cover ~95% of needs; consumers needing a
+  bespoke spinner can render their own `<svg>` with `className="animate-spin"`.
+- **Progress mode** — if you have a value, reach for `<CircularProgress value={...} />`
+  instead of `<Spinner />`.

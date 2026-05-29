@@ -1,0 +1,138 @@
+## Overview
+
+`<CommandPalette />` is the canonical **⌘K command launcher** — a Modal-styled overlay with a search input, a filterable result list, optional sub-pages, and a global hotkey to toggle visibility. It composes existing primitives rather than introducing new architecture:
+
+- **Dialog shell** — `<Modal>` (Phase 19). Backdrop, focus trap, scroll lock, escape stack, portal.
+- **Filter logic** — `filterStrategies` + `fuzzyMatch` from Combobox (Phase 34). Substring / startsWith / fuzzy / custom.
+- **Keyboard navigation** — `_shared/useListKeyboard`. **Fourth consumer** (Menu → Select → Combobox → CommandPalette).
+- **Module-level imperative API** — mirrors Toast's `ToastStore` / `toast()` pattern (Phase 21). `commands.register()` and `palette.open()` work from any JS context.
+- **Inline keyboard glyphs** — new `<Kbd>` primitive, exported separately. Less than 0.5 KB gz.
+
+## When to use
+
+- A **launcher** for app-wide actions ("New document", "Switch workspace", "Toggle theme") — `⌘K` is the canonical gesture.
+- A **navigator** across hundreds of objects (issues, files, members) — search-narrowed nav is faster than menu trees.
+- A **shortcut help layer** — even if it never opens, the registered commands document every action with their hotkeys.
+
+## When NOT to use
+
+- A picker bound to a single field value → `<Combobox />`.
+- A list of contextual actions on a specific row / element → `<Menu />`.
+- A single confirmation step → `<Modal>` directly.
+
+## Anatomy
+
+```text
+<CommandPalette
+  open onOpenChange defaultOpen
+  commands=[…]                         // declarative list
+  pages={ <pageId>: { title, placeholder, commands: […] } }
+  recentCommandIds=[…] maxRecentItems
+  hotkey="$mod+K"  disableGlobalHotkey
+  filterStrategy="substring|fuzzy|startsWith|custom"
+  filterCommand=(cmd, query) => boolean
+  matchKeywords
+  renderCommand renderEmpty renderFooter
+  variant="solid|soft|minimal"
+  size="sm|md|lg"
+  color="primary|secondary|success|warning|danger|info|neutral"
+  placeholder ariaLabel
+  translations={…}                     // merged over DEFAULT_COMMAND_PALETTE_TRANSLATIONS
+  trackRecents
+  portalContainer
+  className style sx
+/>
+
+// Three registration APIs (all interop via the same store)
+commands.register({ id, label, onSelect, … })            // imperative
+commands.unregister(id)
+commands.registerMany([…])                               // batched, single emit
+useRegisterCommand({ id, label, onSelect, … })           // hook
+<CommandPalette commands={[…]} />                        // declarative prop
+
+// Module-level palette controller
+palette.open()
+palette.close()
+palette.toggle()
+palette.openPage(pageId)
+palette.popPage()
+palette.setQuery(query)
+
+// Kbd primitive (separate export, useful outside the palette)
+<Kbd>K</Kbd>
+<Kbd keys={['Ctrl', 'Shift', 'P']} separator="+" />
+<Kbd platform="mac">cmd</Kbd>                            // → ⌘
+
+// Public hotkey utilities
+parseHotkey('$mod+K')                                    // → { mod, key, … }
+matchesHotkey(event, parsed)                             // → boolean
+useGlobalHotkey({ hotkey, onTrigger })                   // window listener
+```
+
+## Three registration APIs
+
+Each team has a different pattern; one API doesn't fit all. The store deduplicates by id so the three paths interop cleanly — declarative wins on collision because it's the most explicit signal.
+
+| API                           | When                                                                  |
+| ----------------------------- | --------------------------------------------------------------------- |
+| `commands` prop               | Top-level, static list. Doc / settings / onboarding flows.            |
+| `useRegisterCommand()`        | Commands defined deep in the tree, lifecycle-bound. Editor toolbars.  |
+| `commands.register()`         | Outside React. Action creators, error handlers, service workers.      |
+
+## Sub-pages
+
+A command can push a sub-palette via `pushPage(pageId)` from its `onSelect`. The `pages` prop maps page ids to their command lists + title + placeholder. Esc pops, Backspace-on-empty-query pops. No re-mount of the dialog — focus stays trapped inside the same Modal.
+
+## Recents
+
+When the query is empty, the most-recent N selected commands surface in a dedicated "Recently used" section above the categories. Defaults to in-memory tracking; pass `recentCommandIds` from your own store (Redux, Zustand, localStorage, …) to persist across sessions. Pass `trackRecents={false}` to disable.
+
+## Hotkey
+
+Defaults to `'$mod+K'` — Cmd on macOS, Ctrl elsewhere. Pass a fully-qualified string (`'Ctrl+P'`, `'Cmd+/'`) to lock to a single platform. Set `disableGlobalHotkey` when the host app already binds the shortcut and toggles via `palette.toggle()`.
+
+The hotkey utilities — `parseHotkey`, `matchesHotkey`, `useGlobalHotkey` — are exported publicly so consumers can build their own shortcut help / binding UIs without duplicating the parser.
+
+## Accessibility
+
+Full W3C **Combobox in a Modal** pattern:
+
+- Modal: `role="dialog"` + `aria-modal="true"` + `aria-label`.
+- Input: `role="combobox"` + `aria-expanded="true"` + `aria-controls={listId}` + `aria-autocomplete="list"` + `aria-activedescendant={highlightedId}`.
+- List: `role="listbox"`.
+- Rows: `role="option"` + `aria-selected` + `tabIndex={-1}` (so the input retains focus while the highlight moves).
+- Category headers: `role="presentation"` (decorative).
+- Footer hints: `aria-hidden="true"`.
+
+Focus management:
+
+- Opening focuses the input (via Modal's `initialFocus`).
+- Closing returns focus to the trigger (Modal default).
+- Esc closes at root; Esc inside a sub-page pops back (we `stopImmediatePropagation` so Modal's escape stack stays quiet).
+- Tab is trapped inside the Modal.
+
+Live announcements: result count is announced via `aria-live="polite"` whenever the query changes.
+
+Axe: 0 violations across the variant × size × color matrix, including the sub-page and empty states.
+
+## I18n
+
+Inline `translations` prop merges over `DEFAULT_COMMAND_PALETTE_TRANSLATIONS`. No `<I18nProvider>` integration yet (the provider hasn't shipped); the prop is the temporary surface and will dovetail with the provider when it lands.
+
+## Bundle
+
+| Export             | Size (gz) | Notes                                                           |
+| ------------------ | --------- | --------------------------------------------------------------- |
+| `<CommandPalette>` | ~5 KB     | Modal + filter + keyboard + store fusion.                       |
+| `<Kbd>`            | < 0.5 KB  | Single recipe + the `macKey` glyph table.                       |
+| Headless utilities | < 1 KB    | `parseHotkey`, `useGlobalHotkey`, `filterCommands`, `platformKey`. |
+
+## DRY notes
+
+- Reuses `<Modal>` for the overlay shell — no bespoke dialog code.
+- Reuses Combobox's `filterStrategies` + `fuzzyMatch` (imported, not copied).
+- `_shared/useListKeyboard` is now validated for the fourth time — the abstraction is mature.
+- `commandStore` mirrors `ToastStore` line-for-line. Two consumers (Toast, CommandPalette) is the threshold where lifting into a generic `createStore()` becomes attractive; future Phase candidate.
+- `<Kbd>` is a single tiny recipe — no bespoke shadows / borders outside the token system.
+- `parseHotkey` is pure and reusable for shortcut-help / binding UIs.
+- No `clsx`.

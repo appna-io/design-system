@@ -1,0 +1,93 @@
+# Avatar
+
+`<Avatar />` is the canonical user-identity glyph in apx-ds. It handles the three states every
+profile tile has to deal with — image loads, image fails, no image at all — without spreading
+that logic across the consuming app. Reach for it whenever a screen needs to represent a person
+or entity: comment threads, member lists, assignee chips, mention pickers, hero profile sections.
+
+`<AvatarGroup />` stacks several avatars with a configurable overlap and an optional `+N` overflow
+tile. Use it for "assigned to" lists, project members, viewers/typing indicators — anywhere a
+small set of identities collapses into a single inline glyph.
+
+## State machine
+
+Avatar is the first DS component whose rendered tree depends on **async state**. The decision
+tree lives in a tiny isolated hook (`useAvatarImage`):
+
+- `src` missing → render fallback immediately
+- `src` set, loading → wait `delayMs` (default 600 ms), then show fallback
+- `src` loaded → render `<img>`
+- `src` errored → render fallback
+
+`delayMs` is the "don't flash the initials if the image is about to arrive" debounce — same
+semantics as Radix Avatar.
+
+## Variants
+
+The variant prop describes how the **fallback** looks. Once an image loads, it covers the tile,
+so loaded avatars look identical across variants (modulo `outline`'s border).
+
+- **`solid`** — opaque palette fill, contrast text. **Default.** Loud, readable on any background.
+- **`outline`** — paper background + 2px palette-colored border + role-colored text.
+- **`soft`** — palette `-subtle` background + role-colored text. Calm, editorial.
+
+## Colors
+
+Seven palette roles plus `'auto'`. `auto` deterministically hashes the `name` prop into one of
+the seven roles, so the same person consistently lands on the same color across the app — no
+random fallbacks, no inconsistent UI between lists and detail pages. Explicit `color` props
+always win over the hash.
+
+## Sizes
+
+Six sizes — broader than Badge or Button — because real product surfaces range from
+list-cell glyphs (`xs`, 24 px) to hero profile photos (`2xl`, 96 px). The status dot and fallback
+icon scale alongside the avatar; you set one size token and everything responds.
+
+## Status indicator
+
+Pass `status` for a presence dot — `online`, `offline`, `away`, `busy`. Position with
+`statusPlacement` (four corners). The `busy` tone pulses via the shared `badge-pulse` keyframe
+and respects `prefers-reduced-motion`. The dot is `aria-hidden` — the wrapper's label remains
+the source of truth.
+
+## Examples
+
+<ExampleBlock for="Basic" title="Basic — image, fallback initials, default icon" />
+<ExampleBlock for="Variants" title="Variants — solid / outline / soft" />
+<ExampleBlock for="Sizes" title="Sizes — xs through 2xl" />
+<ExampleBlock for="Colors" title="Colors — palette + auto hash by name" />
+<ExampleBlock for="Shapes" title="Shapes — circle / rounded / square" />
+<ExampleBlock for="Fallback" title="Fallback — initials, icon, error state" />
+<ExampleBlock for="WithStatus" title="Status indicator — online / offline / away / busy" />
+<ExampleBlock for="WithRing" title="Accent ring — colored offset" />
+<ExampleBlock for="Group" title="AvatarGroup — overlap + overflow" />
+<ExampleBlock for="ProfileCard" title="Profile card — avatar + identity" />
+<ExampleBlock for="AsChild" title="asChild — render as a link / button" />
+
+## AvatarGroup
+
+The group propagates `size` / `shape` / `variant` defaults to nested Avatars via context. Per-
+Avatar props still win. Children beyond `max` collapse into a single `+N` overflow tile — which
+is just another `<Avatar>` with `name="+3"`. One render path, one accessible name, no parallel
+implementation. Use `renderOverflow` to wrap the overflow tile in a tooltip / popover.
+
+## RTL
+
+- The avatar's status placement is **physical** on purpose (`bottom-right` stays bottom-right
+  in RTL). Designers expect a fixed corner.
+- The group's overlap direction **does** flip in RTL via `margin-inline-start`.
+
+## Accessibility
+
+- `role="img"` + `aria-label={alt ?? name ?? 'avatar'}` on the wrapper (unless `asChild`, where
+  the wrapped element's native role wins).
+- Inner `<img>` always has `alt=""` — wrapper carries the name.
+- Initials, fallback icon, and status dot are `aria-hidden`.
+- Overflow tile in AvatarGroup carries `aria-label="N more"`.
+- axe-core: zero violations across every variant × color × state cell.
+
+## Bundle
+
+Target: < 3.5 KB gzipped — heaviest in this batch (image state machine + group composition).
+No `lucide-react` import; the default icon is inline SVG.

@@ -1,0 +1,241 @@
+---
+title: Toast
+category: Feedback
+status: stable
+---
+
+# Toast
+
+Transient notifications driven by an imperative API. Mount `<Toaster />` once at your app
+root, then call `toast(…)` from anywhere — components, hooks, Redux middleware, fetch
+interceptors, service workers — without provider plumbing.
+
+```tsx
+// app/layout.tsx
+import { Toaster } from 'apx-ds';
+
+export default function Layout({ children }) {
+  return (
+    <>
+      {children}
+      <Toaster />
+    </>
+  );
+}
+```
+
+```ts
+// anywhere
+import { toast } from 'apx-ds';
+
+toast('Saved.');
+toast.success('Profile updated');
+toast.error('Could not save. Please retry.');
+```
+
+## Why an imperative API
+
+Notifications happen in code that is far away from React's view tree — the success / failure
+path of an async action, a global error handler, a third-party callback. Forcing every caller
+to thread a context through to dispatch a notification leads to prop drilling for an
+ephemeral concern. The Toaster's module-level store sidesteps that: callers reach for
+`toast(…)` like they would `console.log(…)`, and the singleton Toaster handles the rest.
+
+## API
+
+### `<Toaster />`
+
+| Prop                | Type              | Default          | Description                                              |
+| ------------------- | ----------------- | ---------------- | -------------------------------------------------------- |
+| `position`          | `ToastPosition`   | `'bottom-right'` | Where the stack anchors on screen.                       |
+| `max`               | `number`          | `3`              | Maximum simultaneously visible toasts.                   |
+| `gap`               | `number`          | `8`              | Pixels between stacked toasts.                           |
+| `expand`            | `boolean`         | `false`          | Always-expanded vs collapsed-with-hover-expand.          |
+| `duration`          | `number`          | `5000`           | Default auto-dismiss in ms. `0` is persistent.           |
+| `closeButton`       | `boolean`         | `false`          | Show the × button on every toast.                        |
+| `richColors`        | `boolean`         | `false`          | Default to `soft` (tinted) variant.                      |
+| `pauseOnHover`      | `boolean`         | `true`           | Pause auto-dismiss while pointer is over the region.     |
+| `pauseOnFocusLoss`  | `boolean`         | `true`           | Pause auto-dismiss when tab visibility is hidden.        |
+| `portalContainer`   | `HTMLElement \| null` | `document.body` | Override the portal target.                          |
+| `aria-label`        | `string`          | `'Notifications'` | Live region label.                                      |
+
+### `toast(…)` and aliases
+
+```ts
+toast(title, opts?);            // intent: neutral
+toast.success(title, opts?);
+toast.error(title, opts?);
+toast.warning(title, opts?);
+toast.info(title, opts?);
+toast.loading(title, opts?);
+
+toast.promise(promise, {
+  loading: ReactNode,
+  success: ReactNode | ((data) => ReactNode),
+  error: ReactNode | ((err) => ReactNode),
+}, opts?);
+
+toast.dismiss();        // dismiss everything
+toast.dismiss(id);      // dismiss a specific toast
+
+toast.update(id, {
+  title?,
+  description?,
+  intent?,
+  duration?,
+  icon?,
+  action?,
+  cancel?,
+  variant?,
+});
+```
+
+`toast(…)` returns the toast's id — pass it to `toast.dismiss(id)` / `toast.update(id, …)` to
+manage the toast later. Calling `toast(…, { id })` with an existing id **updates in place**
+instead of stacking; this is how `toast.promise` cycles a single toast through loading →
+success / error.
+
+### `ToastOptions`
+
+| Option        | Type                  | Description                                                                |
+| ------------- | --------------------- | -------------------------------------------------------------------------- |
+| `id`          | `string`              | Dedup key. New calls with the same id update the existing toast.           |
+| `description` | `ReactNode`           | Secondary text rendered under the title.                                   |
+| `icon`        | `ReactNode \| false`  | Override the per-intent icon; `false` removes it.                          |
+| `action`      | `{label, onClick}`    | Primary button (defaults to dismissing the toast on click).                |
+| `cancel`      | `{label, onClick}`    | Secondary button (defaults to dismissing the toast on click).              |
+| `duration`    | `number`              | Auto-dismiss in ms. `0` keeps the toast until manually dismissed.          |
+| `dismissible` | `boolean`             | When `false`, hides the close button and disables swipe.                   |
+| `onDismiss`   | `(id) => void`        | Fired when the toast leaves the queue via explicit dismiss.                |
+| `onAutoClose` | `(id) => void`        | Fired when the toast leaves the queue via timer expiry.                    |
+| `variant`     | `ToastVariant`        | Per-toast variant override (otherwise inherits `richColors` setting).      |
+
+## Variants
+
+| Variant   | Visual                                                                            |
+| --------- | --------------------------------------------------------------------------------- |
+| `solid`   | Paper background, neutral border. **Default minimal style.**                      |
+| `outline` | Paper background, intent-colored border.                                          |
+| `soft`    | Intent-tinted background + matching border. **Default when `richColors={true}`.** |
+
+## Intents
+
+| Intent     | Color role | Default icon            |
+| ---------- | ---------- | ----------------------- |
+| `neutral`  | neutral    | message bubble          |
+| `success`  | success    | check-circle            |
+| `error`    | danger     | alert-octagon           |
+| `warning`  | warning    | alert-triangle          |
+| `info`     | info       | info-circle             |
+| `loading`  | neutral    | spinner (CSS animation) |
+
+`error` intent uses `role="alert"`; every other intent uses `role="status"`.
+
+## Accessibility
+
+- The Toaster renders an `<ol role="region" aria-live="polite" aria-label="Notifications">`.
+  The list is present even when empty so screen readers stay subscribed.
+- Each toast is `<li role="status">` (`role="alert"` for the `error` intent).
+- `aria-atomic="true"` ensures the full toast re-announces when `toast.update` patches it.
+- Close / action / cancel buttons are native focusable buttons with explicit labels.
+- **F8** focuses the toast region (platform convention). Arrow Up / Down cycles between
+  visible toasts; Esc dismisses the focused toast.
+- `pauseOnHover` + `pauseOnFocusLoss` (both on by default) give users time to read.
+- Motion respects `prefers-reduced-motion`: opacity-only transition, no slide.
+- axe-core passes for every intent × variant combination.
+
+## Patterns
+
+### Optimistic update with undo
+
+```tsx
+async function archive(emailId: string) {
+  await api.archive(emailId);
+  toast('Email archived', {
+    description: 'Removed from inbox.',
+    action: {
+      label: 'Undo',
+      onClick: () => api.unarchive(emailId).then(() => toast.success('Restored.')),
+    },
+  });
+}
+```
+
+### Async with promise
+
+```tsx
+function onSubmit(values) {
+  toast.promise(api.savePost(values), {
+    loading: 'Saving post…',
+    success: (post) => `Posted as “${post.title}”`,
+    error: (err) => `Failed: ${err.message}`,
+  });
+}
+```
+
+### Outside React
+
+```ts
+// axios interceptor
+api.interceptors.response.use(undefined, (error) => {
+  if (error.response?.status === 401) {
+    toast.error('Your session expired. Please sign in again.');
+  }
+  return Promise.reject(error);
+});
+```
+
+## Anti-patterns
+
+- **Toast inside a Modal.** Toasts portal to `document.body` so they render correctly
+  above modals, but the UX is confusing (two simultaneous attention surfaces). Prefer an
+  inline Alert inside the Modal body.
+- **Toast for blocking confirmation.** Toasts are transient — they auto-dismiss. Use a
+  Modal or AlertDialog when you need a synchronous yes/no answer.
+- **Multiple Toasters.** Mount exactly one Toaster per app. Multiple Toasters with
+  different `position` props is allowed (rare), but they share the same queue.
+
+## Examples
+
+Each example below mounts its own `<Toaster />` so the preview is self-contained — in a
+real app you mount **one** Toaster at the app shell. Click any trigger button to fire a
+toast; the queue, animation, and ARIA live region all run live.
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="Intents" />
+
+<ExampleBlock for="RichColors" />
+
+<ExampleBlock for="WithAction" />
+
+<ExampleBlock for="Promise" />
+
+<ExampleBlock for="Persistent" />
+
+<ExampleBlock for="DismissAll" />
+
+<ExampleBlock for="Dedup" />
+
+<ExampleBlock for="Positions" />
+
+<ExampleBlock for="ExpandedStack" />
+
+<ExampleBlock for="CustomIcon" />
+
+## Theming
+
+```tsx
+defineTheme({
+  components: {
+    Toast: {
+      styleOverrides: {
+        region: '',
+        content: 'shadow-2xl',
+        action: 'font-semibold',
+        close: '',
+      },
+    },
+  },
+});
+```

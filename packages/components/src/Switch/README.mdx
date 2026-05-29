@@ -1,0 +1,135 @@
+## Overview
+
+`<Switch />` is the binary on/off toggle. It uses the same hidden-input + custom-painted-indicator
+technique as `<Checkbox />` (Phase 9), but with a sliding thumb instead of a glyph. The visual
+language is intentionally different so users learn the affordance:
+
+- **Switch** flips a setting **now** (often async, often server-confirmed).
+- **Checkbox** queues a value for **submission**.
+
+Switch ships three independently overridable slots: `root`, `track`, `thumb`. The slide is pure
+CSS (`transition-transform`) and respects `prefers-reduced-motion` — no Motion-library cost is
+paid for the most common interaction.
+
+## Anatomy
+
+```text
+[ track [ thumb ] | label / description column ]
+```
+
+- **track** — the colored rail. Variant × color × shape lives here.
+- **thumb** — the sliding pill (always circular). Optional `thumbIcon` glyph inside.
+- **label** — `children`, click target via the wrapping `<label>`.
+- **description** — optional secondary text, wired via `aria-describedby`.
+
+The track + thumb are decorative (`aria-hidden`). Assistive tech reads the underlying
+`<input role="switch">`.
+
+## Examples
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="Variants" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="Colors" />
+
+<ExampleBlock for="Shapes" />
+
+<ExampleBlock for="WithThumbIcons" />
+
+<ExampleBlock for="WithDescription" />
+
+<ExampleBlock for="Disabled" />
+
+<ExampleBlock for="Invalid" />
+
+<ExampleBlock for="Loading" />
+
+<ExampleBlock for="SettingsRow" />
+
+<ExampleBlock for="Controlled" />
+
+## Props
+
+<PropsTable />
+
+## Accessibility
+
+- The hidden `<input type="checkbox" role="switch">` is the canonical control. Form participation
+  (`name` + `value`), keyboard, and screen-reader announcements all flow through it.
+- `aria-checked` is binary (`true` / `false`) — switches are not tri-state.
+- `aria-busy` is set when `loading` is `true`; toggling is blocked at the React layer.
+- Focus ring lands on the **track** via the `peer-focus-visible` variant, colored to match the
+  active `color` for every variant × color cell.
+- `Space` toggles; `Enter` is a no-op (matches native `role="switch"` per the ARIA spec).
+- `invalid` sets `aria-invalid` on the input and adds a danger ring on the track.
+- `description` is auto-wired via `aria-describedby`; consumer-supplied `aria-describedby` ids
+  are merged in.
+- A dev-mode warning fires when no accessible name is provided (`SWITCH_NO_LABEL`).
+- The internal spinner sits inside the `aria-hidden` track. Screen readers learn about the
+  loading state via the `aria-busy` on the input itself — the visible spinner is decorative.
+- axe-core passes across the variant × color × state matrix.
+
+## Theming
+
+```tsx
+<ThemeProvider
+  theme={defineTheme({
+    components: {
+      Switch: {
+        defaultProps: { variant: 'soft', size: 'lg' },
+        styleOverrides: {
+          root: 'gap-3',
+          track: 'shadow-inner',
+          thumb: 'shadow-md',
+        },
+      },
+    },
+  })}
+>
+  {children}
+</ThemeProvider>
+```
+
+Instance-level overrides win via `tailwind-merge`:
+
+```tsx
+<Switch className="font-medium" sx={{ radius: 'lg' }} style={{ accentColor: '#22c55e' }}>
+  Override me
+</Switch>
+```
+
+## Motion
+
+- **Thumb slide** — pure CSS `transition-transform` (~150ms, `ease-standard`).
+- **Track bg crossfade** — pure CSS `transition-[background-color,border-color,...]`.
+- **Loading spinner** — Tailwind `animate-spin` on a 2-px ring; no Motion library import.
+- **`prefers-reduced-motion`** — collapses all transitions via Tailwind's `motion-reduce`
+  variant on every animated rule.
+
+Total Motion-library cost for Switch: **0 bytes**. The whole component slides without paying for
+the spring engine.
+
+## RTL
+
+- `labelPosition` is logical (`right` = end side LTR, start side RTL).
+- The thumb starts at `start-0.5` (logical), so it begins from the start edge in both directions.
+- The Tailwind `translate-x-*` slide is already direction-aware in modern browsers when the
+  parent has `dir="rtl"` — the thumb visually slides toward the logical end without an explicit
+  flip.
+
+## Do / Don't
+
+- **Do** use Switch for **instant-effect** settings: notifications, dark mode, integrations.
+- **Do** use `loading` for async toggles where the server must confirm the new state — the
+  spinner inside the thumb is the right affordance for "I'm waiting on a server", not "I'm
+  computing locally".
+- **Do** label the switch — short verb phrases ("Enable…", "Allow…") read best.
+- **Don't** use Switch inside a form that requires Submit before changes apply — that's
+  `<Checkbox />`'s job. The user expects switches to take effect immediately.
+- **Don't** wrap multiple switches in a `<RadioGroup>`-style single-selection container —
+  that's `<Radio />` (Phase 11). Switches are independent boolean toggles.
+- **Don't** use a switch for navigation or for opening a dialog — that's `<Button>`'s job. The
+  switch metaphor implies persistent state.

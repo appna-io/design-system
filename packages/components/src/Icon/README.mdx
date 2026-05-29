@@ -1,0 +1,149 @@
+---
+title: Icon
+category: Primitives
+---
+
+# Icon
+
+`<Icon>` is the canonical DS icon primitive — **library-agnostic**, with three render modes
+(`as` / `name` / `children`), DS color + size tokens, decorative-by-default a11y, and utility
+props for `rotate` / `flip` / `spin`. Ships with `<IconProvider>` + `createIconRegistry` so
+your app's icon library wires into every shipped DS component through a stable string-name
+contract.
+
+## Why a primitive at all?
+
+Every DS component up to this point inlined raw SVGs or accepted `ReactNode` for icon slots.
+That meant:
+
+- Every example used a different icon library / inline SVG.
+- No central swap point if you switch from lucide-react → heroicons → iconify.
+- A11y bugs leaked through (icons stuck in the tab order, no `aria-hidden` defaults, etc.).
+- `currentColor` cascade was inconsistent (fill vs stroke).
+
+`<Icon>` standardizes all of it in **~1 KB**, without locking you to a library.
+
+## Quick start
+
+### 1. Inline static (zero-config)
+
+```tsx
+import { Mail } from 'lucide-react';
+import { Icon } from 'apx-ds';
+
+<Icon as={Mail} />
+<Icon as={Mail} size="lg" color="danger" />
+<Icon as={Mail} label="Inbox" />   {/* meaningful: role=img + aria-label */}
+```
+
+### 2. Registry (the 80% case)
+
+Wire your icon set once at app boot, then reference by name everywhere:
+
+```tsx
+import { createIconRegistry, IconProvider, Icon } from 'apx-ds';import * as Lucide from 'lucide-react';
+
+const icons = createIconRegistry({
+  mail: Lucide.Mail,
+  user: Lucide.User,
+  settings: Lucide.Settings,
+});
+
+<IconProvider value={icons}>
+  <App />
+</IconProvider>;
+
+<Icon name="mail" />
+<Icon name="user" size="lg" />
+<Icon name="settings" label="Settings" />
+```
+
+### 3. Inline children (escape hatch)
+
+```tsx
+<Icon size="md" label="Custom logo">
+  <svg viewBox="0 0 24 24"><path d="..." /></svg>
+</Icon>
+```
+
+## Render-source precedence
+
+When multiple sources are passed, the runtime picks in this order:
+
+1. **`children`** wins.
+2. **`as`** runs when `children` is absent.
+3. **`name`** runs when both are absent.
+
+Missing `name` (no registry / unregistered key) → fires `onMissing`, then renders the provider
+`fallback` (or an empty placeholder when no fallback is set).
+
+## A11y
+
+| Intent                                | Pass to Icon              | Resulting ARIA                              |
+| ------------------------------------- | ------------------------- | ------------------------------------------- |
+| Decorative (paired with visible text) | _(default — no props)_    | `aria-hidden="true"`                        |
+| Meaningful (icon stands alone)        | `label="…"`               | `role="img"` + `aria-label="…"`             |
+| Explicit decorative override          | `decorative`              | `aria-hidden="true"` (even with `label`)    |
+
+`focusable="false"` is always applied on the underlying `<svg>` to neutralize legacy IE/Edge
+tab-stop behavior.
+
+## Sizes
+
+Token classes for `xs | sm | md | lg | xl`. Numeric (`size={20}` → 20px) and arbitrary CSS
+lengths (`size="1.5rem"`) apply via inline style.
+
+| Token | px |
+| ----- | -- |
+| xs    | 12 |
+| sm    | 14 |
+| md    | 16 (default) |
+| lg    | 20 |
+| xl    | 24 |
+
+## Colors
+
+DS palette tokens map to recipe classes; arbitrary CSS colors (`'#abc'`, `'var(--my-c)'`)
+apply via inline `style.color`. Default `color="current"` inherits `currentColor`, so dropping
+an Icon inside a colored button "just works."
+
+`current | inherit | default | muted | subtle | accent | success | warning | danger | info`
+
+## DS Icon Catalog
+
+The DS internally references icons by these stable string names. Register them in your
+provider once and every shipped component (Checkbox, Select, Toast, Alert, NavigationMenu, …)
+lights up:
+
+```tsx
+import { DS_ICON_NAMES, createIconRegistry } from 'apx-ds';import * as Lucide from 'lucide-react';
+
+const icons = createIconRegistry(
+  {
+    check: Lucide.Check,
+    'check-circle': Lucide.CheckCircle2,
+    x: Lucide.X,
+    'chevron-down': Lucide.ChevronDown,
+    // …see DS_ICON_NAMES for the full set
+  },
+  { strict: true }, // optional — runtime warns if a DS name is missing
+);
+```
+
+## Utility props
+
+- `rotate={0 | 90 | 180 | 270}` — quarter-turn CSS rotation.
+- `flip="horizontal" | "vertical" | "both"` — CSS scale mirror.
+- `spin` — applies the spinner ring animation; honors `prefers-reduced-motion`.
+- `asChild` — render via `<Slot>`; child element receives the merged className + ARIA wiring.
+
+## Bundle
+
+- Icon + IconProvider + helpers: target **< 1 KB gz**.
+- Registry lookup: O(1) Map access.
+- Zero icon-library imports in the Icon source — every glyph is the consumer's import.
+
+## Non-breaking
+
+Phase 57 doesn't migrate any existing component. Every icon slot that accepts `ReactNode`
+keeps accepting `ReactNode`; the recommended new pattern is `<Icon name="…" />` inside it.

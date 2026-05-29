@@ -1,0 +1,67 @@
+{
+  "name": "@apx-ui/ds",
+  "version": "0.0.0",
+  "description": "Themable, RTL-ready, fully overridable React component library",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./tailwind-preset": {
+      "types": "./dist/tailwind-preset.d.ts",
+      "import": "./dist/tailwind-preset.js",
+      "require": "./dist/tailwind-preset.cjs"
+    },
+    "./styles/reset.css": "./dist/styles/reset.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "echo 'apx-ds is an aggregator package with no tests of its own' && exit 0",
+    "test:watch": "echo 'apx-ds is an aggregator package with no tests of its own' && exit 0",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist .turbo"
+  },
+  "keywords": [
+    "react",
+    "component-library",
+    "design-system",
+    "ui",
+    "rtl",
+    "themable",
+    "tailwind"
+  ],
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "dependencies": {
+    "@apx-ui/components": "workspace:*",
+    "@apx-ui/engine": "workspace:*",
+    "@apx-ui/icons": "workspace:*",
+    "@apx-ui/theme": "workspace:*",
+    "@apx-ui/tokens": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

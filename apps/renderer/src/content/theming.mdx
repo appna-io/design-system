@@ -1,0 +1,86 @@
+# Theming
+
+The `apx-ds` theming system is built on three orthogonal axes:
+
+- **Mode** — `light` · `dark` · `system` (follows OS preference)
+- **Variant** — stylistic family (`default` _adaptive_, `tetsu`, `origami`, `katana`)
+- **Platform** — Safari / Apple-WebKit vs everything else (auto-detected; powers the adaptive `default`)
+- **Direction** — `ltr` · `rtl`
+
+All three are driven from a single `<ThemeProvider>` and exposed as CSS variables, so toggling any
+axis updates the page without re-rendering component class strings.
+
+## Mode
+
+```tsx
+import { useMode } from 'apx-ds';
+
+function Header() {
+  const { mode, setMode } = useMode();
+  return (
+    <button type="button" onClick={() => setMode(mode === 'dark' ? 'light' : 'dark')}>
+      Toggle mode
+    </button>
+  );
+}
+```
+
+<Callout type="info">
+  Use the **mode toggle** in the top bar of this renderer to flip between light and dark — the
+  preview surfaces and Shiki code blocks both follow along.
+</Callout>
+
+## Variants
+
+A variant is a partial theme override that swaps a coherent set of tokens at once (radii, spacing,
+shadows, …). They're defined in `@apx-ds/tokens/variants` and can be extended by passing a
+custom theme to `<ThemeProvider>`:
+
+```tsx
+import { ThemeProvider, defineTheme } from 'apx-ds';
+
+const theme = defineTheme({
+  variants: {
+    brand: {
+      radius: { md: '999px' },
+    },
+  },
+});
+
+<ThemeProvider theme={theme} defaultVariant="brand">
+  …
+</ThemeProvider>;
+```
+
+## Direction
+
+```tsx
+import { useThemeDirection } from 'apx-ds';
+
+function Bidi() {
+  const { dir, setDir } = useThemeDirection();
+  return (
+    <button type="button" onClick={() => setDir(dir === 'ltr' ? 'rtl' : 'ltr')}>
+      Flip direction
+    </button>
+  );
+}
+```
+
+The provider writes `dir` to `<html>` and DS components use CSS logical properties
+(`margin-inline-start`, etc.) plus Tailwind's `rtl:` variants, so flipping LTR ↔ RTL is a single
+attribute change.
+
+## Override precedence
+
+The DS resolves component styling in this strict order — `useThemedClasses()` enforces it
+internally so every component is consistent:
+
+1. The component's own `cv()` recipe (base + variant + compound classes).
+2. The active theme's `styleOverrides[componentName]`.
+3. The `className` prop the consumer passes.
+4. The `sx` prop (theme-aware style object) translated to inline `style`.
+5. The raw `style` prop the consumer passes (highest priority).
+
+Each layer can override the one before it, giving consumers complete control without ever having
+to fork a component.

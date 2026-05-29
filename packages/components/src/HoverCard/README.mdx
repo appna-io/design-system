@@ -1,0 +1,144 @@
+## Overview
+
+`<HoverCard />` is the canonical **hover-triggered rich preview overlay** — the GitHub-user-card-on-@mention,
+the Stripe-style link preview, the inline glossary popup. It's Tooltip's interactive cousin and
+Popover's hover-driven sibling, sitting deliberately between them in the overlay family.
+
+| Overlay        | Trigger        | Interactive content?       | Focus trap? | Default delay |
+| -------------- | -------------- | --------------------------- | ----------- | ------------- |
+| `<Tooltip />`  | hover / focus  | No (text-only)              | No          | 400 / 150     |
+| `<HoverCard />`| hover / focus  | **Yes** (links, buttons OK) | **No**      | 700 / 300     |
+| `<Popover />`  | click          | Yes                         | Optional    | n/a           |
+| `<Modal />`    | click          | Yes                         | **Yes**     | n/a           |
+
+HoverCard reuses Popover's positioning engine (`usePosition`, `<Portal>`, `useEscapeStack`) and
+Tooltip's hover-delay state machine (`useTooltipDelay`). It's the **second consumer of
+`useTooltipDelay`** — when NavigationMenu (Phase 52) ships as the third consumer, the hook
+becomes engine-promotion-ready as `useHoverDelay`.
+
+## When to use
+
+- User profile card when hovering an `@mention` or avatar.
+- Link preview when hovering a URL inside running text.
+- Definition popup when hovering a glossary term (dotted-underline trigger).
+- Quick-view card when hovering a thumbnail / list-item title.
+- API endpoint preview when hovering a method name in docs.
+
+## When NOT to use
+
+- The content is non-interactive text → `<Tooltip />` (smaller, snappier).
+- The content needs to persist until dismissed → `<Popover />` (click trigger, optional focus trap).
+- The content blocks the rest of the page → `<Modal />` (centered, modal).
+- The interaction is a list of actions → `<Menu />`.
+- The trigger is a non-focusable decorative element AND the content is the only path to the
+  information → use `<Popover />` instead, hover-only triggers are inaccessible by themselves.
+
+## Anatomy
+
+```text
+<HoverCard>
+  <HoverCard.Trigger asChild>
+    <a href="…">trigger</a>            (any focusable element via asChild)
+  </HoverCard.Trigger>
+  <HoverCard.Content>
+    {…rich content — links, buttons, avatars, anything…}
+                                       (arrow auto-rendered by default)
+  </HoverCard.Content>
+</HoverCard>
+```
+
+## Default behavior
+
+- **Hover-focus mode** (default) — opens on `pointerenter` *or* `focus`, closes on `pointerleave`
+  (after delay) *or* `blur` (immediately). Keyboard-accessible by default.
+- **Bridge pattern** — moving the cursor from the trigger to the content cancels the close
+  timer. Move out of both → the close timer fires. Lets users actually click the links / buttons
+  inside the card.
+- **No focus trap** — Tab continues through Content as part of the natural document order.
+  HoverCard is **additive**, not blocking. The card never steals focus when it opens.
+- **Escape closes** — integrated with the engine's `useEscapeStack` so nested overlays close in
+  the right order (Tooltip-over-HoverCard or HoverCard-inside-Popover both work without
+  per-component coordination).
+- **Click does not toggle** — clicking the trigger follows the trigger's own action (`<a>`
+  navigates, `<button>` runs `onClick`). HoverCard is additive; it never steals the trigger's
+  primary affordance.
+
+## Trigger modes
+
+- `trigger="hover-focus"` (**default**) — opens on hover *and* focus. Use for any
+  keyboard-reachable trigger (links, buttons, focusable images).
+- `trigger="hover"` — hover-only. Discouraged because it locks out keyboard users; use only
+  when the trigger is decorative *and* the content is reachable elsewhere.
+
+## Delay defaults
+
+- `openDelay=700` — patient by design. HoverCard content is richer than a Tooltip; firing during
+  incidental cursor sweeps would be visual noise.
+- `closeDelay=300` — gives users time to traverse from trigger → content for clicking.
+
+Override via `<HoverCard openDelay={…} closeDelay={…}>`. See the **Delays** example for the
+range.
+
+## Variants
+
+Three visual variants × seven colors. `solid` is color-neutral (paper bg + neutral border) so
+the `color` prop is ignored; `outline` paints the border; `soft` paints the tinted background +
+low-opacity border + colored text.
+
+## Accessibility
+
+- Trigger always carries its own role + accessible name (the consumer's element).
+- Trigger gets `aria-describedby={contentId}` while the card is open, pairing it with the
+  Content element.
+- Content carries `role="tooltip"` per the W3C HoverCard guidance — it's a *description* of the
+  trigger, not a button-disclosed panel. (The plan's draft `role="dialog"` was reconsidered:
+  `dialog` requires an accessible name + implies modal semantics; `tooltip` is the accurate
+  W3C-blessed role for additive hover content.)
+- No `aria-haspopup` / `aria-expanded` — these are disclosure-widget attributes; HoverCard is
+  not a disclosure.
+- Esc closes the topmost card via `useEscapeStack`.
+- axe-clean across all variants × representative colors. See `HoverCard.a11y.test.tsx`.
+
+## Composition recipes
+
+### `@mention` profile card
+
+```tsx
+<HoverCard onOpenChange={(open) => open && fetchProfile(id)}>
+  <HoverCard.Trigger asChild>
+    <a href={`/users/${username}`}>@{username}</a>
+  </HoverCard.Trigger>
+  <HoverCard.Content>
+    {profile ? <ProfileCard data={profile} /> : <Spinner size="sm" />}
+  </HoverCard.Content>
+</HoverCard>
+```
+
+### Inline glossary
+
+```tsx
+<HoverCard>
+  <HoverCard.Trigger asChild>
+    <button type="button" className="underline decoration-dotted">design token</button>
+  </HoverCard.Trigger>
+  <HoverCard.Content variant="soft" color="info">
+    <strong>design token</strong>
+    <p>A single source-of-truth value (color, spacing, …).</p>
+  </HoverCard.Content>
+</HoverCard>
+```
+
+### Async lazy-load
+
+```tsx
+const [data, setData] = useState(null);
+const loadOnce = (open: boolean) => open && data == null && fetchData().then(setData);
+
+<HoverCard onOpenChange={loadOnce}>…</HoverCard>;
+```
+
+## Related
+
+- [`<Tooltip />`](../Tooltip/README.mdx) — non-interactive text hint.
+- [`<Popover />`](../Popover/README.mdx) — click-triggered interactive panel.
+- [`<Modal />`](../Modal/README.mdx) — centered, focus-trapped overlay.

@@ -1,0 +1,123 @@
+## Overview
+
+`<Input />` is the canonical single-line text-input primitive. It pairs with `<label>` for the
+accessible name and proves the **shared form-control recipe** every later text-style control
+(Textarea, Select shell, FormattedInput, …) inherits without modification.
+
+Where Button proved the variant system on a button surface, Input proves it on a
+**bordered, focus-ringed, slotted** surface — addons and icons live inside the same focus ring,
+and `invalid` / `disabled` / `loading` all flow through the same attribute-driven story.
+
+## Variants
+
+Four "border + background" stories. Pick the one that matches how much frame the surrounding
+form needs:
+
+- **`outline`** — 1px border, paper background. The default; safest on any surface.
+- **`solid`** — filled tint (`bg.subtle`), no visible border. Best when the parent is already
+  `bg.paper` and you want to suggest "field" without a heavy frame.
+- **`ghost`** — invisible at rest; gains a colored border + tint only on hover / focus. Inline
+  editing and search-as-you-type live here.
+- **`underline`** — Material-style single bottom rule. Dense forms.
+
+Every variant works with every `color` (7 colors) and every theme `variant` and adapts to the
+active `platform`. The focus ring + focused border use the active `color`; the body border stays
+neutral at rest so colored inputs don't shout for attention.
+
+## Anatomy
+
+```text
+[ leftAddon | leftIcon | <input /> | rightIcon / spinner | rightAddon ]
+```
+
+Add-ons are sibling DOM elements that share the wrapper's frame (single border, single radius,
+single focus ring). Icons live inside the input padding and are visually decorative — wrap
+interactive icons (clear, password reveal) in a real `<button>` to keep semantics correct.
+
+## Examples
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="Variants" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="Colors" />
+
+<ExampleBlock for="WithIcons" />
+
+<ExampleBlock for="WithAddons" />
+
+<ExampleBlock for="Invalid" />
+
+<ExampleBlock for="Disabled" />
+
+<ExampleBlock for="Loading" />
+
+<ExampleBlock for="Password" />
+
+<ExampleBlock for="Controlled" />
+
+## Props
+
+<PropsTable />
+
+## Accessibility
+
+- Renders a native `<input>` — keyboard interaction, IME composition, and form submission all
+  use the platform's built-in behaviors.
+- **Labels**: Input never auto-labels. Wrap with a `<label htmlFor>` (or the future `<Field>`),
+  pass `aria-label`, or pass `aria-labelledby`. A dev-mode warning fires when none of those are
+  present — `[apx-ds][INPUT_NO_LABEL]`.
+- **Invalid state**: `invalid={true}` sets `aria-invalid="true"` on the input and a matching
+  `data-invalid` on the wrapper. The danger border + ring color come from an attribute selector,
+  so a future `<Field invalid>` propagates correctly without prop-drilling.
+- **Required state**: `required` sets the native attribute + `aria-required="true"`.
+- **`aria-describedby`** is preserved as-is; the future `<Field>` will append helper / error
+  text ids here.
+- **Disabled vs read-only**: `disabled` is unreachable by tab; `readOnly` is reachable but
+  uneditable. `loading` chooses **read-only + `aria-busy`** so the field stays focusable and
+  participates in submission — useful for live validation.
+- **Focus ring** lives on the **wrapper** (`focus-within:ring-*`), not the bare input, so
+  addons + icons + input read as a single visual frame.
+
+## Theming
+
+Every visual decision is a token. Tweak the global theme to remix the whole library at once, or
+scope overrides to Input specifically — both `root` (wrapper) and `input` (the bare element) are
+addressable slots:
+
+```tsx
+<ThemeProvider
+  theme={defineTheme({
+    components: {
+      Input: {
+        defaultProps: { variant: 'solid', size: 'lg' },
+        styleOverrides: {
+          root: 'shadow-xs',
+          input: 'font-medium',
+          leftAddon: 'font-mono',
+          rightAddon: 'font-mono',
+        },
+      },
+    },
+  })}
+>
+  {children}
+</ThemeProvider>
+```
+
+Instance-level overrides win via `tailwind-merge`:
+
+```tsx
+<Input className="border-dashed" sx={{ radius: 'xl' }} style={{ minWidth: 320 }} />
+```
+
+## Do / Don't
+
+- **Do** pair every Input with a visible `<label>`. Placeholders are not labels.
+- **Do** use `invalid` + an `aria-describedby` error message for client-side validation.
+- **Don't** use `disabled` for "not editable right now" — `readOnly` keeps the field reachable
+  and submittable.
+- **Don't** put a label-equivalent icon (e.g. an envelope) as the sole accessible name —
+  decorative icons inside the input must be paired with a real label.

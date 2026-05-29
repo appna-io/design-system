@@ -1,0 +1,108 @@
+# NumberInput
+
+`<NumberInput />` is the DS's canonical numeric form control — a drop-in replacement for
+`<Input type="number">` that fixes its long list of UX defects (scientific notation, silent
+rejection on blur, no thousand separator, vendor spinners) and ships **typed `number | null`
+values**, **locale-aware formatting + parsing**, **clamping + precision rounding**, **mouse-hold
+accelerating step**, full **keyboard control**, and a hidden `<input type="hidden">` for HTML
+form submission with the canonical value.
+
+## Why a separate component
+
+Native `type="number"` accepts arbitrary scientific notation (`1e5`), silently rejects bad input
+on blur, lacks formatting (no thousand separators), and renders ugly browser-vendored spinners.
+NumberInput owns all of that:
+
+- **Typed value (`number | null`)** — `null` means the input is empty; consumers never deal with
+  `"42"` strings.
+- **Render as `<input type="text">`** under the hood + `role="spinbutton"` + `aria-valuemin` /
+  `aria-valuemax` / `aria-valuenow` / `aria-valuetext`.
+- **Locale-aware parsing** (`Intl.NumberFormat` probes + Arabic-Indic / Persian digit
+  normalization) handles `1,234.56`, `1.234,56`, and `١٬٢٣٤٫٥٦` uniformly.
+- **Cached `Intl.NumberFormat`** instances — formatting on hot keystrokes stays cheap.
+- **Mouse-hold stepper** with an accelerating repeat rate (`useStepperHold`) — released for the
+  next consumer that needs press-and-hold semantics.
+- **Hidden `<input type="hidden">`** for HTML form submission with the canonical numeric string.
+
+## Inherits Input's visual story
+
+NumberInput re-uses `inputRecipe` + `inputInnerRecipe` directly — same variants (`outline`,
+`solid`, `ghost`, `underline`), same sizes (`sm` / `md` / `lg`), same 7-color palette, same
+`controlBase` focus ring. Adding a new Input variant or color picks up here automatically. The
+only new visual surface is the stepper button group (`stepperGroupRecipe` + `stepperButtonRecipe`)
+which lives next to the component.
+
+## Stepper position
+
+| `stepperPosition` | Layout                                                            |
+| ----------------- | ----------------------------------------------------------------- |
+| `'end'` (default) | Vertically stacked `+` (top) / `−` (bottom) on the logical end.   |
+| `'start'`         | Same stacked layout on the logical start.                         |
+| `'split'`         | Single `−` on the logical start, single `+` on the logical end.   |
+
+All positions use logical CSS properties, so RTL layouts flip automatically.
+
+## Keyboard
+
+| Key                        | Action                                          |
+| -------------------------- | ----------------------------------------------- |
+| Arrow Up / Down            | `value ± step`                                  |
+| Shift + Arrow              | `value ± largeStep` (defaults to `step * 10`)   |
+| PageUp / PageDown          | `value ± largeStep`                             |
+| Home                       | `value = min` (when `min` defined)              |
+| End                        | `value = max` (when `max` defined)              |
+| Enter                      | Commit + format display                         |
+| Escape                     | Revert to last committed value                  |
+
+The stepper buttons are intentionally **not** in the tab order (`tabIndex={-1}`) — keyboard users
+operate on the input itself. Pointer-only users get the buttons.
+
+## Examples
+
+<ExampleBlock for="Basic" title="Basic — `number | null` value, default stepper" />
+<ExampleBlock for="Range" title="Min / max / step" />
+<ExampleBlock for="Step" title="step + largeStep (Shift+Arrow)" />
+<ExampleBlock for="Currency" title="Currency — Intl format pass-through" />
+<ExampleBlock for="Percentage" title="Percentage — Intl percent style" />
+<ExampleBlock for="Precision" title="Precision — decimal-place rounding" />
+<ExampleBlock for="LocaleDe" title="Locale: de-DE — 1.234,56 display" />
+<ExampleBlock for="LocaleAr" title="Locale: ar-EG — Arabic-Indic digits" />
+<ExampleBlock for="ScrollWheel" title="Scroll-wheel opt-in" />
+<ExampleBlock for="StepperPositions" title="Stepper positions — end / start / split" />
+<ExampleBlock for="Variants" title="Variants — inherits Input" />
+<ExampleBlock for="Sizes" title="Sizes — sm / md / lg" />
+<ExampleBlock for="Colors" title="Colors — 7-role palette" />
+<ExampleBlock for="HiddenSteppers" title="Hide stepper buttons" />
+<ExampleBlock for="Disabled" title="Disabled + read-only" />
+<ExampleBlock for="Invalid" title="Invalid — aria-invalid + danger ring" />
+<ExampleBlock for="WithLabel" title="With label + helper text" />
+<ExampleBlock for="FormSubmission" title="Form submission — hidden canonical value" />
+
+## Accessibility
+
+- Visible input is `<input type="text" role="spinbutton">` with the full ARIA value triad.
+- `aria-valuetext` carries the formatted display string so screen readers announce `"$1,234.56"`
+  instead of the raw `1234.56`.
+- Stepper buttons have translatable `aria-label`s (`incrementLabel` / `decrementLabel`) and are
+  `tabIndex={-1}` so they don't pollute the tab order.
+- Wires through `useFormFieldA11y` — invalid + required + describedby flow exactly like Input.
+- Dev-only warning fires once when no `aria-label` / `aria-labelledby` / wrapping `<label>` is
+  found (same shape as Input's `INPUT_NO_LABEL`).
+
+## Bundle
+
+Target: < 3.5 KB gz. Roughly the parse + format helpers (`Intl.NumberFormat` itself is a platform
+primitive, paid once), the controllable state, the stepper hold hook, the stepper recipes, the
+inline glyph SVGs (no `lucide-react` dependency), and the React event wiring.
+
+## Sibling primitives introduced
+
+- **`useStepperHold`** — generic "press and hold to repeat" hook with an accelerating ramp. Lives
+  next to NumberInput today; promote to `_shared/` when the second consumer (Spinner /
+  Quantity-stepper) arrives.
+- **`parseLocalizedNumber`** — pure locale-aware parser. Handles thousand separators, locale
+  decimal separators, Arabic-Indic + Persian digits, and rejects scientific notation. Exported
+  for tests; future date / measurement parsers can borrow the digit-normalization step.
+- **`formatNumber`** — cached `Intl.NumberFormat` wrapper. Same caching strategy any future
+  formatter (DatePicker, FileSize, Duration) should adopt.
+- **`clampToRange` + `roundToPrecision`** — pure math, no DOM. Slider / NumberRange will pull these in.

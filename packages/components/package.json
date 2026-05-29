@@ -1,0 +1,66 @@
+{
+  "name": "@apx-ui/components",
+  "version": "0.0.0",
+  "description": "The apx-ds component library",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./src/*": "./src/*"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "bench": "vitest bench --run",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist .turbo"
+  },
+  "peerDependencies": {
+    "@tanstack/react-virtual": ">=3",
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "@tanstack/react-virtual": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@apx-ui/engine": "workspace:*",
+    "@apx-ui/theme": "workspace:*",
+    "@apx-ui/tokens": "workspace:*",
+    "lucide-react": "^1.16.0",
+    "motion": "^12.39.0"
+  },
+  "devDependencies": {
+    "@tanstack/react-virtual": "^3.13.25",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/jest-axe": "^3.5.9",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "jest-axe": "^10.0.0",
+    "jsdom": "^25.0.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

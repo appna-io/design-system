@@ -1,0 +1,803 @@
+---
+title: DataGrid
+status: Stable
+phase: 27
+---
+
+# DataGrid
+
+`<DataGrid />` is the canonical data-display primitive of the DS — a semantic
+`<table role="grid">` with the **full ARIA Grid pattern**, a headless `useDataGrid()`
+state machine, four chrome variants × seven accent colors × three densities, end-to-end
+RTL support, and a first-class i18n contract that every visible string flows through.
+
+> **Mental model**
+>
+> Reach for `<Table>` for static or paginated lists ≤ a few hundred rows.
+> Reach for `<DataGrid>` when you need multi-column sort, per-column filtering,
+> column visibility / resize / pin / reorder, row virtualization, inline cell
+> editing, expandable detail rows, aggregations, server-driven data, persistent
+> state, or any combination of these. The component is built to be the **only**
+> grid the consumer ever needs at the price of being ~10× the bundle of `<Table>`.
+
+The full plan lives in [`plans/pending/components/27-data-grid.md`](../../../../plans/pending/components/27-data-grid.md).
+It ships in **8 PRs**; this page is the consolidated docs for all eight.
+
+| PR | Scope | Status |
+| --- | --- | --- |
+| 1 | Engine `<I18nProvider>` primitive (consumed by DataGrid, Pagination, Breadcrumbs, Calendar, Combobox, Scheduler) | Shipped |
+| 2 | Headless `useDataGrid()` + reducers + derivations + filter engine + exporters | Shipped |
+| 3 | DOM scaffolding (`<DataGrid />` + 7 base subparts + ARIA Grid + keyboard nav) | Shipped |
+| 4 | Toolbar + Pagination + Selection + Filter UX + Density toggle + Export + ColumnVisibility | Shipped |
+| 5 | Column pinning + resize + row expansion + cell editing + aggregations + states | Shipped |
+| 6 | Virtualization (50k rows via `@tanstack/react-virtual`, peer dep) | Shipped |
+| 7 | RTL polish + Hebrew + Arabic translation bundles + persistence + responsive | Shipped |
+| 8 | Visual snapshot suite (168 Playwright PNGs) + full a11y matrix (168 axe runs) + perf benchmarks + bundle audit (22.8–25.6 KB gz) + this README | Shipped |
+
+---
+
+## When to use what
+
+| Use case | Component |
+| --- | --- |
+| Static or paginated data, ≤ a few hundred rows | `<Table>` |
+| One sort column at a time, no filters | `<Table>` |
+| "Select rows with a checkbox" only | `<Table>` |
+| Multi-column sort, per-column filters, global search | `<DataGrid>` |
+| Column resize / pin / reorder / hide | `<DataGrid>` |
+| Inline cell editing | `<DataGrid>` |
+| Expandable detail rows / aggregations footer | `<DataGrid>` |
+| Virtualized 10k+ rows | `<DataGrid>` (opt-in via `<DataGrid.VirtualBody>` + `@tanstack/react-virtual`) |
+| Server-driven pagination + sort + filter | `<DataGrid>` with `pagination.cursor` + `manual*: true` flags |
+| Persistent state across page reloads | `<DataGrid storage="local">` |
+| Hebrew / Arabic UI | `<DataGrid translations={heDataGridTranslations}>` inside `<DirectionProvider dir="rtl">` |
+
+---
+
+## Basic example
+
+```tsx
+import { DataGrid } from 'apx-ds';
+import type { DataGridColumnDef } from 'apx-ds';
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  signups: number;
+}
+
+const columns: DataGridColumnDef<User>[] = [
+  { id: 'name', header: 'Name', accessor: 'name', sortable: true, type: 'text' },
+  { id: 'email', header: 'Email', accessor: 'email', type: 'text' },
+  {
+    id: 'signups',
+    header: 'Signups',
+    accessor: 'signups',
+    sortable: true,
+    type: 'number',
+    align: 'end',
+  },
+];
+
+<DataGrid data={users} columns={columns} getRowId={(u) => u.id} />;
+```
+
+Out of the box the consumer gets: sortable headers, a toolbar with global search +
+column-visibility popover + density `<Select>` + CSV/JSON export menu, a checkbox
+selection column (when `selectionMode` is set), a sticky bottom pagination bar, and
+the full ARIA Grid keyboard contract.
+
+## Composed (headless) form
+
+When the consumer wants to mount only a subset of the chrome or re-order it:
+
+```tsx
+import { DataGrid, useDataGrid } from 'apx-ds';
+
+function MyTable() {
+  const grid = useDataGrid({ data, columns, getRowId: (u) => u.id });
+
+  return (
+    <DataGrid.Root grid={grid}>
+      <DataGrid.Toolbar>
+        <DataGrid.GlobalSearch />
+      </DataGrid.Toolbar>
+      <DataGrid.Table>
+        <DataGrid.Header />
+        <DataGrid.Body />
+        <DataGrid.Footer />
+      </DataGrid.Table>
+      <DataGrid.Pagination />
+    </DataGrid.Root>
+  );
+}
+```
+
+`useDataGrid()` is the public headless contract — see the type signature in
+[`DataGrid.types.ts`](DataGrid.types.ts) (`UseDataGridOptions` + `UseDataGridReturn`).
+Every action exposed on the high-level component is reachable through the hook.
+
+---
+
+## Variants × colors × densities
+
+| Dimension | Values |
+| --- | --- |
+| `variant` | `solid` · `outline` · `striped` · `minimal` |
+| `color` | `primary` · `secondary` · `success` · `warning` · `danger` · `info` · `neutral` |
+| `size` (density) | `compact` (32 px rows) · `standard` (44 px) · `comfortable` (56 px) |
+| `stickyHeader` | `boolean` — header pins to scroll container |
+| `bordered` | `boolean` — adds an outer 1px border around the whole table |
+| `roundedCorners` | `'none' \| 'sm' \| 'md' \| 'lg'` |
+| `elevation` | `'none' \| 'sm' \| 'md'` |
+
+All three style dimensions accept the standard DS `ResponsiveValue<T>` so a grid can
+be `compact` on mobile, `standard` on `md`, `comfortable` on `lg` without consumer
+wiring. The PR 8 a11y matrix exercises all 168 cells (4 × 7 × 3 × {LTR, RTL}) under
+`jest-axe`; see [`__tests__/DataGrid.a11y.test.tsx`](../../__tests__/DataGrid.a11y.test.tsx).
+
+---
+
+## Sorting
+
+```tsx
+<DataGrid
+  data={users}
+  columns={columns}
+  getRowId={(u) => u.id}
+  defaultSort={[{ id: 'signups', direction: 'desc' }]}
+/>
+```
+
+Click any `sortable` header to cycle `asc → desc → none`. **Shift-click** a second
+column to add a secondary sort key — small numbered pills next to each chevron mark
+the priority. Sort is **locale-aware** through `Intl.Collator` (the same collator
+used by `<I18nProvider>` so a Hebrew bundle gets Hebrew sort order for free).
+
+| Column `type` | Comparator |
+| --- | --- |
+| `'text'` (default) | `Intl.Collator` from the active `<I18nProvider>` |
+| `'number'` | Numeric coercion, `NaN`s sink |
+| `'date'` | `Date` / ISO → millis, invalid sinks |
+| `'boolean'` | `false < true` |
+| custom `sortFn?: (a, b, ctx) => number` | Per-column override |
+
+Server-driven sort: set `manualSorting` and listen to `onSortChange`. The grid
+emits the new descriptor but does not re-sort the `data` array itself.
+
+---
+
+## Filtering
+
+Each column with `filterable` and a `type` gets a per-column filter `<Popover>` —
+operator `<Select>` adapts to the type, value control picks the right input.
+
+```tsx
+<DataGrid
+  data={users}
+  columns={[
+    { id: 'name', header: 'Name', accessor: 'name', type: 'text', filterable: true },
+    { id: 'team', header: 'Team', accessor: 'team', type: 'text', filterable: true },
+    { id: 'signups', header: 'Signups', accessor: 'signups', type: 'number', filterable: true },
+  ]}
+  getRowId={(u) => u.id}
+  defaultFilters={{
+    team: { operator: 'equals', value: 'platform' },
+    signups: { operator: 'gte', value: 100 },
+  }}
+/>
+```
+
+Operators per type (see `FILTER_OPERATORS` for the full table):
+
+| Type | Operators |
+| --- | --- |
+| `text` | `contains` · `notContains` · `equals` · `notEquals` · `startsWith` · `endsWith` · `isEmpty` |
+| `number` | `equals` · `notEquals` · `gt` · `gte` · `lt` · `lte` · `between` · `isEmpty` |
+| `date` | `equals` · `notEquals` · `before` · `after` · `between` · `isEmpty` |
+| `boolean` | `isTrue` · `isFalse` · `isEmpty` |
+| `enum` | `in` · `notIn` · `isEmpty` |
+
+Global search lives in `<DataGrid.GlobalSearch>` and matches against every
+`filterable` column's stringified value (case-insensitive). Server-driven
+filtering: set `manualFiltering` and listen to `onFiltersChange` / `onGlobalSearchChange`.
+
+---
+
+## Pagination
+
+```tsx
+<DataGrid
+  data={users}
+  columns={columns}
+  getRowId={(u) => u.id}
+  defaultPagination={{ pageIndex: 0, pageSize: 50 }}
+  pageSizeOptions={[25, 50, 100, 250]}
+/>
+```
+
+**Offset mode** (default) renders a page-size `<Select>`, "X–Y of N" label, and
+first/prev/next/last buttons. **Cursor mode** (`pagination={{ cursor, pageSize }}`)
+trims to prev/next only and hides the total label — the server can't always
+report a total.
+
+Server-driven: set `manualPagination`, listen to `onPaginationChange`, slice the
+data yourself before passing it to `data`. The grid will still derive the visible
+slice locally if `manualPagination` is `false`.
+
+---
+
+## Selection
+
+```tsx
+<DataGrid
+  data={users}
+  columns={columns}
+  getRowId={(u) => u.id}
+  selectionMode="multiple"
+  selectedRowIds={selected}
+  onSelectionChange={setSelected}
+>
+  <Button color="danger">Delete selected</Button>
+  <Button>Export</Button>
+</DataGrid>
+```
+
+`selectionMode="multiple"` auto-injects a leading checkbox column with a tri-state
+header (select-all on the current page). **Shift-click** extends a contiguous
+range; **cmd / ctrl-click** toggles individual rows. `selectionMode="single"`
+swaps the checkboxes for radio inputs.
+
+Children passed to `<DataGrid>` are forwarded into the auto-mounted
+`<DataGrid.SelectionBar>` (a sticky-bottom bar that mounts only when ≥ 1 row is
+selected). It already renders the count and a "Clear" button; children sit
+alongside.
+
+---
+
+## Row actions
+
+```tsx
+<DataGrid
+  data={docs}
+  columns={columns}
+  getRowId={(d) => d.id}
+  rowActions={(row) => [
+    { id: 'edit', label: 'Edit', onSelect: () => onEdit(row.id) },
+    { id: 'archive', label: 'Archive', onSelect: () => onArchive(row.id) },
+    {
+      id: 'delete',
+      label: 'Delete',
+      color: 'danger',
+      onSelect: () => onDelete(row.id),
+    },
+  ]}
+/>
+```
+
+Passing `rowActions` auto-appends a trailing actions column with a `<Menu>`
+trigger per row. The structural column dispatch short-circuits the default
+accessor renderer in `<DataGrid.HeaderCell>` and `<DataGrid.Cell>`.
+
+---
+
+## Column pinning, resize, and reorder
+
+```tsx
+<DataGrid
+  data={users}
+  columns={columns}
+  getRowId={(u) => u.id}
+  defaultColumnPinning={{ start: ['name'], end: ['actions'] }}
+  resizableColumns
+  reorderableColumns
+/>
+```
+
+- **Pinning** — `column.pinned: 'start' | 'end'` or the runtime
+  `setColumnPinning` action. Pinned columns get `position: sticky` with
+  cumulative `inset-inline-start` / `inset-inline-end` offsets (RTL-aware) and a
+  `data-pinned` attribute for shadow CSS in the recipe.
+- **Resize** — drag the right edge of a header to resize. `Home` resets to
+  default; double-click auto-fits (PR 5+). Min / max widths come from
+  `column.minWidth` / `column.maxWidth` or fall back to the recipe defaults.
+- **Reorder** — drag the header to a new position. Pinned columns can't be
+  reordered across the pin boundary. The `moveColumn` headless action is the
+  programmatic equivalent.
+
+---
+
+## Row expansion
+
+```tsx
+<DataGrid
+  data={users}
+  columns={columns}
+  getRowId={(u) => u.id}
+  isRowExpandable={(row) => row.original.notes.length > 0}
+  renderExpandedRow={(row) => <UserNotes notes={row.original.notes} />}
+/>
+```
+
+Setting `renderExpandedRow` auto-injects a leading expand-toggle column. The
+rendered detail row spans the full table width inside a `<tr>` with
+`role="row"` + `aria-level="2"`, so it sits naturally inside the ARIA Grid
+tree. `isRowExpandable` is optional — when omitted, every row is expandable.
+
+---
+
+## Cell editing
+
+```tsx
+<DataGrid
+  data={users}
+  columns={[
+    { id: 'name', header: 'Name', accessor: 'name', editable: true, type: 'text' },
+    { id: 'plan', header: 'Plan', accessor: 'plan', editable: true, type: 'enum',
+      enumOptions: ['free', 'pro', 'enterprise'] },
+  ]}
+  getRowId={(u) => u.id}
+  onCellChange={({ rowId, columnId, value }) => updateUser(rowId, columnId, value)}
+/>
+```
+
+Double-click a cell (or focus + `F2` / `Enter`) to enter edit mode. The matching
+editor mounts in place — `<Input>` for `text`, `<NumberInput>` for `number`,
+`<Select>` for `enum`, etc. `Enter` commits, `Esc` reverts. The `onCellChange`
+callback fires on commit; the parent owns the data array.
+
+Conditional editability per row: pass a function — `editable: (ctx) => ctx.row.canEdit`.
+
+---
+
+## Aggregations footer
+
+```tsx
+<DataGrid
+  data={transactions}
+  columns={[
+    { id: 'description', header: 'Description', accessor: 'description', type: 'text' },
+    {
+      id: 'amount',
+      header: 'Amount',
+      accessor: 'amount',
+      type: 'number',
+      align: 'end',
+      aggregations: ['sum', 'avg'],
+    },
+  ]}
+  getRowId={(t) => t.id}
+/>
+```
+
+When any column declares `aggregations`, a sticky `<DataGrid.Footer>` mounts with
+one `<td>` per aggregation. Built-in IDs: `sum` · `avg` · `min` · `max` ·
+`count` · `countDistinct` · `median`. Custom aggregations:
+
+```tsx
+{
+  id: 'amount',
+  aggregations: [
+    { id: 'p95', label: 'P95', fn: (rows) => percentile(rows.map((r) => r.original.amount), 95) },
+  ],
+}
+```
+
+Aggregations run over the **filtered** rows (not paginated) by default — the
+consumer sees the sum of the current filter, not just the current page.
+
+---
+
+## Virtualization
+
+```tsx
+import { DataGrid, useDataGrid, DataGridVirtualBody } from 'apx-ds';
+
+function HugeTable({ rows }: { rows: Row[] }) {
+  const grid = useDataGrid({ data: rows, columns, getRowId: (r) => r.id });
+
+  return (
+    <DataGrid.Root grid={grid}>
+      <DataGrid.Table>
+        <DataGrid.Header />
+        <DataGridVirtualBody estimatedRowHeight={44} overscan={8} />
+      </DataGrid.Table>
+    </DataGrid.Root>
+  );
+}
+```
+
+Virtualization is **opt-in** and ships behind the optional peer dependency
+`@tanstack/react-virtual`. Mounting `<DataGrid.VirtualBody>` instead of
+`<DataGrid.Body>` renders only the visible row window, with spacer rows above
+and below preserving the scroll height. The sticky header, sticky footer, and
+selection state all continue to work because the semantic `<table>` structure
+stays intact — virtualization windows the rows, not the chrome.
+
+Pagination is automatically hidden when `<DataGrid.VirtualBody>` is in use (the
+two patterns are mutually exclusive — a virtualized grid is its own pagination).
+The renderer's `examples/Virtualized.tsx` demonstrates a 50k-row grid.
+
+---
+
+## State persistence
+
+```tsx
+<DataGrid
+  data={users}
+  columns={columns}
+  getRowId={(u) => u.id}
+  storage="local"
+  storageKey="users-grid"
+/>
+```
+
+Persisted slice: **sort · filters · global search · column visibility · column
+order · column sizes · column pinning · density · page size**. Deliberately
+**excluded**: `selection`, `pageIndex` (selection is request-scoped; page index
+churns on data refetch and would surprise the user with a stale page).
+
+`storage` accepts `'local'` (default key derived from the grid), `'session'`, or
+a custom `StorageAdapter`:
+
+```tsx
+const memoryAdapter: StorageAdapter = {
+  read: (key) => memory.get(key) ?? null,
+  write: (key, value) => memory.set(key, value),
+};
+
+<DataGrid storage={memoryAdapter} storageKey="users-grid" />;
+```
+
+Malformed payloads are swallowed and the grid falls back to defaults — a stale
+or version-skewed entry never crashes the user.
+
+---
+
+## i18n + RTL
+
+Every visible string flows through the `DataGridTranslations` contract. Bundles
+shipped with the package:
+
+| Locale | Identifier | RTL? |
+| --- | --- | --- |
+| English | `enDataGridTranslations` (default) | LTR |
+| Hebrew | `heDataGridTranslations` | RTL |
+| Arabic | `arDataGridTranslations` | RTL |
+
+Two ways to opt in:
+
+```tsx
+// Per-grid override
+<DataGrid translations={heDataGridTranslations} {...rest} />
+
+// App-wide via the engine I18nProvider (recommended)
+import { I18nProvider, DirectionProvider } from '@apx-ds/engine';
+import { heDataGridTranslations } from 'apx-ds';
+
+<DirectionProvider dir="rtl">
+  <I18nProvider locale="he" translations={{ DataGrid: heDataGridTranslations }}>
+    <DataGrid {...rest} />
+  </I18nProvider>
+</DirectionProvider>
+```
+
+Resolution order: `props.translations` > `I18nProvider` context > built-in
+English defaults. Missing keys fall back through the same chain so a partial
+override never breaks rendering.
+
+RTL is **first-class** — every recipe uses logical CSS properties
+(`inset-inline-start`, `border-inline-start`, `text-start`, …). `ArrowLeft` /
+`ArrowRight` mirror direction in keyboard nav. Pinned-column shadows reorient.
+The PR 8 a11y matrix runs every variant cell in both LTR and RTL.
+
+---
+
+## Responsive columns
+
+```tsx
+{
+  id: 'email',
+  header: 'Email',
+  accessor: 'email',
+  type: 'text',
+  responsive: { hideBelow: 'md' },
+}
+```
+
+Columns with `responsive.hideBelow` auto-hide below the matching Tailwind
+breakpoint (`sm` · `md` · `lg` · `xl` · `2xl`). The hook
+[`useResponsiveColumns`](headless/useResponsiveColumns.ts) wires the engine's
+`useMediaQuery` to `setColumnVisibility` — the visibility is reactive, so a
+column hidden by responsive rules reappears the moment the viewport widens.
+
+User overrides via the column-visibility menu still win — the responsive rule
+only sets the initial / breakpoint-driven default, not a hard lock.
+
+---
+
+## Loading, empty, and error states
+
+```tsx
+<DataGrid
+  data={users}
+  columns={columns}
+  getRowId={(u) => u.id}
+  loading={query.isLoading}
+  error={query.error ? { message: query.error.message } : undefined}
+  onRetry={() => query.refetch()}
+/>
+```
+
+- **Loading** — overlays a `<Skeleton>` row grid; the table chrome stays
+  visible (no layout jank when data arrives).
+- **Empty** — `data.length === 0` and no filters / search → mounts
+  `<DataGrid.Empty>` (an `<EmptyState>` shortcut). With filters / search → swaps
+  for a "No results match your filters" variant with a "Clear all" button.
+- **Error** — passing `error` mounts `<DataGrid.Error>` (an `<Alert variant="error">`
+  with the `onRetry` callback wired to a button).
+
+Each state is also exposed as a subpart (`<DataGrid.Loading>` /
+`<DataGrid.Empty>` / `<DataGrid.Error>`) for the headless / composed form.
+
+---
+
+## Export
+
+```tsx
+<DataGrid
+  data={users}
+  columns={columns}
+  getRowId={(u) => u.id}
+  exportable
+  exportFilename="users"
+  onCsvExport={(csv) => uploadAuditLog(csv)}
+/>
+```
+
+`<DataGrid.Export>` mounts a `<Menu>` with "Export as CSV" / "Export as JSON".
+Default behavior triggers a browser download with the resolved filename.
+`onCsvExport` / `onJsonExport` intercept for custom sinks (S3, audit, copy to
+clipboard, …). The pure helpers `exportDataGridCsv` / `exportDataGridJson` are
+also exported for offline use.
+
+---
+
+## Keyboard
+
+Full ARIA Grid pattern. Roving tabindex on the grid wrapper; one cell holds
+`tabindex="0"` at a time.
+
+| Key | Action |
+| --- | --- |
+| `ArrowDown` / `ArrowUp` | Move focus down / up one cell |
+| `ArrowRight` / `ArrowLeft` | Move focus across columns (RTL-aware) |
+| `Home` / `End` | First / last cell in the current row |
+| `Ctrl` / `Cmd` + `Home` / `End` | First cell of header / last cell of last row |
+| `PageDown` / `PageUp` | Jump by the current page size |
+| `Tab` / `Shift+Tab` | Leave the grid |
+| `Space` | Toggle row selection (when selection is on) |
+| `Shift` + `ArrowDown` / `ArrowUp` | Extend a contiguous selection range |
+| `Enter` / `F2` | Enter cell-edit mode |
+| `Esc` | Cancel edit, close popover |
+
+---
+
+## Bundle size
+
+Measured against the Phase 27 plan budget of **< 25 KB gz**:
+
+| Surface | raw (min) | gz | vs budget |
+| --- | --- | --- | --- |
+| Minimal — `DataGrid` only | 80.5 KB | **22.8 KB** | ✓ Under |
+| Minimal — `DataGrid` + `useDataGrid` + `enDataGridTranslations` | 80.5 KB | **22.8 KB** | ✓ Under |
+| Minimal + Hebrew + Arabic locales | 89.3 KB | **24.6 KB** | ✓ Under |
+| Full surface — every named export (every recipe, every subpart) | 92.2 KB | **25.6 KB** | ~ at budget (+0.6 KB) |
+| `@tanstack/react-virtual` peer dep (only when virtualizing) | — | **~6 KB** | n/a |
+
+Measured with `esbuild --minify --format=esm --target=es2020` and
+`zlib.gzipSync(level: 9)`. Externalized: `react`, `react-dom`, `motion`,
+`lucide-react`, `@tanstack/react-virtual`, the workspace `@apx-ds/engine`
+/ `@apx-ds/theme` / `@apx-ds/tokens` packages, and every sibling DS
+component DataGrid composes (Button, Input, Checkbox, Menu, Popover, Select,
+EmptyState, Skeleton, Alert, Badge, …) — those are paid for once by any DS
+consumer.
+
+The top contributors are: the 3 locale bundles (10.5 KB), the recipe object
+(6.8 KB), the headless `useDataGrid` hook (6.8 KB), the entry component
+(4.3 KB), the reducer suite (4.2 KB), and the filter panel (4.2 KB). The
+locales dominate — a consumer who only needs English saves ~2 KB by not
+re-exporting `he` + `ar`.
+
+Reproduce locally:
+
+```bash
+pnpm --filter @apx-ds/components build
+node packages/components/scripts/measure-data-grid.mjs
+```
+
+---
+
+## Performance
+
+The headless pipeline is benchmarked via `vitest bench`. Run:
+
+```bash
+pnpm --filter @apx-ds/components bench
+```
+
+Reference numbers on Apple M-series, single core (`vitest bench` median):
+
+| Case | 10k rows | 50k rows |
+| --- | --- | --- |
+| Sort by numeric column (desc) | ~5 ms | ~36 ms |
+| Sort by text column (`Intl.Collator`) | ~1 ms | — |
+| Sort by 2-key compound sort | ~14 ms | — |
+| Filter by 3-predicate compound (`equals` + `isTrue` + `gte`) | ~0.7 ms | ~3.7 ms |
+| Filter by global-search across every text/number column | ~2.8 ms | — |
+| Paginate (any page) | ~0.1 µs | — |
+| Full pipeline: filter → sort → paginate | ~1 ms | ~4.6 ms |
+| Aggregate `sum + avg + max` over filtered rows | ~0.7 ms | ~4.2 ms |
+
+Bench cases live in [`__tests__/DataGrid.bench.ts`](../../__tests__/DataGrid.bench.ts).
+
+---
+
+## Accessibility
+
+- Root `<table role="grid">`, `aria-rowcount` and `aria-colcount` set to the
+  full (post-filter, pre-paginate) totals so AT users hear "row 3 of 10,432"
+  even when the visible window only contains 50.
+- Header `<th>`s carry `role="columnheader"` and `aria-sort` reflecting the
+  current sort state.
+- Body `<td>`s carry `role="gridcell"`, `aria-rowindex` and `aria-colindex`
+  matching the 1-based grid coordinate.
+- Roving tabindex: exactly one cell is the tabstop at any time. `Tab` leaves
+  the grid; the grid restores the last focused cell on re-entry.
+- Selection bar has `role="status"` so the count change is announced.
+- Editing cell: the editor is auto-focused, `Esc` returns focus to the cell.
+- Loading state: the overlay has `aria-busy="true"` on the root; the
+  `<Skeleton>` is decorative and `aria-hidden`.
+- Error state: `<Alert variant="error">` with `role="alert"`.
+- Live regions: "Page 2 of 18" updates and selection-count changes announce
+  through a polite `role="status"` channel.
+
+The 168-cell axe matrix at [`__tests__/DataGrid.a11y.test.tsx`](../../__tests__/DataGrid.a11y.test.tsx)
+covers every variant / color / density / direction combination. Total: 189
+a11y tests pass.
+
+## Visual snapshot suite
+
+The same 4 variants × 7 colors × 3 densities × {LTR, RTL} matrix is captured
+as **168 PNG snapshots** via Playwright. Baselines live at
+[`apps/renderer/tests/data-grid.visual.spec.ts-snapshots/`](../../../../apps/renderer/tests/data-grid.visual.spec.ts-snapshots/);
+the harness route that mounts every cell is
+[`apps/renderer/src/app/visual-matrix/data-grid/page.tsx`](../../../../apps/renderer/src/app/visual-matrix/data-grid/page.tsx).
+
+```bash
+pnpm --filter @apx-ds/renderer build         # rebuild the harness page
+pnpm --filter @apx-ds/renderer test:visual   # compare against baselines
+pnpm --filter @apx-ds/renderer test:visual:update # regenerate baselines
+```
+
+Threshold is `maxDiffPixelRatio: 0.01` with `threshold: 0.2` per pixel — tuned
+to absorb sub-pixel antialiasing variance across machines while still surfacing
+any meaningful visual regression.
+
+---
+
+## Examples
+
+Every example below ships in [`examples/`](examples/) and is auto-discovered by
+the renderer. The numbers match the `meta.ts` ordering.
+
+| # | File | Demonstrates |
+| --- | --- | --- |
+| 1 | [`Basic.tsx`](examples/Basic.tsx) | Minimal grid with sort + global search |
+| 2 | [`Filters.tsx`](examples/Filters.tsx) | Per-column filter operators per type |
+| 3 | [`Selection.tsx`](examples/Selection.tsx) | Multi-select with bulk action bar |
+| 4 | [`RowActions.tsx`](examples/RowActions.tsx) | Trailing `<Menu>` per row |
+| 5 | [`Pinning.tsx`](examples/Pinning.tsx) | Start/end pinned columns + sticky shadows |
+| 6 | [`Resize.tsx`](examples/Resize.tsx) | Drag-resize + reset-on-double-click |
+| 7 | [`Expansion.tsx`](examples/Expansion.tsx) | Conditional row expansion + detail panel |
+| 8 | [`Editing.tsx`](examples/Editing.tsx) | Inline cell editing with `onCellChange` |
+| 9 | [`Aggregations.tsx`](examples/Aggregations.tsx) | Sticky footer with sum/avg/custom |
+| 10 | [`Virtualized.tsx`](examples/Virtualized.tsx) | 50k rows via `<DataGrid.VirtualBody>` |
+| 11 | [`RTL.tsx`](examples/RTL.tsx) | Hebrew strings + `DirectionProvider dir="rtl"` |
+| 12 | [`I18n.tsx`](examples/I18n.tsx) | Live locale switching (en / he / ar) |
+| 13 | [`Persistence.tsx`](examples/Persistence.tsx) | `localStorage`-backed state across remounts |
+| 14 | [`Responsive.tsx`](examples/Responsive.tsx) | `responsive.hideBelow` column hiding |
+
+---
+
+## Headless API reference
+
+Full type signatures live in [`DataGrid.types.ts`](DataGrid.types.ts). The
+short version:
+
+```tsx
+const grid = useDataGrid<T>({
+  data,                    // T[]
+  columns,                 // ColumnDef<T>[]
+  getRowId,                // (row: T, index: number) => RowId
+
+  // Initial state (uncontrolled)
+  defaultSort,             // SortDescriptor[]
+  defaultFilters,          // ColumnFiltersState
+  defaultGlobalSearch,     // string
+  defaultPagination,       // PaginationState
+  defaultColumnVisibility, // Record<ColumnId, boolean>
+  defaultColumnOrder,      // ColumnId[]
+  defaultColumnSizes,      // Record<ColumnId, number>
+  defaultColumnPinning,    // ColumnPinningState
+  defaultSelectedRowIds,   // Set<RowId>
+  defaultExpandedIds,      // RowId[]
+  defaultDensity,          // 'compact' | 'standard' | 'comfortable'
+
+  // Controlled mirrors (omit to stay uncontrolled)
+  sort, onSortChange,
+  filters, onFiltersChange,
+  globalSearch, onGlobalSearchChange,
+  pagination, onPaginationChange,
+  // …same shape for visibility / order / sizes / pinning / selection / expansion / density
+
+  // Server-side flags — skip local derivations
+  manualSorting,
+  manualFiltering,
+  manualPagination,
+
+  // i18n + persistence
+  translations,            // Partial<DataGridTranslations>
+  storage,                 // 'local' | 'session' | StorageAdapter
+  storageKey,              // string
+
+  // Misc
+  selectionMode,           // 'none' | 'single' | 'multiple'
+  isRowExpandable,         // (row) => boolean
+});
+
+// Return shape — every state slice + every action
+grid.state.sort
+grid.setSort(...)
+grid.toggleSort(columnId, multi)
+grid.filteredRows
+grid.sortedRows           // post-filter + post-sort, pre-paginate
+grid.paginatedRows        // .rows / .pageIndex / .pageCount / .fromRow / .toRow
+grid.visibleColumns
+grid.pinnedGroups         // { start, center, end }
+grid.moveColumn(...)
+grid.setColumnPinning(...)
+grid.resetColumnSize(...)
+// …and so on. Every action has an `on*Change` counterpart on the props side.
+```
+
+---
+
+## DRY self-check
+
+- The headless `useDataGrid()` is the single source of state truth. The
+  component never owns state that isn't derived from the hook.
+- All filter logic is in `headless/filterEngine.ts` — the operator switch
+  lives in one place. New operators add a single case.
+- Aggregators are pure helpers in `headless/aggregators.ts`; custom
+  aggregations slot into the same `runAggregation` codepath.
+- All visible strings flow through `DataGridTranslations`. There is **no
+  hard-coded English** in any subpart.
+- All sticky-position math is in `headless/pinningOffsets.ts` — header cells,
+  body cells, and footer cells call the same helper so they never get out of
+  sync.
+- Recipes are the only place class strings live. There is no `cn()` /
+  `clsx` / `tailwind-merge` import anywhere in the DataGrid source tree.
+
+---
+
+## Migration from `<Table>`
+
+`<Table>` and `<DataGrid>` deliberately share column-def + data shapes for
+columns / accessors / sortable / sortFn — moving a static table to a grid
+should be a one-line swap when the consumer only needs the new behavior.
+
+The reverse (grid → table) is also one-line provided the consumer wasn't
+using a grid-only feature (filters, virtualization, editing, …); otherwise
+the migration is wholesale.

@@ -1,0 +1,193 @@
+# TagsInput
+
+A multi-value text input that turns typed text, pasted strings, and optional suggestions into an
+array of string tags. Companion to `<MultiCombobox>`:
+
+|                       | **`<MultiCombobox>`**                       | **`<TagsInput>`**                                |
+| --------------------- | ------------------------------------------- | ------------------------------------------------ |
+| Where do values come from? | A constrained option list                  | Whatever the user types (free-form)              |
+| New-value creation        | Optional (`creatable`)                     | The default — every typed token becomes a tag    |
+| Suggestion listbox        | Always visible                             | Optional; only shown when the user is typing     |
+| Typical use case          | Customer-facing selectors                  | Power-user input / admin forms / pickers         |
+
+Both render badge chips inside a form-control shell, but the data flows are different. Pick the
+one that matches the UX intent.
+
+## Why this exists
+
+Hand-rolling a chips-input gets ten things wrong:
+
+- ❌ Press Enter on the last tag and the form submits.
+- ❌ Backspace deletes a tag without warning.
+- ❌ Paste a CSV of emails — it lands as one giant tag.
+- ❌ No keyboard way to remove a tag once you're past it.
+- ❌ Screen readers hear "removable" buttons but no announcement when you actually remove one.
+- ❌ Suggestions overlay never opens on small windows because of overflow.
+- ❌ Validation lives in the consumer and the field looks fine while it's wrong.
+
+`<TagsInput>` ships every one of those fixed: a `role="combobox"` input with the W3C tags-input
+keyboard contract (commit/remove/tag-cursor), per-tag `validate()` that surfaces both visually
+(danger Badge color, `title` tooltip) and audibly (live-region announcement), paste-aware
+`splitOn`, optional `maxTags` enforcement, hidden inputs for native form submission, and an
+inline suggestion listbox that doesn't fight the page.
+
+## Anatomy
+
+```
+┌────────────────────────────────────────────────────────────┐
+│  Tags *                                ← label              │
+│  ─────────────────────────────────────────────              │
+│  ╔════╗ ╔════╗ ╔════╗  type here…  3 / 10  ← field          │
+│  ╚════╝ ╚════╝ ╚════╝                                       │
+│  ─────────────────────────────────────────────              │
+│  ┌───────────────────────────────────┐  ← suggestions       │
+│  │ TypeScript                        │     listbox          │
+│  │ TypeORM                           │     (inline)         │
+│  └───────────────────────────────────┘                      │
+│  Add at least one tag                  ← helper / error     │
+└────────────────────────────────────────────────────────────┘
+```
+
+- **field** — `role="group"` chip-row. Click anywhere → focuses the input.
+- **input** — `role="combobox"` with `aria-expanded` / `aria-controls` / `aria-activedescendant`.
+- **tag chip** — `<Badge removable>` by default; replace via `renderTag`.
+- **suggestions** — inline `role="listbox"` below the field; auto-opens when typing matches.
+- **live region** — off-screen `aria-live="polite"` that announces add / remove / invalid / duplicate.
+
+## Examples
+
+<ExampleBlock for="Basic" title="Basic — controlled tag array, default outline shell" />
+
+<ExampleBlock for="WithSuggestions" title="With static suggestions" />
+
+<ExampleBlock for="AsyncSuggestions" title="Async suggestions (loadSuggestions + render)" />
+
+<ExampleBlock for="EmailValidation" title="Per-tag validate() — invalid emails render in danger Badge" />
+
+<ExampleBlock for="PasteCsv" title="Paste a CSV / multi-line list — splitOn handles it" />
+
+<ExampleBlock for="MaxTags" title="maxTags — input disables + placeholder swaps when reached" />
+
+<ExampleBlock for="ShowCount" title="showCount — '3 / 10' chip at the end of the field" />
+
+<ExampleBlock for="CustomRenderTag" title="renderTag — opt out of the default Badge" />
+
+<ExampleBlock for="CustomRenderSuggestion" title="renderSuggestion — rich rows for objects" />
+
+<ExampleBlock for="AllowDuplicates" title="allowDuplicates — opt into repeated values" />
+
+<ExampleBlock for="Sizes" title="Sizes — sm / md / lg field; tagSize maps to Badge" />
+
+<ExampleBlock for="Variants" title="Variants — filled / outline / ghost shell" />
+
+<ExampleBlock for="Disabled" title="Disabled — no interaction, dimmed" />
+
+<ExampleBlock for="ReadOnly" title="Read-only — static display, no remove button" />
+
+<ExampleBlock for="WithLabel" title="With label + description + helper" />
+
+<ExampleBlock for="ErrorState" title="Error state — required field, role='alert' helper" />
+
+<ExampleBlock for="InForm" title="Inside a form — hidden input per tag, FormData.getAll('tags')" />
+
+## Props
+
+| Prop                  | Type                                                                    | Default          | Notes                                                                          |
+| --------------------- | ----------------------------------------------------------------------- | ---------------- | ------------------------------------------------------------------------------ |
+| `value`               | `readonly string[]`                                                     | —                | Controlled value. Pair with `onChange`.                                        |
+| `defaultValue`        | `readonly string[]`                                                     | `[]`             | Uncontrolled initial value.                                                    |
+| `onChange`            | `(next, meta) => void`                                                  | —                | `meta.action` is `'add' / 'remove' / 'clear' / 'reject-…'`. See `TagsInputChangeMeta`. |
+| `suggestions`         | `readonly T[]`                                                          | —                | Static suggestion list.                                                        |
+| `loadSuggestions`     | `(query, { signal }) => Promise<T[]>`                                   | —                | Async fetcher; debounced + abortable via the Combobox-shared `useDeferredFilter`. |
+| `debounceMs`          | `number`                                                                | `250`            | Async debounce window.                                                         |
+| `minQueryLength`      | `number`                                                                | `0`              | Suppress suggestions until the user types N chars.                             |
+| `filterSuggestions`   | `(items, query) => items`                                               | substring        | Override the default filter for static suggestions.                            |
+| `getSuggestionValue`  | `(item) => string`                                                      | `String(item)`   | Tag value for a suggestion item.                                               |
+| `getSuggestionKey`    | `(item) => string`                                                      | value            | React key helper for non-string items.                                         |
+| `renderSuggestion`    | `(item, { active, index, query }) => ReactNode`                         | value text       | Custom suggestion row.                                                         |
+| `splitOn`             | `string[] \| RegExp`                                                    | `[' ', ',']`     | Separators that commit pending input.                                          |
+| `commitOnEnter`       | `boolean`                                                               | `true`           | Enter commits the pending input as a tag.                                      |
+| `commitOnBlur`        | `boolean`                                                               | `false`          | Commit when the input blurs (off by default — surprising in forms).            |
+| `trim`                | `boolean`                                                               | `true`           | Trim whitespace before storing.                                                |
+| `toLowerCase`         | `boolean`                                                               | `false`          | Lowercase before storing.                                                      |
+| `allowDuplicates`     | `boolean`                                                               | `false`          | Whether duplicate tags are accepted.                                           |
+| `maxTags`             | `number`                                                                | —                | Hard cap; input disables when reached.                                         |
+| `validate`            | `(tag) => true \| false \| string`                                      | —                | Per-tag validator; string return is a custom error message.                    |
+| `errorMessage`        | `string`                                                                | `'Invalid tag'`  | Used when `validate` returns `false`.                                          |
+| `renderTag`           | `(tag, { invalid, selected, removeProps, index, disabled }) => ReactNode` | `<Badge>`        | Replace the default chip.                                                      |
+| `showCount`           | `boolean`                                                               | `false`          | Render `"n / max"` text at the end of the field.                               |
+| `emptyHint`           | `ReactNode`                                                             | —                | Hint inside the field when no tags + no input.                                 |
+| `label` / `description` / `helperText` / `error` / `required` | …                                                | —                | Standard form-field surface.                                                   |
+| `disabled` / `readOnly`     | `boolean`                                                         | `false`          | Disable / static display.                                                      |
+| `name`                | `string`                                                                | —                | Hidden-input name; one hidden input per tag for native form submission.        |
+| `placeholder`         | `string`                                                                | from i18n        | Input placeholder.                                                             |
+| `variant`             | `'filled' \| 'outline' \| 'ghost'`                                      | `'outline'`      | Field shell variant.                                                           |
+| `size`                | `'sm' \| 'md' \| 'lg'`                                                  | `'md'`           | Field height + typography.                                                     |
+| `tagSize`             | `'xs' \| 'sm' \| 'md'`                                                  | `'sm'`           | Badge size for default chips.                                                  |
+| `tagColor`            | Badge color                                                             | `'neutral'`      | Badge color for default chips.                                                 |
+| `tagVariant`          | Badge variant                                                           | `'soft'`         | Badge variant for default chips.                                               |
+| `translations`        | `Partial<TagsInputTranslations>`                                        | English          | Replace any subset of the default strings.                                     |
+
+## Keyboard
+
+| Key                                            | Action                                                              |
+| ---------------------------------------------- | ------------------------------------------------------------------- |
+| Typing                                         | Add character to pending input.                                      |
+| Any separator in `splitOn`                     | Commit pending input as a tag.                                       |
+| `Enter`                                        | Commit (when `commitOnEnter`).                                       |
+| `Backspace` at empty input                     | Remove the last tag.                                                 |
+| `ArrowLeft` at input start (RTL: `ArrowRight`) | Activate tag cursor on the last tag.                                 |
+| `ArrowLeft` / `ArrowRight` with cursor active  | Move cursor between tags. Cursor past the last tag → focus input.    |
+| `Delete` / `Backspace` (cursor active)         | Remove the selected tag.                                             |
+| `Escape`                                       | Close suggestions; deselect tag cursor.                              |
+| `ArrowDown` / `ArrowUp` (suggestions open)     | Move highlighted suggestion.                                         |
+| `Enter` / `Tab` (suggestion highlighted)       | Commit the highlighted suggestion.                                   |
+| Paste                                          | Multi-token; runs `splitTokens(pasted, splitOn)` and commits in one batch. |
+
+## A11y
+
+- `input` is `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded`, `aria-controls`,
+  `aria-activedescendant` — standard ARIA combobox pattern.
+- `field` is `role="group"`; clicking it focuses the input.
+- Tag chips are `<span>` by default (decorative); the **remove button** inside each chip is the
+  actionable element with `aria-label="Remove {tag}"`.
+- Live region (`aria-live="polite"`) announces `'Added tag …'` / `'Removed tag …'` /
+  `'{tag} is already added'` / `'Maximum N tags reached'` / `'{tag}: {error}'`.
+- `useFormFieldA11y` (shared with `<Input>`, `<Textarea>`, `<Select>`, `<Combobox>`) wires
+  label / description / helper / error IDs into `aria-labelledby` + `aria-describedby`.
+- axe-core: 0 violations in basic / labeled / max-reached / disabled / error / suggestion-open
+  modes.
+
+## RTL
+
+- The chip row's `flex-wrap` mirrors natively under `dir="rtl"`.
+- Arrow key semantics flip: `ArrowRight` activates the cursor in RTL.
+- Hidden input order matches the visual tag order (last-typed = last in `value` = last `<input>`).
+
+## Theming
+
+`<TagsInput>` registers with the theme as `TagsInput`. Slot names:
+
+`wrapper` · `label` · `description` · `field` · `input` · `count` · `emptyHint` · `listbox` ·
+`item` · `empty` · `helperText`
+
+```ts
+const theme = createTheme({
+  components: {
+    TagsInput: {
+      defaultProps: { variant: 'filled', tagColor: 'primary' },
+      styleOverrides: {
+        field: 'gap-2 min-h-12',
+        item: 'data-[active=true]:bg-primary/10',
+      },
+    },
+  },
+});
+```
+
+## See also
+
+- **`<MultiCombobox>`** — constrained-list multi-select (every value must come from an option).
+- **`<Combobox>`** — single-value searchable select.
+- **`<Badge>`** — the chip primitive used for default tag rendering.
+- **`<Input>` / `<Textarea>`** — single-value text controls; same form-field surface.

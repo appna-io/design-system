@@ -1,0 +1,177 @@
+## Overview
+
+`<Tooltip />` is the canonical hover/focus hint primitive — and the **first overlay consumer of
+the positioning engine** (`@apx-ds/engine`'s `usePosition` + `<Portal>` + `useEscapeStack`).
+Wrap any single trigger element to attach a small floating message that opens on hover and on
+keyboard focus.
+
+Tooltip is intentionally **read-only** — its surface has `pointer-events: none` and never
+receives focus. For interactive overlays (rich content, links, buttons-inside-the-floater),
+reach for `<Popover />` instead.
+
+## When to use
+
+- Quick clarification for an icon-only button: `<Tooltip content="Save changes"><Button leftIcon={…} aria-label="Save" /></Tooltip>`.
+- Disambiguating a truncated label or a status indicator.
+- Surfacing a keyboard shortcut: `<Tooltip content={<>Save · <Kbd>⌘S</Kbd></>}>…</Tooltip>`.
+- Showing extra metadata (timestamps, IDs) without crowding the visible UI.
+
+## When NOT to use
+
+- The content is interactive — use `<Popover />`.
+- The information is critical — Tooltips are skipped on touch devices and read by screen readers
+  via `aria-describedby` (associative, not announced as a live region). Critical info belongs in
+  the visible UI.
+- The trigger is wrapped twice. Tooltip clones a **single** child; multi-element triggers must
+  wrap in a `<span>` first.
+
+## Anatomy
+
+```text
+[ trigger ] ──hover/focus──▶ ┌──────────────────┐
+                             │ content + arrow  │
+                             └──────────────────┘
+```
+
+- **trigger** — your single React element. Tooltip clones it to attach `ref`,
+  `aria-describedby`, and pointer / focus handlers.
+- **content** — the floating surface. Carries `role="tooltip"` and a generated `id` that the
+  trigger references via `aria-describedby` while open.
+- **arrow** — optional SVG arrow that points back at the trigger after Floating UI's `flip()`
+  resolves. Toggle with `showArrow={false}`.
+
+## Variants
+
+Pick by **how the tooltip should integrate with the surface beneath it**:
+
+- **`solid`** — opaque fill + contrast text. **Default.** The conventional tooltip look.
+- **`outline`** — paper background, 1px colored border + colored text. Brand-aligned hints
+  (link previews, primary actions).
+- **`soft`** — subtle tinted background + colored text + low-opacity colored border. Editorial
+  / settings-pane tooltips; calmer than `solid`.
+- **`inverted`** — platform-default light-on-dark / dark-on-light. **Ignores `color`** — the
+  inverted variant has a fixed dark/light contrast palette so it works on every brand.
+
+The 4 variants × 7 colors compound matrix mirrors Badge's shape exactly. Adding an 8th color =
+one palette entry in `@apx-dsens` + 3 compound rows in `Tooltip.recipe.ts`.
+
+## Sizes
+
+| Size | Padding         | Font        | Max-width    | Arrow size |
+|------|-----------------|-------------|--------------|------------|
+| `sm` | `px-2 py-1`     | `text-xs`   | `max-w-xs`   | `12×6`     |
+| `md` | `px-2.5 py-1.5` | `text-sm`   | `max-w-sm`   | `16×8`     |
+| `lg` | `px-3 py-2`     | `text-base` | `max-w-md`   | `20×10`    |
+
+## Placement
+
+12 placements — `top` / `right` / `bottom` / `left` × `start` / `center` / `end`. Floating UI's
+`flip` middleware automatically swaps to the opposite side at viewport edges, and the `start` /
+`end` alignment uses **logical properties** so RTL falls out automatically: `top-start` is
+top-left in LTR and top-right in RTL.
+
+The post-flip placement is reflected on the floating element via `data-placement` so consumers
+who care about animation direction or arrow rotation can branch on it.
+
+## Delay state
+
+Two timers control hover behaviour:
+
+- **`openDelay`** (default `400ms`) — filters out accidental sweeps across the UI. Matches
+  MUI / Radix UX research findings on attention thresholds.
+- **`closeDelay`** (default `150ms`) — gives users time to move the cursor onto the floating
+  surface. Hovering the surface itself **cancels** the close timer, so users can move from
+  trigger → tooltip without it disappearing.
+
+Set both to `0` for instant tooltips; set high values (~1000ms+) for "patient" tooltips that
+only appear on deliberate hovers.
+
+## Accessibility
+
+- Floating surface carries `role="tooltip"` and a generated `id`. The trigger gets
+  `aria-describedby="<id>"` while open — exactly the ARIA Tooltip pattern.
+- Existing `aria-describedby` values on the trigger are preserved (the new id is appended).
+- Tooltip opens on **pointerenter** (mouse, pen, touch on platforms that emit it) and **focus**
+  (keyboard). It closes on pointerleave, blur, and `Escape`.
+- The escape stack ensures only the topmost tooltip closes on `Escape`, not all open overlays.
+- Tooltip never receives focus itself (`pointer-events-none` + no `tabIndex`) — content is not
+  interactive. For interactive overlays use `<Popover />`.
+- The arrow carries `aria-hidden="true"`.
+- `disabled={true}` skips all opening logic; the trigger renders normally.
+- axe-core: zero violations across every `variant × color` cell.
+
+## Examples
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="Variants" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="Colors" />
+
+<ExampleBlock for="Placements" />
+
+<ExampleBlock for="Delay" />
+
+<ExampleBlock for="WithoutArrow" />
+
+<ExampleBlock for="LongContent" />
+
+<ExampleBlock for="Disabled" />
+
+<ExampleBlock for="Controlled" />
+
+<ExampleBlock for="PortalContainer" />
+
+## Theming
+
+Theme-level overrides flow through `useThemedClasses` exactly like every other DS component:
+
+```tsx
+defineTheme({
+  components: {
+    Tooltip: {
+      defaultProps: { variant: 'inverted', size: 'sm', openDelay: 200 },
+      styleOverrides: {
+        content: 'shadow-lg',
+        arrow: '',
+      },
+    },
+  },
+});
+```
+
+Per-instance overrides via `className` / `sx` / `style` are merged on top of the theme overrides,
+which are merged on top of the recipe — same precedence as everywhere else in the DS.
+
+## Composing with other overlays
+
+Tooltip is intentionally minimal — it's the engine validation phase. The other overlay primitives
+will consume the same engine APIs:
+
+- **Popover** — `usePosition` + `useFocusTrap` + `useEscapeStack` + `useOutsideClick`. Reaches
+  Tooltip's surface but with `pointer-events: auto` and a focus trap so the inner content is
+  reachable.
+- **Modal / Drawer** — adds `useScrollLock` to Popover's stack and drops `usePosition` (centered
+  / side-anchored CSS).
+- **Menu / Select** — full set; Select also passes `matchTriggerWidth: true` to `usePosition`.
+
+See `packages/engine/README.md`'s "Overlay primitives" section for the canonical composition
+shapes.
+
+## Notes for consumers (engine-API feedback)
+
+Tooltip exercises every public surface of the positioning engine. The few things worth knowing
+when you build the next overlay:
+
+- `usePosition`'s `triggerRef` and `floatingRef` are stable RefCallbacks. When you clone a child
+  element to attach the trigger ref, **merge** with any existing ref the child carried — don't
+  blindly overwrite. Tooltip ships a small `mergeRefs` helper inline; promote to engine when a
+  second consumer needs it.
+- `<Portal>`'s `disabled` prop is honored at the runtime root level, so AnimatePresence inside it
+  still works the same whether portaled or inline.
+- `useEscapeStack` is mount-order topmost-fires-first. With `<AnimatePresence>` you must guard
+  the active flag against the exit phase: pass `active: open` (your declarative state), not
+  `active: mounted`, so the Escape handler unregisters the moment you set `open: false`, even
+  while the floating element is still animating out.

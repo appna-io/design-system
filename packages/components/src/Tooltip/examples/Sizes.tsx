@@ -1,0 +1,22 @@
+import { Button, Tooltip, type TooltipSize } from 'apx-ds';
+
+const SIZES: readonly TooltipSize[] = ['sm', 'md', 'lg'];
+
+export default function Sizes() {
+  return (
+    <div className="flex flex-wrap gap-4">
+      {SIZES.map((size) => (
+        <Tooltip
+          key={size}
+          content={`${size.toUpperCase()} hint`}
+          size={size}
+          openDelay={150}
+        >
+          <Button variant="soft" size={size}>
+            {size}
+          </Button>
+        </Tooltip>
+      ))}
+    </div>
+  );
+}

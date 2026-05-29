@@ -1,0 +1,101 @@
+# Card
+
+`<Card />` is the canonical content container in apx-ds, and the **first compound component**
+in the library. The root paints the shell; five subparts (`Card.Header`, `Card.Body`,
+`Card.Footer`, `Card.Media`, `Card.Divider`) compose the inside.
+
+Reach for Card whenever a piece of UI needs an edge, a background, and a stack of regions:
+project tiles, search results, settings groups, dashboard widgets, the inside of a Modal.
+
+## Compound API
+
+`<Card.Header>` has dedicated slots (`avatar`, `title`, `subtitle`, `action`) instead of asking
+consumers to hand-author a flex row. That's deliberate — title/subtitle pairs are the most
+overlooked source of accessibility regressions in DS cards. Pass `title={<h3>...</h3>}` if a
+heading level is needed; the slot renders as a `<div>` by default so the Card doesn't blindly
+inject itself into the page outline.
+
+## Variants
+
+- **`outline`** — `bg-bg-paper` + 1px border. **Default.** The conventional card.
+- **`solid`** — quiet, edgeless, `bg-bg-subtle`. Pairs well with dense layouts.
+- **`elevated`** — `bg-bg-paper` + `shadow-md`. For surfaced content; what a Modal looks like.
+- **`ghost`** — no edge, no fill. Container only when hovered (combine with `hoverable`).
+
+## Color
+
+`color` does **not** repaint the body — that would shout for attention. Instead it drives two
+accents:
+
+- `hoverable={true}` → border tints to the role color on hover.
+- `selected={true}` → a colored ring + `data-selected="true"`.
+
+Same accent shows up on the focus ring when `clickable`. Adding a new palette role re-paints
+every accent automatically; no Card-side changes.
+
+## Interactivity
+
+- **`hoverable`** — pure cosmetic lift (transform + shadow). Does *not* imply a click target.
+- **`clickable`** — promotes the entire card to a single click target. The root gets
+  `role="button"`, `tabIndex=0`, and keyboard activation (Enter / Space). Pair with `onClick`.
+- **`disabled`** — dims the surface, blocks pointer events, sets `aria-disabled="true"`.
+- **`selected`** — toggles the colored ring + `data-selected="true"` for multi-select grids.
+
+For more complex semantics (a link Card, a `<button>` Card with `<form>` integration), reach for
+`asChild`. The wrapped element's role wins (`link` for `<a>`, `button` for `<button>`), and Card
+still contributes its frame + keyboard wiring.
+
+## Orientation
+
+`horizontal` puts `Card.Media` at the **logical start** of the row, so RTL layouts auto-mirror.
+The media slot is width-fixed at `2/5`; the body takes the rest.
+
+## Sizes & padding
+
+Density lives on the root and propagates to every subpart via `CardContext`. Set
+`size="lg"` once and Header / Body / Footer all jump to `p-6`. Subparts never expose their own
+size prop — they read it from the parent.
+
+## Examples
+
+<ExampleBlock for="Basic" title="Basic — Header + Body" />
+<ExampleBlock for="Variants" title="Variants — outline / solid / elevated / ghost" />
+<ExampleBlock for="Sizes" title="Sizes — sm / md / lg propagate via context" />
+<ExampleBlock for="Colors" title="Colors — selected ring + hover border tint" />
+<ExampleBlock for="Shapes" title="Shapes — square / rounded / pill" />
+<ExampleBlock for="WithMedia" title="With media — Card.Media + aspect ratio" />
+<ExampleBlock for="Horizontal" title="Horizontal — media on the side" />
+<ExampleBlock for="HeaderSlots" title="Header slots — avatar / title / subtitle / action" />
+<ExampleBlock for="FooterAlignment" title="Footer alignment — start / center / end / between" />
+<ExampleBlock for="Clickable" title="Clickable — whole-card click target" />
+<ExampleBlock for="Selectable" title="Selectable — multi-card selection grid" />
+<ExampleBlock for="AsChild" title="asChild — render Card as a link" />
+<ExampleBlock for="WithDivider" title="With divider — semantic section breaks" />
+
+## Theming
+
+Card pushes the per-slot override path harder than any other component to date — each of the
+six slot keys (`root`, `header`, `body`, `footer`, `media`, `divider`) merges independently
+through `useThemedClasses` — overrides on `header` don't bleed into `footer`, and consumer
+`className` still wins last via `tailwind-merge`.
+
+## Accessibility
+
+- Non-interactive Card: plain `<div>`, no role. Content reads in normal order.
+- `clickable`: `role="button"`, focusable, Enter / Space activate. Focus ring tints by `color`.
+- `disabled`: `aria-disabled="true"` + pointer events blocked. Not focusable.
+- `Card.Header.title` is **not** a heading by default — pass `<h2>...</h2>` if needed.
+- `Card.Media` requires `alt` when `src` is set (dev-warn if missing); pass `alt=""` for
+  decorative imagery.
+- axe-core: zero violations across the matrix.
+
+## Compound-component pattern
+
+`Card/index.ts` is the canonical assembly file for every future compound primitive in the DS.
+The root component is wrapped with `Object.assign` so subparts are reachable via dot syntax
+(`<Card.Header>`, `<Card.Body>`, …). Tabs, Accordion, Modal, Drawer all copy this shape.
+Consumers reach subparts via `<Card.Header>` — no separate import, no naming friction.
+
+## Bundle
+
+Target: < 4 KB gzipped. Six recipes + context + five subparts. CSS-only transitions (no Motion).

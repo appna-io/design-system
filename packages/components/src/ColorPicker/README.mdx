@@ -1,0 +1,126 @@
+# ColorPicker
+
+The canonical visual color form control. Three exports cover three jobs:
+
+- **`<ColorPicker />`** — the full visual picker. Saturation/lightness square + hue slider + alpha + presets + tabbed hex/rgb/hsl text input, all packed inside a Popover. The default.
+- **`<ColorSwatch />`** — read-only display chip. Use for brand swatches, label colors, theme previews.
+- **`<ColorInput />`** — text-only entry. Use when you want hex / rgb / hsl entry without the visual picker (e.g. a Theme Studio token row, a CLI-style color field).
+
+All three share the same pure color math in `_shared/color.ts` (~120 LoC, no external library).
+
+## Why this exists
+
+Visual color pickers are full of subtle mistakes when hand-rolled:
+
+- ❌ Two thumb-and-track sliders for hue and alpha get the W3C Slider keyboard pattern wrong.
+- ❌ Saturation/value squares miss the `role="slider"` 2D pattern entirely.
+- ❌ Hex inputs accept invalid input silently.
+- ❌ RGB / HSL inputs don't clamp or round-trip cleanly.
+- ❌ Alpha rendering forgets the checker transparency background.
+- ❌ Eyedropper buttons render unconditionally and fail in non-Chrome browsers.
+- ❌ No WCAG contrast feedback when the picker is being used to set text or button colors.
+
+`<ColorPicker />` fixes every one of those.
+
+## Anatomy
+
+```
+┌──────────────────────────────────────────────────┐
+│  Brand color *                  ← label          │
+│  Used for primary buttons       ← description    │
+│  [ ████ ]   #6c5ce7             ← trigger        │
+│  WCAG AA recommended            ← helper/error   │
+└──────────────────────────────────────────────────┘
+
+    on open ──►  ┌──────────────────────────┐
+                  │  ┌────────────────────┐  │  ← saturation square
+                  │  │                    │  │
+                  │  │        ●           │  │
+                  │  └────────────────────┘  │
+                  │  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ ●     │  ← hue slider
+                  │  ░░░░░░░░░░░░░░░  ●     │  ← alpha slider
+                  │  HEX  RGB  HSL          │  ← format tabs
+                  │  #6c5ce7                │  ← hex / rgb / hsl row
+                  │  ⬛⬛⬛⬛⬛⬛⬛⬛           │  ← presets grid
+                  │  4.6:1 ✓ AA      [👁]   │  ← contrast chip + eyedropper
+                  └──────────────────────────┘
+```
+
+## Examples
+
+<ExampleBlock for="Basic" title="Basic — controlled value, default trigger" />
+
+<ExampleBlock for="WithAlpha" title="With alpha — rgba / hsla / hex8 output" />
+
+<ExampleBlock for="HexFormat" title="Format='hex' — forces hex output" />
+
+<ExampleBlock for="RgbFormat" title="Format='rgb' — forces rgb output" />
+
+<ExampleBlock for="HslFormat" title="Format='hsl' — forces hsl output" />
+
+<ExampleBlock for="WithPresets" title="With presets — palette beside the picker" />
+
+<ExampleBlock for="PresetsOnly" title="Presets-only — chip grid, no freeform" />
+
+<ExampleBlock for="Eyedropper" title="Eyedropper — gated on browser API availability" />
+
+<ExampleBlock for="ContrastCheck" title="Contrast check — live WCAG ratio chip" />
+
+<ExampleBlock for="TriggerSwatch" title="Trigger variants — swatch" />
+
+<ExampleBlock for="TriggerButton" title="Trigger variants — button" />
+
+<ExampleBlock for="TriggerInput" title="Trigger variants — input" />
+
+<ExampleBlock for="Sizes" title="Sizes — sm / md / lg" />
+
+<ExampleBlock for="AsFormField" title="In a form — name + required + helperText" />
+
+<ExampleBlock for="ColorSwatchSizes" title="ColorSwatch — read-only chip in three sizes" />
+
+<ExampleBlock for="ColorSwatchGroup" title="ColorSwatch — with inline labels" />
+
+<ExampleBlock for="ColorInputOnly" title="ColorInput — text-only variant" />
+
+## Keyboard
+
+| Surface              | Keys                                                                       |
+| -------------------- | -------------------------------------------------------------------------- |
+| Trigger              | `Space` / `Enter` opens the picker.                                         |
+| Saturation square    | `Arrow*` ±1%; `Shift+Arrow*` ±10%; `Home`/`End` for saturation extremes.    |
+| Hue slider           | `Arrow` ±1°; `Shift+Arrow` ±15°; `PageUp`/`PageDown` ±15°; `Home`/`End`.    |
+| Alpha slider         | Same as hue, in 0..1 with 10% page step.                                    |
+| Hex / RGB / HSL input | `Enter` commits, `Esc` reverts.                                            |
+| Preset swatch grid   | Arrow keys move focus, `Enter` / `Space` selects.                           |
+| Eyedropper           | `Enter` activates browser eyedropper.                                       |
+
+## A11y
+
+- Saturation square is a `role="slider"` with `aria-valuetext` describing both axes ("S 75%, L 60%").
+- Hue + alpha sliders are full `role="slider"` controls with the W3C keyboard pattern.
+- Hex / RGB / HSL inputs are plain text inputs with visible per-channel labels.
+- Preset swatches form a `role="listbox"` with `role="option"` children.
+- Eyedropper button is hidden entirely when `window.EyeDropper` is unavailable.
+- Contrast chip announces its WCAG level via `aria-label`, not color alone.
+
+## RTL
+
+The hue and alpha gradients stay visually canonical (red on the left, transparent on the left) because color pickers are visual instruments — the hue wheel doesn't change direction with text reading direction. The underlying `role="slider"` value semantics still respect RTL through arrow-key flipping.
+
+## i18n
+
+Wrap the app in `<I18nProvider locale="he" messages={{ ColorPicker: heColorPickerTranslations }}>` to translate every visible string. Bundles ship for `en`, `he`, `ar`.
+
+```tsx
+import { I18nProvider } from '@apx-ds/engine';
+import { heColorPickerTranslations } from 'apx-ds';
+<I18nProvider locale="he" messages={{ ColorPicker: heColorPickerTranslations }}>
+  <ColorPicker defaultValue="#6c5ce7" />
+</I18nProvider>;
+```
+
+## Performance
+
+- Color math is sub-microsecond per call.
+- Saturation square uses pointer capture so a single drag doesn't thrash `getBoundingClientRect`.
+- Bundle target: < 7 KB gz for the picker, < 0.5 KB for `<ColorSwatch />`, < 1 KB for `<ColorInput />`.

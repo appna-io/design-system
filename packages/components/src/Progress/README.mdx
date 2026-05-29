@@ -1,0 +1,177 @@
+## Overview
+
+Phase 24 ships **two** progress indicators in one phase:
+
+- **`<Progress />`** — linear bar (determinate + indeterminate). Three slots: `track`, `bar`,
+  `label`.
+- **`<CircularProgress />`** — SVG ring (determinate + indeterminate). Four slots: `root`, `svg`,
+  `track`, `arc`, `label`.
+
+Both share the same prop vocabulary (`value`, `min`, `max`, `variant`, `size`, `color`,
+`indeterminate`, `showLabel`, `labelFormat`, `animated`) and the same ARIA semantics. The math
+is shared via `useProgressValue()`; the indeterminate keyframes live in the Tailwind preset
+alongside Badge's `badge-pulse`.
+
+**No Motion library.** Both surfaces are CSS-only — the linear sweep is a `transform` keyframe
+and the circular spinner is a combination of `rotate` (whole SVG) + `stroke-dashoffset`
+oscillation (the arc). Bundle delta target: < 2 KB gzipped combined.
+
+## Variants
+
+### Linear
+
+- **`solid`** — neutral track + role-colored bar. **Default.**
+- **`soft`** — role `-subtle` track + role-colored bar. The bar sits inside its own tinted lane.
+- **`striped`** — `solid` plus a diagonal CSS-gradient overlay on the bar. Reach for it on
+  long-running uploads / installs to communicate "active work".
+
+### Circular
+
+- **`solid`** — `bg-subtle` track + role-colored arc. **Default.**
+- **`soft`** — role `-subtle` track + role-colored arc.
+
+(No `striped` for circular — SVG strokes can't carry a diagonal pattern without a `<pattern>`
+def. Logged in the plan as a deferred follow-up.)
+
+## Sizes
+
+| Token | Linear height | Circular diameter | Default thickness |
+| ----- | ------------- | ----------------- | ----------------- |
+| `sm`  | `h-1` (4px)   | 24px              | 3px               |
+| `md`  | `h-2` (8px)   | 40px              | 4px               |
+| `lg`  | `h-3` (12px)  | 56px              | 5px               |
+
+`<CircularProgress size={number} />` sets the diameter directly; thickness defaults to
+`Math.max(2, size / 10)` and can still be overridden via `thickness`.
+
+## Anatomy
+
+### Linear
+
+```text
+[ track | bar { stripes? | label? } ]
+```
+
+### Circular
+
+```text
+[ root
+   ↳ svg
+       ↳ <circle/> (track)
+       ↳ <circle/> (arc — strokeDasharray drives the visible length)
+   ↳ label? ]
+```
+
+## Examples
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="BasicCircular" />
+
+<ExampleBlock for="Variants" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="Colors" />
+
+<ExampleBlock for="Indeterminate" />
+
+<ExampleBlock for="WithLabel" />
+
+<ExampleBlock for="CustomFormat" />
+
+<ExampleBlock for="Rounded" />
+
+<ExampleBlock for="ThicknessCircular" />
+
+<ExampleBlock for="CustomSize" />
+
+<ExampleBlock for="Animated" />
+
+## Props
+
+<PropsTable />
+
+## Accessibility
+
+- Both surfaces render `role="progressbar"` on the root element.
+- `aria-valuemin`, `aria-valuemax`, `aria-valuenow` are emitted when **determinate**.
+- `aria-valuetext` is always present — defaults to the `labelFormat` output when provided,
+  otherwise the rounded percentage. Indeterminate emits `aria-valuetext="Loading"` and **omits**
+  `aria-valuenow` (the correct ARIA for "we don't know how far along we are").
+- The visible inline / centered label is `aria-hidden` because the same value is already exposed
+  via `aria-valuenow` / `aria-valuetext`.
+- The inner `<svg>` of `<CircularProgress />` is `aria-hidden` — the wrapper carries the
+  accessible name.
+- Pass `aria-label` (or use `aria-labelledby` to point at a heading) so SR users hear what is
+  progressing. axe-core: zero violations across all 21 + 14 = 35 variant×color×size cells.
+
+## Animation / Reduced motion
+
+- **Determinate**: `width` (linear) / `stroke-dashoffset` (circular) transition over
+  `duration-normal` with `ease-emphasized`. Pass `animated={false}` to opt out per-instance — the
+  bar/arc snaps. The `motion-reduce:` Tailwind variant also halts the transition for users with
+  `prefers-reduced-motion: reduce`.
+- **Indeterminate (linear)**: `progress-indeterminate` keyframe slides the 1/3-width bar across
+  the track on a 1.4s loop.
+- **Indeterminate (circular)**: `circular-indeterminate-spin` rotates the whole SVG; in parallel
+  `circular-indeterminate-dash` modulates `stroke-dashoffset` so the arc grows then shrinks. Both
+  loops are 1.4s.
+- All four keyframes live in `packages/theme/src/tailwind-preset.ts` — **deviation from the plan**
+  (the plan called out `packages/theme/src/styles/globals.css`, which does not exist in the repo).
+  Following the Phase 12 / Badge convention keeps the preset as the single source of truth and
+  avoids consumers needing an extra CSS import.
+- Reduced-motion fallback: indeterminate animations halt; the static state drops to 60% opacity
+  so the surface still reads as "in progress" without motion.
+
+## Theming
+
+Every visual decision is a palette token. Pull the `<ThemeProvider>` knobs to remix the whole
+library, or scope overrides to Progress / CircularProgress specifically:
+
+```tsx
+<ThemeProvider
+  theme={defineTheme({
+    components: {
+      Progress: {
+        defaultProps: { variant: 'soft', rounded: 'md' },
+        styleOverrides: {
+          track: '',
+          bar: 'opacity-90',
+          label: 'tracking-wide',
+        },
+      },
+      CircularProgress: {
+        defaultProps: { thickness: 5 },
+        styleOverrides: {
+          root: '',
+          svg: '',
+          track: 'opacity-30',
+          arc: '',
+          label: 'tabular-nums',
+        },
+      },
+    },
+  })}
+>
+  {children}
+</ThemeProvider>
+```
+
+Instance-level overrides win via `tailwind-merge`:
+
+```tsx
+<Progress className="rounded-none" style={{ minWidth: 240 }} value={66} />
+<CircularProgress sx={{ color: 'success.main' }} value={66} />
+```
+
+## Do / Don't
+
+- **Do** prefer `indeterminate` whenever you can't measure the operation. A bar pegged at "5%"
+  for two minutes is worse than a sweeping indeterminate bar.
+- **Do** pair `showLabel` with `labelFormat` for domain-specific units (`"2.4 GB / 4 GB"`,
+  `"step 3 of 5"`) — the percent is rarely the most useful number on its own.
+- **Don't** stack more than one indeterminate spinner on a single screen — the motion competes.
+  A single page-level spinner reads as authoritative; many small ones read as broken.
+- **Don't** flip `animated={false}` globally in a theme override unless you've also disabled
+  the indeterminate keyframes — the result is a static bar that lies about its state.

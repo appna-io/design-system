@@ -1,0 +1,190 @@
+## Overview
+
+`<Carousel />` is an accessible, keyboard- and touch-friendly carousel built on **CSS
+scroll-snap** with a thin JS coordination layer for index tracking, controls, and optional
+autoplay. **Zero new runtime dependencies** — no Embla, no Swiper.
+
+It ships two equivalent APIs that resolve to the same DOM:
+
+- **Prop-driven** (90% case) — drop `<Carousel.Slide>` children in and the `Viewport`,
+  `Track`, `Controls`, and `Indicators` are auto-wrapped for you.
+- **Compound** (power users) — render the full `<Carousel.Viewport>` / `<Carousel.Track>` /
+  `<Carousel.Slide>` shape yourself for precise layout control.
+
+## Anatomy
+
+| Subpart                       | Element                              | Role                                                                |
+| ----------------------------- | ------------------------------------ | ------------------------------------------------------------------- |
+| `<Carousel>`                  | `<section role="region">`            | landmark + CarouselContext provider                                 |
+| `<Carousel.Viewport>`         | `<div tabIndex={0}>`                 | overflow scroll container; main keyboard target                     |
+| `<Carousel.Track>`            | `<div data-carousel-track>`          | flex container of slides; owns inter-slide gap                      |
+| `<Carousel.Slide>`            | `<div role="group">` (or `asChild`)  | one slide; auto-labeled "Slide N of M"                              |
+| `<Carousel.Controls>`         | `<div data-carousel-controls>`       | wrapper for Prev / Next buttons (overlay / top / bottom)            |
+| `<Carousel.PrevButton>`       | `<button>`                           | step backwards by one slide                                         |
+| `<Carousel.NextButton>`       | `<button>`                           | step forwards by one slide                                          |
+| `<Carousel.Indicators>`       | `<div role="tablist">`               | dot/bar/number indicators row                                       |
+| `<Carousel.Indicator>`        | `<button role="tab">`                | one indicator targeting a specific slide                            |
+| `<Carousel.AutoplayControl>`  | `<button aria-pressed>`              | visible play/pause toggle when autoplay is enabled (WCAG 2.2.2)     |
+| `<Carousel.LiveRegion>`       | `<div aria-live>` (sr-only)          | announces slide changes when explicit / autoplay paused             |
+
+## Examples
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="HeroBanner" />
+
+<ExampleBlock for="ProductLane" />
+
+<ExampleBlock for="Responsive" />
+
+<ExampleBlock for="Vertical" />
+
+<ExampleBlock for="Loop" />
+
+<ExampleBlock for="Autoplay" />
+
+<ExampleBlock for="AutoplayPauseOnHover" />
+
+<ExampleBlock for="ControlledIndex" />
+
+<ExampleBlock for="ProgrammaticRef" />
+
+<ExampleBlock for="SnapCenter" />
+
+<ExampleBlock for="SnapNone" />
+
+<ExampleBlock for="CustomIndicators" />
+
+<ExampleBlock for="PolymorphicSlides" />
+
+<ExampleBlock for="WithCardContent" />
+
+<ExampleBlock for="WithFadeShadows" />
+
+<ExampleBlock for="ImageGallery" />
+
+<ExampleBlock for="TestimonialCarousel" />
+
+## Props
+
+| Prop                      | Type                                                                 | Default        | Notes                                                              |
+| ------------------------- | -------------------------------------------------------------------- | -------------- | ------------------------------------------------------------------ |
+| `orientation`             | `'horizontal' \| 'vertical'`                                         | `'horizontal'` | Scroll axis.                                                       |
+| `slidesPerView`           | `ResponsiveValue<number>`                                            | `1`            | How many slides are visible at once.                               |
+| `gap`                     | `ResponsiveValue<number>`                                            | `0`            | Inter-slide gap in 4px theme spacing units (i.e. `3` ⇒ 12px).      |
+| `snap`                    | `'start' \| 'center' \| 'end' \| 'none'`                             | `'start'`      | CSS scroll-snap alignment per slide.                               |
+| `index` / `defaultIndex`  | `number`                                                             | `0`            | Controlled / uncontrolled active index.                            |
+| `onIndexChange`           | `(index, source) => void`                                            | —              | Fires on any change. `source` ∈ `keyboard / control / indicator / autoplay / scroll / programmatic`. |
+| `loop`                    | `boolean`                                                            | `false`        | Wrap-around navigation past the last slide back to the first.      |
+| `autoplay`                | `boolean`                                                            | `false`        | **Off by default** (WCAG 2.2.2).                                   |
+| `autoplayInterval`        | `number`                                                             | `5000`         | Tick interval in ms.                                               |
+| `autoplayDirection`       | `'forward' \| 'backward'`                                            | `'forward'`    | Direction of auto-advance.                                         |
+| `pauseOnHover`            | `boolean`                                                            | `true`         | Pause while the pointer hovers the viewport.                       |
+| `pauseOnFocus`            | `boolean`                                                            | `true`         | Pause while anything inside the viewport is focused.               |
+| `pauseOnReducedMotion`    | `boolean`                                                            | `true`         | Pause when `prefers-reduced-motion: reduce`.                       |
+| `showAutoplayControl`     | `'auto' \| 'always' \| 'never'`                                      | `'auto'`       | Visibility of the play/pause button (always visible when autoplay enabled). |
+| `showControls`            | `'auto' \| 'always' \| 'never'`                                      | `'auto'`       | Visibility of Prev/Next buttons.                                   |
+| `showIndicators`          | `'auto' \| 'always' \| 'never'`                                      | `'auto'`       | Visibility of the indicators row.                                  |
+| `ariaLabel`               | `string`                                                             | `'Carousel'`   | Required accessible name for the region (defaults to "Carousel"). |
+| `ariaLabelledby`          | `string`                                                             | —              | Alternative to `ariaLabel` — id of an external labeling element.   |
+| `ariaRoleDescription`     | `string`                                                             | `'carousel'`   | `aria-roledescription`. Common overrides: `'gallery'`, `'banner'`. |
+| `liveRegionPoliteness`    | `'off' \| 'polite'`                                                  | `'off'`        | When `'polite'`, slide changes announce to assistive tech.         |
+| `variant`                 | `'default' \| 'ghost' \| 'card'`                                     | `'default'`    | Root container styling.                                            |
+| `size`                    | `'sm' \| 'md' \| 'lg'`                                               | `'md'`         | Drives indicator + button sizing.                                  |
+| `showShadows`             | `boolean`                                                            | `false`        | Fade gradients on the leading + trailing scroll edges.             |
+| `scrollBehavior`          | `'smooth' \| 'auto'`                                                 | `'smooth'`     | Programmatic scroll behavior (`prefers-reduced-motion` collapses smooth → auto). |
+
+## Imperative ref
+
+```tsx
+const ref = useRef<CarouselRef>(null);
+
+ref.current?.scrollTo(2);
+ref.current?.next();
+ref.current?.prev();
+ref.current?.getIndex();
+ref.current?.getSlideCount();
+ref.current?.isAutoplaying();
+ref.current?.pauseAutoplay();
+ref.current?.playAutoplay();
+```
+
+## Keyboard
+
+Focus the `<Carousel.Viewport>` (Tab into it) — then:
+
+| Key                        | Horizontal (LTR) | Horizontal (RTL) | Vertical    |
+| -------------------------- | ---------------- | ---------------- | ----------- |
+| `ArrowLeft` / `ArrowRight` | prev / next      | next / prev      | —           |
+| `ArrowUp` / `ArrowDown`    | —                | —                | prev / next |
+| `PageUp` / `PageDown`      | prev / next      | prev / next      | prev / next |
+| `Home` / `End`             | first / last     | first / last     | first / last |
+| `Space`                    | toggle autoplay (only when `autoplay` is enabled) | — | — |
+
+Prev / Next buttons and Indicators are in the standard Tab order; the Viewport itself is also
+focusable for power keyboard users who want to skip the controls.
+
+## Accessibility
+
+- Root is a `<section role="region">` with a required `aria-label` (default `'Carousel'`) and
+  `aria-roledescription="carousel"`.
+- Each slide is a `role="group"` with `aria-roledescription="slide"` and an auto-generated
+  `aria-label="Slide N of M"`.
+- Indicators render as `role="tab"` inside a `role="tablist"`, with `aria-selected` + `aria-current`.
+- Autoplay is **off by default** (WCAG 2.2.2). When enabled, the
+  `<Carousel.AutoplayControl>` is rendered automatically and gives the user a visible
+  pause/play toggle. Autoplay also pauses when the user hovers / focuses the carousel, when
+  `prefers-reduced-motion: reduce` is set, when the tab is backgrounded, and when the user has
+  explicitly paused via the button.
+- A live region (`<Carousel.LiveRegion>`) is rendered when `liveRegionPoliteness="polite"` or
+  whenever the user pauses autoplay; it announces "Slide N of M" on manual navigation only,
+  never during autoplay (to avoid AT spam).
+- Loop wrap-around uses programmatic `scrollTo`; no DOM clones means screen readers always
+  see the real slide list once.
+
+## RTL
+
+Direction is read from `useDirection()`. `ArrowLeft` / `ArrowRight` semantics flip
+automatically for horizontal carousels; vertical and PageUp / PageDown remain direction-neutral.
+The Prev / Next chevron glyphs mirror automatically.
+
+## i18n
+
+Strings are English defaults with prop overrides:
+
+- `ariaLabel` (region)
+- `ariaRoleDescription` (region)
+- `<Carousel.Slide ariaLabel>` (per-slide override)
+- `<Carousel.PrevButton ariaLabel>` (default `'Previous slide'`)
+- `<Carousel.NextButton ariaLabel>` (default `'Next slide'`)
+- `<Carousel.AutoplayControl ariaLabelPlay / ariaLabelPause>` (defaults `'Play carousel'` /
+  `'Pause carousel'`)
+- `<Carousel.Indicators renderLabel>` callback `(index, total) => string`
+
+Once `<I18nProvider>` lands, these will default to provider-supplied strings; the prop
+overrides will remain higher precedence.
+
+## Theming
+
+The full recipe matrix (`root`, `viewport`, `track`, `slide`, `controls`, `controlButton`,
+`indicators`, `indicator`) is exposed through theme `styleOverrides.Carousel` so brands can
+restyle every slot without forking the source.
+
+## Do / Don't
+
+**Do**
+- Use a single `<Carousel>` per region; if you have many lanes on a page, give each a unique
+  `ariaLabel` so AT users can tell them apart.
+- Provide an accessible name for image-only slides via `<Carousel.Slide ariaLabel>` (image
+  galleries lean on this).
+- Use `loop` for hero banners, leave it off for content lanes (otherwise the keyboard order
+  loops infinitely).
+- Use `slidesPerView` with a responsive object (`{ base: 1, md: 3 }`) — let small screens
+  show one slide.
+
+**Don't**
+- Don't enable `autoplay` without a visible pause/play control (the component does this for
+  you; the AutoplayControl renders automatically).
+- Don't put critical actions inside autoplaying slides — users won't have time to click.
+- Don't disable `pauseOnReducedMotion`; users have set this preference explicitly.
+- Don't nest a `<Carousel>` inside another `<Carousel>` — the keyboard semantics conflict.

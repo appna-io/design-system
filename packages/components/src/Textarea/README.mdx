@@ -1,0 +1,125 @@
+## Overview
+
+`<Textarea />` is the canonical multi-line text-input primitive. It pairs with `<label>` for the
+accessible name and is the **DRY proof of the shared form-control layer** introduced in Phase 7:
+it consumes `controlBase`, `useFormFieldA11y`, and the 28-row `variantColorMatrix` directly from
+`_shared/` without copying a single line.
+
+Where Input proves the variant system on a single-line bordered surface, Textarea proves the same
+system on a **height-changing, multi-line** surface — auto-resize, character counts, manual
+resize affordances, and the same four variants × seven colors matrix as Input.
+
+## Variants
+
+Same four "border + background" stories as Input — by design, the two components are visually
+indistinguishable in the resting state of a form. Adding a variant to Input adds it to Textarea
+(the type is a literal alias, and the recipe imports the same compound rows).
+
+- **`outline`** — 1px border, paper background. Default; safest on any surface.
+- **`solid`** — filled tint, no visible border. Best when the parent is already `bg.paper`.
+- **`ghost`** — invisible at rest; gains a tinted border + faint bg on hover / focus.
+- **`underline`** — Material-style single bottom rule, dense forms.
+
+Every variant works with every `color` (7 colors). The focus ring + focused border use the
+active `color`; the body border stays neutral at rest so colored textareas don't shout for
+attention.
+
+## Anatomy
+
+```text
+[ <textarea/> ]                  ← inner element, padding + leading-relaxed + resize
+[             counter (optional) ]   ← absolute end-bottom, pointer-events-none
+```
+
+## Multi-line-specific concerns
+
+- **`autoResize`** (`true` by default) grows the textarea with content, clamped between
+  `minRows` and `maxRows`. Once content exceeds `maxRows`, an internal scrollbar takes over.
+- **`resize`** (`'vertical'` by default) controls the native CSS `resize` property — the
+  browser-rendered corner grip. Works alongside `autoResize`: a user can still drag below the
+  auto-resize ceiling unless `resize` is `'none'`.
+- **`showCount`** (paired with `maxLength`) renders a small bottom-end counter. When the limit
+  is hit, `data-at-limit="true"` flips the counter text to the danger token — consumers can
+  CSS-target this for custom animation.
+
+## Examples
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="Variants" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="AutoResize" />
+
+<ExampleBlock for="WithCount" />
+
+<ExampleBlock for="ResizeModes" />
+
+<ExampleBlock for="Invalid" />
+
+<ExampleBlock for="Disabled" />
+
+<ExampleBlock for="Controlled" />
+
+## Props
+
+<PropsTable />
+
+## Accessibility
+
+- Renders a native `<textarea>` — keyboard interaction, IME composition, and form submission
+  all use the platform's built-in behaviors.
+- **Labels**: Textarea never auto-labels. Wrap with `<label htmlFor>` (or the future
+  `<Field>`), pass `aria-label`, or pass `aria-labelledby`. A dev-mode warning fires when none
+  of those are present — `[apx-ds][TEXTAREA_NO_LABEL]`.
+- **Invalid state**: `invalid={true}` sets `aria-invalid="true"` on the textarea and a matching
+  `data-invalid` on the wrapper. The danger border + ring come from the same attribute
+  selector Input uses, so a future `<Field invalid>` propagates without prop-drilling.
+- **`aria-describedby`** is preserved as-is. The character counter is `aria-hidden="true"` (the
+  count is decoration — the textarea itself announces value changes natively). Consumers who
+  want screen-reader announcement of the count should render a `<span aria-live="polite">`
+  separately and wire it via `aria-describedby`.
+- **Disabled vs read-only**: `disabled` is unreachable by tab; `readOnly` is reachable but
+  uneditable.
+- **Focus ring** lives on the **wrapper** (`focus-within:ring-*`) so the counter footer is
+  inside the same visual frame as the textarea.
+
+## Theming
+
+Both `root` (wrapper), `textarea` (inner element), and `count` (counter footer) are addressable
+slots. Tweak the global theme to remix the whole library at once, or scope overrides to Textarea
+specifically:
+
+```tsx
+<ThemeProvider
+  theme={defineTheme({
+    components: {
+      Textarea: {
+        defaultProps: { autoResize: false, rows: 6 },
+        styleOverrides: {
+          root: 'shadow-xs',
+          textarea: 'font-mono leading-snug',
+          count: 'text-fg',
+        },
+      },
+    },
+  })}
+>
+  {children}
+</ThemeProvider>
+```
+
+Instance-level overrides win via `tailwind-merge`:
+
+```tsx
+<Textarea className="font-mono" sx={{ radius: 'xl' }} style={{ minHeight: 240 }} />
+```
+
+## Do / Don't
+
+- **Do** pair every Textarea with a visible `<label>`. Placeholders are not labels.
+- **Do** use `maxLength` + `showCount` when there's a hard cap so users know in advance.
+- **Don't** use `disabled` for "not editable right now" — `readOnly` keeps the field reachable.
+- **Don't** turn off `autoResize` unless you have a strong layout reason; modern forms expect
+  the field to grow with content.

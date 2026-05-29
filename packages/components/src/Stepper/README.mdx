@@ -1,0 +1,190 @@
+## Overview
+
+`<Stepper />` is the multi-step progress indicator for wizards, onboarding, checkout, KYC,
+and any flow where the user advances through a known list of stages.
+
+It ships in two flavors that resolve to the same `<ol>` shape:
+
+- **Array API** — pass `steps={[{ id, label, description }, …]}` + `active={n}`. Best for
+  data-driven wizards where every step is uniform.
+- **Compound API** — `<Stepper.Step id label>` children inside `<Stepper>`. Best when one
+  step needs inline expanded content (a form, an error message, a sub-task list).
+
+Status auto-derives from `active`: indexes `< active` paint as `complete`, `=== active`
+paints as `active`, `> active` stays `pending`. Override per step with `status: 'error'` or
+`status: 'loading'` (the latter auto-injects `<Spinner />`).
+
+## Anatomy
+
+| Subpart                  | Element                              | Role                                                  |
+| ------------------------ | ------------------------------------ | ----------------------------------------------------- |
+| `<Stepper>`              | `<ol role="list" aria-label="Progress">` | container + ordered list of steps                  |
+| `<Stepper.Step>`         | `<li data-stepper-item>`             | a single step; carries `aria-current="step"` when active |
+| internal indicator       | `<span>` (or `<button>` if clickable) | renders the glyph: number / dot / check / alert / Spinner |
+| internal connector       | `<li role="presentation" aria-hidden>` | visual line between indicators; status mirrors the preceding step |
+
+## Examples
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="Vertical" />
+
+<ExampleBlock for="Variants" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="WithDescriptions" />
+
+<ExampleBlock for="WithErrorStep" />
+
+<ExampleBlock for="WithLoadingStep" />
+
+<ExampleBlock for="Clickable" />
+
+<ExampleBlock for="ClickableCompleted" />
+
+<ExampleBlock for="LinearMode" />
+
+<ExampleBlock for="Responsive" />
+
+<ExampleBlock for="Compound" />
+
+<ExampleBlock for="VerticalWithContent" />
+
+<ExampleBlock for="CustomIcons" />
+
+<ExampleBlock for="CustomConnector" />
+
+<ExampleBlock for="Wizard" />
+
+## Props
+
+<PropsTable />
+
+## Status auto-derivation
+
+```tsx
+<Stepper
+  active={2}
+  steps={[
+    { id: 'a', label: 'Account' },       // auto → complete  (index 0 < active 2)
+    { id: 'b', label: 'Profile' },       // auto → complete  (index 1 < active 2)
+    { id: 'c', label: 'Plan' },          // auto → active    (index 2 === active 2)
+    { id: 'd', label: 'Review' },        // auto → pending   (index 3 > active 2)
+  ]}
+/>
+```
+
+To override per step, pass `status`:
+
+```tsx
+{ id: 'c', label: 'Verify', status: 'loading' }   // shows Spinner instead of step number
+{ id: 'c', label: 'Payment', status: 'error' }    // paints red + alert icon
+```
+
+The `error` / `loading` / `complete` overrides always win. Explicit `active` on a non-active
+index quietly downgrades to whichever auto-derived status applies (so consumer-set "active"
+can never disagree with the prop-set `active` index).
+
+## Clickability
+
+- `clickable={false}` (default): steps render as plain `<span>` — no tab stop, no hover affordance.
+- `clickable={true}`: every step is a focusable `<button>`. Combine with `onStepClick={({ id, index }) => …}` to jump.
+- `clickable="completed"`: only `complete` steps fire `onStepClick`. The common "tap a finished step to jump back" pattern.
+- `linear={true}` blocks `pending` steps from firing `onStepClick`. The button is rendered with `aria-disabled="true"` + native `disabled` so screen readers announce it and keyboard tabbing skips it.
+
+## Variants
+
+| Variant     | When                                                                          |
+| ----------- | ----------------------------------------------------------------------------- |
+| `numbered`  | Default. Circle with step number; check / alert / Spinner replace it per status. |
+| `dots`      | Compact rail — useful for narrow surfaces where labels are below the indicators. |
+| `progress`  | Filled dots-and-line look — the dot itself reads as the active marker.        |
+
+## Sizes
+
+`sm` / `md` (default) / `lg`. Size controls indicator diameter, label font, and connector vertical offset so the line lines up with the indicator's center across all three sizes.
+
+## Accessibility
+
+- Root is `<ol role="list" aria-label="Progress">` (override via `aria-label`).
+- Each step is `<li data-stepper-item>` with `aria-current="step"` on the active one.
+- The indicator's accessible name is auto-composed: `"Step {n} of {total}: {label}, {status}"` — screen readers announce position + label + status in one pass.
+- Status icons (`<Check>` for complete, `<AlertCircle>` for error, `<Spinner>` for loading) are `aria-hidden`; the indicator span carries the accessible name via `aria-label`.
+- Separators (the connector lines) carry `role="presentation"` + `aria-hidden="true"` so SR doesn't read "underscore underscore underscore" between every step.
+- Clickable steps render as `<button type="button">` with native focus management; non-clickable steps render as plain spans (no tab stop). Linear-blocked steps get `aria-disabled="true"` *and* native `disabled` so SR users hear the restriction.
+- axe-core: 0 violations across horizontal / vertical / clickable / linear / error / loading + the variant × size matrix.
+
+## i18n
+
+The default `aria-label="Progress"` and the embedded status strings (`"complete"`, `"in progress"`, etc.) are hard-coded English for this phase. When `<I18nProvider>` ships, the same prop surface will plug into the translation hook — no breaking API change. Until then, override `aria-label` if you need a localized root name; the per-step status strings live inside the rendered `aria-label` and currently can't be customized without `<I18nProvider>`.
+
+## RTL
+
+- The `<ol>` flows right-to-left automatically inside `dir="rtl"` — the first step appears on the right in both horizontal and vertical layouts.
+- Connectors use `border-inline-start` for the vertical variant — they always sit on the logical-start edge.
+- Step number digits stay LTR (consistent with `tabular-nums` and standard form indicators).
+
+## Theming
+
+Six override slots: `root`, `item`, `interactive`, `indicator`, `label`, `description`, `connector`, `content`.
+
+```tsx
+<ThemeProvider
+  theme={defineTheme({
+    components: {
+      Stepper: {
+        defaultProps: { variant: 'dots', size: 'sm' },
+        styleOverrides: {
+          indicator: 'data-[status=active]:bg-primary data-[status=active]:ring-primary/40',
+          connector: 'data-[status=complete]:border-primary',
+        },
+      },
+    },
+  })}
+>
+  {children}
+</ThemeProvider>
+```
+
+## Composition: wizard pattern
+
+`<Stepper>` is intentionally presentation-only — it doesn't ship next / prev / submit buttons.
+Pair it with the consumer's own button row + form state (or your favorite form library):
+
+```tsx
+function Wizard() {
+  const [active, setActive] = useState(0);
+  const isLast = active === STEPS.length - 1;
+
+  return (
+    <>
+      <Stepper active={active} steps={STEPS} clickable linear
+        onStepClick={({ index }) => setActive(index)} />
+      <YourFormForStep active={active} />
+      <div>
+        <Button onClick={() => setActive((i) => Math.max(0, i - 1))}>Back</Button>
+        {isLast
+          ? <Button onClick={submit}>Submit</Button>
+          : <Button onClick={() => setActive((i) => i + 1)}>Next</Button>}
+      </div>
+    </>
+  );
+}
+```
+
+The `Wizard` example above demonstrates this pattern end-to-end.
+
+## Do / Don't
+
+- **Do** keep `active` as a single number index; it's the easiest state to advance.
+- **Do** use the array API for data-driven flows; switch to compound when one step needs custom inline content.
+- **Do** combine `clickable` + `linear` for wizard navigation that lets the user backtrack but not skip ahead.
+- **Don't** put next / prev / submit buttons inside Stepper — they belong in your form, not the indicator.
+- **Don't** auto-advance on mount in a renderer example — Ahmad's ship-gate rule: every interactive component must wait for a user action.
+
+## Out of scope (future)
+
+- Vertical mode "expanded form" panel that lives outside the `<li>` (today it lives inside; some consumers may want a sibling panel that animates in).
+- Per-step `onComplete` / `onError` lifecycle hooks — currently consumers wire these into their own state machine.
+- Step branching (decision-tree wizards) — keep linear for now; branching requires a different mental model.

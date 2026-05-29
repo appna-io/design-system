@@ -1,0 +1,245 @@
+---
+title: Table
+status: Stable
+phase: 55
+---
+
+# Table
+
+`<Table />` is the lightweight, semantic HTML-`<table>` primitive for the 80 % case — render an
+array as rows and columns, get sorting and a checkbox-driven selection mode for free, target
+under 4 KB gzipped. The heavy lifting (virtualization, multi-column sort, column resize/pin,
+cell editing) lives in **DataGrid** (Phase 27).
+
+> **Mental model**
+>
+> Reach for `<Table>` first. If you need virtualization for tens of thousands of rows, column
+> resizing, multi-sort, inline editing, or row-grouping, graduate to `<DataGrid>`.
+
+## When to use what
+
+| Use case | Component |
+| --- | --- |
+| Static or paginated data, ≤ a few hundred rows | `<Table>` |
+| One sort column at a time | `<Table>` |
+| "Select rows with a checkbox" | `<Table>` |
+| Need to expand a row into a detail panel | Compose `<Table>` cells around `<Disclosure>` |
+| Virtualized 10k+ rows / column resize / multi-sort / inline edit | `<DataGrid>` |
+
+---
+
+## APIs
+
+`<Table>` exposes **two equivalent APIs** — pick whichever fits the surface you're building.
+
+### Compound API
+
+Mirrors `<table>` semantics one-to-one. Choose this when you want full control of the cells
+(custom markup per cell, multiple body sections, captions, footers).
+
+```tsx
+<Table ariaLabel="Members">
+  <Table.Head>
+    <Table.Row>
+      <Table.HeaderCell>Name</Table.HeaderCell>
+      <Table.HeaderCell align="end">Plan</Table.HeaderCell>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    {members.map((m) => (
+      <Table.Row key={m.id}>
+        <Table.Cell>{m.name}</Table.Cell>
+        <Table.Cell align="end"><Badge>{m.plan}</Badge></Table.Cell>
+      </Table.Row>
+    ))}
+  </Table.Body>
+</Table>
+```
+
+### Declarative API
+
+Better when the schema is uniform across rows — one prop, no JSX boilerplate.
+
+```tsx
+<Table
+  ariaLabel="Members"
+  columns={[
+    { id: 'name', header: 'Name', accessor: (m) => m.name },
+    { id: 'plan', header: 'Plan', align: 'end', cell: (m) => <Badge>{m.plan}</Badge> },
+  ]}
+  data={members}
+  getRowId={(m) => m.id}
+/>
+```
+
+The two APIs share the same DOM and recipes; mixing within one `<Table>` isn't supported —
+pass either children **or** `columns`/`data`. Children win.
+
+---
+
+## Sorting
+
+Mark columns `sortable` and provide an `accessor`. Sort state can be uncontrolled
+(`defaultSort`) or controlled (`sort` + `onSortChange`). Clicking a header cycles
+`unsorted → asc → desc → unsorted`. Strategies:
+
+| `sortFn`           | Comparator                                                   |
+| ------------------ | ------------------------------------------------------------ |
+| `'string'` (def)   | `localeCompare`, nulls sink                                  |
+| `'number'`         | numeric coercion, `NaN`s sink                                |
+| `'date'`           | `Date` / ISO string → millis, invalid sinks                  |
+| `(a, b) => number` | Custom comparator over the raw rows                          |
+
+```tsx
+<Table
+  columns={[
+    { id: 'name', header: 'Name', accessor: (r) => r.name, sortable: true },
+    { id: 'age', header: 'Age', accessor: (r) => r.age, sortable: true, sortFn: 'number' },
+  ]}
+  data={rows}
+  defaultSort={{ id: 'name', direction: 'asc' }}
+  onSortChange={(next) => analytics.track('table_sort', next)}
+/>
+```
+
+`sortRows()` and `cycleSort()` are exported as pure helpers — use them if you sort outside the
+component (e.g., to ship sorted data to a server-side log).
+
+---
+
+## Selection
+
+Set `selectionMode="single"` or `"multiple"` to opt in. Table auto-injects a leading
+checkbox column; in `multiple` mode the header gets a master checkbox with three states
+(none / some / all).
+
+```tsx
+<Table
+  selectionMode="multiple"
+  selected={selectedIds}
+  onSelectedChange={(next) => setSelectedIds(next as string[])}
+  isRowSelectable={(row) => row.active}
+  columns={…}
+  data={…}
+  getRowId={(row) => row.id}
+/>
+```
+
+`getRowId` is **mandatory** when selection or `data` mutation is in play; it falls back to the
+row index when omitted, which works fine for static demos but breaks the moment a row is
+filtered or sorted.
+
+---
+
+## Row actions
+
+`rowActions(row)` renders into a trailing column. The cell is marked
+`data-table-stop-row-click=""` so clicks inside don't bubble up to `onRowClick`.
+
+```tsx
+<Table
+  rowActions={(row) => (
+    <Menu>
+      <Menu.Trigger><IconButton aria-label="Actions"><MoreVertical /></IconButton></Menu.Trigger>
+      <Menu.Content>
+        <Menu.Item onSelect={() => edit(row)}>Edit</Menu.Item>
+        <Menu.Item onSelect={() => del(row)} tone="danger">Delete</Menu.Item>
+      </Menu.Content>
+    </Menu>
+  )}
+  {…}
+/>
+```
+
+---
+
+## Loading + empty + error
+
+| Slot           | Behavior                                                                 |
+| -------------- | ------------------------------------------------------------------------ |
+| `loading`      | Renders `loadingRowCount` (default 5) `<Skeleton>` rows; sets `aria-busy` |
+| `empty`        | Rendered in a full-width body cell when `data.length === 0`               |
+| `error`        | Rendered in a full-width body cell when supplied (wins over `empty`)      |
+
+`empty` accepts any node — for the rich variant, drop in `<EmptyState>` (Phase 42).
+
+---
+
+## Visual axes
+
+| Prop          | Effect                                                                  |
+| ------------- | ----------------------------------------------------------------------- |
+| `variant`     | `default` / `card` (rounded outer border) / `minimal`                   |
+| `density`     | `sm` / `md` / `lg` — controls cell padding + font size                  |
+| `striped`     | Zebra striping on odd body rows                                         |
+| `bordered`    | Per-cell row borders (default `true`)                                   |
+| `hoverable`   | Hover background on body rows (default `true`)                          |
+| `stickyHeader`| `position: sticky` on header cells (works inside any scrolling parent)  |
+
+---
+
+## Accessibility
+
+- Renders a real `<table>` with `<thead>` / `<tbody>` / `<tfoot>` semantics.
+- Required `ariaLabel` (or a `<Table.Caption>` child) gives the table its accessible name.
+- Sortable headers wrap their label in a `<button>`. `aria-sort` switches between
+  `ascending` / `descending` / `none`.
+- Selection: each row checkbox carries an `aria-label`; the master checkbox toggles between
+  *Select all rows* and *Deselect all rows*.
+- Body rows announce `aria-selected` when a selection mode is active.
+- Loading rows set `aria-busy="true"` on `<tbody>`.
+- Empty / error states render inside a single body cell — screen readers announce them as the
+  table content.
+- Sort indicator glyphs are `aria-hidden`; the announcement comes from `aria-sort`.
+
+`Table.test.tsx` and `Table.a11y.test.tsx` together exercise every mode against `jest-axe`
+with **zero violations**.
+
+---
+
+## RTL
+
+All horizontal spacing is logical (`text-start` / `text-end`, `inset-inline-*`). The leading
+selection column flips to the row's logical start; the trailing row-actions column flips to
+the logical end. No per-direction code lives in the component.
+
+---
+
+## Internationalization
+
+V1 ships English defaults inline. When `<I18nProvider>` lands (Phase 27 establishes the
+primitive), the keys we'll consume are:
+
+| Key                       | Default              |
+| ------------------------- | -------------------- |
+| `table.selectRow`         | "Select row"          |
+| `table.selectAll`         | "Select all rows"     |
+| `table.deselectAll`       | "Deselect all rows"   |
+| `table.empty`             | "No data to display"  |
+| `table.loading`           | "Loading data..."     |
+
+---
+
+## Performance
+
+- Sort is `O(n log n)`, memoised; runs only when `sort` or `data` changes.
+- Selection set is normalised once per render; per-row lookups are `O(1)`.
+- Skeleton rows render `loadingRowCount × columns` shallow nodes; the default of 5 is
+  tuned to fit a single viewport without thrashing.
+- Heavier needs (10k+ rows, virtualization) belong to DataGrid.
+
+---
+
+## Anti-patterns
+
+- Don't use `<Table>` for layout (e.g., two-column forms). Use `Grid` / `Stack`.
+- Don't reach for `<Table>` if you need column resize, multi-sort, or virtualization —
+  graduate to `<DataGrid>`.
+- Don't mix compound children and the declarative `columns` / `data` API on the same
+  `<Table>`. Children win and the declarative props are silently ignored — explicit beats
+  implicit, so pick one.
+- Don't omit `ariaLabel` or `<Table.Caption>`. Without one, the table is unnamed for screen
+  readers.
+- Don't put interactive controls in cells that you also want to trigger `onRowClick` — wrap
+  them in `data-table-stop-row-click` if you're rolling your own (the built-in row actions
+  cell already does this).

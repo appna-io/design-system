@@ -1,0 +1,194 @@
+## Overview
+
+`<Tabs>` is the canonical sectioned-navigation primitive. It implements the
+[W3C ARIA Tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) end-to-end —
+roving tabindex, arrow-key navigation, manual vs automatic activation, panel
+association — across four visual variants and two orientations.
+
+The compound shape mirrors `<Card>` (Phase 14): a root state owner with three
+dot-namespaced subparts that read everything they need from a single context.
+
+```tsx
+import { Tabs } from 'apx-ds';
+
+<Tabs defaultValue="overview">
+  <Tabs.List aria-label="Sections">
+    <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
+    <Tabs.Trigger value="activity">Activity</Tabs.Trigger>
+    <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Panel value="overview">…</Tabs.Panel>
+  <Tabs.Panel value="activity">…</Tabs.Panel>
+  <Tabs.Panel value="settings">…</Tabs.Panel>
+</Tabs>;
+```
+
+## Anatomy
+
+| Subpart           | Element                | Role         |
+| ----------------- | ---------------------- | ------------ |
+| `<Tabs>`          | `<div>`                | container, state owner |
+| `<Tabs.List>`     | `<div role="tablist">` | trigger row — put `aria-label` here so SR users hear the navigation name |
+| `<Tabs.Trigger>`  | `<button role="tab">`  | activator (becomes the wrapped child when `asChild`) |
+| `<Tabs.Panel>`    | `<div role="tabpanel">` | content region paired with a trigger of matching `value` |
+
+## Examples
+
+The default example below is fully interactive — click any trigger or use the keyboard
+(`Tab` to enter, `Arrow` keys to navigate, `Home` / `End` to jump).
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="Variants" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="Colors" />
+
+<ExampleBlock for="Vertical" />
+
+<ExampleBlock for="WithIcons" />
+
+<ExampleBlock for="WithBadges" />
+
+<ExampleBlock for="Disabled" />
+
+<ExampleBlock for="ManualActivation" />
+
+<ExampleBlock for="FullWidth" />
+
+<ExampleBlock for="AsChildRouting" />
+
+<ExampleBlock for="ForceMount" />
+
+<ExampleBlock for="Controlled" />
+
+## Props
+
+<PropsTable />
+
+## Activation modes
+
+```tsx
+<Tabs activation="automatic">…</Tabs>  // default — arrow keys change focus AND active panel
+<Tabs activation="manual">…</Tabs>     // arrow keys only move focus; Enter/Space activates
+```
+
+Pick `manual` when activating a panel is expensive (fetches, large lists) and
+you don't want every arrow-key press to trigger that work. The `ManualActivation`
+example above demonstrates the difference live.
+
+## Keyboard
+
+- **Tab** — enters the tablist on the active trigger; leaves to the next focusable on the page.
+- **Arrow Left / Right** — horizontal navigation (RTL flips the direction).
+- **Arrow Up / Down** — vertical navigation.
+- **Home / End** — jump to first / last enabled trigger.
+- **Enter / Space** — explicit activation in `activation="manual"` mode.
+- Disabled triggers are skipped by keyboard navigation.
+
+## Accessibility
+
+- `<Tabs.List>` carries `role="tablist"` + `aria-orientation`. Put the `aria-label`
+  on the list itself — that's the role screen readers announce.
+- Each `<Tabs.Trigger>` is `role="tab"` with `aria-selected`, `aria-controls`,
+  `aria-disabled`, and a stable `id`.
+- Each `<Tabs.Panel>` is `role="tabpanel"` with `aria-labelledby` pointing at its
+  trigger and `tabIndex={0}` so SR users can land inside.
+- Roving tabindex: only the active trigger has `tabIndex={0}`; siblings have `-1`.
+- All IDs are derived from a single `useId()` call so SSR + hydration match.
+- axe-core: zero violations across the variant × orientation matrix.
+
+## Routing-driven tabs
+
+```tsx
+import Link from 'next/link';
+
+<Tabs defaultValue="/overview">
+  <Tabs.List aria-label="Sections">
+    <Tabs.Trigger asChild value="/overview">
+      <Link href="/overview">Overview</Link>
+    </Tabs.Trigger>
+    <Tabs.Trigger asChild value="/activity">
+      <Link href="/activity">Activity</Link>
+    </Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Panel value="/overview">…</Tabs.Panel>
+  <Tabs.Panel value="/activity">…</Tabs.Panel>
+</Tabs>;
+```
+
+`asChild` swaps the rendered element while preserving every ARIA role, the
+active-state classes, the roving tabindex, and the click handler. The wrapped
+element supplies the `href` and routing behavior. See the `AsChildRouting`
+example above.
+
+## `forceMount`
+
+```tsx
+<Tabs.Panel value="player" forceMount>
+  <Video />
+</Tabs.Panel>
+```
+
+Inactive `forceMount` panels are hidden via the `hidden` attribute, so they're
+removed from the a11y tree but their React subtree (and any DOM state) stays
+intact. Useful for video players or expensive children you don't want to
+remount per tab switch. The `ForceMount` example above demonstrates the pattern.
+
+## Theming
+
+Each of the four slots can be overridden independently:
+
+```tsx
+<ThemeProvider
+  theme={defineTheme({
+    components: {
+      Tabs: {
+        defaultProps: { variant: 'pills', size: 'sm' },
+        styleOverrides: {
+          root: 'gap-1',
+          list: 'bg-bg-subtle p-1 rounded-md border-0',
+          trigger: 'font-semibold',
+          panel: 'mt-6',
+        },
+      },
+    },
+  })}
+>
+  {children}
+</ThemeProvider>
+```
+
+Instance-level overrides win via `tailwind-merge`:
+
+```tsx
+<Tabs className="border rounded-md" sx={{ radius: 'lg' }}>
+  …
+</Tabs>
+```
+
+## RTL
+
+The keyboard handler reads `dir="rtl"` from the nearest ancestor at handle time
+and flips horizontal arrow-key direction accordingly. Vertical orientation uses
+the logical `border-e` divider, which automatically flips visually.
+
+## Do / Don't
+
+- **Do** treat `value` as an opaque identifier — strings are fine; URL paths are fine.
+- **Do** use `activation="manual"` when switching panels triggers network work.
+- **Do** put `aria-label` on `<Tabs.List>` (or use `aria-labelledby`) — that's the
+  role SR users hear.
+- **Don't** put critical content behind a tab the user might miss; use a heading
+  + section if the content always matters.
+- **Don't** auto-select on mount in shared rendering contexts (e.g. SSR-only);
+  rely on `defaultValue` from your data.
+
+## Out of scope (future)
+
+- A literally-sliding indicator powered by JS measurements (the CSS-crossfade
+  approach in this phase covers ~95% of consumer needs).
+- Overflow handling (scroll shadows when the trigger row exceeds its container) —
+  a focused follow-up.
+- Closable tabs — a separate `<TabBar>` is the right home for that UX.

@@ -1,0 +1,206 @@
+## Overview
+
+`<Modal />` is the canonical **blocking dialog** primitive. Where `<Popover />` is a non-blocking
+floating panel anchored to a trigger, Modal is a viewport-centered surface that:
+
+- Captures all pointer events behind a backdrop.
+- Traps keyboard focus inside its Content.
+- Locks page scroll while open (no layout shift; iOS-aware).
+- Carries `role="dialog"` + `aria-modal="true"`.
+- Composes a structured Header / Body / Footer compound for the common confirm / form / content-viewer shapes.
+
+Modal is also the **first consumer of `useScrollLock`**, closing the Phase 17 Core overlay
+primitive audit (`usePosition` / `<Portal>` / `useEscapeStack` / `useFocusTrap` / `useOutsideClick`
+/ `useScrollLock` are now all consumer-validated).
+
+## When to use
+
+- A blocking confirmation: "Delete account?".
+- A short form whose work shouldn't be lost to accidental navigation.
+- A viewer for content that needs the full visual focus (image lightbox, large editor).
+- A wizard step that is meaningfully separate from the surrounding page.
+
+## When NOT to use
+
+- The content is purely a hint with no interactivity → `<Tooltip />`.
+- The content is a small interactive panel anchored to a trigger → `<Popover />`.
+- The content is a page-level workflow that the user needs to navigate while still seeing the
+  page → `<Drawer />` (Phase 20, builds on the same backdrop + scroll-lock pattern).
+- The content is a list of actions on a button → `<Menu />` (Phase 22).
+- The content is a transient acknowledgement → `<Toast />` (Phase 21).
+
+## Anatomy
+
+```text
+<Modal>
+  <Modal.Trigger> button </Modal.Trigger>
+  <Modal.Content>
+    <Modal.Close />               (optional × button in the top-right corner)
+    <Modal.Header
+      title="…"                   (wired into aria-labelledby)
+      description="…"             (wired into aria-describedby)
+      avatar={…}                  (optional leading slot)
+      action={…}                  (optional trailing slot)
+    />
+    <Modal.Body>… scrollable region …</Modal.Body>
+    <Modal.Footer align="end">
+      <Modal.Close asChild><Button variant="ghost">Cancel</Button></Modal.Close>
+      <Button>Save</Button>
+    </Modal.Footer>
+  </Modal.Content>
+</Modal>
+```
+
+- **`Modal`** — context provider. Owns `open`, the trigger / content refs, the lifecycle hooks
+  (`useEscapeStack`, `useScrollLock`), and the ARIA ids (`triggerId` / `titleId` / `descId`).
+- **`Modal.Trigger`** — clones a single child (`asChild`, default), attaches click + ARIA. Or
+  renders an inline `<button>` when `asChild={false}`. Optional — controlled `Modal`s can omit it.
+- **`Modal.Content`** — the portal-rendered dialog surface. Carries the visual axes (`variant` /
+  `size` / `placement` / `overlay`).
+- **`Modal.Header`** — title + description + optional avatar + action slots. Auto-wires ARIA via
+  the parent context.
+- **`Modal.Body`** — scrollable middle region (`flex-1 overflow-y-auto`).
+- **`Modal.Footer`** — button-row with `align` variant (`start` / `center` / `end` / `between`).
+- **`Modal.Close`** — built-in × button (asChild-able) that calls `setOpen(false)`.
+
+## Variants
+
+Two variants of the Content surface — Modal is a structural primitive, not a stylistic one:
+
+- **`solid`** — paper background, `shadow-2xl`, transparent border. **Default.**
+- **`outline`** — paper background, 1px subtle border, `shadow-xl`. Quieter; pairs well with
+  heavy `blur` backdrops.
+
+## Sizes
+
+| Size  | Max-width      | Pad (sm/md/lg/xl) | Notes |
+|-------|----------------|--------------------|-------|
+| `sm`  | `max-w-sm`     | `p-4`              | Confirms, simple prompts |
+| `md`  | `max-w-md`     | `p-5`              | Default — short forms |
+| `lg`  | `max-w-lg`     | `p-6`              | Multi-section dialogs |
+| `xl`  | `max-w-2xl`    | `p-6`              | Editors, content viewers |
+| `full`| viewport-edges | `p-6`              | Fullscreen takeover (lightboxes) |
+| `fit` | `max-w-fit`    | `p-5`              | Content-driven sizing |
+
+## Placement & overlay
+
+| Prop | Values | Default |
+|------|--------|---------|
+| `placement` | `'center'` (vertical center) / `'top'` (anchored 10vh from top) | `'center'` |
+| `overlay`   | `'dimmed'` / `'blur'` / `'transparent'` | `'dimmed'` |
+
+## Behavior
+
+| Prop | Default | Effect |
+|------|---------|--------|
+| `closeOnEscape` | `true` | Esc closes the topmost Modal (escape-stack ordering). |
+| `closeOnBackdropClick` | `true` | Click on the backdrop (not inside Content) closes the Modal. |
+| `trapFocus` | `true` | Focus moves into Content on open; Tab cycles inside; focus returns to trigger on close. |
+| `preventScroll` | `true` | Locks `document.body` scroll while open via the engine's reference-counted `useScrollLock`. |
+| `initialFocus` | (first focusable) | Element to focus on open. Defaults to the first focusable inside Content; falls back to Content itself (`tabIndex={-1}`). |
+| `finalFocus` | (the trigger) | Element to focus on close. Defaults to whatever opened the Modal. |
+
+## Accessibility
+
+- **Trigger** carries `aria-haspopup="dialog"`, `aria-expanded`, `data-state="open"|"closed"`.
+- **Content** carries `role="dialog"`, `aria-modal="true"`, `aria-labelledby={titleId}`,
+  `aria-describedby={descId}` — both ids resolve to nodes rendered by `<Modal.Header>`'s `title`
+  and `description` props automatically.
+- **Focus management** (when `trapFocus={true}`):
+  - On open: focus moves to `initialFocus` if provided, else first focusable child, else Content
+    itself (which carries `tabIndex={-1}`).
+  - Tab cycles inside Content via the engine's `useFocusTrap`.
+  - On close: focus returns to the trigger (or `finalFocus` if provided).
+- **Escape** closes via the engine's `useEscapeStack` — only the topmost Modal closes per press,
+  so nested Modals unwind cleanly (see `<NestedModal />` example).
+- **Body scroll** is locked via `useScrollLock` while open, restored on close. Reference-counted,
+  so a Modal-over-Drawer combo collapses into one lock + unlock pair.
+- **Backdrop click** uses an `e.target === e.currentTarget` sentinel — clicks inside Content
+  (inputs, buttons) bubble up but never satisfy the sentinel, so they never close the Modal.
+- **Close button** carries `aria-label="Close"` by default; override via `aria-label` prop.
+- axe-core: zero violations across the full variant × size × open-state matrix.
+
+## Examples
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="Placements" />
+
+<ExampleBlock for="Overlays" />
+
+<ExampleBlock for="ConfirmDelete" />
+
+<ExampleBlock for="ScrollableBody" />
+
+<ExampleBlock for="FormInside" />
+
+<ExampleBlock for="NestedModal" />
+
+<ExampleBlock for="Controlled" />
+
+<ExampleBlock for="Programmatic" />
+
+<ExampleBlock for="WithoutTrigger" />
+
+## Theming
+
+```tsx
+defineTheme({
+  components: {
+    Modal: {
+      defaultProps: { /* root behavior props — closeOnEscape / preventScroll / etc. */ },
+      styleOverrides: {
+        backdrop: 'bg-fg-default/50',
+        content: 'shadow-2xl',
+        header: '',
+        body: '',
+        footer: '',
+        close: 'text-fg-muted',
+      },
+    },
+  },
+});
+```
+
+Per-instance overrides via `<Modal.Content className sx style />` (and the equivalent on every
+subpart) merge on top of the theme overrides, which merge on top of the recipe — the same
+precedence the rest of the DS uses, re-validated for compound components by Core 18's
+`defaultProps` wiring.
+
+## Engine consumption (Phase 17 Core full sweep — closed)
+
+Modal is the **first consumer of `useScrollLock`**, completing the Phase 17 Core consumer audit:
+
+| Primitive | First consumer | Modal's role |
+|---|---|---|
+| `usePosition` | Tooltip (P17) | Not used — Modal is centered, not anchored. |
+| `<Portal>` | Tooltip (P17) | Re-validated with focus-trapped + scroll-locked content. |
+| `useEscapeStack` | Tooltip (P17) | Re-validated for nested-Modal unwind ordering. |
+| `useFocusTrap` | Popover (P18) | Re-validated on a non-positioned (centered) overlay. |
+| `useOutsideClick` | Popover (P18) | Not used — Modal handles backdrop clicks inline via the `e.target === e.currentTarget` sentinel. |
+| `useScrollLock` | **Modal (P19)** | Reference-counted lock + iOS pin + scrollbar-gutter compensation, all validated end-to-end. |
+
+### Engine-API feedback
+
+Two new things surfaced and are documented inline:
+
+- **`mergeRefs`** is now duplicated in **three** components (Tooltip trigger, Popover trigger +
+  content, Modal trigger + content). Threshold for engine promotion crossed; the next overlay
+  (Drawer, Phase 20) should consume it from `@apx-ds/engine` instead of re-declaring it.
+- **`useScrollLock(active: boolean)` shape is correct** — the boolean-driven shape (vs. an
+  imperative lock/unlock) made the wiring into Modal's `open && preventScroll` trivial. No
+  changes requested.
+
+No breaking changes were forced on the engine.
+
+## DRY notes
+
+- No `clsx`/`cn` imports — every class composition flows through `useThemedClasses`.
+- `ModalPlacement` is its own enum (`center` / `top`) — Modal does not share Tooltip's 12-axis
+  vocabulary because it is not anchored.
+- Six recipes (one per slot) — chosen over a single god-recipe so theme overrides stay 1:1 with
+  the structural compound. The cost is some repetition across the 4 size-padded slots; lifting
+  to a shared `padBySize()` helper is the next consumer's call (Drawer).
+- Compound assembly (`Object.assign`) follows Card's pattern verbatim.

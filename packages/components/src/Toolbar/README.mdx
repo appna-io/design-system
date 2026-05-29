@@ -1,0 +1,193 @@
+# Toolbar
+
+`<Toolbar />` is the composition layer for editor toolbars, app-bar action rails, rich-text
+editor surfaces, table action bars, and dashboard chrome. It composes the existing DS controls
+(`<Button>`, `<Toggle>`, `<ToggleGroup>`, `<Menu>`, `<Select>`, `<Input>`) into a single
+accessible action rail with the W3C Toolbar pattern out of the box.
+
+- **Single Tab stop**: arrow keys move between items inside the toolbar; the whole toolbar is
+  one tab position in the page's tab order.
+- **Roving tabindex**: managed automatically — consumers never set `tabindex` on children.
+- **RTL-aware** keyboard semantics (ArrowLeft / ArrowRight swap meaning under `dir="rtl"`).
+- **Optional overflow → popover** reflow with `ResizeObserver` measurement.
+- **Optional auto-tooltips** for iconic children.
+
+## Anatomy
+
+```tsx
+import { Button, Toolbar, ToggleGroup } from 'apx-ds';
+
+<Toolbar aria-label="Text formatting">
+  <ToggleGroup type="multiple" attached aria-label="Style">
+    <ToggleGroup.Item value="bold" aria-label="Bold"><BoldIcon /></ToggleGroup.Item>
+    <ToggleGroup.Item value="italic" aria-label="Italic"><ItalicIcon /></ToggleGroup.Item>
+  </ToggleGroup>
+
+  <Toolbar.Separator />
+
+  <Button variant="ghost" aria-label="Insert link"><LinkIcon /></Button>
+  <Button variant="ghost" aria-label="Insert image"><ImageIcon /></Button>
+
+  <Toolbar.Spacer />
+
+  <Button variant="solid" color="primary">Publish</Button>
+</Toolbar>
+```
+
+## API
+
+| Prop            | Values                                          | Default            |
+| --------------- | ----------------------------------------------- | ------------------ |
+| `orientation`   | `horizontal` &middot; `vertical`                | `horizontal`       |
+| `variant`       | `default` &middot; `bordered` &middot; `floating` | `default`        |
+| `size`          | `sm` &middot; `md` &middot; `lg`                | `md`               |
+| `align`         | `start` &middot; `center` &middot; `end`        | `center`           |
+| `overflow`      | `none` &middot; `menu`                          | `none`             |
+| `overflowLabel` | string                                          | `"More actions"`   |
+| `applyTooltips` | boolean                                         | `false`            |
+| `loop`          | boolean                                         | `true`             |
+| `aria-label`    | string &mdash; **required** unless `aria-labelledby` | —             |
+
+Every visual axis accepts a `ResponsiveValue<T>` (`{ base: 'horizontal', md: 'vertical' }`).
+
+Toolbar deliberately contributes **no styling to its children** beyond a gap rhythm — buttons,
+toggles, and inputs look exactly the same inside a Toolbar as they do standalone. The size
+axis adds a small descendant gap (`sm` → 2px, `md` → 4px, `lg` → 6px); per-child `size` props
+win on every other dimension.
+
+## Subparts
+
+- **`Toolbar.Group`** — logical grouping with optional `aria-label`. Renders inline-flex; the
+  group's children participate in the toolbar's roving tabindex (the group itself is not a
+  focus stop). Supports a `gap` override.
+- **`Toolbar.Separator`** — auto-orienting visual divider. Horizontal toolbar → vertical
+  separator; vertical toolbar → horizontal separator. `role="separator"` for screen readers.
+- **`Toolbar.Spacer`** — pushes following items to the logical end via `flex: 1`, or to a
+  fixed size on the toolbar's main axis when `size` is set. Thin wrapper over the shipped
+  `<Spacer>` from the Stack family with toolbar-specific data hooks.
+
+## Keyboard
+
+| Key                           | Action                                          |
+| ----------------------------- | ----------------------------------------------- |
+| `Tab` / `Shift+Tab`           | Enter / leave the toolbar (single stop)         |
+| `ArrowRight` (horizontal LTR) | Next item (wraps if `loop`)                     |
+| `ArrowLeft` (horizontal LTR)  | Previous item                                   |
+| `ArrowDown` (vertical)        | Next item                                       |
+| `ArrowUp` (vertical)          | Previous item                                   |
+| `Home`                        | First item                                      |
+| `End`                         | Last item                                       |
+| `Enter` / `Space`             | Activate item (handled by the item itself)      |
+| `Esc`                         | Close overflow popover, if open                 |
+
+Disabled items are skipped during arrow navigation. RTL semantics swap `ArrowLeft` and
+`ArrowRight` automatically (read at handle-time from the nearest `[dir="rtl"]` ancestor or the
+document direction).
+
+The toolbar's keyboard handler runs in capture phase, so nested `<ToggleGroup>`'s own arrow
+nav is suppressed in favor of the toolbar's flat order. Activation inside a ToggleGroup still
+works via Space / Enter / click — the canonical editor-toolbar behavior.
+
+## Overflow → Popover
+
+Set `overflow="menu"` to enable ResizeObserver-driven reflow:
+
+```tsx
+<Toolbar overflow="menu" overflowLabel="More" aria-label="Document actions">
+  <Button>Save</Button>
+  <Button>Print</Button>
+  <Button>Share</Button>
+  <Button>Duplicate</Button>
+  <Button>Delete</Button>
+</Toolbar>
+```
+
+Trailing items that don't fit the available horizontal space collapse into a `<Popover>` with a
+three-dot trigger button. The observer is only created when overflow is enabled, so toolbars
+that don't request it pay zero runtime cost.
+
+Overflow detection only runs in horizontal mode; vertical toolbars defer overflow handling to
+the parent layout.
+
+## Auto-tooltips
+
+Set `applyTooltips` to wrap iconic children (children that have an `aria-label` but no string
+text) in `<Tooltip>` automatically:
+
+```tsx
+<Toolbar applyTooltips aria-label="Editor">
+  <Button variant="ghost" aria-label="Bold"><BoldIcon /></Button>
+  <Button variant="ghost" aria-label="Italic"><ItalicIcon /></Button>
+  …
+</Toolbar>
+```
+
+Buttons with visible text are left untouched (no duplicate label noise). Tooltip placement is
+`bottom` for horizontal toolbars and `right` for vertical, matching Notion / Linear / Figma
+convention.
+
+## Examples
+
+<ExampleBlock for="BasicEditor" title="Basic editor — toggle groups + actions + publish" />
+<ExampleBlock for="Vertical" title="Vertical — app-rail toolbar with icon buttons" />
+<ExampleBlock for="Variants" title="Variants — default, bordered, floating" />
+<ExampleBlock for="Sizes" title="Sizes — sm, md, lg with matching child sizes" />
+<ExampleBlock for="Groups" title="Groups — labelled regions with optional gap override" />
+<ExampleBlock for="WithSpacer" title="With Spacer — push primary actions to the end" />
+<ExampleBlock for="Overflow" title="Overflow — add/remove items to see the reflow into a popover" />
+<ExampleBlock for="ApplyTooltips" title="Apply tooltips — auto-wrap iconic children" />
+<ExampleBlock for="Floating" title="Floating — contextual selection action bar" />
+<ExampleBlock for="KeyboardDemo" title="Keyboard demo — arrows, Home/End, disabled skip" />
+<ExampleBlock for="MixedControls" title="Mixed controls — Input + ToggleGroup + Button" />
+<ExampleBlock for="RichTextDemo" title="Rich text demo — full editor toolbar with live preview" />
+
+## Accessibility
+
+- **Root**: `role="toolbar"`, `aria-label` (or `aria-labelledby`) **required** — a dev warning
+  fires when neither is supplied; axe-core rejects unlabelled toolbars.
+- `aria-orientation` is emitted automatically per the resolved orientation.
+- **Items** keep their native roles (`role="button"`, `role="switch"`, …).
+- **Roving tabindex**: exactly one focusable child is `tabIndex=0` at any time; the rest are
+  `tabIndex=-1`. The toolbar reasserts this via a `MutationObserver` if a descendant rewrites
+  its own tabindex (notably `<ToggleGroup.Item>` in single mode).
+- **Disabled items** retain `aria-disabled="true"` (or native `disabled`) and are skipped
+  during arrow navigation.
+- **`Toolbar.Separator`** renders `<div role="separator" aria-orientation=…>`.
+- **`Toolbar.Group`** with `aria-label` emits `role="group"`; without a label it's a plain
+  layout wrapper.
+- **Overflow trigger** is a `<Button aria-haspopup="menu" aria-expanded={open}>` with
+  `aria-label={overflowLabel}`.
+- axe-core: zero violations across horizontal / vertical / bordered / floating / with-groups /
+  applyTooltips / aria-labelledby modes.
+
+## RTL
+
+- `flex-direction: row` flips natively — the first item appears on the right.
+- `ArrowLeft` / `ArrowRight` semantics swap (read from the nearest `[dir="rtl"]` ancestor).
+- `Toolbar.Separator` uses `self-stretch` and the cross-axis dimension — direction-agnostic.
+- `Toolbar.Spacer` is `flex: 1` — direction-agnostic.
+
+## Theming
+
+Toolbar reads from `theme.components.Toolbar.styleOverrides.{root, group, separator}`. The
+three slots share the same component key so a single theme override targets the whole family.
+Consumer `className` always wins via `tailwind-merge`.
+
+## Bundle
+
+Target: **< 4 KB gz** (excluding `<Menu>` / `<Tooltip>` / `<Popover>` / `<Button>` peers, which
+are externalized). Roving-tabindex logic is component-local; `ResizeObserver` overflow only
+activates when `overflow="menu"` is set.
+
+## Do / Don't
+
+- **Do** pass an `aria-label` or `aria-labelledby` on every Toolbar.
+- **Do** put icon-only Buttons inside `applyTooltips={true}` — the aria-label becomes a hover
+  hint for free.
+- **Do** use `<Toolbar.Separator>` between logical groups; visually it adapts to the toolbar's
+  orientation.
+- **Don't** set `tabindex` on toolbar children manually — the toolbar manages the roving
+  order.
+- **Don't** put a focus trap inside a toolbar; Tab is the canonical exit affordance.
+- **Don't** use Toolbar for a navigation menu — `<Tabs>` or `<NavigationMenu>` are the right
+  primitives for navigation. Toolbar is for actions.

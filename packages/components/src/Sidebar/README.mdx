@@ -1,0 +1,187 @@
+# Sidebar
+
+`<Sidebar />` is the vertical navigation rail that lives inside an AppShell's `sidebar` slot
+— or stands alone with its own width — and powers the left-hand nav of dashboards, admin
+panels, docs sites, and internal tools.
+
+- **Compound primitive**: `Sidebar.Header`, `Sidebar.Section`, `Sidebar.Item`, `Sidebar.SubItems`,
+  `Sidebar.Spacer`, `Sidebar.Footer`.
+- **Rail mode** (`collapsed`): item labels go `sr-only`, items auto-wrap in Tooltips, section
+  labels collapse. Wired to `useAppShell().isSidebarCollapsed` when inside an AppShell.
+- **Active-state matching** at the root via `activeHref` + `activeMatchStrategy` (`exact` or
+  `prefix`). Each Item self-decides `aria-current="page"` against the pure helper
+  `isActiveHref({ current, itemHref, strategy })`.
+- **Compound interactive elements** — `<a>` for nav targets, `<button>` for actions,
+  `<button aria-expanded>` for expandable groups. No roving tabindex (each item is a tab stop,
+  matching the W3C Disclosure pattern).
+- **`asChild`** anywhere (`<Sidebar.Item asChild>`) for router-Link integration.
+
+## Anatomy
+
+```tsx
+import { Sidebar, useAppShell } from 'apx-ds';
+
+function AppNav() {
+  const { isSidebarCollapsed } = useAppShell();
+  return (
+    <Sidebar collapsed={isSidebarCollapsed} activeHref={router.pathname}>
+      <Sidebar.Header>
+        <Logo />
+      </Sidebar.Header>
+      <Sidebar.Section label="Workspace">
+        <Sidebar.Item href="/" icon={<HomeIcon />}>Home</Sidebar.Item>
+        <Sidebar.Item href="/inbox" icon={<InboxIcon />} badge={3}>Inbox</Sidebar.Item>
+      </Sidebar.Section>
+      <Sidebar.Section label="Projects" collapsible defaultOpen>
+        <Sidebar.Item href="/p/launch" icon={<FolderIcon />}>Launch</Sidebar.Item>
+      </Sidebar.Section>
+      <Sidebar.Spacer />
+      <Sidebar.Footer>
+        <UserMenu />
+      </Sidebar.Footer>
+    </Sidebar>
+  );
+}
+```
+
+## API — `<Sidebar>` root
+
+| Prop                  | Type                                                | Default      | Notes                                            |
+| --------------------- | --------------------------------------------------- | ------------ | ------------------------------------------------ |
+| `variant`             | `default` &middot; `bordered` &middot; `floating` &middot; `ghost` | `default`    | Chrome family.                                   |
+| `size`                | `sm` &middot; `md` &middot; `lg`                    | `md`         | Propagates to subparts via context.              |
+| `itemSize`            | `sm` &middot; `md` &middot; `lg`                    | inherits `size` | Override the per-item size axis only.         |
+| `collapsed`           | `boolean`                                           | `false`      | Rail mode — labels go sr-only, Tooltips kick in. |
+| `activeHref`          | `string`                                            | —            | Current URL path.                                |
+| `activeMatchStrategy` | `exact` &middot; `prefix`                           | `exact`      | How items decide they're active.                 |
+| `ariaLabel`           | `string`                                            | `"Sidebar"`  | Accessible name for the `<nav>` landmark.        |
+| `ariaLabelledBy`      | `string`                                            | —            | Alternative to `ariaLabel`.                      |
+| `width`               | `number` &middot; `string`                          | —            | Inline width (omit when inside AppShell).        |
+| `collapsedWidth`      | `number` &middot; `string`                          | —            | Inline width when collapsed.                     |
+| `position`            | `start` &middot; `end`                              | `start`      | Logical side; affects only `variant="bordered"`. |
+
+## API — `<Sidebar.Item>`
+
+| Prop                  | Type                                          | Default     | Notes                                                                                |
+| --------------------- | --------------------------------------------- | ----------- | ------------------------------------------------------------------------------------ |
+| `icon`                | `ReactNode`                                   | —           | Leading icon. Required in rail mode (only visible content).                          |
+| `endIcon`             | `ReactNode`                                   | —           | Trailing icon. Hidden in rail mode.                                                  |
+| `badge`               | `ReactNode` &middot; `number`                 | —           | Renders inside a `<Badge>`. Hidden visibly in rail; mirrored sr-only for AT.         |
+| `badgeColor`          | `BadgeColor`                                  | `neutral`   | Palette for the badge.                                                               |
+| `href`                | `string`                                      | —           | When set, item renders as `<a href>`.                                                |
+| `active`              | `boolean`                                     | —           | Explicit override. Otherwise computed from `activeHref` + strategy.                  |
+| `expandable`          | `boolean`                                     | `false`     | Item becomes a disclosure trigger for nested `<Sidebar.SubItems>` children.          |
+| `defaultExpanded`     | `boolean`                                     | `false`     | Initial uncontrolled expanded state.                                                 |
+| `expanded`            | `boolean`                                     | —           | Controlled expanded state.                                                           |
+| `onExpandedChange`    | `(expanded: boolean) => void`                 | —           | Fires on every transition (controlled or uncontrolled).                              |
+| `variant`             | `default` &middot; `ghost` &middot; `primary` | `default`   | Per-item visual variant.                                                             |
+| `size`                | `sm` &middot; `md` &middot; `lg`              | inherits    | Per-item size override.                                                              |
+| `disabled`            | `boolean`                                     | `false`     | Sets `aria-disabled` + neutralizes clicks.                                           |
+| `asChild`             | `boolean`                                     | `false`     | Render the consumer's single child element with merged props (router-Link pattern).  |
+
+## API — `<Sidebar.Section>`
+
+| Prop                     | Type                          | Default | Notes                                                          |
+| ------------------------ | ----------------------------- | ------- | -------------------------------------------------------------- |
+| `label`                  | `ReactNode`                   | —       | Section heading. Required for screen readers.                  |
+| `collapsible`            | `boolean`                     | `false` | When true, label becomes a `<button aria-expanded>`.           |
+| `defaultOpen`            | `boolean`                     | `true`  | Initial uncontrolled open state.                               |
+| `open`                   | `boolean`                     | —       | Controlled open state.                                         |
+| `onOpenChange`           | `(open: boolean) => void`     | —       | Fires on every transition.                                     |
+| `hideLabelWhenCollapsed` | `boolean`                     | `true`  | Hide the section label visually when the sidebar is `collapsed`. |
+| `badge`                  | `ReactNode` &middot; `number` | —       | Optional badge beside the label.                               |
+| `badgeColor`             | `BadgeColor`                  | `neutral` | Badge palette.                                              |
+
+## Active-href matching
+
+The pure helper `isActiveHref({ current, itemHref, strategy })` decides each item's active
+state. Trailing slashes are normalized. Under `prefix`, the boundary check ensures `/p` does
+not wrongly match `/photos` — the helper requires `current` to start with `itemHref + '/'`.
+
+```ts
+import { isActiveHref } from 'apx-ds';
+
+isActiveHref({ current: '/inbox/42', itemHref: '/inbox', strategy: 'prefix' }); // true
+isActiveHref({ current: '/photos',  itemHref: '/p',     strategy: 'prefix' }); // false
+isActiveHref({ current: '/inbox/',  itemHref: '/inbox', strategy: 'exact'  }); // true
+```
+
+## Rail (collapsed) mode
+
+Set `collapsed` on the root — typically wired to `useAppShell().isSidebarCollapsed`:
+
+- Item labels become `sr-only` (kept in the DOM for SR announcement).
+- Each item is wrapped in a `<Tooltip content={label} placement="right">` so the visible cue
+  on hover/focus is the label text itself.
+- Section labels go `sr-only` by default; opt out via `hideLabelWhenCollapsed={false}`.
+- End icons + visible badges hide; numeric badge contents are mirrored to a sr-only span so
+  unread counts still reach AT.
+
+## Examples
+
+<ExampleBlock for="BasicFlat" title="Basic flat — minimal sidebar" />
+<ExampleBlock for="WithSections" title="With sections — labeled groupings" />
+<ExampleBlock for="WithCollapsibleSections" title="Collapsible sections — Accordion-style folding" />
+<ExampleBlock for="WithExpandableItem" title="Expandable items — two-level docs nav" />
+<ExampleBlock for="WithHeaderFooter" title="Header + Footer — full chrome" />
+<ExampleBlock for="WithBadges" title="Badges — color spectrum showcase" />
+<ExampleBlock for="WithSpacer" title="Spacer — push CTA to bottom" />
+<ExampleBlock for="RailMode" title="Rail mode — Tooltip-driven icon rail" />
+<ExampleBlock for="RouterLinkIntegration" title="Router Link via asChild" />
+<ExampleBlock for="ActiveHrefPrefix" title="Active matching — prefix strategy with boundary" />
+<ExampleBlock for="Variants" title="All four chrome variants" />
+<ExampleBlock for="Sizes" title="Three size scales" />
+<ExampleBlock for="Disabled" title="Disabled items — paid-tier gating" />
+<ExampleBlock for="DashboardDemo" title="Dashboard — Sidebar inside AppShell with rail toggle" />
+
+## Accessibility
+
+- Root renders as `<nav aria-label={ariaLabel}>` (default `"Sidebar"`). Does NOT use `<aside>`
+  because AppShell already labels its own `<aside>` sidebar slot; nesting two landmarks would
+  add noise.
+- `<Sidebar.Item href>` → `<a>` (navigation target). With `aria-current="page"` when active.
+- `<Sidebar.Item onClick>` → `<button type="button">`.
+- `<Sidebar.Item expandable>` → `<button aria-expanded aria-controls>` (Disclosure pattern).
+- `<Sidebar.SubItems>` → `<ul role="group">`.
+- Section labels: static → `<h3>`; collapsible → `<button aria-expanded>`.
+- Disabled items get `aria-disabled="true"` and `tabIndex={-1}`; clicks are neutralized.
+- **No roving tabindex** — every item is a tab stop. This matches Linear / GitHub /
+  Notion / VS Code, and the W3C Disclosure / Landmarks patterns (navigation is browsable
+  with Tab; `role="menu"` patterns are for menus, not navigation).
+- axe-core: zero violations across flat / sections / collapsible / expandable / rail / active
+  configurations.
+
+## RTL
+
+- The root flex column is direction-agnostic.
+- Inline borders use `border-inline-end` / `border-inline-start` so the bordered variant lands
+  on the correct logical side.
+- Padding + icon order use logical properties throughout.
+- Rail-mode Tooltip uses `placement="right"` which flips via Floating UI's `flip` middleware
+  under `dir="rtl"`.
+
+## Theming
+
+Sidebar reads from `theme.components.Sidebar.styleOverrides.{root, item, sectionLabel, sectionBody, disclosure, header, footer, subItems}`. Consumer `className` always wins via
+`tailwind-merge`.
+
+## Bundle
+
+Target: **< 4 KB gz** with Tooltip / Badge / Slot externalized (they're already in the bundle
+if the consumer uses them elsewhere; Sidebar only pays the marginal cost of its own surface).
+
+## Do / Don't
+
+- **Do** wire `collapsed` to `useAppShell().isSidebarCollapsed` when nested in AppShell. That's
+  the canonical pattern — Sidebar then degrades into a rail in sync with the header hamburger.
+- **Do** use `activeMatchStrategy="prefix"` for nested route highlighting; the boundary check
+  is built-in so `/p` does not match `/photos`.
+- **Do** put icons on every item that might appear in rail mode — without an icon the rail
+  has nothing visible to show.
+- **Do** use `asChild` to integrate with your router (`<RouterLink>`, `<NavLink>`, etc.) instead
+  of adding `onClick={navigate}` handlers.
+- **Don't** add roving tabindex — sidebar items are tab stops, not menu items.
+- **Don't** nest a Sidebar inside another Sidebar. Use `<Sidebar.Item expandable>` +
+  `<Sidebar.SubItems>` for hierarchical navigation.
+- **Don't** render a Sidebar as the AppShell's `aside` slot — the aside is for context panels
+  (details / settings / chat), not navigation.

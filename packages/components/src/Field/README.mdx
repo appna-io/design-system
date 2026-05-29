@@ -1,0 +1,252 @@
+## Overview
+
+`<Field />` is the canonical composition wrapper that pairs a **label**, an optional
+**description**, a single **form control**, and an optional **helper text** or **error message**.
+
+Every form control (`<Input>`, `<Textarea>`, `<Select>`, `<Combobox>`, `<Checkbox>`, `<Switch>`,
+`<Radio>`, `<NumberInput>`, `<Rating>`, `<TagsInput>`) re-uses `useFormFieldA11y` under the hood,
+so wrapping any of them in `<Field>` flows id, name, required, invalid, disabled, readOnly and
+the composed `aria-describedby` automatically — **with zero source-code changes** to the control.
+
+It ships in two flavors that resolve to the same DOM:
+
+- **Prop-driven** — pass `label` / `description` / `helperText` / `error` props. Best for the
+  90% case.
+- **Compound** — `<Field.Label>` / `<Field.Description>` / `<Field.Helper>` / `<Field.Error>` /
+  `<Field.Control>` children. Best when you need custom ordering or to mix multiple subparts.
+
+Both APIs honor the same context, so subparts can be mixed freely with the prop-driven
+defaults.
+
+## Anatomy
+
+| Subpart                  | Element                                              | Role                                                          |
+| ------------------------ | ---------------------------------------------------- | ------------------------------------------------------------- |
+| `<Field>`                | `<div data-field-root>` or `<fieldset data-field-root>` | container + FieldContext provider                          |
+| `<Field.Label>`          | `<label htmlFor={controlId}>`                        | the visible label; auto-`sr-only` when `labelPosition='hidden'` |
+| `<Field.Description>`    | `<p id={descriptionId}>`                             | long-form guidance above the control; wired to `aria-describedby` |
+| `<Field.Helper>`         | `<p id={helperId}>`                                  | short hint below the control; suppressed when `error` is set |
+| `<Field.Error>`          | `<p id={errorId} role="alert">`                      | error message; sets `aria-invalid="true"` on the control     |
+| `<Field.Control>`        | `<div data-field-control>`                           | explicit control-row slot; useful with start / end adornments |
+
+## Examples
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="WithError" />
+
+<ExampleBlock for="Required" />
+
+<ExampleBlock for="Optional" />
+
+<ExampleBlock for="LabelPositionStart" />
+
+<ExampleBlock for="LabelPositionFloating" />
+
+<ExampleBlock for="LabelHidden" />
+
+<ExampleBlock for="WithDescription" />
+
+<ExampleBlock for="WithHelper" />
+
+<ExampleBlock for="WithLabelIcon" />
+
+<ExampleBlock for="WithLabelAddon" />
+
+<ExampleBlock for="WithStartEndAdornment" />
+
+<ExampleBlock for="Fieldset" />
+
+<ExampleBlock for="Compound" />
+
+<ExampleBlock for="Disabled" />
+
+<ExampleBlock for="ReadOnly" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="EveryControl" />
+
+<ExampleBlock for="InForm" />
+
+## Props
+
+<PropsTable />
+
+## Label positions
+
+`<Field>` supports four label positions, each rendered with the same DOM shape (`<label>` →
+`<control>` → optional helper / error) but laid out differently:
+
+| Value          | Layout                                                                                       | When to use                                            |
+| -------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `'top'` (default) | Label above the control, stacked column                                                  | The default for almost every form                       |
+| `'start'`      | Label on the leading inline edge with a `labelWidth` gutter                                  | Settings pages, admin forms with many short fields     |
+| `'floating'`   | Label inside the control border; collapses upward on focus / value (pure CSS)                | Sign-in pages, marketing CTAs, sites with hero forms    |
+| `'hidden'`     | Label is `sr-only` (visually hidden, still associated with the control)                      | Search fields, icon-only inputs where context is obvious |
+
+The `'floating'` layout is implemented with `:placeholder-shown` and `:focus` sibling selectors;
+**the inner control must render a `placeholder`** (use `placeholder=" "` if you want an empty
+collapsed state). It works with `<Input>`, `<Textarea>`, `<NumberInput>`, `<Combobox>`. For
+controls without a placeholder (Checkbox, Switch, Radio) the label falls back to top-positioned.
+
+## Required vs Optional
+
+The `required` and `optional` props are visual + a11y opposites:
+
+| Prop        | Visual                  | A11y                                                                |
+| ----------- | ----------------------- | ------------------------------------------------------------------- |
+| `required`  | Red `*` after the label | `aria-required="true"` on the inner control; `*` itself is `aria-hidden` |
+| `optional`  | Muted `(optional)` text | No `aria-required`; nothing announced separately                    |
+
+They are mutually exclusive — if both are passed, `required` wins (and a dev warning fires). Use
+`hideRequiredIndicator={true}` to keep `aria-required` but hide the visual `*` (e.g. when every
+field in a form is required and the asterisks would be visual noise).
+
+## Fieldset semantics
+
+When `<Field>` wraps multiple controls (a checkbox group, a radio group, multiple toggles), pass
+`as="fieldset"` so the wrapper renders as `<fieldset>` with the label routed into `<legend>`. AT
+users hear the legend before each grouped control, which is the W3C-recommended pattern for
+grouped form controls.
+
+```tsx
+<Field as="fieldset" label="Notifications">
+  <Field.Description>Pick at least one channel.</Field.Description>
+  <Stack gap={2}>
+    <Checkbox name="email">Email</Checkbox>
+    <Checkbox name="sms">SMS</Checkbox>
+    <Checkbox name="push">Push</Checkbox>
+  </Stack>
+</Field>
+```
+
+## Compound API
+
+Use the compound API when you need to control ordering precisely, or to mix `<Field.Helper>`
+and `<Field.Error>` with custom inline content:
+
+```tsx
+<Field required>
+  <Field.Label>Email address</Field.Label>
+  <Field.Description>Used for billing notifications and password resets.</Field.Description>
+  <Input type="email" name="email" />
+  <Field.Helper>Lowercase letters only.</Field.Helper>
+</Field>
+```
+
+Field auto-detects which subparts the consumer rendered and suppresses its prop-driven
+counterparts so the same prop never renders twice.
+
+## Adornments
+
+`startAdornment` and `endAdornment` render *inside* the field layout, on either side of the
+control row. Use them for inline visual cues that should participate in the control row but stay
+outside the control's own border (e.g. a currency symbol, an external URL prefix):
+
+```tsx
+<Field
+  label="Amount"
+  startAdornment={<span>$</span>}
+  endAdornment={<span className="text-fg-muted">USD</span>}
+>
+  <Input type="number" />
+</Field>
+```
+
+Adornments are `aria-hidden` by default — they're visual aids, not labels. If the adornment
+carries meaning (e.g. a button), set the control's `aria-label` accordingly.
+
+## Accessibility
+
+- **Label association**: `<label htmlFor={controlId}>` is wired through context. The inner
+  control reads `id` from FieldContext (replacing its own auto-generated id).
+- **`aria-describedby`**: composed automatically from description id → helper id → error id (in
+  that order). Description is read first, then either helper *or* error (never both — error
+  replaces helper).
+- **`aria-invalid`**: set on the inner control when `error` is non-falsy.
+- **`aria-required`**: set on the inner control when `required` is true. The visible `*` glyph
+  is `aria-hidden` to avoid double-announcement.
+- **Fieldset / Legend**: `as="fieldset"` renders proper `<fieldset><legend>` semantics — no
+  manual `aria-labelledby` wiring required.
+- **Floating label**: when collapsed (control has value or is focused), the label remains
+  associated via `htmlFor` and stays in the accessibility tree.
+- **`role="alert"` on `<Field.Error>`** so error messages are announced when they appear
+  mid-flow (e.g. on blur-triggered validation).
+- axe-core: 0 violations across all label positions, required / optional / error / fieldset /
+  floating modes, and the full 10-control integration matrix.
+
+## RTL
+
+All layouts use logical axes (`flex-row` + `flex-col`), logical insets (`start` / `end`), and
+direction-agnostic `gap` spacing. The required `*` indicator and `(optional)` text appear after
+the label text in both LTR and RTL since they follow document direction. `labelWidth` applies to
+the leading inline edge regardless of direction.
+
+## i18n
+
+When wrapped in `<I18nProvider>` (Phase 27, not yet shipped), Field will source these strings
+from the active locale bundle. Until then, the defaults below are hardcoded English:
+
+| Key                     | Default (en)    | Notes                                                |
+| ----------------------- | --------------- | ---------------------------------------------------- |
+| `field.required`        | `"*"` (visible)  | The visible glyph; `aria-required` carries the AT announcement |
+| `field.optional`        | `"(optional)"`  | Visible label addon when `optional={true}`           |
+
+For now, override per field via the `labelAddon` prop if you need a different visible string.
+
+## Theming
+
+`fieldRecipes` is a 9-slot recipe (`root`, `labelColumn`, `label`, `controlRow`, `description`,
+`helper`, `error`, `requiredIndicator`, `optionalIndicator`, `adornment`). Override per slot via
+`theme.components.Field.styleOverrides.{slot}`:
+
+```ts
+theme.components.Field = {
+  styleOverrides: {
+    label: { fontWeight: 600 },
+    error: { fontStyle: 'italic' },
+  },
+};
+```
+
+## Integration with form controls
+
+Field integrates with every form control that uses `useFormFieldA11y`:
+
+| Control       | Integration | Notes                                                 |
+| ------------- | ----------- | ----------------------------------------------------- |
+| Input         | ✅          | id, required, invalid, describedBy via context        |
+| Textarea      | ✅          | Same                                                  |
+| Select        | ✅          | id flows to the trigger                               |
+| Combobox      | ✅          | id flows to the text input; listbox stays associated  |
+| Checkbox      | ✅          | id, required, invalid via context                     |
+| Switch        | ✅          | id, required, invalid via context                     |
+| Radio         | ✅          | Use `as="fieldset"` for radio groups                  |
+| NumberInput   | ✅          | id, required, invalid via context                     |
+| Rating        | ✅          | id, required, invalid via context                     |
+| TagsInput     | ✅          | id, required, invalid via context                     |
+| Slider        | ⚠️ Wrap-only | Doesn't use `useFormFieldA11y` (each thumb has its own `role="slider"`). Label still associates via `<label for>`. |
+
+For controls outside the design system (e.g. third-party datepicker / colorpicker), wrap them in
+Field and pass `id={field.controlId}` manually, or read FieldContext directly with
+`useFieldContext()`.
+
+## Do / Don't
+
+✅ **Do** use `<Field>` for every visible form control — even one-off inputs benefit from the
+consistent label / helper / error chrome.
+
+✅ **Do** prefer `error` over `helperText` when validation fails; Field will swap them
+automatically and set `aria-invalid` for you.
+
+✅ **Do** use `as="fieldset"` for grouped controls (checkbox / radio groups, multi-toggle rows).
+
+❌ **Don't** double-set the same a11y prop on both the inner control and Field — Field wins, and
+a dev warning will flag the duplication.
+
+❌ **Don't** use `labelPosition="floating"` for controls without a placeholder (Checkbox, Switch,
+Radio). Field warns in dev when this is detected.
+
+❌ **Don't** wrap multiple input controls (e.g. two `<Input>`s side by side) in a single
+non-fieldset `<Field>` — the label / describedBy / id can only point to one inner control.

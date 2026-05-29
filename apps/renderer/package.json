@@ -1,0 +1,47 @@
+{
+  "name": "@apx-ui/renderer",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Local development renderer / docs preview for apx-ds",
+  "type": "module",
+  "scripts": {
+    "predev": "node scripts/generate-example-registry.mjs",
+    "dev": "next dev --port 6008",
+    "prebuild": "node scripts/generate-example-registry.mjs",
+    "build": "next build",
+    "start": "next start --port 6008",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "test:visual": "playwright test",
+    "test:visual:update": "playwright test --update-snapshots",
+    "clean": "rm -rf .next .turbo src/generated test-results playwright-report"
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-select": "^2.2.6",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "@tanstack/react-virtual": "^3.13.25",
+    "clsx": "^2.1.1",
+    "fuse.js": "^7.3.0",
+    "lucide-react": "^1.16.0",
+    "next": "^15.1.3",
+    "next-mdx-remote": "^6.0.0",
+    "react": "^19.0.0",
+    "react-docgen-typescript": "^2.4.0",
+    "react-dom": "^19.0.0",
+    "remark-gfm": "^4.0.1",
+    "@apx-ui/ds": "workspace:*",
+    "server-only": "^0.0.1",
+    "shiki": "^4.1.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2"
+  }
+}

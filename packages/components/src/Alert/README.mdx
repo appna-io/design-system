@@ -1,0 +1,120 @@
+# Alert
+
+The canonical inline status banner. `<Alert />` is the DS's first opinionated feedback
+surface — it covers `info` / `success` / `warning` / `danger` / `neutral` messages with
+auto-icon, optional title + description + action area, and a Motion-driven dismiss.
+
+## Why this exists
+
+Three jobs land in this component that other status surfaces (Toast, Banner, Inline-error)
+will reuse:
+
+1. **Icon-by-color.** The leading icon is selected automatically from the active color via
+   the shared `_shared/iconForColor` helper. One mapping, every consumer.
+2. **Constrained color set.** Alerts speak about *what happened* — they don't carry brand.
+   The 5-of-7 palette (no `primary` / `secondary`) is the convention.
+3. **Motion-driven exit.** `<AnimatePresence>` makes `closable` Alerts dismiss with a
+   single height + opacity tween. Surrounding layout reflows for free.
+
+## Anatomy
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  [icon]   <Title>                       [× close button] │
+│           <Description>                                  │
+│           <Action> [button] [button]                     │
+└──────────────────────────────────────────────────────────┘
+```
+
+`<Alert.Title>` / `<Alert.Description>` / `<Alert.Action>` are subparts — use only the
+ones you need. A bare `<Alert>Saved.</Alert>` is just as valid.
+
+## Variants
+
+| Variant   | Background       | Border                          | When to reach for it                            |
+| --------- | ---------------- | ------------------------------- | ----------------------------------------------- |
+| `solid`   | full color       | none                            | Critical announcements, system-level alerts.    |
+| `outline` | paper            | colored border                  | Brand-light contexts, paired with Card.         |
+| `soft`    | subtle tint      | low-contrast colored border     | **Default.** Toast/banner-style notifications.  |
+| `inline`  | transparent      | logical-start 4px colored bar   | Inline form validation, minimal chrome.         |
+
+## Colors
+
+`info` (default) · `success` · `warning` · `danger` · `neutral`
+
+Brand colors (`primary`, `secondary`) are intentionally excluded — they don't carry status
+meaning. Add them via a theme override if your product needs them.
+
+## Examples
+
+<ExampleBlock for="Basic" title="Default — info color, soft variant" />
+<ExampleBlock for="Variants" title="All four variants" />
+<ExampleBlock for="Sizes" title="Three sizes (sm / md / lg)" />
+<ExampleBlock for="Colors" title="Every variant × every color" />
+<ExampleBlock for="WithTitle" title="With title + description" />
+<ExampleBlock for="WithAction" title="With action button row" />
+<ExampleBlock for="Closable" title="Closable + Motion exit" />
+<ExampleBlock for="CustomIcon" title="Custom leading icon" />
+<ExampleBlock for="HideIcon" title="Hide icon (chrome-less)" />
+<ExampleBlock for="Controlled" title="Controlled — parent owns open state" />
+<ExampleBlock for="FormValidation" title="Inline variant under a form field" />
+<ExampleBlock for="Stacked" title="Stacked / dismissable list" />
+
+## Props
+
+| Prop          | Type                                                       | Default   | Notes                                                                       |
+| ------------- | ---------------------------------------------------------- | --------- | --------------------------------------------------------------------------- |
+| `variant`     | `'solid' \| 'outline' \| 'soft' \| 'inline'`               | `'soft'`  | Responsive via the `{ base, md }` shape.                                    |
+| `color`       | `'info' \| 'success' \| 'warning' \| 'danger' \| 'neutral'`| `'info'`  | Drives the auto-icon and the auto-`role`.                                   |
+| `size`        | `'sm' \| 'md' \| 'lg'`                                     | `'md'`    | Padding + icon size + font scale.                                           |
+| `icon`        | `ReactNode`                                                | —         | Overrides the auto-selected leading icon.                                   |
+| `hideIcon`    | `boolean`                                                  | `false`   | Hides the leading icon slot entirely.                                       |
+| `closable`    | `boolean`                                                  | `false`   | Renders a `×` button on the trailing edge.                                  |
+| `onClose`     | `() => void`                                               | —         | Fired when the alert dismisses (close button or controlled `open` flip).    |
+| `open`        | `boolean`                                                  | —         | Controlled visibility. Pair with `onClose`.                                 |
+| `defaultOpen` | `boolean`                                                  | `true`    | Initial visibility for the uncontrolled flow.                               |
+| `role`        | `'status' \| 'alert'`                                      | auto      | Auto-selects per `color`. Override only when intentional.                   |
+| `className`   | `string`                                                   | —         | Merged via `tailwind-merge`. Last-wins.                                     |
+| `sx`          | `Sx`                                                       | —         | Theme-aware inline style.                                                   |
+
+## Accessibility
+
+- **Auto live-region role.** `info` / `success` / `neutral` → `role="status"` (polite live
+  region). `warning` / `danger` → `role="alert"` (assertive). Override only when you know.
+- **Decorative icon.** The leading icon is wrapped in an `aria-hidden="true"` span — the
+  body text + role carry the meaning for screen readers.
+- **Close button has a name.** Always reads as "Dismiss" via `aria-label`.
+- **Heading level is left to you.** `Alert.Title` is a plain `<div>`. Wrap in `<h3>` /
+  `<h4>` when the page outline demands a real heading.
+
+## Theming
+
+```ts
+defineTheme({
+  components: {
+    Alert: {
+      defaultProps: { variant: 'outline', size: 'sm' },
+      styleOverrides: {
+        root: 'rounded-xl',
+        title: 'tracking-tight',
+        description: 'leading-snug',
+        action: 'mt-3',
+      },
+    },
+  },
+});
+```
+
+`Alert` is consumed by the renderer's Theme Studio for live preview.
+
+## Out of scope (future phases)
+
+- `<Toast>` — overlays batch (separate component, reuses Alert's recipe shape + the shared
+  `iconForColor` mapping plus a portal + queue).
+- Auto-dismiss timer — belongs to Toast. Alert is "until-acknowledged" by design.
+- Stacked alerts UI (`<AlertList>`) — composition, not a primitive.
+
+## Sibling APIs introduced
+
+- `_shared/iconForColor.ts` — color → lucide-react icon map. First consumer is Alert;
+  Toast/Banner will import the same map.

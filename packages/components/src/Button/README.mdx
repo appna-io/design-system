@@ -1,0 +1,113 @@
+## Overview
+
+`<Button />` is the canonical interactive primitive. Use it to trigger an action — submit a form,
+open a dialog, advance a flow, etc. Buttons are intentionally **stateful** (loading, disabled) and
+**polymorphic** (`asChild`), so they cover everything from a plain submit to a styled `<a>` link.
+
+## Variants
+
+Three stylistic families ship out of the box. Pick the one that matches the action's
+**importance hierarchy** on the page:
+
+- **`solid`** — opaque fill, contrast text. The **primary** call-to-action. Use one per region.
+- **`outline`** — transparent fill, 1px colored border, colored text. **Secondary** actions
+  ("Cancel" next to "Save"). Pairs gracefully with a solid sibling without competing for attention.
+- **`ghost`** — no fill, no border, colored text. **Tertiary** / in-line / utility actions
+  (toolbar buttons, "Show more", inline edits). The least visually heavy variant.
+
+Every variant works with every `color` and every theme `variant` (`default` / `tetsu` / `origami`
+/ `katana`) and adapts to the active `platform`. All hover, active, and focus states reference
+semantic palette tokens, so a single Theme-Studio edit re-paints the entire grid.
+
+## Anatomy
+
+A Button is composed of three optional slots arranged inline:
+
+```text
+[ leftIcon | label | rightIcon ]
+```
+
+When `loading` is `true`, the left slot is replaced by a spinning indicator and the label is
+optionally swapped with `loadingText` for assistive tech.
+
+## Examples
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="Variants" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="Colors" />
+
+<ExampleBlock for="OutlineColors" />
+
+<ExampleBlock for="GhostColors" />
+
+<ExampleBlock for="VariantMatrix" />
+
+<ExampleBlock for="WithIcons" />
+
+<ExampleBlock for="Loading" />
+
+<ExampleBlock for="Disabled" />
+
+<ExampleBlock for="FullWidth" />
+
+<ExampleBlock for="AsChild" />
+
+## Props
+
+<PropsTable />
+
+## Accessibility
+
+- Renders a native `<button>` by default — Space and Enter activate, focus is keyboard-visible.
+- `disabled` and `loading` both set `aria-disabled` and block `onClick`. While loading, the
+  button also gets `aria-busy="true"` and a `cursor-progress` hint.
+- The spinner is `role="status"` with an `aria-label` of `loadingText ?? "Loading"`.
+- `asChild` lets you wrap any element (an `<a>`, a router `<Link>`, …) — Button hands all
+  props/className/ref through `Slot` so the child keeps its native role.
+- `iconOnly` (explicit or inferred when `children` is empty) requires `aria-label`. A dev-mode
+  warning fires from the engine when it's missing.
+
+## Theming
+
+Every visual decision is a token. Pull on the `<ThemeProvider>` knobs to remix the whole library
+at once, or scope overrides to Button specifically:
+
+```tsx
+<ThemeProvider
+  theme={defineTheme({
+    components: {
+      Button: {
+        styleOverrides: {
+          root: 'tracking-wide uppercase',
+        },
+      },
+    },
+  })}
+>
+  {children}
+</ThemeProvider>
+```
+
+Component-level overrides win via `tailwind-merge`:
+
+```tsx
+<Button className="border-2 border-dashed" sx={{ radius: 'lg' }} style={{ minWidth: 200 }}>
+  Custom
+</Button>
+```
+
+The override ladder is fully documented on the [Theming](/theming) page.
+
+## Do / Don't
+
+- **Do** name the action ("Save changes", not "OK"). Verbs > nouns.
+- **Do** pair destructive actions with `color="danger"` so the palette tells the same story as
+  the label.
+- **Don't** use Button for navigation — wrap an `<a>` with `asChild` instead, so the element
+  remains semantically a link.
+- **Don't** disable a button without telling the user why; pair `disabled` with a tooltip or
+  helper text whenever feasible.

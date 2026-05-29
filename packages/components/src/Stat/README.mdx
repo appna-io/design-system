@@ -1,0 +1,233 @@
+# Stat / StatGroup
+
+The dashboard metric tile. `<Stat />` ships a single primitive for **label + value + delta + formatting + states**, replacing the ~7-line hand-rolled card pattern that every B2B dashboard reinvents. `<StatGroup />` lays out several stats with consistent dividers and responsive collapse.
+
+```tsx
+import { Stat, StatGroup } from 'apx-ds';
+
+<Stat label="Revenue" value={12400} format="currency" />
+
+<Stat
+  label="Active users"
+  value={1240}
+  delta={{ value: 12.3, direction: 'up' }}
+  caption="vs last week"
+/>
+
+<StatGroup direction="row" divider gap={8}>
+  <Stat label="Revenue" value={12400} format="currency" />
+  <Stat label="Orders" value={47} />
+  <Stat label="Conversion" value={0.214} format="percent" />
+</StatGroup>
+```
+
+---
+
+## When to reach for it
+
+- **Dashboards & analytics** — single tiles or grouped KPIs.
+- **Empty-state success indicators** — "+12 new signups today".
+- **Settings / billing summary** — "$84,512 / month".
+
+If you need **a chart**, reach for a chart library and slot it under the `<Stat>` via `children`. Stat owns the surrounding tile chrome (label, value, delta, caption); it does *not* own data fetching, time-series, or interactivity.
+
+---
+
+## Prop-driven API (covers 90% of cases)
+
+```tsx
+<Stat
+  label="Revenue"
+  value={12400}
+  caption="MoM"
+  icon={<DollarSign />}
+  delta={{ value: 12.3, direction: 'up' }}
+
+  format="currency"      // 'auto' | 'number' | 'currency' | 'percent' | 'compact'
+  currency="USD"
+  fractionDigits={2}
+  locale="en-US"
+
+  variant="elevated"     // 'default' | 'elevated' | 'minimal'
+  size="md"              // 'sm' | 'md' | 'lg'
+  align="start"          // 'start' | 'center' | 'end'
+  colorize="auto"        // 'auto' | 'never'
+
+  loading={false}
+  error={undefined}      // 'string | undefined'
+
+  as="div"
+  asChild={false}
+/>
+```
+
+### `delta`
+
+`delta` is a **structured object**, not a string. Stat owns the color, the arrow glyph, and the screen-reader announcement so consumers don't reinvent the wheel:
+
+```tsx
+delta={{
+  value: 12.3,           // number — magnitude
+  direction: 'up',       // 'up' | 'down' | 'neutral'
+  label: undefined,      // override visual string (e.g. '+$120')
+  suffix: '%',           // default '%'
+  inverse: false,        // flip color logic — see below
+}}
+```
+
+#### `inverse` for "down is good" metrics
+
+Churn going down is **good**. Error rate going up is **bad**. Pass `inverse: true` on the delta and Stat flips the tone:
+
+```tsx
+<Stat
+  label="Churn"
+  value={0.042}
+  format="percent"
+  delta={{ value: 1.1, direction: 'down', inverse: true }}
+/>
+// → green arrow-down, "down 1.1%"
+```
+
+The arrow + accessible text still come from the direction (so screen-reader announcements stay consistent) — only the color tone flips.
+
+---
+
+## Compound API (advanced composition)
+
+When you need to interleave custom markup between label and value (icon between them, side-by-side delta, etc.), pass `Stat.*` subcomponents as children. Stat auto-detects compound mode and ignores the shortcut props:
+
+```tsx
+<Stat variant="elevated" size="lg">
+  <Stat.Icon><TrendingUp /></Stat.Icon>
+  <Stat.Label>Monthly recurring revenue</Stat.Label>
+  <Stat.Value>$84,512</Stat.Value>
+  <Stat.Delta value={5.4} direction="up" />
+  <Stat.Caption>+$4,341 over last month</Stat.Caption>
+</Stat>
+```
+
+| Subcomponent | Purpose |
+| ------------ | ------- |
+| `Stat.Icon`    | Decorative leading glyph. `aria-hidden`. |
+| `Stat.Label`   | Metric name. Pulls font scale from parent size. |
+| `Stat.Value`   | The big number. `tabular-nums` keeps digits stable. |
+| `Stat.Delta`   | Trend chip. Same payload as the `delta` prop. |
+| `Stat.Caption` | Smaller muted text below the value. |
+
+---
+
+## Formatting
+
+Numbers route through `Intl.NumberFormat` via the strategy passed to `format`:
+
+| `format`     | Output for `1234.56`  | Notes |
+| ------------ | --------------------- | ----- |
+| `'auto'`     | `1,234.56`            | Default. Same behavior as `'number'`. |
+| `'number'`   | `1,234.56`            | Locale-aware grouping. |
+| `'currency'` | `$1,234.56`           | Needs `currency` prop (ISO code). 2 fraction digits by default. |
+| `'percent'`  | `123,456%`            | Multiply by 100. Pass `value={0.214}` for `21.4%`. |
+| `'compact'`  | `1.2K`                | Short form — `12.4K`, `1.2M`, `3.4B`. |
+
+Strings and `ReactNode` values pass through untouched, so pre-formatted values still render correctly:
+
+```tsx
+<Stat label="Revenue" value="$12.4K (≈$84,512)" />
+```
+
+---
+
+## States
+
+### Loading
+
+```tsx
+<Stat label="Revenue" loading />
+```
+
+Renders a `<Spinner>` in the value slot, marks the tile `aria-busy="true"` and `role="status"`. The label stays visible so the user always knows what's being measured.
+
+### Error
+
+```tsx
+<Stat label="Revenue" error="Failed to load" />
+```
+
+Renders the error message in the value slot with `role="alert"`. The delta and caption are suppressed in this state.
+
+---
+
+## `<StatGroup />`
+
+Thin orchestration over `<Stack>` so you inherit responsive layout (`direction`, `gap`, `align`, `justify`) without re-implementing it. Auto-inserts a `<Divider>` between tiles when `divider` is `true`:
+
+```tsx
+<StatGroup direction="row" divider gap={8}>
+  <Stat label="Revenue" value={12400} format="currency" />
+  <Stat label="Orders" value={47} />
+  <Stat label="Conversion" value={0.214} format="percent" />
+</StatGroup>
+```
+
+The divider orientation flips with the layout direction: **vertical** for row, **horizontal** for column.
+
+### Responsive direction
+
+```tsx
+<StatGroup
+  direction={{ base: 'column', md: 'row' }}
+  gap={{ base: 4, md: 8 }}
+  divider
+>
+  {…}
+</StatGroup>
+```
+
+For responsive directions the divider orientation is fixed at runtime to the **base** breakpoint's value. If you need per-breakpoint orientation, pass a custom node:
+
+```tsx
+<StatGroup divider={<MyResponsiveDivider />}>{…}</StatGroup>
+```
+
+---
+
+## Accessibility
+
+- **Plain `<div>`** with synthesised `aria-label` (`"Revenue, $12,400, up 12.3%"`) so the whole tile announces in one screen-reader pass.
+- **Delta direction is doubled in the markup** — arrow icon (`aria-hidden`) for visual users, sr-only sentence (`"up 12.3%"`) for assistive tech. Color is **not** the only indicator.
+- **Loading** uses `role="status"` + `aria-busy="true"`. The visible label stays in place.
+- **Error** uses `role="alert"`.
+- **Compound mode** leaves announcement semantics to the consumer's chosen markup — wrap in a `<dl>` and Stat's subcomponents will sit happily underneath (they render `<span>` by default).
+- axe-core: 0 violations across default, loading, error, compound, and grouped modes.
+
+---
+
+## RTL
+
+- `align="end"` uses logical `text-end` so right-aligned tiles flip in RTL.
+- Delta arrows are vertical (`up` / `down`) — unaffected by writing direction.
+- `Intl.NumberFormat` handles locale-aware currency placement (`$12,400` in en-US vs `12 400 $` in fr-FR).
+- `tabular-nums` works in both directions.
+
+---
+
+## Performance
+
+- Stateless. Loading / error are conditional renders, not stateful animations.
+- `formatValue` runs once per render — fast enough that memoization would be premature optimization. Profile first if you have hundreds of stats on screen.
+- Bundle: small. The recipe and helpers add a few hundred bytes each on top of the engine + Spinner + Divider deps.
+
+---
+
+## Theming
+
+Stat uses semantic tokens (`text-fg-default`, `text-fg-muted`, `text-success`, `text-danger`, `bg-bg-paper`, `border-border-subtle`). Override per-variant via the `useThemedClasses` extension points in your theme provider — slot names: `Stat.root`, `Stat.header`, `Stat.icon`, `Stat.label`, `Stat.value`, `Stat.delta`, `Stat.caption`, `Stat.error`, `Stat.extra`.
+
+---
+
+## Anti-patterns
+
+- ❌ Don't pass `value` as a pre-formatted string when you have a number — use `format` instead so locale + currency stays consistent.
+- ❌ Don't fetch data inside `<Stat>`. It's presentational; lift the fetch up and pass `loading` / `error` / `value` from your data layer.
+- ❌ Don't use Stat for free-form text — it's optimized for **single metrics**. Use a Card or KeyValue list instead.
+- ❌ Don't mix the prop API and the compound API — when any `Stat.*` child is present the shortcuts are ignored. Pick one mode per Stat instance.

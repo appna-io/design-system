@@ -1,0 +1,126 @@
+## Overview
+
+`<Checkbox />` is the canonical boolean control. It renders a real `<input type="checkbox">`
+(visually hidden but keyboard-reachable and form-participating) alongside a custom-painted
+indicator span, all wrapped in a `<label>`. Clicking the label toggles the box natively — no
+synthetic click handlers required.
+
+Checkbox establishes the **hidden-input + custom-indicator** pattern reused by Switch
+(Phase 10) and Radio (Phase 11). The recipe ships three independently overridable slots:
+`root`, `control`, `label`.
+
+## Tri-state
+
+Checkbox supports three visual states — `unchecked`, `checked`, and `indeterminate`. Per native
+HTML and ARIA semantics, `indeterminate` is a *separate axis* from `checked`: the indeterminate
+look is drawn whenever `indeterminate && !checked`, and `aria-checked="mixed"` is set
+automatically.
+
+The classic "parent-of-children" pattern works out of the box — see the **Indeterminate**
+example.
+
+## Anatomy
+
+```text
+[ control box | label / description column ]
+```
+
+- **control** — the custom-painted indicator. Variant × color × shape lives here.
+- **label** — `children`. Click target via the wrapping `<label htmlFor>`.
+- **description** — optional secondary text below the label, wired via `aria-describedby`.
+
+The control box is decorative (`aria-hidden`) — assistive tech reads the underlying `<input>`.
+
+## Examples
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="Variants" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="Colors" />
+
+<ExampleBlock for="Shapes" />
+
+<ExampleBlock for="Indeterminate" />
+
+<ExampleBlock for="WithDescription" />
+
+<ExampleBlock for="Disabled" />
+
+<ExampleBlock for="Invalid" />
+
+<ExampleBlock for="Group" />
+
+<ExampleBlock for="Controlled" />
+
+## Props
+
+<PropsTable />
+
+## Accessibility
+
+- Renders a real `<input type="checkbox">` inside a `<label>` — clicking the label toggles the
+  state natively. Form participation (`name` + `value`) works exactly like a native checkbox.
+- The native input is visually hidden via `sr-only` (Tailwind) — focus, form participation, and
+  screen-reader announcements all flow through it.
+- `aria-checked="mixed"` is set automatically when `indeterminate && !checked`.
+- Focus ring lands on the *control box*, not just the hidden input, via the `peer-focus-visible`
+  variant. The ring color matches the active `color` for every variant × color cell.
+- `Space` toggles; `Enter` is a no-op (matches native checkbox + Radix convention).
+- `invalid` sets `aria-invalid` on the input and `data-invalid` on the control.
+- `description` text gets an auto-generated id and is wired into `aria-describedby`. If the
+  consumer also supplies their own `aria-describedby`, both ids are merged space-separated.
+- A dev-mode warning fires when neither `children`, `aria-label`, nor `aria-labelledby` is
+  provided (`CHECKBOX_NO_LABEL`).
+- axe-core passes across the variant × color × state matrix.
+
+## Theming
+
+Each of the three slots can be overridden independently:
+
+```tsx
+<ThemeProvider
+  theme={defineTheme({
+    components: {
+      Checkbox: {
+        defaultProps: { variant: 'outline', shape: 'rounded' },
+        styleOverrides: {
+          root: 'gap-3',
+          control: 'shadow-xs',
+          label: 'font-medium',
+        },
+      },
+    },
+  })}
+>
+  {children}
+</ThemeProvider>
+```
+
+Instance-level overrides win via `tailwind-merge`:
+
+```tsx
+<Checkbox className="text-lg" sx={{ radius: 'lg' }} style={{ accentColor: '#0ea5e9' }}>
+  Accept
+</Checkbox>
+```
+
+## RTL
+
+- `labelPosition` is logical — `right` means **end** in LTR and **start** in RTL (mapped via
+  `flex-row` / `flex-row-reverse`).
+- The check and minus glyphs are centered in the box and need no flipping.
+- Description text inherits the parent direction.
+
+## Do / Don't
+
+- **Do** label every checkbox — verb-phrase children ("Subscribe", "Accept terms") read better
+  than nouns. Provide `aria-label` only when the visual surface deliberately has no text.
+- **Do** use `indeterminate` for parent-of-children selection groups — the engine sets
+  `aria-checked="mixed"` so screen readers announce the partial state correctly.
+- **Don't** disable a checkbox without telling the user why; pair `disabled` with a tooltip or
+  helper text when feasible.
+- **Don't** use Checkbox for navigation or instant settings — that's `<Switch />`'s job.
+  Checkbox queues a value for form submission; Switch flips a setting now.

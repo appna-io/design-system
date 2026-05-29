@@ -1,0 +1,49 @@
+{
+  "name": "apx-ds-workspace",
+  "version": "0.0.0",
+  "private": true,
+  "description": "APX DS — themable, RTL-ready, fully overridable React component library",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
+  "packageManager": "pnpm@10.12.4",
+  "scripts": {
+    "dev": "turbo run dev --filter=@apx-ui/renderer",
+    "build": "pnpm build:components && pnpm build:preview",
+    "build:components": "turbo run build --filter='./packages/*'",
+    "build:preview": "turbo run build --filter=@apx-ui/renderer",
+    "test": "turbo run test --concurrency=1",
+    "test:watch": "turbo run test:watch --concurrency=1",
+    "lint": "turbo run lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && rm -rf node_modules .turbo",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm build:components && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.10",
+    "@eslint/js": "^9.39.4",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "@typescript-eslint/eslint-plugin": "^8.18.1",
+    "@typescript-eslint/parser": "^8.18.1",
+    "eslint": "^9.17.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2",
+    "tsup": "^8.3.5",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.1"
+  }
+}

@@ -1,0 +1,200 @@
+# Div
+
+`<Div />` is the DS's canonical **styling primitive** — the equivalent of MUI's `Box` or
+Chakra's `Box`. A single `<div>` (or any other element via `actLike` / `as` / `asChild`) with a
+flat, token-aware CSS shorthand prop surface plus responsive show/hide, opt-in motion presets,
+a `centered` shortcut, full HTML pass-through, and pseudo-state className hooks.
+
+Reach for `<Div>` whenever you'd otherwise write `<div className="flex items-center p-4
+bg-bg-paper">…</div>` — it reads better and resolves theme tokens (`primary.main`, `md`, …) into
+CSS variables for free.
+
+## Anatomy
+
+```tsx
+import { Div } from 'apx-ds';
+
+<Div p={4} bg="primary.50" fg="primary.contrast" radius="md">
+  A token-aware box.
+</Div>
+
+<Div display="flex" gap={12} alignItems="center">
+  <Div flex={1}>Left</Div>
+  <Div flex={2}>Right</Div>
+</Div>
+
+<Div hideOn="md">Mobile-only content</Div>
+<Div displayOn="lg">Desktop-only content</Div>
+
+<Div centered h={200}>
+  <Spinner />
+</Div>
+
+<Div actLike="button" type="button" onClick={open} onHover="bg-primary-100" onFocusVisible="ring-2 ring-primary-500">
+  Click me
+</Div>
+
+<Div animation="fadeIn">Fades in on mount</Div>
+```
+
+## Prop surface
+
+### Styling shorthand
+
+Every value flows through the engine's `sxToStyle` resolver — palette / radius / shadow /
+spacing **token strings** (e.g. `bg="primary.main"`, `radius="md"`) become `var(--sds-…)`,
+plain CSS values pass through untouched. **Scalars only** in v1 (no `{ base, sm, md }` shape
+on these props — use `hideOn` / `displayOn` / `className` for responsive layout).
+
+| Group       | Props                                                                                                                                                                                              |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Aliases     | `m` `mt` `mr` `mb` `ml` `mx` `my` `p` `pt` `pr` `pb` `pl` `px` `py` `w` `h` `radius` `shadow` `z` `bg` `fg`                                                                                        |
+| Layout      | `display` `position` `top` `right` `bottom` `left` `inset` `zIndex` `overflow` `overflowX` `overflowY` `visibility`                                                                                |
+| Flex / Grid | `flex` `flexDirection` `flexWrap` `flexBasis` `flexGrow` `flexShrink` `alignItems` `alignContent` `alignSelf` `justifyContent` `justifyItems` `justifySelf` `gap` `rowGap` `columnGap` `order` + `grid*` |
+| Sizing      | `width` `height` `minWidth` `maxWidth` `minHeight` `maxHeight` `boxSizing` `aspectRatio`                                                                                                           |
+| Spacing     | `margin` `padding` + every directional variant including the logical `marginInline` / `paddingBlock` family                                                                                        |
+| Color / bg  | `color` `backgroundColor` `background` `backgroundImage`                                                                                                                                           |
+| Border      | `border` `borderRadius` `borderWidth` `borderStyle` `borderColor` `borderTop` `borderRight` `borderBottom` `borderLeft`                                                                            |
+| Typography  | `fontSize` `fontWeight` `fontFamily` `lineHeight` `letterSpacing` `textAlign` `textTransform` `textDecoration` `whiteSpace` `textOverflow` `wordBreak`                                             |
+| Effects     | `boxShadow` `opacity` `cursor` `transition` `transform` `pointerEvents` `userSelect` `filter` `backdropFilter`                                                                                     |
+
+### Responsive show / hide
+
+| Prop        | Type                                | Behavior                                          |
+| ----------- | ----------------------------------- | ------------------------------------------------- |
+| `hideOn`    | `'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl'` | Adds `${bp}:hidden` — hides from that breakpoint upward. |
+| `displayOn` | `'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl'` | Adds `hidden ${bp}:block` — start hidden, reveal at that breakpoint. |
+
+Both use Tailwind's mobile-first "from breakpoint upward" semantics, so each emits a single
+utility class that the JIT scanner picks up at build time.
+
+### Animation
+
+| Prop        | Type                                                                       | Behavior                                                                                                                  |
+| ----------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `animation` | `'fadeIn' \| 'scaleIn' \| 'slideInFromBottom' \| 'slideInFromTop'`         | Wraps the element via `motion.create(...)` and applies the matching engine preset. `useReducedMotion()` short-circuits to a plain element. |
+
+The `pressScale` preset is **not** exposed here — it's a `whileTap` interaction that belongs on
+a trigger element (`<Button>`) instead.
+
+### Shortcuts
+
+| Prop        | Behavior                                                                                                                       |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `centered`  | Injects `display: flex; align-items: center; justify-content: center;` at the **lowest** style priority, so any explicit value wins. |
+
+### Polymorphism
+
+| Prop      | Behavior                                                                                                                                  |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`      | Swap the rendered element (`<Div as="section">`).                                                                                         |
+| `actLike` | Alias of `as` — provided for the requested ergonomic reading `<Div actLike="button">`. Wins over `as` when both are set (dev warning).    |
+| `asChild` | Radix-style — merges Div's props onto the single child element. Mutually exclusive with `as` / `actLike`; `asChild` wins (dev warning). Animation is skipped here. |
+
+### Pseudo-state className hooks
+
+Each prop accepts a Tailwind className string. Every whitespace-separated token is automatically
+prefixed with the corresponding state variant via the engine's `prefixClasses` helper.
+
+| Prop             | Prefix                  | Notes                                                                  |
+| ---------------- | ----------------------- | ---------------------------------------------------------------------- |
+| `onHover`        | `hover:`                | Mouse / pen hover.                                                     |
+| `onFocusVisible` | `focus-visible:`        | **Use this for focus rings** — keyboard-focus-only is the a11y default. |
+| `onActive`       | `active:`               | Pressed (mouse-down / Enter).                                          |
+| `onDisabled`     | `disabled:`             | Disabled form control.                                                 |
+| `onChecked`      | `aria-checked:`         | Triggered by `aria-checked="true"`.                                    |
+| `onGroupHover`   | `group-hover:`          | Pair with a parent that has the `group` class.                          |
+| `onDataState`    | `data-[state=open]:`    | Radix-style state hook.                                                |
+
+> `onFocus` is intentionally absent because it would collide with React's native focus event
+> handler. Use `onFocusVisible` (the a11y-correct choice for focus rings) or compose `focus:*`
+> classes via the standard `className` prop.
+
+### HTML pass-through
+
+`id`, `role`, `aria-*`, `data-*`, every event handler, plus the common element-specific
+attributes (`href`, `type`, `target`, `rel`, `download`, `src`, `alt`, `name`, `value`,
+`htmlFor`, `disabled`, `checked`) flow to the rendered element untouched. Use `actLike` to
+swap the element type and the matching attributes "just work":
+
+```tsx
+<Div actLike="a" href="/docs" target="_blank" rel="noreferrer">Open docs</Div>
+<Div actLike="button" type="submit" disabled={isSubmitting}>Save</Div>
+```
+
+## Style resolution order
+
+Lowest → highest priority:
+
+1. `centered` defaults (`display: flex; align-items: center; justify-content: center;`)
+2. `sx` (theme-aware object)
+3. Curated style shorthand props (`p={4}`, `bg="primary.50"`, `display="grid"`, …)
+4. Consumer `style` prop (escape hatch)
+
+Classes layer the same way:
+
+1. Recipe (`hideOn` / `displayOn`)
+2. `theme.components.Div.styleOverrides.root` (theme override)
+3. Consumer `className`
+4. Pseudo-state hooks (`hover:` / `focus-visible:` / …)
+
+`tailwind-merge` handles utility-class conflict resolution (last wins).
+
+## Examples
+
+<ExampleBlock for="Basic" title="Basic — token-aware padding + bg + radius" />
+<ExampleBlock for="Flex" title="Flex — display='flex' + flex={n} on children" />
+<ExampleBlock for="Centered" title="Centered — the centered shortcut" />
+<ExampleBlock for="HideOn" title="HideOn — hide from breakpoint upward" />
+<ExampleBlock for="DisplayOn" title="DisplayOn — reveal from breakpoint upward" />
+<ExampleBlock for="Animation" title="Animation — opt-in motion presets" />
+<ExampleBlock for="ActLikeButton" title="ActLike button — real <button> with onClick + pseudo hooks" />
+<ExampleBlock for="ActLikeAnchor" title="ActLike anchor — real <a> with href" />
+<ExampleBlock for="OnHover" title="OnHover — hover-state Tailwind classes" />
+<ExampleBlock for="OnFocus" title="OnFocusVisible — keyboard-only focus ring" />
+<ExampleBlock for="TokenStyles" title="TokenStyles — palette tokens across colors" />
+
+## Accessibility
+
+- `<Div>` is a layout primitive — no implicit role, no implicit ARIA, no focus management of its own.
+- When you swap the element with `actLike` (e.g. `actLike="button"`), the **rendered intrinsic
+  element** carries its own semantics. Pair with `type="button"` and let the native element
+  handle keyboard activation; no extra `role` is needed.
+- `hideOn` / `displayOn` use `display: none`, which removes the node from the accessibility tree
+  at the matching breakpoint — that's almost always what you want for purely decorative or
+  duplicate content. For content you want to keep announced but hide visually, prefer a
+  Tailwind utility like `sr-only` via `className`.
+
+## RTL
+
+- No RTL-specific code. The aliases `mx` / `my` / `px` / `py` map to logical properties
+  (`marginInline`, `paddingBlock`, …) so they flip automatically under `dir="rtl"`.
+- Pseudo-state classes (`hover:`, `focus-visible:`, …) are direction-agnostic.
+
+## Theming
+
+- `<Div>` reads from `theme.components.Div.styleOverrides.root` and
+  `theme.components.Div.defaultProps` via the standard `useThemedClasses` hook.
+- Consumer `className` always wins via `tailwind-merge`.
+
+## Bundle
+
+- Static cost: a single `forwardRef` component + two small pure helpers
+  (`extractStyleProps`, `buildPseudoClassName`) + the existing engine `sxToStyle` / `cv` /
+  `prefixClasses` / `motionPresets`.
+- Motion runtime is **only** pulled in when `animation` is set on at least one render — and even
+  then `useReducedMotion()` short-circuits to a plain element.
+
+## Do / Don't
+
+- **Do** reach for `<Div>` instead of `<div className="…">` when you'd otherwise inline more
+  than one or two Tailwind utilities.
+- **Do** use `<Div centered>` for the centered-spinner / centered-empty-state pattern.
+- **Do** prefer `<Div actLike="button">` over `<Div role="button" tabIndex={0}>` — the real
+  element gets you keyboard activation + focus for free.
+- **Don't** use `<Div>` as a substitute for a real DS component when one exists (`<Button>`,
+  `<Card>`, `<Stack>`, `<Field>`, …). Those carry richer semantics, recipes, and a11y.
+- **Don't** pass responsive objects to the inline-style shorthand props — they expect scalars in
+  v1. For responsive layout, reach for `hideOn` / `displayOn` / `className`.
+- **Don't** combine `as` / `actLike` with `asChild` — pick one. A dev warning fires in
+  development if both are set.

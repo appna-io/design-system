@@ -1,0 +1,166 @@
+# Typography
+
+`<Typography />` (also exported as `<Text />`) is the DS's canonical **text primitive** — a
+variant-driven sibling of [`<Div />`](../Div/README.mdx). Pick a variant and you get the right
+semantic element (`<h1>` / `<p>` / `<span>` / `<code>`), a curated visual treatment from the DS
+typography scale, and the entire `<Div />` styling surface (CSS shorthand, pseudo-state hooks,
+polymorphism, animation, responsive show / hide) inherited verbatim.
+
+Reach for `<Typography />` whenever you'd otherwise hand-roll `<h1 className="text-4xl
+font-semibold tracking-tight">…</h1>` or `<p className="text-sm text-fg-muted">…</p>`. The
+variant carries the styling intent, the shorthand props let you nudge any axis without dropping
+into `sx`, and the token-aware resolver maps `fontSize="lg"` → `var(--sds-font-size-lg)` so
+mode / variant switching is a no-op for the type system.
+
+## Anatomy
+
+```tsx
+import { Typography, Text } from 'apx-ds';
+
+<Typography variant="h1">Page title</Typography>             {/* renders <h1> */}
+<Typography variant="body">Paragraph body</Typography>        {/* renders <p>  */}
+<Typography variant="caption">Caption</Typography>             {/* renders <span> */}
+<Typography variant="code">const x = 42;</Typography>          {/* renders <code> */}
+
+<Typography fontSize="2xl" weight="semibold" lineHeight="tight" letterSpacing="tight">
+  Custom-sized header without a variant.
+</Typography>
+
+<Typography truncate>Single-line ellipsis…</Typography>
+<Typography lineClamp={3}>Up to three lines, then ellipsis…</Typography>
+
+<Typography align="center" italic decoration="underline">
+  Centered italic underlined
+</Typography>
+
+<Typography variant="body" actLike="a" href="/docs">
+  Body-styled paragraph rendered as an anchor.
+</Typography>
+
+<Text variant="caption" color="fg.muted">Updated 3 minutes ago</Text>
+```
+
+## Prop surface
+
+### Variants (13)
+
+| Group       | Variant      | Default element | Notes                                                     |
+| ----------- | ------------ | --------------- | --------------------------------------------------------- |
+| Display     | `display`    | `<h1>`          | Oversize hero. Still semantically a top-level heading.    |
+| Headings    | `h1`–`h6`    | `<h1>`–`<h6>`   | One-to-one semantic mapping.                              |
+| Body        | `bodyLarge`  | `<p>`           | Lead paragraph density.                                   |
+|             | `body`       | `<p>`           | Default. The page baseline.                               |
+|             | `bodySmall`  | `<p>`           | Helper / footnote density.                                |
+| Supporting  | `caption`    | `<span>`        | Muted by default. Inline metadata.                        |
+|             | `overline`   | `<span>`        | Uppercase + wider tracking. Section eyebrows.             |
+|             | `code`       | `<code>`        | Mono font, subtle background, inline code spans.          |
+
+`as` / `actLike` always override the default element (matches `<Div />`'s rules — `actLike`
+wins over `as` and emits the same dev warning when both are provided).
+
+### Token-aware shorthand (5)
+
+Each prop accepts **either** a documented token key (resolved to `var(--sds-font-...)`) **or**
+any raw CSS value (number / px string / inherit / `'Helvetica Neue', sans-serif` / …) — unknown
+strings pass through untouched, so consumers always retain a per-prop CSS escape hatch.
+
+| Prop            | Token keys                                                            | CSS var                                      |
+| --------------- | --------------------------------------------------------------------- | -------------------------------------------- |
+| `fontSize`      | `xs` `sm` `base` `lg` `xl` `2xl` `3xl` `4xl` `5xl`                    | `--sds-font-size-{key}`                      |
+| `weight` / `fontWeight` | `normal` `medium` `semibold` `bold`                          | `--sds-font-weight-{key}`                    |
+| `lineHeight`    | `none` `tight` `snug` `normal` `relaxed`                              | `--sds-line-height-{key}`                    |
+| `letterSpacing` | `tight` `normal` `wide` `wider`                                       | `--sds-letter-spacing-{key}`                 |
+| `fontFamily`    | `sans` `mono`                                                         | `--sds-font-sans` / `--sds-font-mono`        |
+
+`weight` and `fontWeight` are interchangeable; `weight` wins if both are supplied.
+
+### Text-friendly shortcuts (7)
+
+| Prop          | Type                                            | Effect                                                                                                                       |
+| ------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `italic`      | `boolean`                                       | `font-style: italic`                                                                                                         |
+| `align`       | `'left' \| 'center' \| 'right' \| 'justify'`    | maps to `text-align`                                                                                                         |
+| `transform`   | `'none' \| 'upper' \| 'lower' \| 'capitalize'`  | maps to `text-transform` (`upper`/`lower` are friendly aliases for the CSS verbose forms)                                    |
+| `decoration`  | `'none' \| 'underline' \| 'line-through'`       | maps to `text-decoration`                                                                                                    |
+| `truncate`    | `boolean`                                       | `overflow: hidden; text-overflow: ellipsis; white-space: nowrap;`                                                            |
+| `lineClamp`   | `number`                                        | multi-line clamp via the `-webkit-` flexbox combo; wins over `truncate` when both are set                                    |
+
+### Inherited from `<Div />`
+
+Everything else: every CSS shorthand prop the `Div` accepts (`m` / `p` / `bg` / `fg` / `radius` /
+`shadow` / `flex` / `gap` / `width` / `height` / …), all 7 pseudo hooks (`onHover`,
+`onFocusVisible`, `onActive`, `onDisabled`, `onChecked`, `onGroupHover`, `onDataState`),
+polymorphism (`as` / `actLike` / `asChild`), responsive show / hide (`hideOn` / `displayOn`),
+`centered`, `animation`, the full `sx` prop, every HTML attribute, ref forwarding, and the
+`className` cascade — all inherited unchanged. See the [Div docs](../Div/README.mdx) for the full
+prop tables.
+
+## Style resolution order
+
+Lowest-precedence first:
+
+1. **Variant recipe class** — `text-4xl font-semibold leading-tight tracking-tight` (from
+   `typographyRecipe`).
+2. **Div's recipe class** — `min-w-0` plus any `hideOn` / `displayOn` utilities.
+3. **`sx` prop** — engine `sxToStyle` resolution (palette / radius / spacing / shadow tokens).
+4. **Div's curated CSS shorthand** — `m` / `p` / `bg` / `fg` / etc., also via `sxToStyle`.
+5. **Typography text-style chunk** — the 5 token-resolved type props + the 7 shortcuts.
+6. **Consumer `style` prop** — always wins.
+
+Consumer `className` is merged via `tailwind-merge` (so a later utility always overrides an
+earlier one — e.g. `<Typography variant="body" className="text-primary" />` swaps the body color
+without touching the size / weight).
+
+## Examples
+
+See [examples/](./examples/) — 13 files covering the variant ladder, headings vs body
+semantics, code spans, truncation + line clamp, alignment, weight (including a numeric escape
+hatch), italic + decoration + transform, polymorphism via `actLike="a"`, the full token-size
+ladder, and the pseudo-state hooks.
+
+## Accessibility
+
+- The default variant → element mapping keeps the document outline correct out of the box. `h1`
+  through `h6` render their semantic counterparts; `body*` variants are `<p>` (announced as
+  paragraphs by AT); `caption` / `overline` are inline `<span>`s so they don't break the
+  surrounding flow.
+- `display` collapses to `<h1>` semantically — use it for the page's primary visual hero only.
+  If you want the visual without the semantics, pair it with `as="div"` or `as="p"`.
+- `align="justify"` is preserved for consumer choice but discouraged for long-form copy on the
+  web (the rivers degrade readability without manual hyphenation).
+- `lineClamp` truncates content invisibly — pair with a tooltip / disclosure when the full text
+  matters to AT users.
+- The `code` variant ships the `<code>` element + mono font; for **block** code, wrap a `<pre>`
+  around it (Typography is single-element by design).
+
+## RTL
+
+The variant recipe never uses physical `text-left` / `text-right`; the `align` shortcut maps
+through `text-align` which respects the document direction. For directional padding around
+`code` / `overline` use the Div logical pairs (`paddingInlineStart`, `paddingInlineEnd`).
+
+## Theming
+
+All five type-specific CSS vars (`--sds-font-size-*`, `--sds-font-weight-*`, `--sds-line-height-*`,
+`--sds-letter-spacing-*`, `--sds-font-sans` / `--sds-font-mono`) are emitted by `themeToCssVars`
+from the typography token shape. Override them per-variant or per-theme via the existing
+theme overrides — no Typography-side change is needed.
+
+## Bundle
+
+`<Typography />` is implemented as a thin wrapper over `<Div />`. The only new code is the
+13-row variant recipe, the variant → element map, the 5-row token table + resolver, and the
+three shortcut maps (align / transform / decoration). Per-instance bundle cost is dominated by
+`<Div />`; Typography itself adds ~3 kB minified before gzip and is fully tree-shakeable.
+
+## Do / Don't
+
+- **Do** lean on variants for the common 95% (page titles, body copy, captions, code spans).
+- **Do** reach for `fontSize` / `weight` / `lineHeight` / `letterSpacing` / `fontFamily` props
+  when a one-off needs a non-variant tweak.
+- **Do** use `truncate` / `lineClamp` on text inside fixed-width containers.
+- **Don't** stack a `variant="h1"` inside another `variant="h1"` — variants control both the
+  visual and the semantic. If you need a visually large piece of text inside a heading, override
+  with `as="span"` to keep the outer document outline correct.
+- **Don't** override `fontFamily` per-instance unless you really need to — let the theme set
+  the family globally and reach for the prop only at exceptional surfaces.

@@ -1,0 +1,265 @@
+## Overview
+
+`<Menu />` is the canonical dropdown / context-menu / hover-menu primitive — Popover's
+keyboard-driven cousin. Where Popover hosts arbitrary content with focus trapping, Menu is
+**list-shaped**: a vertical sequence of focusable actions with full ARIA Menu pattern wiring,
+arrow-key navigation, type-ahead prefix matching, submenus, checkbox items, radio groups, and
+destructive item styling — all under a single compound API.
+
+The same component handles four UX patterns: **action menus** (click an item, do a thing),
+**checkbox menus** (multi-select toggles), **radio menus** (single-select), and **submenus**
+(hierarchical menus). The `trigger` prop unifies dropdown + context + hover into one component
+instead of shipping three.
+
+## When to use
+
+- A list of actions opened from a button: "More options" → Edit / Duplicate / Delete.
+- A right-click context menu on a row, card, file, canvas object.
+- A multi-select control set: "View" → Show sidebar / Show status bar / Fullscreen.
+- A single-select preference: "Theme" → Light / Dark / System.
+- Hierarchical commands: Tools → More → Developer → DevTools.
+
+## When NOT to use
+
+- The content isn't list-shaped → use `<Popover />` (arbitrary content) or `<Modal />` (blocking).
+- It's a chooser bound to a form field → wait for `<Select />` (Phase 23, builds on Menu).
+- It's a hint with no interaction → use `<Tooltip />`.
+- A "navigation links" component → use a `<nav>` with `<Tabs />` or `<Breadcrumbs />`.
+
+## Anatomy
+
+```text
+<Menu>
+  <Menu.Trigger> button </Menu.Trigger>
+  <Menu.Content>
+    <Menu.Label> section name </Menu.Label>
+    <Menu.Group>
+      <Menu.Item>          action               </Menu.Item>
+      <Menu.CheckboxItem>  multi-select toggle  </Menu.CheckboxItem>
+    </Menu.Group>
+    <Menu.Separator />
+    <Menu.RadioGroup>
+      <Menu.RadioItem value="…"> single-select </Menu.RadioItem>
+    </Menu.RadioGroup>
+    <Menu.Sub>
+      <Menu.SubTrigger> opens submenu </Menu.SubTrigger>
+      <Menu.SubContent> nested items </Menu.SubContent>
+    </Menu.Sub>
+  </Menu.Content>
+</Menu>
+```
+
+- **`Menu`** — context provider + state owner. Owns `open`, `setOpen`, the item registry, the
+  keyboard-highlight signal, and the lifecycle hooks (`useEscapeStack`, `useOutsideClick`).
+- **`Menu.Trigger`** — clones a single child (`asChild`) or renders an inline `<button>`. Wires
+  click / contextmenu / pointerenter+leave depending on `trigger` mode.
+- **`Menu.Content`** — portal-rendered, positioned, animated, keyboard-driven floating panel.
+  Carries the visual axes (`variant` / `size` / `color` / `placement` / `offset`).
+- **`Menu.Item`** — `role="menuitem"`. Fires `onSelect` for keyboard Enter/Space + mouse click.
+- **`Menu.CheckboxItem`** — `role="menuitemcheckbox"`. Toggles via `checked` / `onCheckedChange`;
+  forces `closeOnSelect=false`.
+- **`Menu.RadioGroup`** + **`Menu.RadioItem`** — exclusive single-pick via `value` / `onValueChange`.
+- **`Menu.Label`** — visual section heading. `role="presentation"`.
+- **`Menu.Group`** — `role="group"` wrapper for related items.
+- **`Menu.Separator`** — `role="separator"` horizontal rule.
+- **`Menu.Sub`** + **`Menu.SubTrigger`** + **`Menu.SubContent`** — nested submenu.
+
+## Trigger modes
+
+| Mode | Opens on | Use case |
+|------|----------|----------|
+| `click` | Click (default) | Standard dropdown menus |
+| `context` | Right-click anywhere inside trigger area | Context menus (file, row, canvas) |
+| `hover` | Pointer-enter after `openDelay` | Hover-menus (rare; Apple-style) |
+
+Switch with `<Menu trigger="context">`. The whole component works the same way otherwise — same
+items, same keyboard, same ARIA.
+
+## Variants
+
+Three variants of the Content surface (same vocabulary as Popover):
+
+- **`solid`** — paper background + neutral border. **Default.** `color` is ignored.
+- **`outline`** — paper background + 1px colored border.
+- **`soft`** — subtle tinted background + low-opacity colored border.
+
+The 3 variants × 7 colors compound matrix has 14 active cells (`solid` ignores `color`; `outline`
+and `soft` use one row each). Adding a new color = palette entry + 2 compound rows.
+
+## Item colors
+
+Item color is a constrained axis on purpose:
+
+- **`neutral`** (default) — uses the surface text color.
+- **`danger`** — destructive items get red text and a red-tinted highlight.
+
+Most menu items should be neutral; the destructive item is the one canonical exception. For
+one-off colored items, pass `className`.
+
+## Sizes
+
+| Size | Item padding | Content padding | Font           |
+| ---- | ------------ | --------------- | -------------- |
+| `sm` | `px-2 py-1`  | `p-1`           | `text-xs`      |
+| `md` | `px-2 py-1.5`| `p-1`           | `text-sm`      |
+| `lg` | `px-3 py-2`  | `p-1.5`         | `text-base`    |
+
+## Behavior
+
+| Prop | Default | Effect |
+|------|---------|--------|
+| `closeOnEscape` | `true` | Esc closes topmost menu / submenu (escape-stack ordering). |
+| `closeOnOutsideClick` | `true` | Pointer-down outside trigger + content closes the menu. |
+| `closeOnSelect` | `true` | `<Menu.Item>`'s `onSelect` closes the menu. CheckboxItem / RadioItem always force `false`. |
+| `loop` | `true` | Arrow-key wrap at top/bottom. |
+| `typeAhead` | `true` | Type a prefix to jump to the matching item. |
+| `openDelay` | `120` ms | Hover-mode open delay. |
+| `closeDelay` | `180` ms | Hover-mode close delay. |
+
+## Accessibility
+
+ARIA Menu pattern (W3C APG):
+
+- **Trigger** — `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`, `data-state="open|closed"`.
+- **Content** — `role="menu"`, `aria-labelledby` the trigger, `aria-orientation="vertical"`.
+- **Item** — `role="menuitem"` (or `"menuitemcheckbox"` / `"menuitemradio"`), `aria-disabled`
+  when disabled, `aria-checked` for checkbox / radio variants, `data-highlighted="true"` for the
+  keyboard-highlighted row.
+- **Submenu trigger** — `aria-haspopup="menu"`, `aria-expanded`, `aria-controls` (same pairing
+  pattern as the root trigger).
+
+Keyboard:
+
+| Key | Action |
+|-----|--------|
+| ArrowDown / ArrowUp | Cycle highlight; wrap with `loop=true` |
+| Home / End | First / last enabled item |
+| Enter / Space | Select highlighted item |
+| Esc | Close (innermost only when submenus are open) |
+| Tab / Shift+Tab | Close (matches platform menu convention) |
+| ArrowRight / ArrowLeft | Open / close submenu |
+| Printable character | Type-ahead — prefix match within ~500 ms |
+| Same letter twice | Cycle through items starting with that letter (macOS / Windows convention) |
+
+Focus management:
+
+- Focus moves into Content on open (the `<menu>` element itself receives focus; items are
+  navigated via the keyboard highlight, not by tabbing).
+- Focus returns to the trigger on close.
+- Submenus restore highlight to their parent SubTrigger.
+
+axe-core: zero violations across every variant × color cell, plus disabled / submenu / checkbox /
+radio combinations.
+
+## Examples
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="WithIcons" />
+
+<ExampleBlock for="WithShortcuts" />
+
+<ExampleBlock for="ContextMenu" />
+
+<ExampleBlock for="HoverMenu" />
+
+<ExampleBlock for="DestructiveItem" />
+
+<ExampleBlock for="CheckboxItems" />
+
+<ExampleBlock for="RadioGroup" />
+
+<ExampleBlock for="Submenus" />
+
+<ExampleBlock for="Disabled" />
+
+<ExampleBlock for="TypeAhead" />
+
+<ExampleBlock for="Variants" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="Colors" />
+
+<ExampleBlock for="Controlled" />
+
+## Theming
+
+```tsx
+defineTheme({
+  components: {
+    Menu: {
+      defaultProps: { /* root behavior props — loop / typeAhead / closeOnSelect */ },
+      styleOverrides: {
+        content: 'shadow-xl',
+        item: 'rounded-md',
+        label: '',
+        group: '',
+        separator: 'bg-border-strong',
+        checkboxIndicator: '',
+        radioIndicator: '',
+        shortcut: 'text-fg-default',
+        subTriggerChevron: '',
+      },
+    },
+  },
+});
+```
+
+Per-instance overrides via `<Menu.Content className sx style />` merge on top of the theme
+overrides, which merge on top of the recipe — same precedence as everywhere else in the DS, and
+re-validated for compound components by Core 18's `defaultProps` wiring.
+
+## Engine consumption
+
+Menu consumes the entire overlay surface — no new engine primitives requested:
+
+| Primitive | Used for |
+|---|---|
+| `usePosition` | Position Content (and SubContent) against trigger; supports virtual-element anchoring for context-menu mode. |
+| `<Portal>` | Render Content outside the DOM tree so z-index + overflow clip-paths can't trap the menu. |
+| `useEscapeStack` | Esc closes innermost menu first (sub before root). |
+| `useOutsideClick` | Pointer-down outside trigger + content closes. |
+| `useControllableState` | `open` / `defaultOpen` / `onOpenChange`, plus CheckboxItem's `checked` / `onCheckedChange` and RadioGroup's `value` / `onValueChange`. |
+| `mergeRefs` | Compose Floating UI's setReference + local ref + forwarded ref + root's trigger ref. |
+
+Menu **does not** use `useFocusTrap` — focus stays on the Content element, items are
+keyboard-highlighted (not tab-focused), and Tab closes the menu. This matches the platform menu
+convention and is what the W3C APG specifies for the Menu role.
+
+`MenuPlacement = PopoverPlacement` — single source of truth for the 12-placement vocab; Modal /
+Menu / Select / Combobox all alias from this same canonical type.
+
+### Notes for consumers
+
+A few conventions surfaced during implementation; documented here so the next overlay author
+(Select, Combobox) doesn't rediscover them:
+
+- **Keyboard registry is DOM-order, not mount-order** — items register via callback ref + sort by
+  `compareDocumentPosition` on each `getEnabledItems()` call. Dynamic / re-ordered item lists
+  work correctly without any per-item index prop.
+- **Type-ahead buffer is per-`useMenuKeyboard` instance**, not per-component. SubContent gets its
+  own buffer, so typing "d" inside a submenu only matches sub items.
+- **Highlight ≠ focus** — `data-highlighted="true"` is what drives the visual + screen-reader
+  signal. `node.click()` is dispatched on Enter/Space, which lets Items, CheckboxItems, and
+  RadioItems all share one selection code path through their `onClick` handler.
+
+## DRY notes
+
+- No `clsx` / `cn` imports — every class composition flows through `useThemedClasses`.
+- `useMenuKeyboard` lives locally; promote to `_shared/useListKeyboard.ts` if Select (Phase 23) or
+  the future Combobox prove a second consumer wants the same shape.
+- `MenuPlacement = PopoverPlacement` — alias for the 12-placement vocab.
+- Checkbox / Radio indicators reuse the Phase 9 / Phase 11 visual idiom (`<Check>` icon and
+  centered dot) inline rather than re-importing — same shape, no `_shared/` churn.
+- Adding a new color = palette entry + 2 compound rows in `content` recipe.
+- Adding a new variant = one base row + 7 compound rows.
+- Compound assembly (`Object.assign`) follows Popover / Modal / Card verbatim.
+
+## Out of scope (V1)
+
+- **"Triangle path" submenu hover prediction** (Apple-style heuristic) — V2; the basic hover delay
+  works fine for now.
+- **`Menu.Item` with badge / count slot** — composition; render the badge inside `children`.
+- **`Menu.Loading` placeholder** for async-loaded items — defer; an inline spinner works.
+- **Native `<select>` substitute** — that's `<Select />` (Phase 23, depends on Menu).

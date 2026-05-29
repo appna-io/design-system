@@ -1,0 +1,123 @@
+---
+title: Divider
+category: Layout
+status: stable
+---
+
+# Divider
+
+The canonical separator primitive. Renders an `<hr>` by default, switches to a `<div role="separator">` when given a label.
+
+```tsx
+import { Divider } from 'apx-ds';
+
+<Divider />
+<Divider orientation="vertical" />
+<Divider>OR</Divider>
+<Divider color="strong" thickness={2} variant="dashed" />
+```
+
+## Why a Divider primitive
+
+Card / Modal / Menu had been reaching for `<hr className="border-t border-…">` in markup. That pattern works but:
+
+- It silently leaks theme colors when a consumer's `<hr>` reset wipes them.
+- It cannot express the labeled-divider pattern (`<Divider>OR</Divider>`) without a 3-element ad-hoc wrapper.
+- It doesn't share the token surface (`border-border-subtle` / `border-border-default` / `border-border-strong`), so theme swaps don't retint every divider at once.
+
+`<Divider />` packages all three concerns into one tiny component.
+
+## API
+
+| Prop            | Type                                       | Default        | Description                                                                 |
+| --------------- | ------------------------------------------ | -------------- | --------------------------------------------------------------------------- |
+| `orientation`   | `'horizontal' \| 'vertical'`               | `'horizontal'` | Axis along which the rule runs.                                             |
+| `variant`       | `'solid' \| 'dashed' \| 'dotted'`          | `'solid'`      | Border-style.                                                               |
+| `thickness`     | `1 \| 2 \| 4`                              | `1`            | Pixel width.                                                                |
+| `color`         | `'subtle' \| 'default' \| 'strong'`        | `'subtle'`     | Token-mapped border color.                                                  |
+| `labelPosition` | `'start' \| 'center' \| 'end'`             | `'center'`     | Where the label sits when `children` is present.                            |
+| `decorative`    | `boolean`                                  | `false`        | When `true`, sets `role="presentation"` + `aria-hidden="true"`.             |
+| `as`            | `ElementType`                              | `'hr'` / `'div'` | Override the rendered element. Defaults to `<hr>` (no children) or `<div role="separator">` (labeled). |
+| `children`      | `ReactNode`                                | —              | Optional inline label. When present, the rendered element switches to a wrapping div. |
+| `className` / `style` / `sx` | —                              | —              | Standard escape hatches.                                                     |
+
+## Patterns
+
+### Vertical divider in a toolbar
+
+```tsx
+<HStack gap={2} align="center">
+  <Button variant="ghost">Cut</Button>
+  <Button variant="ghost">Copy</Button>
+  <Divider orientation="vertical" />
+  <Button variant="ghost">Paste</Button>
+</HStack>
+```
+
+The vertical divider uses `border-inline-start`, so RTL flips it to the correct visual edge automatically.
+
+### Labeled divider — "OR" separator
+
+```tsx
+<Divider>OR</Divider>
+```
+
+Renders a flex row with the label between two flex-grow rule spans. The spans inherit the same `color` / `variant` / `thickness` you pass.
+
+### As section heading
+
+```tsx
+<Divider labelPosition="start">Account settings</Divider>
+```
+
+Drops the leading rule; the label sits at the start with a single trailing rule.
+
+### Inside a Card body
+
+```tsx
+<Card>
+  <div className="p-4">Account</div>
+  <Divider />
+  <div className="p-4">Security</div>
+</Card>
+```
+
+The default `color="subtle"` reads as a quiet section break — exactly what Card asks for.
+
+### Decorative usage
+
+```tsx
+<section aria-labelledby="account-heading">
+  <h2 id="account-heading">Account</h2>
+  …
+  <Divider decorative />
+  …
+</section>
+```
+
+When the surrounding region is already announced as a landmark, the divider's screen-reader role becomes noise. `decorative={true}` makes axe + the AT happy.
+
+## Accessibility
+
+- Unlabeled `<hr>` carries native `role="separator"`. We emit `aria-orientation="vertical"` only when needed (horizontal is the spec default).
+- Labeled dividers render `<div role="separator">` with the label as its accessible name.
+- `decorative={true}` switches the role to `presentation` and applies `aria-hidden="true"`.
+- Both flank-rules in the labeled form are `aria-hidden="true"` — only the label is announced.
+- axe-core: zero violations across every prop combination.
+
+## Theming
+
+```tsx
+defineTheme({
+  components: {
+    Divider: {
+      styleOverrides: {
+        rule: 'opacity-50',
+        labeled: 'uppercase tracking-wider',
+      },
+    },
+  },
+});
+```
+
+Two slots: `rule` (every `<hr>`-form divider + the flank spans of the labeled form) and `labeled` (the wrapper of the labeled form).

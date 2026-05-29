@@ -1,0 +1,53 @@
+# dependencies
+node_modules
+.pnpm-store
+
+# build outputs
+dist
+.next
+out
+.turbo
+*.tsbuildinfo
+
+# generated sources (regenerated on predev/prebuild)
+apps/renderer/src/generated
+
+# Playwright (visual snapshot suite — baselines under tests/*-snapshots/ are
+# tracked; only the per-run artefact dirs are excluded)
+apps/renderer/test-results
+apps/renderer/playwright-report
+apps/renderer/blob-report
+apps/renderer/.playwright-cache
+
+# coverage
+coverage
+.nyc_output
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# editor
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.recommended.json
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# env
+.env
+.env.local
+.env.*.local
+
+# misc
+.cache
+.eslintcache
+.parcel-cache

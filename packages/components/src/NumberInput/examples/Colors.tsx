@@ -1,0 +1,13 @@
+import { NumberInput } from 'apx-ds';
+
+export default function Colors() {
+  return (
+    <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+      {(['primary', 'secondary', 'success', 'warning', 'danger', 'info', 'neutral'] as const).map(
+        (c) => (
+          <NumberInput key={c} aria-label={c} defaultValue={42} color={c} />
+        ),
+      )}
+    </div>
+  );
+}

@@ -1,0 +1,190 @@
+# EmptyState
+
+The canonical layout for **empty lists**, **no-results**, **first-run**, **error**, **success**,
+and **loading** surfaces. Drop it anywhere the data could be absent: data tables, search
+results, dashboards, file lists, inboxes.
+
+EmptyState is **two APIs in one**: the prop-driven shortcut form for the 80% case, and a
+compound form (`<EmptyState.Icon>` / `.Illustration` / `.Title` / `.Description` / `.Actions`)
+for full control. When any compound child is detected, the prop-driven shortcuts are silently
+ignored — the two modes never compete.
+
+## Why this exists
+
+Every product surface ends up reinventing the empty state — usually inconsistently, often
+without proper ARIA semantics, sometimes without any "next step" CTA. Phase 42 ships **one**
+primitive with built-in:
+
+- Variant-driven ARIA roles (`region` / `alert` / `status` — picked automatically per variant).
+- A loading variant that auto-injects `<Spinner />` (Phase 39).
+- Consistent rhythm (icon container → title → description → CTAs) so empty states across the
+  app feel like the same product.
+- A `bordered` axis specifically for DataGrid / Combobox / FileUpload empty slots that need to
+  fill an existing rectangle.
+
+## Anatomy
+
+```
+┌─────────────────────────────────────────────────────┐
+│                       ◯                             │   ← <EmptyState.Icon> / .Illustration
+│                                                      │
+│                 No users yet                         │   ← <EmptyState.Title> (<h3> by default)
+│      Invite your team to collaborate.                │   ← <EmptyState.Description> (<p>)
+│                                                      │
+│        [Invite teammates]  [Learn more]              │   ← <EmptyState.Actions> (flex row)
+└─────────────────────────────────────────────────────┘
+```
+
+## Variants
+
+| Variant   | Root role                                            | Icon container tint              | Auto glyph         |
+| --------- | ---------------------------------------------------- | -------------------------------- | ------------------ |
+| `default` | `region` (with `aria-labelledby` → Title)            | neutral subtle                   | —                  |
+| `error`   | `alert`                                              | danger-subtle bg + danger fg     | —                  |
+| `loading` | `status` + `aria-busy="true"` + `aria-live="polite"` | neutral subtle                   | `<Spinner />`      |
+| `success` | `region`                                             | success-subtle bg + success fg   | —                  |
+
+The `loading` variant auto-injects a `<Spinner />` in the icon slot **only when neither
+`icon` nor `illustration` is supplied** (nor a compound `<EmptyState.Icon>` child). Pass an
+explicit `icon` to override.
+
+## Sizes
+
+| Size | Icon container | Title text | Padding (y / x) | When                                |
+| ---- | -------------- | ---------- | --------------- | ----------------------------------- |
+| `sm` | 40 × 40 px     | `text-base`| 24 / 16 px      | Inline use, sidebar panels.         |
+| `md` | 56 × 56 px     | `text-lg`  | 40 / 24 px      | **Default.** Page-level empty states. |
+| `lg` | 80 × 80 px     | `text-xl`  | 64 / 32 px      | Hero empty surfaces, full-page.     |
+
+## Action shortcuts
+
+Both `primaryAction` and `secondaryAction` accept the same shape:
+
+```ts
+type ActionShortcut = {
+  label: ReactNode;
+  onClick?: () => void;
+  href?: string;          // when set, renders as <Button asChild><a href=…>
+  target?: string;        // anchor target, only meaningful with href
+  rel?: string;           // anchor rel,    only meaningful with href
+  variant?: 'solid' | 'outline' | 'ghost';   // default: primary='solid', secondary='ghost'
+  color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'neutral';
+  // …all other <Button> props
+};
+```
+
+When `target="_blank"` is set without an explicit `rel`, the component injects
+`rel="noopener noreferrer"` automatically.
+
+## Examples
+
+<ExampleBlock for="Basic" title="Minimal — title + description only" />
+<ExampleBlock for="WithIcon" title="With an icon" />
+<ExampleBlock for="WithIllustration" title="With a larger illustration" />
+<ExampleBlock for="WithPrimaryAction" title="Adding a primary call-to-action" />
+<ExampleBlock for="WithBothActions" title="Primary + secondary (the secondary is a link)" />
+<ExampleBlock for="Error" title="variant=error — role=alert, danger-tinted icon" />
+<ExampleBlock for="Loading" title="variant=loading — auto-injects <Spinner />, role=status" />
+<ExampleBlock for="Success" title="variant=success — celebratory tone" />
+<ExampleBlock for="Compact" title="size=sm — for inline use" />
+<ExampleBlock for="Bordered" title="bordered — fills a rect inside a DataGrid / FileUpload" />
+<ExampleBlock for="Compound" title="Compound API for full content control" />
+<ExampleBlock for="AlignStart" title="align=start — left-aligned for sidebar panels" />
+
+## Props
+
+### `<EmptyState />`
+
+| Prop              | Type                                                                        | Default     | Notes                                                                  |
+| ----------------- | --------------------------------------------------------------------------- | ----------- | ---------------------------------------------------------------------- |
+| `variant`         | `'default' \| 'error' \| 'loading' \| 'success'`                            | `'default'` | Drives ARIA role + icon tint + (loading) auto-Spinner.                 |
+| `size`            | `'sm' \| 'md' \| 'lg'`                                                      | `'md'`      | Density token; cascades to all subparts via context.                   |
+| `align`           | `'center' \| 'start'`                                                       | `'center'`  | Layout alignment. `start` is for inline use.                           |
+| `bordered`        | `boolean`                                                                   | `false`     | Wraps in a dashed rounded border — for DataGrid empty slots.           |
+| `padded`          | `boolean`                                                                   | `true`      | Adds outer padding sized to `size`. Disable for parent-owned spacing.  |
+| `as`              | `'section' \| 'div' \| 'aside' \| 'article'`                                | `'section'` | Root element. `<section>` is a landmark.                               |
+| `icon`            | `ReactNode`                                                                 | —           | Small glyph rendered in the icon container.                            |
+| `illustration`    | `ReactNode`                                                                 | —           | Larger graphic; **wins** over `icon` when both are set.                |
+| `title`           | `ReactNode`                                                                 | —           | Becomes the accessible label.                                          |
+| `description`     | `ReactNode`                                                                 | —           | Becomes the accessible description.                                    |
+| `primaryAction`   | `ActionShortcut` *(see above)*                                              | —           | Solid Button by default.                                               |
+| `secondaryAction` | `ActionShortcut`                                                            | —           | Ghost Button by default.                                               |
+| `className`       | `string`                                                                    | —           | Merged via `tailwind-merge`.                                           |
+| `sx`              | `Sx`                                                                        | —           | Theme-aware inline style.                                              |
+
+### Subcomponents
+
+| Subcomponent              | Element     | Notes                                                       |
+| ------------------------- | ----------- | ----------------------------------------------------------- |
+| `<EmptyState.Icon>`       | `<div>`     | Tinted circular container; `aria-hidden="true"`.            |
+| `<EmptyState.Illustration>` | `<div>`   | Max-width sized per `size`; `aria-hidden="true"`.           |
+| `<EmptyState.Title>`      | `<h3>` (default; override via `as`) | The accessible name of the region.        |
+| `<EmptyState.Description>`| `<p>`       | The accessible description.                                  |
+| `<EmptyState.Actions>`    | `<div>`     | Flex row for `<Button>` children.                            |
+
+All five subparts pull `size` / `variant` / `align` from `EmptyStateContext`.
+
+## Accessibility
+
+- **Variant decides the role.** `default` / `success` → `region`. `error` → `alert`.
+  `loading` → `status` + `aria-busy="true"` + `aria-live="polite"`.
+- **Title is the accessible name.** When prop-driven, the root auto-wires
+  `aria-labelledby` to the auto-rendered `<h3>`. Compound mode + custom Title with an
+  explicit `id` will be picked up too if the consumer passes
+  `<EmptyState aria-labelledby={myId}>`.
+- **Description is the accessible description.** Same `aria-describedby` pattern.
+- **Icon / illustration are decorative.** Always `aria-hidden="true"` so they don't
+  duplicate the title in the AT tree.
+- **Actions are real buttons.** `<Button>` / `<Button asChild><a/>` — full keyboard
+  support, focus ring, native semantics.
+- **`href` actions are safe by default.** `target="_blank"` without `rel` injects
+  `rel="noopener noreferrer"`.
+- **axe-core.** Zero violations across `variant × size × align`, including
+  compound mode and the auto-Spinner loading variant.
+
+## Theming
+
+```ts
+defineTheme({
+  components: {
+    EmptyState: {
+      defaultProps: { size: 'lg', bordered: true },
+      styleOverrides: {
+        root: 'bg-bg-paper',
+        icon: 'shadow-sm',
+        title: 'tracking-tight',
+        description: 'leading-loose',
+        actions: 'gap-3',
+      },
+    },
+  },
+});
+```
+
+Each of the six slots (`root` / `icon` / `illustration` / `title` / `description` / `actions`)
+is themable independently. `defaultProps` applies under both the prop-driven and compound APIs.
+
+## Integration patterns
+
+| Surface     | Recommended composition                                                                              |
+| ----------- | ---------------------------------------------------------------------------------------------------- |
+| Data table  | `<EmptyState size="sm" bordered icon={…} title="No rows" primaryAction={{ label: 'Add row', … }} />` |
+| Search page | `<EmptyState illustration={…} title="No results" primaryAction={{ label: 'Clear filters' }} />`      |
+| Dashboard   | `<EmptyState size="lg" icon={…} title="No data yet" primaryAction={{ label: 'Connect a source' }} />`|
+| Error boundary | `<EmptyState variant="error" title="Something went wrong" primaryAction={{ label: 'Retry' }} />`  |
+| Suspense fallback | `<EmptyState variant="loading" title="Loading workspace" />`                                  |
+| First-run   | `<EmptyState size="lg" illustration={…} title="Welcome!" primaryAction={{ label: 'Get started' }} />` |
+
+DataGrid (Phase 27), FileUpload (Phase 36), and Combobox (Phase 34) can consume EmptyState as
+their default empty / no-results slot content once those phases ship.
+
+## Out of scope (future phases)
+
+- **`<EmptyState.Footer>`** — empty states should make the "next step" obvious via Actions;
+  a separate footer slot is feature creep.
+- **Built-in illustrations** — illustration assets are a brand decision; the DS ships the
+  container, the consumer ships the artwork.
+- **`<NoResults>` / `<ErrorState>` aliases** — `variant="error"` and the search-results
+  pattern cover both cases without separate exports.
+- **Auto-i18n** — the DS doesn't currently ship i18n strings; consumer-supplied `title` /
+  `description` are the only translatable text.

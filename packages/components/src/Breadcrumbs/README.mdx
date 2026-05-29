@@ -1,0 +1,171 @@
+## Overview
+
+`<Breadcrumbs>` shows the user's path through a nested hierarchy:
+
+```
+Home / Users / John Smith / Settings
+```
+
+It ships in two flavors that resolve to the same `<nav><ol>…</ol></nav>` shape:
+
+- **Array API** — pass `items={[{ label, href }, …]}`. Best for dynamic paths from a router.
+- **Compound API** — `<Breadcrumbs.Item>` / `<Breadcrumbs.Separator>` children. Best when items
+  diverge (icons, custom render, mixed link types).
+
+The component supports custom separators, overflow collapse via `<Menu>`, polymorphic items
+for router integration, and full RTL.
+
+## Anatomy
+
+| Subpart                     | Element                        | Role                                                 |
+| --------------------------- | ------------------------------ | ---------------------------------------------------- |
+| `<Breadcrumbs>`             | `<nav aria-label="Breadcrumb">` + `<ol>` | container + ordered list of crumbs              |
+| `<Breadcrumbs.Item>`        | `<li>` wrapping `<span>` / `<a>` / `asChild` | a single crumb; `current` paints non-interactive |
+| `<Breadcrumbs.Separator>`   | `<li role="presentation" aria-hidden>` | visual divider; SR skips it                   |
+| Overflow trigger (internal) | `<li>` + `<Menu>` from `apx-ds` | collapsed-middle dropdown when `maxItems` is set |
+
+## Examples
+
+The default example is interactive — every link is clickable, and the truncated example below
+shows the overflow `<Menu>` for hidden crumbs.
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="Truncated" />
+
+<ExampleBlock for="CustomSeparator" />
+
+<ExampleBlock for="WithIcons" />
+
+<ExampleBlock for="RouterLink" />
+
+<ExampleBlock for="RenderItem" />
+
+<ExampleBlock for="Compound" />
+
+<ExampleBlock for="Variants" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="Colors" />
+
+<ExampleBlock for="Rtl" />
+
+<ExampleBlock for="LongLabels" />
+
+## Props
+
+<PropsTable />
+
+## Truncation / overflow
+
+When `items.length > maxItems`, the middle items collapse into a single `<Menu>` trigger
+(visualized as an ellipsis button). `itemsBeforeCollapse` / `itemsAfterCollapse` (default `1`
+each) control how many items remain on each end.
+
+The overflow dropdown is rendered through the same `<Menu>` primitive (Phase 22) that powers
+the rest of the DS — no custom dropdown logic lives in Breadcrumbs. Clicking a hidden crumb
+navigates to its `href` / `to`; consumers using a router should provide `renderItem` so each
+hidden crumb renders inside the menu as their router-aware element.
+
+## Accessibility
+
+- Root is `<nav aria-label="Breadcrumb">` (override via `aria-label` prop). The `<ol>` inside
+  preserves order semantics — screen readers announce "1 of N", "2 of N", etc.
+- Each crumb is an `<li>` wrapping its content (span for current / asChild for link).
+- Last item (or any item with `current={true}` / no `href`) carries `aria-current="page"`.
+- Separators have `role="presentation"` + `aria-hidden="true"` so SRs don't read "slash slash
+  slash" between every item.
+- Overflow trigger is a `<button aria-label="Show hidden navigation items" aria-haspopup="menu">`.
+- Keyboard: native Tab through link items; the overflow Menu uses Menu's existing keyboard
+  pattern (`Enter` / arrows / type-ahead).
+- axe-core: zero violations across the variant × color matrix + overflow + compound API cells.
+
+## Router integration
+
+```tsx
+import Link from 'next/link';
+
+<Breadcrumbs>
+  <Breadcrumbs.Item asChild>
+    <Link href="/">Home</Link>
+  </Breadcrumbs.Item>
+  <Breadcrumbs.Item asChild>
+    <Link href="/users">Users</Link>
+  </Breadcrumbs.Item>
+  <Breadcrumbs.Item current>John Smith</Breadcrumbs.Item>
+</Breadcrumbs>;
+```
+
+For dynamic paths, the array API plus `renderItem` is usually cleaner:
+
+```tsx
+<Breadcrumbs
+  items={crumbsFromRouter}
+  renderItem={({ item, isCurrent, defaultClassName }) =>
+    isCurrent ? (
+      <span aria-current="page" className={defaultClassName}>
+        {item.label}
+      </span>
+    ) : (
+      <Link href={item.href ?? item.to ?? '#'} className={defaultClassName}>
+        {item.label}
+      </Link>
+    )
+  }
+/>
+```
+
+## Theming
+
+Four override slots are exposed: `root`, `list`, `item`, `separator`, `overflowTrigger`. Each
+is merged through the same `useThemedClasses` precedence chain every DS component uses.
+
+```tsx
+<ThemeProvider
+  theme={defineTheme({
+    components: {
+      Breadcrumbs: {
+        defaultProps: { variant: 'soft', color: 'primary' },
+        styleOverrides: {
+          list: 'rounded-md bg-bg-subtle px-2 py-1',
+          item: 'font-medium',
+          separator: 'opacity-50',
+        },
+      },
+    },
+  })}
+>
+  {children}
+</ThemeProvider>
+```
+
+## RTL
+
+- The `<ol>` flows right-to-left automatically inside `dir="rtl"`.
+- Long-label truncation uses logical-CSS `truncate` + `max-w-*` — works in both directions.
+- Chevron separators should use a logical icon (`<ChevronEnd />`) so they flip; symmetric
+  separators like `/` or `·` need no change.
+
+## i18n
+
+The plan calls for `<I18nProvider>` integration (translatable `Breadcrumb` and
+`Show hidden navigation items` strings). That primitive hasn't shipped yet, so this phase
+exposes both strings as overridable props (`aria-label`, `overflowAriaLabel`). When
+`<I18nProvider>` lands, the same prop surface will plug into the translation hook with no
+breaking changes.
+
+## Do / Don't
+
+- **Do** use the array API for dynamic paths from your router.
+- **Do** put `aria-current="page"` on the destination crumb (the array API does this for you
+  when the last item has no `href`).
+- **Do** use `maxItems` to keep deep paths inside narrow containers.
+- **Don't** wrap individual crumbs in a separate `<nav>` — the root already handles that.
+- **Don't** put critical actions in a breadcrumb — it's a navigation indicator, not a toolbar.
+
+## Out of scope (future)
+
+- Per-item overflow priority (e.g. always keep crumb #2 visible when collapsing).
+- Drag-to-reorder — not a DS concern.
+- Animated collapse — overflow opens through Menu's existing animation.

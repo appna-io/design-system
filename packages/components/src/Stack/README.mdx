@@ -1,0 +1,164 @@
+# Stack
+
+`<Stack />`, `<HStack />`, `<VStack />`, and `<Spacer />` are the DS's flex-based layout vocabulary.
+They cover ~95% of layout composition in product surfaces so consumers can stop reaching for raw
+`<div className="flex …">` everywhere.
+
+- **`<Stack>`** — generic flex container. Defaults to `direction="column"`.
+- **`<HStack>`** — same surface, `direction` locked to `row`. Reads better at the call site.
+- **`<VStack>`** — same surface, `direction` locked to `column`. Reads as explicit intent.
+- **`<Spacer>`** — `flex: 1` separator (or a fixed-size span). Partner primitive that the divider
+  inserter recognizes via the `__sds_spacer` marker.
+
+## Anatomy
+
+```tsx
+import { HStack, Spacer, Stack, VStack } from 'apx-ds';
+
+<Stack gap={4}>
+  <Card>One</Card>
+  <Card>Two</Card>
+</Stack>
+
+<HStack gap={2} align="center">
+  <Avatar />
+  <span>Ada Lovelace</span>
+  <Spacer />
+  <Button>Edit</Button>
+</HStack>
+```
+
+Stack has **no visual variants** — it's invisible by design. Only layout axes:
+
+| Axis        | Values                                                                       | Default     |
+| ----------- | ---------------------------------------------------------------------------- | ----------- |
+| `direction` | `column` &middot; `column-reverse` &middot; `row` &middot; `row-reverse`     | `column`    |
+| `align`     | `start` &middot; `center` &middot; `end` &middot; `stretch` &middot; `baseline` | `stretch`   |
+| `justify`   | `start` &middot; `center` &middot; `end` &middot; `between` &middot; `around` &middot; `evenly` | `start`     |
+| `gap`       | `0` &middot; `px` &middot; `0.5` &middot; `1` &middot; `2` &middot; `3` &middot; `4` &middot; `5` &middot; `6` &middot; `8` &middot; `10` &middot; `12` | undefined |
+| `wrap`      | `false` &middot; `true` &middot; `reverse`                                   | `false`     |
+| `inline`    | `false` &middot; `true`                                                      | `false`     |
+| `fullWidth` | `false` &middot; `true`                                                      | `false`     |
+
+Every axis accepts a `ResponsiveValue<T>` — pass `{ base: 'column', md: 'row' }` and the recipe
+emits `flex-col md:flex-row` via the engine's native responsive support.
+
+## Gap (and overrides)
+
+`gap` controls both axes; `rowGap` (Tailwind `gap-y-*`) and `columnGap` (Tailwind `gap-x-*`) split
+the spacing per axis when set. When only one override is provided the other axis falls back to
+the unified `gap` value:
+
+```tsx
+<Stack gap={2} />                     {/* gap-2 on both axes */}
+<Stack gap={2} rowGap={4} />          {/* gap-x-2 (cols) + gap-y-4 (rows) */}
+<Stack rowGap={1} columnGap={2} />    {/* gap-y-1 + gap-x-2, no unified gap */}
+```
+
+The 13-entry spacing scale maps 1:1 onto Tailwind's standard `gap-*` ladder; `'px'` covers the
+1px hairline gap.
+
+## Dividers
+
+Pass any node to `divider` and Stack auto-inserts it between adjacent non-Spacer siblings:
+
+```tsx
+<Stack divider={<hr className="h-px bg-border border-0" />} gap={2}>
+  <Item />
+  <Item />
+  <Item />
+</Stack>
+```
+
+- Spacer edges are skipped — a Spacer already creates separation.
+- Falsy children (`false`, `null`, `undefined`) are filtered before counting siblings, so
+  conditional rendering doesn't produce orphan dividers.
+- Element dividers are cloned with a stable key per insertion; primitives are wrapped in a keyed
+  `<Fragment>`.
+
+## Spacer
+
+Two modes:
+
+```tsx
+<HStack>
+  <Cancel />
+  <Spacer />              {/* greedy: flex:1, pushes the next sibling to the end */}
+  <Save />
+</HStack>
+
+<VStack>
+  <Header />
+  <Spacer size={6} />     {/* fixed 24px span on the parent's main axis */}
+  <Body />
+</VStack>
+```
+
+Spacer is `aria-hidden="true"`. Use `axis="block"` to pin a fixed Spacer to the vertical axis
+when the parent isn't a Stack or you want to override the auto-detection.
+
+## Polymorphism
+
+`as` swaps the root element (`<nav>`, `<ul>`, `<section>`, …). For the rare case where the
+element already exists (e.g. a router `<Link>`), use `asChild` to merge Stack's props onto the
+single child via `<Slot>`:
+
+```tsx
+<Stack asChild gap={2}>
+  <a href="/x">…</a>             {/* renders the <a>, with flex + gap-2 applied */}
+</Stack>
+```
+
+`as` and `asChild` are mutually exclusive — a dev warning fires when both are set; `asChild`
+wins at runtime.
+
+## Examples
+
+<ExampleBlock for="Basic" title="Basic — vertical stack with gap" />
+<ExampleBlock for="Horizontal" title="Horizontal — HStack with align center" />
+<ExampleBlock for="Responsive" title="Responsive — direction column → row at md" />
+<ExampleBlock for="WithDividers" title="With dividers — auto-inserted between siblings" />
+<ExampleBlock for="WithSpacer" title="With Spacer — push actions to opposite ends" />
+<ExampleBlock for="Justify" title="Justify — all six distribution values" />
+<ExampleBlock for="Align" title="Align — all five cross-axis values" />
+<ExampleBlock for="Gap" title="Gap — spacing scale from 0 to 8" />
+<ExampleBlock for="Wrap" title="Wrap — flex-wrap with badges" />
+<ExampleBlock for="PolymorphicAs" title="Polymorphic — as='nav' and as='ul'" />
+<ExampleBlock for="AsChild" title="asChild — wrap an anchor as the Stack root" />
+<ExampleBlock for="Nested" title="Nested — HStack inside VStack for a card row" />
+
+## Accessibility
+
+- Stack itself carries no implicit role — it's a layout primitive (`<div>` by default).
+- For lists, use `as="ul"` + `<li>` children, or `role="list"` on the Stack with `role="listitem"`
+  on children. axe-core: zero violations across the matrix.
+- Spacer is `aria-hidden="true"` (purely visual).
+- No focus management — layout doesn't carry focus semantics.
+
+## RTL
+
+`flex-direction: row` flows logical-start → logical-end natively in both LTR and RTL. `justify-start`
+/ `justify-end` are also logical. `align-*` operates on the cross axis and is direction-agnostic.
+**No RTL-specific code anywhere in Stack.**
+
+## Theming
+
+Stack and the two alias components (HStack / VStack) all read from `theme.components.Stack.styleOverrides.root` —
+override once, applies to all three. Spacer reads from `theme.components.Spacer.styleOverrides.root`.
+Consumer `className` always wins via `tailwind-merge`.
+
+## Bundle
+
+Target: **< 1 KB gz combined** for `Stack + HStack + VStack + Spacer`. No state, no effects, no
+icons; only a tiny pure transform (`stackChildrenWithDivider`) and a literal-class gap resolver.
+
+## Do / Don't
+
+- **Do** reach for `<Stack>` / `<HStack>` / `<VStack>` instead of `<div className="flex …">`.
+- **Do** put `<Spacer />` between siblings to push them apart in an HStack toolbar.
+- **Do** use `as="nav"` / `as="ul"` to add semantic intent without losing the layout primitive.
+- **Don't** add `margin` to children — Stack handles spacing via `gap`. Margins compound with
+  `gap` and produce inconsistent rhythm.
+- **Don't** mix `as` and `asChild` — pick one.
+- **Don't** reach for `direction="row-reverse"` in LTR-only layouts. `row` already flips
+  correctly in RTL; `row-reverse` is for the rare "always reverse" intent.

@@ -1,0 +1,40 @@
+/*
+ * apx-ds — optional reset / base styles
+ *
+ * Opt-in: `import 'apx-ds/styles/reset.css';` in your app entry. Compatible with Tailwind's
+ * Preflight (apply ours *after* Preflight to take effect on the DS-specific tokens).
+ */
+
+:root {
+  color-scheme: light dark;
+  /* Use DS token defaults so plain text on the page already gets themed colors */
+  background-color: var(--sds-palette-background-default);
+  color: var(--sds-palette-foreground-default);
+  font-family: var(--sds-font-sans);
+}
+
+:root[data-mode='dark'] {
+  color-scheme: dark;
+}
+
+:root[data-mode='light'] {
+  color-scheme: light;
+}
+
+/* Better focus visibility — uses the DS focus-ring token. */
+:focus-visible {
+  outline: 2px solid var(--sds-focus-ring);
+  outline-offset: 2px;
+}
+
+/* Honor reduced-motion at the page level. Individual components can still opt back in. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

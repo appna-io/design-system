@@ -1,0 +1,210 @@
+## Overview
+
+`<Toggle>` and `<ToggleGroup>` are the design system's **press-state** primitives — buttons that
+remember whether they're currently "on". `<Toggle>` is the one-off case (a sidebar collapse, a
+"show/hide" affordance, a mute button); `<ToggleGroup>` is the coordinated case (segmented
+controls, single-pick toolbars, multi-pick formatting bars).
+
+They share a visual language with `<Button>` on purpose — a pressed toggle should look like a
+button that's been activated, not a different control altogether — and lean entirely on the
+already-shipped engine (`useControllableState`, `cv()`, `useThemedClasses`) plus a small
+group-level state machine to coordinate single-vs-multi selection.
+
+## Why this exists
+
+Two patterns recur across product UIs and deserve a first-class primitive instead of being
+re-invented per app:
+
+1. **Pressed state without a checkbox.** Toolbars and segmented controls aren't form fields
+   in the HTML sense — they don't post values, they don't live inside `<form>`s. Using
+   `<input type="checkbox">` styled to look like a button just to get press semantics buys
+   you accessibility headaches (form-control labelling rules, browser default focus rings,
+   tab-order surprises). `<Toggle>` / `<ToggleGroup.Item>` is `role="button"` /
+   `role="radio"` plus `aria-pressed` / `aria-checked` — exactly the right ARIA for the
+   visual.
+2. **Single-pick vs multi-pick on one component.** Toolbars need both ("alignment is a
+   single-pick; bold/italic/underline are multi-pick"). `<ToggleGroup type="...">` is the
+   discriminator — same recipe, same keyboard model, same theming, two ARIA contracts.
+
+## Modes
+
+`<ToggleGroup>` is a discriminated union on `type`:
+
+- `type="single"` (default) — `value` is a string. **At most one item pressed.** Root is
+  `role="radiogroup"`, items are `role="radio"`, arrow keys move focus **and activate** (the
+  canonical radio pattern). Set `required={true}` to forbid the user from clearing the active
+  item (one value is always pressed).
+- `type="multiple"` — `value` is `string[]`. Each item toggles independently. Root is
+  `role="group"`, items are `role="button"` with `aria-pressed`, arrow keys move focus
+  **without** activating; Space / Enter toggle.
+
+## Anatomy
+
+```
+┌────────────────────────────────────────────────────────────┐
+│ ToggleGroup (role=radiogroup or role=group)               │
+│ ┌──────────┐ ┌──────────┐ ┌──────────┐                    │
+│ │  Item    │ │  Item    │ │  Item    │   …                │
+│ │  (radio  │ │  (radio  │ │  (radio  │                    │
+│ │  or btn) │ │  or btn) │ │  or btn) │                    │
+│ └──────────┘ └──────────┘ └──────────┘                    │
+└────────────────────────────────────────────────────────────┘
+
+┌────────────────┐
+│  Toggle        │   role="button" + aria-pressed
+│  (standalone)  │
+└────────────────┘
+```
+
+`<Toggle>` is intentionally standalone — it does not require (and does not consume) a
+`<ToggleGroup>` ancestor. Reach for it when you have one toggle, not a coordinated set.
+
+## Variants × Colors
+
+Three variants (`solid` / `outline` / `ghost`) × seven colors. The variant determines the
+**off-state** chrome; the `data-state="on"` rules layer the pressed-state tint on top using
+the color role:
+
+| Variant   | Off state                                | Pressed state (color-tinted)                        |
+| --------- | ---------------------------------------- | --------------------------------------------------- |
+| `solid`   | subtle tinted surface (color-subtle bg)  | bold tinted surface (color-solid bg + inverted fg)  |
+| `outline` | bordered, transparent bg                 | filled (color-solid bg + inverted fg)               |
+| `ghost`   | transparent                              | filled tint (color-subtle bg + color-solid fg)      |
+
+**Note on `soft`:** the original phase plan called for a 4th `soft` variant. The DS's
+`<Button>` ships three variants (`solid` / `outline` / `ghost`), and the plan also
+specified that `<Toggle>` must **reuse `buttonRecipe` without modifying it**. Those two
+constraints conflict, and modifying `<Button>` to add a fourth variant is out of scope
+here. The `solid` variant's off-state already gives you the tinted-surface look that a
+`soft` variant would have provided, so the visual gap is small. We'll revisit
+`soft` for both Button and Toggle in a follow-up phase.
+
+## Sizes
+
+| Size | Height | Padding (icon-only) | Padding (with label) | Font        | Icon |
+| ---- | ------ | ------------------- | -------------------- | ----------- | ---- |
+| `sm` | 32px   | min-w-8             | px-2                 | `text-xs`   | 16px |
+| `md` | 40px   | min-w-10            | px-3                 | `text-sm`   | 16px |
+| `lg` | 48px   | min-w-12            | px-4                 | `text-base` | 16px |
+
+## Attached (segmented control)
+
+Set `attached={true}` on `<ToggleGroup>` to merge neighboring items into a single bar with
+shared borders and flattened inner corners — the classic "segmented control" look. Rounding
+adapts to the group's `orientation`, and uses **logical properties** (`rounded-s-md`,
+`rounded-e-md`, `ms-`, `me-`) so RTL works for free.
+
+## Examples
+
+<ExampleBlock for="BasicToggle" title="Standalone toggle — pressed state" />
+<ExampleBlock for="BasicGroupSingle" title="ToggleGroup type=single (radio semantics)" />
+<ExampleBlock for="BasicGroupMultiple" title="ToggleGroup type=multiple (independent press)" />
+<ExampleBlock for="Attached" title="Attached — segmented control" />
+<ExampleBlock for="Vertical" title="Vertical orientation (stacked + attached)" />
+<ExampleBlock for="Variants" title="Variants (solid / outline / ghost)" />
+<ExampleBlock for="Sizes" title="Three sizes (sm / md / lg)" />
+<ExampleBlock for="Colors" title="Seven colors × solid variant" />
+<ExampleBlock for="Required" title="type=single + required (cannot deselect)" />
+<ExampleBlock for="WithLabel" title="Icon + text label" />
+<ExampleBlock for="IconOnly" title="Icon-only items (with aria-label)" />
+<ExampleBlock for="DisabledItem" title="Per-item disable + group disable" />
+<ExampleBlock for="Toolbar" title="Composed toolbar — multi + single in one bar" />
+
+## Props
+
+### Toggle (standalone)
+
+| Prop              | Type                                | Default     | Notes                                                              |
+| ----------------- | ----------------------------------- | ----------- | ------------------------------------------------------------------ |
+| `pressed`         | `boolean`                           | —           | Controlled pressed state. Pair with `onPressedChange`.             |
+| `defaultPressed`  | `boolean`                           | `false`     | Uncontrolled initial state.                                        |
+| `onPressedChange` | `(pressed: boolean) => void`        | —           | Fires on every flip.                                               |
+| `variant`         | `'solid' \| 'outline' \| 'ghost'`   | `'ghost'`   | Stylistic family. Responsive via `{ base, md }` shape.             |
+| `size`            | `'sm' \| 'md' \| 'lg'`              | `'md'`      |                                                                    |
+| `color`           | one of seven palette roles          | `'neutral'` | Drives the pressed-state tint.                                     |
+| `disabled`        | `boolean`                           | `false`     |                                                                    |
+| `aria-label`      | `string`                            | —           | **Required** when children are icon-only.                          |
+| `className`       | `string`                            | —           | Merged via `tailwind-merge`.                                       |
+| `sx`              | `Sx`                                | —           | Theme-aware inline style.                                          |
+
+### ToggleGroup (root)
+
+| Prop              | Type                                                 | Default        | Notes                                                                        |
+| ----------------- | ---------------------------------------------------- | -------------- | ---------------------------------------------------------------------------- |
+| `type`            | `'single' \| 'multiple'`                            | `'single'`     | Discriminates `value` / `defaultValue` / `onValueChange` between string/array. |
+| `value`           | `string \| string[]`                                | —              | Controlled. Pair with `onValueChange`.                                       |
+| `defaultValue`    | `string \| string[]`                                | `''` / `[]`    | Uncontrolled initial.                                                        |
+| `onValueChange`   | `(value: string \| string[]) => void`               | —              |                                                                              |
+| `required`        | `boolean`                                            | `false`        | **Single-mode only.** Clicking the active item is a no-op (always pressed).  |
+| `variant`         | `'solid' \| 'outline' \| 'ghost'`                    | `'ghost'`      |                                                                              |
+| `size`            | `'sm' \| 'md' \| 'lg'`                              | `'md'`         |                                                                              |
+| `color`           | one of seven palette roles                           | `'neutral'`    | Pressed-state tint for every item.                                           |
+| `attached`        | `boolean`                                            | `false`        | Merge items into a segmented control.                                        |
+| `orientation`     | `'horizontal' \| 'vertical'`                        | `'horizontal'` | Layout axis; also remaps arrow keys.                                         |
+| `disabled`        | `boolean`                                            | `false`        | Disables every item. Per-item `disabled` is additive.                        |
+| `aria-label`      | `string`                                             | —              | **One of** `aria-label` / `aria-labelledby` is required.                     |
+| `aria-labelledby` | `string`                                             | —              |                                                                              |
+
+### ToggleGroup.Item
+
+| Prop        | Type      | Default  | Notes                                                                |
+| ----------- | --------- | -------- | -------------------------------------------------------------------- |
+| `value`     | `string`  | required | Unique key identifying this item in the group's `value`.             |
+| `disabled`  | `boolean` | `false`  | Disable just this item.                                              |
+| `aria-label`| `string`  | —        | **Required** when children are icon-only.                            |
+
+## Accessibility
+
+- **W3C ARIA patterns.** `type="single"` follows the **Radio Group** pattern (`role="radiogroup"` +
+  `role="radio"` + `aria-checked` + roving tabindex + arrow-activate). `type="multiple"` follows
+  the **Toolbar / press-button** pattern (`role="group"` + `role="button"` + `aria-pressed` + all
+  items tabbable + arrow-move-focus-only).
+- **Keyboard.** Arrow keys move (and in single mode, activate). Home/End jump to the first / last
+  enabled item. Space and Enter activate via native `<button>` semantics. Disabled items are
+  skipped during navigation.
+- **Roving tabindex (single mode).** Only the pressed item is in the tab sequence; if nothing is
+  pressed, the first enabled item is the entry point. Multi-mode keeps every item in the tab
+  sequence — there's no "active" item to rove on, so the user can Tab through marks individually.
+- **Group labels.** A `<ToggleGroup>` **must** carry an `aria-label` or `aria-labelledby`. Dev
+  builds emit a console warning otherwise.
+- **Icon-only items.** An item whose children are only an icon **must** supply its own
+  `aria-label`. Dev builds emit a warning when this is missing.
+- **Reduced motion.** The pressed-state transition shortens to `~120ms` under
+  `prefers-reduced-motion: reduce`. There are no JS-driven animations to disable.
+- **axe-core.** Zero violations across the full 3 × 7 variant × color matrix, in both modes,
+  vertical and horizontal orientations, attached and non-attached.
+
+## Theming
+
+```ts
+defineTheme({
+  components: {
+    Toggle: {
+      defaultProps: { variant: 'outline', size: 'sm', color: 'primary' },
+      styleOverrides: {
+        root: '',
+      },
+    },
+    ToggleGroup: {
+      defaultProps: { variant: 'outline', size: 'sm' },
+      styleOverrides: {
+        root: '',
+        item: 'data-[state=on]:shadow-inner',
+      },
+    },
+  },
+});
+```
+
+Slot keys: `root` (and `item` on `ToggleGroup` for the attached-position styling).
+
+## Out of scope (future phases)
+
+- **`soft` variant.** Requires extending `<Button>` first — out of scope here. The `solid`
+  variant's off state already covers most of what `soft` would have provided.
+- **`size="xs"`**. Three sizes covers ~95% of toolbar / segmented-control use cases. We'll add
+  `xs` if the DS standardizes on a 4-size scale across all controls.
+- **Two-line items (icon above label).** Tray-style controls. Composition over the existing
+  recipe is fine; not a new variant.
+- **Drag-to-reorder of items.** Outside the toggle/segmented-control problem; will land
+  alongside a sortable-list primitive.

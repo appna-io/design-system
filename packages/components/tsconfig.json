@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "noEmit": true
+  },
+  "include": ["src/**/*", "__tests__/**/*", "vitest.config.ts", "vitest.setup.ts"],
+  "exclude": ["node_modules", "dist", ".turbo", "src/**/examples/**"]
+}

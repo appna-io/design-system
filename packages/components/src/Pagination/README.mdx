@@ -1,0 +1,269 @@
+## Overview
+
+`<Pagination>` is the standalone DS primitive for paging through long lists, gallery
+grids, search results, and any "showing X–Y of N" surface where a full DataGrid
+would be overkill. It ships with both **page-numbered** and **cursor** modes, four
+self-contained **layouts**, a full **i18n + RTL** story, and a complete
+visual matrix (4 variants × 7 colors × 3 sizes × 3 shapes = **252 cells**).
+
+`<DataGrid.Pagination>` is implemented as a thin wrapper over this component, so
+the two surfaces never visually drift apart.
+
+## Anatomy
+
+| Subpart                    | Element                                     | Role                                                    |
+| -------------------------- | ------------------------------------------- | ------------------------------------------------------- |
+| `<Pagination>`             | `<nav aria-label="…">`                      | container; carries `data-pagination` + axis attributes  |
+| Page button (internal)     | `<button aria-label="Page N">`              | one per page in the rendered window; `aria-current="page"` on the active one |
+| Chevron buttons (internal) | `<button aria-label="First/Prev/Next/Last">` | nav controls; disabled at boundaries                    |
+| Ellipsis (internal)        | `<span aria-hidden>…</span>`                | decorative; not announced                               |
+| Range label (internal)     | `<span>1–25 of 120</span>`                  | "showing X–Y of N" status                               |
+| Size picker (internal)     | `<Select>`                                  | uses the real DS Select; opt out via `hidePageSize`     |
+
+## Modes
+
+| Mode      | Required props                                                            | Renders                                                                                                              |
+| --------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `page`    | `totalCount` + `pageIndex` + `pageSize`                                   | first / prev / page-number window / next / last + range label + size picker                                          |
+| `cursor`  | `hasPreviousPage` + `hasNextPage` + `onPrevious` + `onNext`               | prev / next only (no page list, no range, no size picker — the server has no concept of "total")                     |
+
+In `page` mode, `pageIndex` is **0-based** internally and **1-based** in every visible
+label (matching JS array indexing while keeping the user-facing "Page 1 of 5"
+contract). The `formatPageNumber` helper translates between them.
+
+## Layouts
+
+| Layout       | What renders                                                                                            |
+| ------------ | ------------------------------------------------------------------------------------------------------- |
+| `full`       | First · Prev · `[1, 2, …, current, …, N]` · Next · Last · Range label · Page-size picker (the default) |
+| `compact`    | Prev · "Page X of Y" · Next                                                                             |
+| `pages-only` | `[1, 2, …, current, …, N]` (no chrome)                                                                  |
+| `simple`     | Prev · Next                                                                                             |
+
+Below the `sm` breakpoint, `full` **auto-degrades to `compact`** so mobile consumers
+don't get a wrapped/overflowing row. Set `responsive={false}` to lock the layout
+regardless of viewport.
+
+## Examples
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="Controlled" />
+
+<ExampleBlock for="Cursor" />
+
+<ExampleBlock for="PageSize" />
+
+<ExampleBlock for="ManyPages" />
+
+<ExampleBlock for="Compact" />
+
+<ExampleBlock for="Simple" />
+
+<ExampleBlock for="PagesOnly" />
+
+<ExampleBlock for="Variants" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="Colors" />
+
+<ExampleBlock for="Shapes" />
+
+<ExampleBlock for="Rtl" />
+
+<ExampleBlock for="I18n" />
+
+<ExampleBlock for="WithListAbove" />
+
+## Props
+
+<PropsTable />
+
+## Window computation — `computePageWindow()`
+
+The page-number list collapses to a fixed-length window around the current page
+with ellipses elsewhere. The algorithm matches MUI's `usePagination` verbatim — a
+sliding window of constant length (`2 * siblingCount + 1`) that shifts toward
+whichever boundary the current page is closest to.
+
+```ts
+type PageItem = number | 'ellipsis-start' | 'ellipsis-end';
+
+computePageWindow({
+  pageIndex: 4,           // 0-based
+  pageCount: 10,
+  siblingCount: 1,        // default 1
+  boundaryCount: 1,       // default 1
+});
+// → [1, 'ellipsis-start', 4, 5, 6, 'ellipsis-end', 10]
+```
+
+Key invariants (verified exhaustively in `Pagination.compute.test.ts`):
+
+- The current page is **always present**.
+- First / last pages are present whenever `boundaryCount ≥ 1`.
+- Numeric items are strictly monotonically increasing and never duplicated.
+- Two adjacent ellipses never appear.
+- A gap of exactly **one page** is replaced with the page number itself (avoids
+  the `1 … 3 4 5` anti-pattern).
+- Ellipses are split into `'ellipsis-start'` / `'ellipsis-end'` sentinels so a
+  future "jump back / forward" interaction can distinguish them.
+
+## Headless — `usePagination()`
+
+Build your own pagination chrome and let `usePagination()` own the state machine:
+
+```tsx
+import { usePagination } from 'apx-ds';
+
+function MyPager() {
+  const grid = usePagination({
+    totalCount: 250,
+    defaultPageSize: 25,
+    siblingCount: 2,
+    onChange: ({ pageIndex, pageSize }) => refetch({ pageIndex, pageSize }),
+  });
+
+  return (
+    <div>
+      Showing {grid.fromRow}–{grid.toRow} of {grid.totalCount}
+      <button onClick={grid.goPrevious} disabled={grid.atFirstPage}>‹</button>
+      {grid.pageItems.map((item, i) =>
+        typeof item === 'number' ? (
+          <button key={item} aria-current={item - 1 === grid.pageIndex ? 'page' : undefined}>
+            {item}
+          </button>
+        ) : (
+          <span key={`${item}-${i}`}>…</span>
+        ),
+      )}
+      <button onClick={grid.goNext} disabled={grid.atLastPage}>›</button>
+    </div>
+  );
+}
+```
+
+The hook exposes the same surface in both modes — `mode='cursor'` flips
+`pageCount` to `Infinity`, returns an empty `pageItems`, and routes `goPrevious`
+/ `goNext` through the consumer callbacks.
+
+## Accessibility
+
+- Root is `<nav aria-label="Pagination">` (override via `aria-label` prop or
+  `translations.paginationLabel`).
+- Page buttons are real `<button>` elements with `aria-label="Page N"` (or
+  `"Page N, current page"` for the active one) and `aria-current="page"` on
+  the active button.
+- First / Prev / Next / Last buttons get `aria-label` from the translations
+  bundle; they're `disabled` at boundaries (cursor mode uses
+  `hasPreviousPage` / `hasNextPage`).
+- Ellipsis spans are `aria-hidden="true"` so SRs don't read "more pages" between
+  every gap.
+- Page-size picker is the real DS `<Select>` (already ARIA-correct) with
+  `aria-label` from `translations.paginationRowsPerPage`.
+- Range label is a plain `<span>` so SRs announce it naturally with the
+  surrounding chrome.
+- Keyboard: native Tab through buttons; Enter / Space activate. The page-size
+  Select uses Select's existing keyboard pattern (arrows, type-ahead).
+- **axe-core: 0 violations across the full 252-cell matrix** + layout × direction
+  sweep (`__tests__/Pagination.a11y.test.tsx`, 268 cells total).
+
+## RTL
+
+- Prev / Next / First / Last chevrons render as logical-start / logical-end —
+  the icon component flips automatically under `dir="rtl"` so prev is always
+  "toward the start" regardless of writing direction.
+- Page-number list flow follows the surrounding `dir` naturally (1 sits on the
+  logical start edge in both LTR and RTL).
+- ARIA labels stay logical ("Previous page", not "Left arrow") so screen-reader
+  users get a direction-agnostic instruction.
+
+## I18n
+
+Pagination consumes translations through three layers, highest precedence first:
+
+1. Inline `translations={…}` prop (partial — every key falls through).
+2. `<I18nProvider messages={{ Pagination: {…} }}>` context, **OR** the
+   `DataGrid` namespace (whose pagination keys overlap). Pagination is the
+   **second consumer** of the engine `<I18nProvider>` primitive — DataGrid
+   established it, Pagination promotes it from "DataGrid-only" to
+   "general-purpose."
+3. Built-in English defaults (`enPaginationTranslations`).
+
+Three bundles ship with the package:
+
+| Bundle                         | Locale | Direction |
+| ------------------------------ | ------ | --------- |
+| `enPaginationTranslations`     | `en`   | `ltr`     |
+| `hePaginationTranslations`     | `he`   | `rtl`     |
+| `arPaginationTranslations`     | `ar`   | `rtl`     |
+
+Function-shaped keys (`paginationPage`, `paginationPageCurrent`,
+`paginationOfTotal`, `paginationPageOfPages`) accept numeric inputs so
+translators can switch grammar per count (e.g. Hebrew's plural-of-two,
+Arabic's six plural categories).
+
+## DataGrid integration
+
+`<DataGrid.Pagination>` delegates to this component:
+
+```tsx
+import { Pagination } from '../../Pagination';
+
+export function DataGridPagination() {
+  const grid = useDataGridContext();
+  return (
+    <Pagination
+      totalCount={grid.totalRowCount}
+      pageIndex={grid.paginationInfo.pageIndex}
+      pageSize={grid.paginationInfo.pageSize}
+      pageSizeOptions={grid.pageSizeOptions}
+      onChange={({ pageIndex, pageSize }) => {
+        grid.setPageIndex(pageIndex);
+        grid.setPageSize(pageSize);
+      }}
+      translations={grid.t}
+      variant="ghost"
+      size="sm"
+    />
+  );
+}
+```
+
+The two surfaces share styling, accessibility, RTL behavior, and i18n bundles —
+fixing a bug in `<Pagination>` fixes it in `<DataGrid.Pagination>` simultaneously.
+
+## DRY self-check
+
+- All styling lives in the slot recipes (`paginationRootRecipe`,
+  `paginationButtonRecipe`, `paginationListRecipe`,
+  `paginationEllipsisRecipe`, `paginationRangeLabelRecipe`,
+  `paginationSizePickerRecipe`) — built with the same `cv()` primitive every
+  other DS recipe uses.
+- `computePageWindow` is pure — no DOM, no React. Testable in isolation
+  (`__tests__/Pagination.compute.test.ts`).
+- No `clsx` import — `useThemedClasses` handles class composition via
+  `tailwind-merge`.
+- DataGrid's pagination is a thin wrapper — no duplicate code paths.
+- Translations namespace overlaps with DataGrid's — single source of truth
+  inside any `<I18nProvider>` that ships either bundle.
+
+## Bundle
+
+| Surface                                                   | gz          |
+| --------------------------------------------------------- | ----------- |
+| `Pagination` only                                         | **4.49 KB** |
+| + `usePagination` + English bundle                        | **4.50 KB** |
+| + Hebrew + Arabic locale bundles                          | **4.84 KB** |
+| Full named-export surface (every recipe + helper)         | **5.23 KB** |
+| Peer: `<Select>` (only rendered when `hidePageSize=false`) | —           |
+
+Measured via `packages/components/scripts/measure-pagination.mjs` (esbuild +
+zlib, externalising peer deps + every sibling DS component including
+`<Select>`). Plan budget was **< 4 KB gz excluding `<Select>`** — the actual
+delta is `+0.49 KB` over that target, driven by the 28-rule (variant × color)
+compound matrix in `paginationButtonRecipe`. The matrix is the single largest
+contributor (6.3 KB raw → ~1.4 KB gz) and is non-negotiable given the
+acceptance criterion "4 variants × 7 colors × 3 sizes × 3 shapes (252 cells)
+snapshot."

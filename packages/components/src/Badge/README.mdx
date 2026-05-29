@@ -1,0 +1,122 @@
+## Overview
+
+`<Badge />` is the smallest stylistic primitive in apx-ds. Reach for it whenever a piece of
+UI needs a label, a count, or a status indicator — "New", "Beta", "Live", "12", "Online" —
+without competing with the surrounding content for attention.
+
+Badge intentionally ships **four** variants (one more than Button) because count/numeric badges
+benefit from a `subtle` look that ties them to a semantic role without shouting.
+
+## Variants
+
+Pick by **how much attention the label should claim** on the page:
+
+- **`solid`** — opaque fill, contrast text. Use sparingly — status labels that need attention
+  ("Critical", "Down").
+- **`outline`** — transparent fill, colored border + text. Tag-like UI; ghosts well on colored
+  backgrounds.
+- **`soft`** — palette `-subtle` background + role-colored text. **Default.** The conventional
+  "tag" look — calmly tagged, not loud.
+- **`subtle`** — neutral background + muted text + role-colored dot/icon accent. Best for counts
+  ("12") and numeric badges that shouldn't dominate.
+
+Every variant works with every `color` and every theme `variant` (`default` / `tetsu` /
+`origami` / `katana`) and adapts to the active `platform`. A Theme-Studio palette edit re-paints
+the entire 28-cell grid automatically.
+
+## Anatomy
+
+```text
+[ dot | leftIcon | label | rightIcon | × ]
+```
+
+Optional slots from left to right:
+
+- **dot** — `withDot` renders a 6–8px palette-colored circle before the label. Mutually
+  exclusive with `leftIcon` (the dot wins). Pair with `dotPulse` for "Live" indicators.
+- **leftIcon** — any `ReactNode` (commonly a `lucide-react` icon).
+- **label** — the children. The accessible name when `removable` is set.
+- **rightIcon** — only renders when `removable` is `false`.
+- **×** (remove button) — `removable` swaps the right slot with a built-in keyboard-accessible
+  `<button>` that fires `onRemove`.
+
+## Examples
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="Variants" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="Colors" />
+
+<ExampleBlock for="Shapes" />
+
+<ExampleBlock for="WithDot" />
+
+<ExampleBlock for="WithIcons" />
+
+<ExampleBlock for="Removable" />
+
+<ExampleBlock for="AsChild" />
+
+<ExampleBlock for="CountAndStatus" />
+
+## Props
+
+<PropsTable />
+
+## Accessibility
+
+- Renders a `<span>` by default — non-interactive content with no implicit role. Screen readers
+  read the label inline with surrounding text.
+- `asChild` promotes the badge to whatever element the consumer passes (`<a>`, `<button>`,
+  router `<Link>`) — full a11y semantics flow through via `Slot`.
+- `withDot` renders a decorative `aria-hidden` circle — it never appears in the accessible name.
+- `dotPulse` respects `prefers-reduced-motion` (the animation is suppressed via
+  `motion-reduce:animate-none`).
+- `removable` renders a real `<button>` with an `aria-label` derived from `children` (when it's
+  a string) or from the explicit `removeLabel` prop. Both Enter and Space activate it. A
+  dev-mode warning fires when `removable` is set with non-string children and no `removeLabel`.
+- Color contrast is verified for every variant × color cell at every size — including the
+  smallest (`sm` at `text-[10px]`).
+
+## Theming
+
+Every visual decision is a palette token. Pull the `<ThemeProvider>` knobs to remix the whole
+library, or scope overrides to Badge specifically:
+
+```tsx
+<ThemeProvider
+  theme={defineTheme({
+    components: {
+      Badge: {
+        defaultProps: { variant: 'outline', shape: 'pill' },
+        styleOverrides: {
+          root: 'tracking-wide uppercase',
+        },
+      },
+    },
+  })}
+>
+  {children}
+</ThemeProvider>
+```
+
+Instance-level overrides win via `tailwind-merge`:
+
+```tsx
+<Badge className="font-bold" sx={{ radius: 'md' }} style={{ minWidth: 32 }}>
+  3
+</Badge>
+```
+
+## Do / Don't
+
+- **Do** use `subtle` for inbox-style counts so the number doesn't dominate the nav.
+- **Do** pair `withDot dotPulse` with `color="success"` only when the indicator is actually live.
+  Don't make every badge pulse — the motion stops being meaningful.
+- **Don't** use Badge as a button. Wrap an `<a>` or `<button>` with `asChild` instead so the
+  element remains semantically interactive.
+- **Don't** stack more than three badges next to a single label — the eye stops grouping them
+  after that.

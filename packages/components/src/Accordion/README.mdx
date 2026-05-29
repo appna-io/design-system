@@ -1,0 +1,201 @@
+## Overview
+
+`<Accordion />` is the canonical **disclosure list** primitive in apx-ds — a stack of
+collapsible sections that share state. It's the first DS component that manages a list of
+toggleable values, and the first compound primitive whose subparts coordinate through a pair
+of contexts (root + per-item).
+
+Reach for it whenever a screen needs a stacked, expandable list: FAQ pages, settings
+panels, sidebars of categorized navigation, or any disclosure UX where one section at a
+time (or several, at the user's choice) is open.
+
+## Why this exists
+
+Three jobs land in this primitive that other disclosure surfaces (Tabs, Navigation drawers,
+Tree views) will reuse:
+
+1. **Compound state via context.** The root owns the open set; the trigger toggles
+   membership; the content reads its own state. Subparts coordinate without prop drilling.
+2. **CSS-grid auto-height transitions.** The open/close animation lives entirely in CSS —
+   `grid-template-rows: 0fr → 1fr` plus `min-h-0` on the inner element. Zero JavaScript
+   height measurement, zero ResizeObserver, zero `scrollHeight` reads. Smooth on long
+   content, on dynamically-resizing content, and on every modern browser since 2024.
+3. **W3C ARIA accordion pattern.** Each trigger is a real `<button>` with `aria-expanded` +
+   `aria-controls`; each content is a `role="region"` labelled by its trigger; arrow keys
+   cycle through enabled triggers; Home/End jump to first/last.
+
+## Modes
+
+`<Accordion>` ships two state shapes via the `type` prop:
+
+- `type="single"` (default) — `value` is a string. **One item open at a time.** Setting
+  `collapsible={true}` (the DS default) lets the user click the open item to close it; set
+  `collapsible={false}` to enforce "one section always open" (e.g. a settings panel with a
+  pinned first row).
+- `type="multiple"` — `value` is a `string[]`. Each item toggles independently. The
+  `collapsible` prop is ignored in this mode (multi-open is collapsible by construction).
+
+## Anatomy
+
+```
+┌────────────────────────────────────────────────────────────┐
+│ Accordion                                                  │
+│ ┌──────────────────────────────────────────────────────┐  │
+│ │ Accordion.Item                                       │  │
+│ │ ┌────────────────────────────────────────────────┐   │  │
+│ │ │ Accordion.Trigger  [leftIcon]  Label   [▾]    │   │  │
+│ │ └────────────────────────────────────────────────┘   │  │
+│ │ ┌────────────────────────────────────────────────┐   │  │
+│ │ │ Accordion.Content (CSS-grid animated)         │   │  │
+│ │ │ ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔  │   │  │
+│ │ │  region(role="region", aria-labelledby=...)   │   │  │
+│ │ └────────────────────────────────────────────────┘   │  │
+│ └──────────────────────────────────────────────────────┘  │
+│ … more Items …                                            │
+└────────────────────────────────────────────────────────────┘
+```
+
+## Variants × Colors
+
+The 4 × 7 matrix lives on `Accordion.Item`. Variant changes the chrome (continuous border
+in `solid`, per-item cards in `outline`, tinted in `soft`, chrome-less in `ghost`); color
+flows through `soft` backgrounds and `outline` borders. `solid` and `ghost` stay
+color-neutral by design — bold-color chrome on a continuous list (or a chrome-less context)
+reads as noise.
+
+| Variant   | Item chrome                                       | When to reach for it                          |
+| --------- | ------------------------------------------------- | --------------------------------------------- |
+| `solid`   | continuous border + horizontal dividers           | **Default.** FAQ pages, settings groups.      |
+| `outline` | each item is its own bordered card                | Spaced lists, card-like disclosure decks.     |
+| `soft`    | tinted card per item (color-subtle bg)            | Brand-tinted FAQ, themed disclosure groups.   |
+| `ghost`   | no chrome, only the trigger row carries weight    | Inline disclosure inside Card / settings.     |
+
+## Sizes
+
+| Size | Trigger padding | Content padding | Font        | Chevron |
+| ---- | --------------- | --------------- | ----------- | ------- |
+| `sm` | `px-3 py-2`     | `px-3 pb-3`     | `text-sm`   | 14px    |
+| `md` | `px-4 py-3`     | `px-4 pb-4`     | `text-base` | 16px    |
+| `lg` | `px-5 py-4`     | `px-5 pb-5`     | `text-lg`   | 20px    |
+
+## Examples
+
+<ExampleBlock for="Basic" title="Default — single mode, solid variant" />
+<ExampleBlock for="Multiple" title="Multiple mode — independent toggles" />
+<ExampleBlock for="Collapsible" title="collapsible=true vs false (single mode)" />
+<ExampleBlock for="Controlled" title="Controlled — parent owns value" />
+<ExampleBlock for="Variants" title="All four variants" />
+<ExampleBlock for="Sizes" title="Three sizes (sm / md / lg)" />
+<ExampleBlock for="Colors" title="Seven colors × soft variant" />
+<ExampleBlock for="WithIcons" title="Leading icons on each trigger" />
+<ExampleBlock for="IconPositionStart" title="Chevron on the logical start" />
+<ExampleBlock for="DisabledItem" title="Per-item disable" />
+<ExampleBlock for="LongContent" title="Rich content (lists, code, prose)" />
+<ExampleBlock for="FAQ" title="Canonical FAQ pattern" />
+<ExampleBlock for="Nested" title="Accordion inside Accordion" />
+
+## Props
+
+### Accordion (root)
+
+| Prop            | Type                                                                   | Default     | Notes                                                                          |
+| --------------- | ---------------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------------ |
+| `type`          | `'single' \| 'multiple'`                                               | `'single'`  | Discriminates `value` / `defaultValue` / `onValueChange` between string/array. |
+| `value`         | `string \| string[]`                                                   | —           | Controlled value. Pair with `onValueChange`.                                   |
+| `defaultValue`  | `string \| string[]`                                                   | `''` / `[]` | Uncontrolled initial value.                                                    |
+| `onValueChange` | `(value: string \| string[]) => void`                                  | —           | Fires on every change (controlled or uncontrolled).                            |
+| `collapsible`   | `boolean`                                                              | `true`      | Single-mode only. `true` lets the user close the open item by re-clicking.     |
+| `disabled`     | `boolean`                                                              | `false`     | Disables every item. Per-item `disabled` overrides.                            |
+| `variant`       | `'solid' \| 'outline' \| 'soft' \| 'ghost'`                            | `'solid'`   | Stylistic family. Responsive via `{ base, md }` shape.                         |
+| `size`          | `'sm' \| 'md' \| 'lg'`                                                 | `'md'`      | Trigger padding + content padding + font + chevron.                            |
+| `color`         | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'info' \| 'neutral'` | `'neutral'` | Drives soft backgrounds + outline borders.                          |
+| `iconPosition`  | `'start' \| 'end'`                                                     | `'end'`     | Chevron placement (logical, RTL-aware).                                        |
+| `className`     | `string`                                                               | —           | Merged via `tailwind-merge`. Last-wins.                                        |
+| `sx`            | `Sx`                                                                   | —           | Theme-aware inline style.                                                      |
+
+### Accordion.Item
+
+| Prop       | Type      | Default  | Notes                                                          |
+| ---------- | --------- | -------- | -------------------------------------------------------------- |
+| `value`    | `string`  | required | Unique key identifying this item in the parent's `value`.      |
+| `disabled` | `boolean` | `false`  | Disable just this item. Overrides root `disabled=false`.       |
+
+### Accordion.Trigger
+
+| Prop       | Type            | Default | Notes                                                            |
+| ---------- | --------------- | ------- | ---------------------------------------------------------------- |
+| `leftIcon` | `ReactNode`     | —       | Decorative icon at the logical start. Always `aria-hidden`.      |
+
+### Accordion.Content
+
+Standard `<div>` props plus `sx`. Renders as a `role="region"` labelled by its trigger.
+
+## Accessibility
+
+- **W3C ARIA Accordion pattern.** Each trigger is `<button>` with `aria-expanded` +
+  `aria-controls`; each content is `role="region"` with `aria-labelledby`.
+- **Keyboard navigation.** ArrowDown / ArrowUp cycles focus between sibling triggers
+  (wrapping at the edges), Home / End jumps to first / last enabled trigger. Disabled
+  triggers are skipped. Enter / Space activate via native `<button>` semantics.
+- **Decorative icons.** The chevron and any `leftIcon` are wrapped in `aria-hidden="true"`
+  — the trigger label is the accessible name.
+- **Reduced-motion.** The CSS transition shortens to ~120ms under
+  `@media (prefers-reduced-motion: reduce)`, plus the chevron rotation disables entirely.
+  Zero-duration snaps are jarring on long lists; a brief signal of state change is helpful.
+- **Closed content is `aria-hidden`.** The wrapper sets `aria-hidden={!isOpen}` so screen
+  readers don't announce collapsed bodies even though they stay in the DOM (necessary for
+  the auto-height transition + for preserving descendant refs across open/close).
+- **axe-core.** Zero violations across the 4 × 7 variant × color matrix.
+
+## Animation
+
+The open/close transition is **pure CSS**:
+
+```css
+.content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 240ms ease;
+}
+.content[data-state='open'] {
+  grid-template-rows: 1fr;
+}
+.content > .inner {
+  min-height: 0; /* lets the grid track shrink below intrinsic min-content */
+}
+```
+
+This is the modern "auto-height transition" pattern. It works on Chromium 117+, Safari 17+,
+and Firefox 121+ — collectively ~96% of users in 2026. Older browsers fall back to an
+instant snap (still functional, just no animation).
+
+## Theming
+
+```ts
+defineTheme({
+  components: {
+    Accordion: {
+      defaultProps: { variant: 'outline', size: 'sm', iconPosition: 'start' },
+      styleOverrides: {
+        root: '',
+        item: 'border-2',
+        trigger: 'rounded-md',
+        content: '',
+        contentInner: '',
+        chevron: 'text-primary',
+      },
+    },
+  },
+});
+```
+
+Six slot keys: `root`, `item`, `trigger`, `content`, `contentInner`, `chevron`.
+
+## Out of scope (future phases)
+
+- **`Accordion.Header`** subpart — most consumers don't need a separate wrapper between
+  Item and Trigger. Add later if `<h2>` etc. nesting becomes a common pattern.
+- **Animation on auto-resizing content** (content that grows due to async data) — the
+  `grid-rows` trick already handles this for free in modern browsers.
+- **Tile / card-style accordion** (each item is a fully-styled card with shadow) —
+  composition via `variant="outline"` + theme overrides, not a new variant.

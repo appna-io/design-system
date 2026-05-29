@@ -1,0 +1,165 @@
+## Overview
+
+`<Radio />` is the single-of-many selection control. It ships **with its parent** —
+`<RadioGroup />` — because a lone radio button is rarely useful: the value of a radio is in
+the comparison with its siblings. The two components are designed together, documented here
+together, and tested as one phase.
+
+The visible affordance is a circular outer ring with an inner filled dot. Under the hood,
+each `<Radio>` renders a real `<input type="radio">` (visually hidden but keyboard-reachable
+and form-participating) inside a `<label>`. Clicking the label toggles the box natively — no
+synthetic handlers required. The inner dot is the control's `::before` pseudo-element, kept
+out of the DOM for the cleanest possible markup.
+
+Radio reuses the three-slot recipe pattern Checkbox (Phase 9) and Switch (Phase 10) established:
+`root`, `control`, `label`. Same hidden-input + custom-indicator trick, same `useThemedClasses`
+slot wiring, same dev-mode warning hook.
+
+## When to use which
+
+- **`<RadioGroup>` + `<Radio>`** — almost always. The group carries the selected value, sets
+  `aria-required` / `aria-invalid` for the whole set, and lets you write `name="size"` /
+  `color="success"` once at the group level instead of repeating it on every option.
+- **Standalone `<Radio>`** — rare, but supported as an escape hatch (testing, ad-hoc form
+  rows, single-option opt-ins). The standalone Radio behaves like a binary toggle whose
+  unchecked state is meaningful — closer in spirit to a checkbox than a true radio.
+
+## Anatomy
+
+```text
+[ ring ⊙ | label / description column ]
+```
+
+- **control** — the outer ring + inner dot. Variant × color lives here. `aria-hidden`.
+- **label** — `children`. Click target via the wrapping `<label htmlFor>`.
+- **description** — optional secondary text below the label, wired via `aria-describedby`.
+
+## Examples
+
+<ExampleBlock for="Basic" />
+
+<ExampleBlock for="Variants" />
+
+<ExampleBlock for="Sizes" />
+
+<ExampleBlock for="Colors" />
+
+<ExampleBlock for="Horizontal" />
+
+<ExampleBlock for="WithDescription" />
+
+<ExampleBlock for="Disabled" />
+
+<ExampleBlock for="Invalid" />
+
+<ExampleBlock for="Standalone" />
+
+<ExampleBlock for="Controlled" />
+
+## Props
+
+<PropsTable />
+
+## Accessibility
+
+- `<RadioGroup>` renders a `<div role="radiogroup">` with `aria-required` / `aria-invalid` /
+  `aria-disabled` reflecting its props.
+- Each `<Radio>` wraps a real `<input type="radio">`. Native radio-button keyboard semantics
+  apply: **arrow keys** move selection between members of the same `name`, **Tab** moves into
+  the group (focus landing on the currently-checked option, per W3C ARIA Authoring Practices),
+  and **Space** selects the focused option.
+- The native input is visually hidden via `peer sr-only` so focus, form submission, and
+  screen-reader announcements all flow through it. `aria-checked` is set automatically by the
+  browser based on the input's `checked` state.
+- Focus ring lands on the *control* (not just the hidden input) via the `peer-focus-visible`
+  variant. The ring color matches the active `color` for every variant × color cell.
+- `invalid` sets `aria-invalid` on the input and `data-invalid` on the control. The group
+  also exposes `aria-invalid="true"` when its `invalid` prop is set so assistive tech
+  announces the error context once per group rather than per option.
+- `description` text gets an auto-generated id and is wired into `aria-describedby`. If the
+  consumer also supplies their own `aria-describedby`, both ids are merged space-separated.
+- Two dev-mode warnings fire when DS contracts are broken: `RADIO_NO_VALUE` when a `<Radio>`
+  ships without a non-empty `value`, and `RADIO_NO_LABEL` when none of `children`,
+  `aria-label`, or `aria-labelledby` is provided.
+- axe-core passes across the variant × color matrix and across disabled / invalid /
+  description states.
+
+## Theming
+
+Each of the three slots can be overridden independently:
+
+```tsx
+<ThemeProvider
+  theme={defineTheme({
+    components: {
+      Radio: {
+        defaultProps: { variant: 'outline' },
+        styleOverrides: {
+          control: 'shadow-xs',
+          label: 'font-medium',
+        },
+      },
+      RadioGroup: {
+        defaultProps: { orientation: 'horizontal' },
+        styleOverrides: { root: 'gap-6' },
+      },
+    },
+  })}
+>
+  {children}
+</ThemeProvider>
+```
+
+Instance-level overrides win via `tailwind-merge`:
+
+```tsx
+<Radio value="x" className="font-bold" sx={{ radius: 'lg' }}>
+  Override me
+</Radio>
+```
+
+The recipe uses CSS-var-mapped utilities (e.g. `rounded-full` for the ring) so theme variants
+like Katana flow through automatically — switching the app-level theme variant changes the
+var values without touching the recipe.
+
+## RTL
+
+- `labelPosition` is logical — `right` means **end** in LTR and **start** in RTL (mapped via
+  `flex-row` / `flex-row-reverse`).
+- `orientation="horizontal"` flips reading order natively via `flex`.
+- Arrow-key navigation flips Left/Right meaning in RTL per the ARIA spec; native handling for
+  `<input type="radio">` covers this without DS-level plumbing.
+
+## Group propagation
+
+`<RadioGroup>` propagates the following props down to every child `<Radio>` as **defaults** —
+each child can still override locally:
+
+| Group prop | Per-Radio fallback                                                  |
+| ---------- | ------------------------------------------------------------------- |
+| `name`     | child `name` wins if set, otherwise inherits                         |
+| `variant`  | child `variant` wins if set, otherwise inherits                      |
+| `size`     | child `size` wins if set, otherwise inherits                         |
+| `color`    | child `color` wins if set, otherwise inherits                        |
+| `disabled` | OR'd — child is disabled if either the child or the group says so   |
+| `invalid`  | OR'd — child shows the invalid state if either source flags it      |
+
+Picking the group's selected value is fully controlled / uncontrolled via the engine's
+`useControllableState` (the same hook Checkbox, Switch, and Accordion lean on). Use
+`value` + `onValueChange` for the controlled mode, `defaultValue` for the uncontrolled
+mode — never both.
+
+## Do / Don't
+
+- **Do** label every radio — verb or noun phrases ("Standard shipping", "Pro plan") read
+  better than abstract codes. Provide `aria-label` only when the visual surface deliberately
+  has no text.
+- **Do** wrap radios in `<RadioGroup>` whenever they're mutually exclusive — the group exists
+  to set `role="radiogroup"`, propagate `name`, and centralize state. Skipping it forces
+  every consumer to re-implement those.
+- **Do** prefer `<Radio>` over `<Checkbox>` for mutually exclusive options. Even when there
+  are only two choices, "ON / OFF" reads differently from "this OR that".
+- **Don't** disable a radio without telling the user why; pair `disabled` with a tooltip or
+  helper text when feasible.
+- **Don't** put a `<RadioGroup>` inside another `<RadioGroup>`. Nest with care: a single
+  radio belongs to exactly one group, and the closest `RadioGroupContext` wins.
