@@ -1,4 +1,4 @@
-import { Sidebar } from 'apx-ds';
+import { Sidebar } from '@apx-ui/ds';
 
 import { CogIcon, FolderIcon, HomeIcon, InboxIcon } from './_icons';
 

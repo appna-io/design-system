@@ -1,4 +1,4 @@
-import { Button, Card } from 'apx-ds';
+import { Button, Card } from '@apx-ui/ds';
 
 export default function FooterAlignment() {
   return (

@@ -1,4 +1,4 @@
-import { Alert, Icon } from 'apx-ds';
+import { Alert, Icon } from '@apx-ui/ds';
 
 import { AlertTriangle, Check, Info, X } from './_glyphs';
 

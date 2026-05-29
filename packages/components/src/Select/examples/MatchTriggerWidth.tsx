@@ -1,4 +1,4 @@
-import { Select } from 'apx-ds';
+import { Select } from '@apx-ui/ds';
 
 /**
  * Default is `matchTriggerWidth={true}` — the listbox stretches to the trigger's width via

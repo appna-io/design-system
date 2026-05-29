@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Textarea } from 'apx-ds';
+import { Textarea } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [value, setValue] = useState('hello\nworld');

@@ -1,6 +1,6 @@
 'use client';
 
-import { useTheme, useThemeOverrides } from 'apx-ds';
+import { useTheme, useThemeOverrides } from '@apx-ui/ds';
 import { RotateCcw } from 'lucide-react';
 
 const STEPS: Array<{ key: 'fast' | 'normal' | 'slow'; label: string; max: number }> = [

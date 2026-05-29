@@ -1,4 +1,4 @@
-import { Tabs } from 'apx-ds';
+import { Tabs } from '@apx-ui/ds';
 
 const variants = ['underline', 'solid', 'pills', 'enclosed'] as const;
 

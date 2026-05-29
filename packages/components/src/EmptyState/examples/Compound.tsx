@@ -1,4 +1,4 @@
-import { Button, EmptyState } from 'apx-ds';
+import { Button, EmptyState } from '@apx-ui/ds';
 
 function TeamIcon() {
   return (

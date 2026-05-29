@@ -1,5 +1,5 @@
-import { HoverCard } from 'apx-ds';
-import type { HoverCardSize } from 'apx-ds';
+import { HoverCard } from '@apx-ui/ds';
+import type { HoverCardSize } from '@apx-ui/ds';
 
 /**
  * Three sizes — `sm` / `md` (default) / `lg`. Drives padding, font-size, and the `min-width` /

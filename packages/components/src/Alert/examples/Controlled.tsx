@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, Button } from 'apx-ds';
+import { Alert, Button } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [open, setOpen] = useState(true);

@@ -1,4 +1,4 @@
-import { Rating } from 'apx-ds';
+import { Rating } from '@apx-ui/ds';
 
 export default function ReadOnly() {
   return (

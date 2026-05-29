@@ -1,6 +1,6 @@
 'use client';
 
-import { CircularProgress, Progress } from 'apx-ds';
+import { CircularProgress, Progress } from '@apx-ui/ds';
 import { useEffect, useState } from 'react';
 
 export default function Animated() {

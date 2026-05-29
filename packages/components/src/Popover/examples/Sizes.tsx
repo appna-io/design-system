@@ -1,4 +1,4 @@
-import { Button, Popover, type PopoverSize } from 'apx-ds';
+import { Button, Popover, type PopoverSize } from '@apx-ui/ds';
 
 const SIZES: readonly PopoverSize[] = ['sm', 'md', 'lg'];
 

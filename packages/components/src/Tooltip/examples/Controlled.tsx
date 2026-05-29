@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Tooltip } from 'apx-ds';
+import { Button, Tooltip } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [open, setOpen] = useState(false);

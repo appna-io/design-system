@@ -1,4 +1,4 @@
-import { Timeline } from 'apx-ds';
+import { Timeline } from '@apx-ui/ds';
 import { GitBranch, GitMerge, GitPullRequest } from 'lucide-react';
 
 export default function Compound() {

@@ -1,4 +1,4 @@
-import { NavigationMenu } from 'apx-ds';
+import { NavigationMenu } from '@apx-ui/ds';
 
 /** Three visual chrome variants — `default` / `ghost` / `pill`. */
 export default function Variants() {

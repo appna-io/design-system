@@ -1,4 +1,4 @@
-import { Radio, RadioGroup, type RadioSize } from 'apx-ds';
+import { Radio, RadioGroup, type RadioSize } from '@apx-ui/ds';
 
 const SIZES: readonly RadioSize[] = ['sm', 'md', 'lg'];
 

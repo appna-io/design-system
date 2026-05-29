@@ -1,4 +1,4 @@
-import { Avatar, type AvatarShape } from 'apx-ds';
+import { Avatar, type AvatarShape } from '@apx-ui/ds';
 
 const SHAPES: readonly AvatarShape[] = ['circle', 'rounded', 'square'];
 

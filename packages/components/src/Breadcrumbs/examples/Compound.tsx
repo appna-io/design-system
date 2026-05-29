@@ -1,4 +1,4 @@
-import { Breadcrumbs } from 'apx-ds';
+import { Breadcrumbs } from '@apx-ui/ds';
 
 export default function Compound() {
   return (

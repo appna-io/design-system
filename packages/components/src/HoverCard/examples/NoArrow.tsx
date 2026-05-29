@@ -1,4 +1,4 @@
-import { HoverCard } from 'apx-ds';
+import { HoverCard } from '@apx-ui/ds';
 
 /**
  * `<HoverCard.Content showArrow={false}>` removes the SVG arrow. Useful for richer card layouts

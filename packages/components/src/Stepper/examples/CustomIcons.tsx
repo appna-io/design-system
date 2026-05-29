@@ -1,5 +1,5 @@
 import { CreditCard, Mail, User, Sparkles } from 'lucide-react';
-import { Stepper } from 'apx-ds';
+import { Stepper } from '@apx-ui/ds';
 
 export default function CustomIcons() {
   return (

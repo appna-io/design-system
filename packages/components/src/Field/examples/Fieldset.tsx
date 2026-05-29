@@ -1,4 +1,4 @@
-import { Checkbox, Field, Stack } from 'apx-ds';
+import { Checkbox, Field, Stack } from '@apx-ui/ds';
 
 export default function FieldsetExample() {
   return (

@@ -1,5 +1,5 @@
 import { ChevronRight } from 'lucide-react';
-import { Breadcrumbs } from 'apx-ds';
+import { Breadcrumbs } from '@apx-ui/ds';
 
 export default function CustomSeparator() {
   return (

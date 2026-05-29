@@ -1,5 +1,5 @@
 import { Mail, Search, X } from 'lucide-react';
-import { Input } from 'apx-ds';
+import { Input } from '@apx-ui/ds';
 
 export default function WithIcons() {
   return (

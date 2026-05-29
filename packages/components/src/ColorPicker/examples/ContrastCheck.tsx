@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ColorPicker } from 'apx-ds';
+import { ColorPicker } from '@apx-ui/ds';
 
 export default function ContrastCheck() {
   const [color, setColor] = useState('#1F2937');

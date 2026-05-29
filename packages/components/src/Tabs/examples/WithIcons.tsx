@@ -1,5 +1,5 @@
 import { Bell, CreditCard, KeyRound, User } from 'lucide-react';
-import { Tabs } from 'apx-ds';
+import { Tabs } from '@apx-ui/ds';
 
 export default function WithIcons() {
   return (

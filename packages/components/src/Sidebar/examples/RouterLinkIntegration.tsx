@@ -1,5 +1,5 @@
 import { forwardRef, type AnchorHTMLAttributes } from 'react';
-import { Sidebar } from 'apx-ds';
+import { Sidebar } from '@apx-ui/ds';
 
 import { HomeIcon, InboxIcon, FolderIcon } from './_icons';
 

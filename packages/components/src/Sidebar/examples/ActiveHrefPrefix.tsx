@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, HStack, Sidebar } from 'apx-ds';
+import { Button, HStack, Sidebar } from '@apx-ui/ds';
 
 import { FolderIcon, HomeIcon, InboxIcon } from './_icons';
 

@@ -1,4 +1,4 @@
-import { AppShell, Button, HStack, Stack, useAppShell } from 'apx-ds';
+import { AppShell, Button, HStack, Stack, useAppShell } from '@apx-ui/ds';
 
 function HeaderBar() {
   const { toggleSidebar, isSidebarCollapsed } = useAppShell();

@@ -1,4 +1,4 @@
-import { Stat, StatGroup } from 'apx-ds';
+import { Stat, StatGroup } from '@apx-ui/ds';
 import { DollarSign, ShoppingCart, TrendingDown, Users } from 'lucide-react';
 
 export default function Dashboard() {

@@ -1,4 +1,4 @@
-import { Combobox, highlightMatch } from 'apx-ds';
+import { Combobox, highlightMatch } from '@apx-ui/ds';
 
 const FRUITS = [
   { value: 'apple', label: 'Apple' },

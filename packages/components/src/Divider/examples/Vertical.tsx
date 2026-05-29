@@ -1,4 +1,4 @@
-import { Button, Divider } from 'apx-ds';
+import { Button, Divider } from '@apx-ui/ds';
 
 export default function Vertical() {
   return (

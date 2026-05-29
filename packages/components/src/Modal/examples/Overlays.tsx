@@ -1,5 +1,5 @@
-import { Button, Modal } from 'apx-ds';
-import type { ModalOverlay } from 'apx-ds';
+import { Button, Modal } from '@apx-ui/ds';
+import type { ModalOverlay } from '@apx-ui/ds';
 
 const overlays: ModalOverlay[] = ['dimmed', 'blur', 'transparent'];
 

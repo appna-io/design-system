@@ -1,4 +1,4 @@
-import { Progress, type ProgressVariant } from 'apx-ds';
+import { Progress, type ProgressVariant } from '@apx-ui/ds';
 
 const VARIANTS: readonly ProgressVariant[] = ['solid', 'soft', 'striped'];
 

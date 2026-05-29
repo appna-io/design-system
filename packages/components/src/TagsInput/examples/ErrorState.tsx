@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TagsInput } from 'apx-ds';
+import { TagsInput } from '@apx-ui/ds';
 
 export default function ErrorState() {
   const [tags, setTags] = useState<string[]>([]);

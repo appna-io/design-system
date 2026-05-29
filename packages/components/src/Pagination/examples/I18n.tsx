@@ -5,7 +5,7 @@ import {
   arPaginationTranslations,
   enPaginationTranslations,
   hePaginationTranslations,
-} from 'apx-ds';
+} from '@apx-ui/ds';
 
 const BUNDLES = {
   en: { locale: 'en', dir: 'ltr', messages: enPaginationTranslations, label: 'English' },

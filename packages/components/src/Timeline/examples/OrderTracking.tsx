@@ -1,4 +1,4 @@
-import { Timeline } from 'apx-ds';
+import { Timeline } from '@apx-ui/ds';
 import { Check, Home, Package, Truck } from 'lucide-react';
 
 const now = Date.now();

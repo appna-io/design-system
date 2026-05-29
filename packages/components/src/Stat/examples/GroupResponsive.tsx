@@ -1,4 +1,4 @@
-import { Stat, StatGroup } from 'apx-ds';
+import { Stat, StatGroup } from '@apx-ui/ds';
 
 export default function GroupResponsive() {
   return (

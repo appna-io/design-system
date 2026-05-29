@@ -1,4 +1,4 @@
-import { CircularProgress, Progress } from 'apx-ds';
+import { CircularProgress, Progress } from '@apx-ui/ds';
 
 const GIB = 1024 * 1024 * 1024;
 

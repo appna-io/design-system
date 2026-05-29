@@ -1,4 +1,4 @@
-import { Button, Popover } from 'apx-ds';
+import { Button, Popover } from '@apx-ui/ds';
 
 /**
  * Stress-tests `useEscapeStack`: an inner Popover opens from inside an outer Popover. Pressing

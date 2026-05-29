@@ -1,4 +1,4 @@
-import { Timeline } from 'apx-ds';
+import { Timeline } from '@apx-ui/ds';
 
 const now = Date.now();
 const day = 86_400_000;

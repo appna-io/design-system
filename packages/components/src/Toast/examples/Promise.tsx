@@ -1,4 +1,4 @@
-import { Button, Toaster, toast } from 'apx-ds';
+import { Button, Toaster, toast } from '@apx-ui/ds';
 
 function fakeSave(): Promise<{ title: string }> {
   return new Promise((resolve, reject) => {

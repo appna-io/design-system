@@ -1,4 +1,4 @@
-import { Field, Input } from 'apx-ds';
+import { Field, Input } from '@apx-ui/ds';
 
 export default function Compound() {
   return (

@@ -1,4 +1,4 @@
-import { CircularProgress, Progress, type ProgressSize } from 'apx-ds';
+import { CircularProgress, Progress, type ProgressSize } from '@apx-ui/ds';
 
 const SIZES: readonly ProgressSize[] = ['sm', 'md', 'lg'];
 

@@ -1,4 +1,4 @@
-import { Button, Tooltip } from 'apx-ds';
+import { Button, Tooltip } from '@apx-ui/ds';
 
 /**
  * Tooltip is hover/focus driven, not click driven — the button below is the test control. Hover

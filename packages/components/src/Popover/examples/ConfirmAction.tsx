@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Popover } from 'apx-ds';
+import { Button, Popover } from '@apx-ui/ds';
 
 /**
  * The "Are you sure?" pattern. The destructive trigger opens a Popover that focuses the

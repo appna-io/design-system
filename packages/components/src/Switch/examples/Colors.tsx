@@ -1,4 +1,4 @@
-import { Switch, type SwitchColor } from 'apx-ds';
+import { Switch, type SwitchColor } from '@apx-ui/ds';
 
 const COLORS: readonly SwitchColor[] = [
   'primary',

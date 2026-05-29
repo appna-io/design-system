@@ -10,7 +10,7 @@ import {
   Switch,
   TagsInput,
   Textarea,
-} from 'apx-ds';
+} from '@apx-ui/ds';
 
 interface Values extends Record<string, unknown> {
   name: string;

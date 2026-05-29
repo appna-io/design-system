@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { DirectionProvider } from '@apx-ui/engine';
-import { Pagination, hePaginationTranslations } from 'apx-ds';
+import { Pagination, hePaginationTranslations } from '@apx-ui/ds';
 
 /**
  * `<DirectionProvider dir="rtl">` flips the chevron icons + flow direction;

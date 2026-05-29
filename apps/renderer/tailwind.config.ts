@@ -1,5 +1,5 @@
 import type { Config } from 'tailwindcss';
-import { apxTailwindPreset } from 'apx-ds/tailwind-preset';
+import { apxTailwindPreset } from '@apx-ui/ds/tailwind-preset';
 
 const config: Config = {
   presets: [apxTailwindPreset as unknown as Config],

@@ -1,4 +1,4 @@
-import { HStack, VStack } from 'apx-ds';
+import { HStack, VStack } from '@apx-ui/ds';
 
 const VALUES = ['start', 'center', 'end', 'stretch', 'baseline'] as const;
 

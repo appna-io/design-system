@@ -1,4 +1,4 @@
-import { Select } from 'apx-ds';
+import { Select } from '@apx-ui/ds';
 
 /**
  * Composing Select with manual `<label htmlFor>` + helper text + error text — the same pattern a

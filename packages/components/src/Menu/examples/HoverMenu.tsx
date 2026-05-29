@@ -1,4 +1,4 @@
-import { Button, Menu } from 'apx-ds';
+import { Button, Menu } from '@apx-ui/ds';
 
 export default function HoverMenu() {
   return (

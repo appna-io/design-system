@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, Input } from 'apx-ds';
+import { Alert, Input } from '@apx-ui/ds';
 
 export default function FormValidation() {
   const [value, setValue] = useState('');

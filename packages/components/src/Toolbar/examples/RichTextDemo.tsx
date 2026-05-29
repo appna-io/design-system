@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Stack, Toolbar, ToggleGroup } from 'apx-ds';
+import { Button, Stack, Toolbar, ToggleGroup } from '@apx-ui/ds';
 
 export default function RichTextDemo() {
   const [style, setStyle] = useState<string[]>([]);

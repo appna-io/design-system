@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Stack, Toolbar } from 'apx-ds';
+import { Button, Stack, Toolbar } from '@apx-ui/ds';
 
 const ALL_ACTIONS = [
   'Save',

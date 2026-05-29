@@ -1,4 +1,4 @@
-import { Button, Tooltip, type TooltipVariant } from 'apx-ds';
+import { Button, Tooltip, type TooltipVariant } from '@apx-ui/ds';
 
 const VARIANTS: readonly TooltipVariant[] = ['solid', 'outline', 'soft', 'inverted'];
 

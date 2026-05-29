@@ -1,4 +1,4 @@
-import { Slider } from 'apx-ds';
+import { Slider } from '@apx-ui/ds';
 
 export default function Range() {
   return (

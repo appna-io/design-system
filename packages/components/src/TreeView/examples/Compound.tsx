@@ -1,4 +1,4 @@
-import { TreeView } from 'apx-ds';
+import { TreeView } from '@apx-ui/ds';
 
 export default function Compound() {
   return (

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AppShell, Button, HStack, Sidebar, Stack, useAppShell } from 'apx-ds';
+import { AppShell, Button, HStack, Sidebar, Stack, useAppShell } from '@apx-ui/ds';
 
 import {
   CalendarIcon,

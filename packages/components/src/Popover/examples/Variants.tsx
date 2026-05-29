@@ -1,4 +1,4 @@
-import { Button, Popover, type PopoverVariant } from 'apx-ds';
+import { Button, Popover, type PopoverVariant } from '@apx-ui/ds';
 
 const VARIANTS: readonly PopoverVariant[] = ['solid', 'outline', 'soft'];
 

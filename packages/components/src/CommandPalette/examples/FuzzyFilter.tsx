@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, CommandPalette } from 'apx-ds';
+import { Button, CommandPalette } from '@apx-ui/ds';
 
 const COMMANDS = [
   { id: 'open-settings', label: 'Open Settings',  onSelect: () => undefined },

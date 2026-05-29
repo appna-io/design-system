@@ -1,6 +1,6 @@
 'use client';
 
-import { useThemeOverrides } from 'apx-ds';
+import { useThemeOverrides } from '@apx-ui/ds';
 import { Palette, RotateCcw, SlidersHorizontal, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 

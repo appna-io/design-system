@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Input, Toolbar, ToggleGroup } from 'apx-ds';
+import { Button, Input, Toolbar, ToggleGroup } from '@apx-ui/ds';
 
 export default function MixedControls() {
   const [filter, setFilter] = useState('');

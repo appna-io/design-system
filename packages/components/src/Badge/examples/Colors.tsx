@@ -1,4 +1,4 @@
-import { Badge, type BadgeColor, type BadgeVariant } from 'apx-ds';
+import { Badge, type BadgeColor, type BadgeVariant } from '@apx-ui/ds';
 
 const COLORS: readonly BadgeColor[] = [
   'primary',

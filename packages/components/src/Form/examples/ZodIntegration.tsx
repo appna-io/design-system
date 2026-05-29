@@ -1,4 +1,4 @@
-import { Button, Form, FormField, Input } from 'apx-ds';
+import { Button, Form, FormField, Input } from '@apx-ui/ds';
 
 /**
  * Zod (or Yup / Joi) integration is a one-liner in the `validate` callback. No bundled adapter —

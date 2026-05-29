@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card } from 'apx-ds';
+import { Card } from '@apx-ui/ds';
 
 const PLANS = [
   { id: 'starter', name: 'Starter', price: '$0', tagline: 'For tinkering' },

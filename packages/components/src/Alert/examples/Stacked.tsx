@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, Button } from 'apx-ds';
+import { Alert, Button } from '@apx-ui/ds';
 
 interface Item {
   id: number;

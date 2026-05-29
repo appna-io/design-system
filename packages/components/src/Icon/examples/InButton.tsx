@@ -1,4 +1,4 @@
-import { Button, Icon } from 'apx-ds';
+import { Button, Icon } from '@apx-ui/ds';
 
 import { Check, Mail } from './_glyphs';
 

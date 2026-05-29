@@ -1,4 +1,4 @@
-import { HoverCard } from 'apx-ds';
+import { HoverCard } from '@apx-ui/ds';
 
 /**
  * Three delay profiles for the same card so Ahmad can feel the difference. HoverCard ships with

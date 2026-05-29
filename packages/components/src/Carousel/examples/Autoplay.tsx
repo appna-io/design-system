@@ -1,4 +1,4 @@
-import { Carousel } from 'apx-ds';
+import { Carousel } from '@apx-ui/ds';
 
 export default function Autoplay() {
   return (

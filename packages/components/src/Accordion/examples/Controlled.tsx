@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Accordion, Button } from 'apx-ds';
+import { Accordion, Button } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [open, setOpen] = useState<string>('two');

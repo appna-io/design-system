@@ -1,4 +1,4 @@
-import { Button, Tooltip, type TooltipColor, type TooltipVariant } from 'apx-ds';
+import { Button, Tooltip, type TooltipColor, type TooltipVariant } from '@apx-ui/ds';
 
 const COLORS: readonly TooltipColor[] = [
   'primary',

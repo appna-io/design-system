@@ -1,4 +1,4 @@
-import { Switch } from 'apx-ds';
+import { Switch } from '@apx-ui/ds';
 
 const BellIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-5 text-fg-muted">

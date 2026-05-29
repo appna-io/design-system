@@ -1,5 +1,5 @@
-import { HoverCard } from 'apx-ds';
-import type { HoverCardPlacement } from 'apx-ds';
+import { HoverCard } from '@apx-ui/ds';
+import type { HoverCardPlacement } from '@apx-ui/ds';
 
 /**
  * Six placements arranged in a 3×2 grid so Ahmad can see each anchor side. Floating UI's `flip`

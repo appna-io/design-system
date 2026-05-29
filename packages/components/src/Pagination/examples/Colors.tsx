@@ -1,5 +1,5 @@
-import { Pagination } from 'apx-ds';
-import type { PaginationColor } from 'apx-ds';
+import { Pagination } from '@apx-ui/ds';
+import type { PaginationColor } from '@apx-ui/ds';
 
 const COLORS: PaginationColor[] = [
   'primary',

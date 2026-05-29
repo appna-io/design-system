@@ -1,4 +1,4 @@
-import { HoverCard } from 'apx-ds';
+import { HoverCard } from '@apx-ui/ds';
 
 /**
  * The canonical "@mention hover" pattern. The trigger is a real anchor (`<a href>`) so it

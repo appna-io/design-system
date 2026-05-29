@@ -1,4 +1,4 @@
-import { Icon, IconProvider, createIconRegistry } from 'apx-ds';
+import { Icon, IconProvider, createIconRegistry } from '@apx-ui/ds';
 import type { SVGProps } from 'react';
 
 import { Mail } from './_glyphs';

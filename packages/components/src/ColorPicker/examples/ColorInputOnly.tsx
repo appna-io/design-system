@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ColorInput } from 'apx-ds';
+import { ColorInput } from '@apx-ui/ds';
 
 export default function ColorInputOnly() {
   const [color, setColor] = useState('#6c5ce7');

@@ -8,8 +8,8 @@ import {
   arDataGridTranslations,
   enDataGridTranslations,
   heDataGridTranslations,
-} from 'apx-ds';
-import type { DataGridColumnDef, DataGridTranslations } from 'apx-ds';
+} from '@apx-ui/ds';
+import type { DataGridColumnDef, DataGridTranslations } from '@apx-ui/ds';
 
 type Locale = 'en' | 'he' | 'ar';
 

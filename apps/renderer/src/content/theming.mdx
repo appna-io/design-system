@@ -1,6 +1,6 @@
 # Theming
 
-The `apx-ds` theming system is built on three orthogonal axes:
+The `@apx-ui/ds` theming system is built on three orthogonal axes:
 
 - **Mode** — `light` · `dark` · `system` (follows OS preference)
 - **Variant** — stylistic family (`default` _adaptive_, `tetsu`, `origami`, `katana`)
@@ -13,7 +13,7 @@ axis updates the page without re-rendering component class strings.
 ## Mode
 
 ```tsx
-import { useMode } from 'apx-ds';
+import { useMode } from '@apx-ui/ds';
 
 function Header() {
   const { mode, setMode } = useMode();
@@ -33,11 +33,11 @@ function Header() {
 ## Variants
 
 A variant is a partial theme override that swaps a coherent set of tokens at once (radii, spacing,
-shadows, …). They're defined in `@apx-ds/tokens/variants` and can be extended by passing a
+shadows, …). They're defined in `@@apx-ui/ds/tokens/variants` and can be extended by passing a
 custom theme to `<ThemeProvider>`:
 
 ```tsx
-import { ThemeProvider, defineTheme } from 'apx-ds';
+import { ThemeProvider, defineTheme } from '@apx-ui/ds';
 
 const theme = defineTheme({
   variants: {
@@ -55,7 +55,7 @@ const theme = defineTheme({
 ## Direction
 
 ```tsx
-import { useThemeDirection } from 'apx-ds';
+import { useThemeDirection } from '@apx-ui/ds';
 
 function Bidi() {
   const { dir, setDir } = useThemeDirection();

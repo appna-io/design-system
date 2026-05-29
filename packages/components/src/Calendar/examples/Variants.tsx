@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Calendar } from 'apx-ds';
+import { Calendar } from '@apx-ui/ds';
 
 export default function Variants() {
   const [d, setD] = useState<Date>(new Date());

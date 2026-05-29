@@ -1,4 +1,4 @@
-import { Button, Card, Carousel } from 'apx-ds';
+import { Button, Card, Carousel } from '@apx-ui/ds';
 
 const features = [
   { title: 'Realtime sync', body: 'See changes from collaborators as they happen.' },

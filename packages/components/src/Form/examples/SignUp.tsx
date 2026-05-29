@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, FormField, Input } from 'apx-ds';
+import { Button, Checkbox, Form, FormField, Input } from '@apx-ui/ds';
 
 interface SignupValues extends Record<string, unknown> {
   email: string;

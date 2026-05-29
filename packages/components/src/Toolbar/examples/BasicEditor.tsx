@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Toolbar, ToggleGroup } from 'apx-ds';
+import { Button, Toolbar, ToggleGroup } from '@apx-ui/ds';
 
 export default function BasicEditor() {
   const [style, setStyle] = useState<string[]>(['bold']);

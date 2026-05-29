@@ -1,4 +1,4 @@
-import { Kbd } from 'apx-ds';
+import { Kbd } from '@apx-ui/ds';
 
 /**
  * `<Kbd>` is its own export — useful well outside CommandPalette (docs, tooltips, menu rows).

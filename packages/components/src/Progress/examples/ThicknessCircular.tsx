@@ -1,4 +1,4 @@
-import { CircularProgress } from 'apx-ds';
+import { CircularProgress } from '@apx-ui/ds';
 
 export default function ThicknessCircular() {
   return (

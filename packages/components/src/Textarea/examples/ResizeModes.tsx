@@ -1,4 +1,4 @@
-import { Textarea } from 'apx-ds';
+import { Textarea } from '@apx-ui/ds';
 
 export default function ResizeModes() {
   return (

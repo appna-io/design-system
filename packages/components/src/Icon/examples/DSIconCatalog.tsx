@@ -1,4 +1,4 @@
-import { DS_ICON_NAMES, Icon, IconProvider, createIconRegistry } from 'apx-ds';
+import { DS_ICON_NAMES, Icon, IconProvider, createIconRegistry } from '@apx-ui/ds';
 
 import * as G from './_glyphs';
 

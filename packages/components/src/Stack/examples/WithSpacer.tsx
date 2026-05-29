@@ -1,4 +1,4 @@
-import { HStack, Spacer } from 'apx-ds';
+import { HStack, Spacer } from '@apx-ui/ds';
 
 export default function WithSpacer() {
   return (

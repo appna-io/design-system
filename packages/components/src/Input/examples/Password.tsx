@@ -1,6 +1,6 @@
 import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
-import { Input } from 'apx-ds';
+import { Input } from '@apx-ui/ds';
 
 export default function Password() {
   const [show, setShow] = useState(false);

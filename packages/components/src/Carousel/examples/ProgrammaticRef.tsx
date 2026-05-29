@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Button, Carousel, type CarouselRef } from 'apx-ds';
+import { Button, Carousel, type CarouselRef } from '@apx-ui/ds';
 
 export default function ProgrammaticRef() {
   const ref = useRef<CarouselRef>(null);

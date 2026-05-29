@@ -1,4 +1,4 @@
-import { Alert } from 'apx-ds';
+import { Alert } from '@apx-ui/ds';
 import { Sparkles } from 'lucide-react';
 
 export default function CustomIcon() {

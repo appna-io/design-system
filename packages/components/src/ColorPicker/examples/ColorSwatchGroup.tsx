@@ -1,4 +1,4 @@
-import { ColorSwatch } from 'apx-ds';
+import { ColorSwatch } from '@apx-ui/ds';
 
 const SWATCHES = [
   { value: '#6c5ce7', label: 'Indigo' },

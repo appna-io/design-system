@@ -1,5 +1,5 @@
-import { Button, Drawer } from 'apx-ds';
-import type { DrawerSide } from 'apx-ds';
+import { Button, Drawer } from '@apx-ui/ds';
+import type { DrawerSide } from '@apx-ui/ds';
 
 const sides: DrawerSide[] = ['left', 'right', 'top', 'bottom'];
 

@@ -1,4 +1,4 @@
-import { Badge, Field, Select } from 'apx-ds';
+import { Badge, Field, Select } from '@apx-ui/ds';
 
 export default function WithLabelAddon() {
   return (

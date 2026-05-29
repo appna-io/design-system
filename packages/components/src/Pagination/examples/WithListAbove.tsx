@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Pagination } from 'apx-ds';
+import { Pagination } from '@apx-ui/ds';
 
 /**
  * The realistic shape: a card list paired with `<Pagination>` underneath.

@@ -1,4 +1,4 @@
-import { HoverCard } from 'apx-ds';
+import { HoverCard } from '@apx-ui/ds';
 
 /**
  * Stripe-style link preview: hover an inline URL to see a small card with the page's title +

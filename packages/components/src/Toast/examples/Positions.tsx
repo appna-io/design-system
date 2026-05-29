@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import { Button, Toaster, toast } from 'apx-ds';
-import type { ToastPosition } from 'apx-ds';
+import { Button, Toaster, toast } from '@apx-ui/ds';
+import type { ToastPosition } from '@apx-ui/ds';
 
 const POSITIONS: ToastPosition[] = [
   'top-left',

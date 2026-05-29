@@ -1,4 +1,4 @@
-import { Badge, Icon } from 'apx-ds';
+import { Badge, Icon } from '@apx-ui/ds';
 
 import { Check, Info, X } from './_glyphs';
 

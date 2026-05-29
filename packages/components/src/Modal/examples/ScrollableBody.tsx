@@ -1,4 +1,4 @@
-import { Button, Modal } from 'apx-ds';
+import { Button, Modal } from '@apx-ui/ds';
 
 export default function ScrollableBody() {
   const paragraphs = Array.from({ length: 30 }, (_, i) => i + 1);

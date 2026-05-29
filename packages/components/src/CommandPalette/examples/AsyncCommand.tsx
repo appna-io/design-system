@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, CommandPalette } from 'apx-ds';
+import { Button, CommandPalette } from '@apx-ui/ds';
 
 /**
  * Commands can return a Promise — the palette stays open and shows the row in its highlighted

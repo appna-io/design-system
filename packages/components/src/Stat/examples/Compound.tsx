@@ -1,4 +1,4 @@
-import { Stat } from 'apx-ds';
+import { Stat } from '@apx-ui/ds';
 import { TrendingUp } from 'lucide-react';
 
 export default function Compound() {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Button, CommandPalette } from 'apx-ds';
-import type { CommandPaletteSize } from 'apx-ds';
+import { Button, CommandPalette } from '@apx-ui/ds';
+import type { CommandPaletteSize } from '@apx-ui/ds';
 
 const COMMANDS = [
   { id: 'a', label: 'New Document', shortcut: '⌘N', category: 'File', onSelect: () => undefined },

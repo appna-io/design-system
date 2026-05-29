@@ -1,4 +1,4 @@
-import { Stat } from 'apx-ds';
+import { Stat } from '@apx-ui/ds';
 
 export default function Compact() {
   return (

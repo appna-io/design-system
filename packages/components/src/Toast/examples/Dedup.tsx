@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Button, Toaster, toast } from 'apx-ds';
+import { Button, Toaster, toast } from '@apx-ui/ds';
 
 export default function Dedup() {
   const [count, setCount] = useState(0);

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Card, Input, Stepper } from 'apx-ds';
+import { Button, Card, Input, Stepper } from '@apx-ui/ds';
 
 const STEPS = [
   { id: 'account', label: 'Account', description: 'Email + password' },

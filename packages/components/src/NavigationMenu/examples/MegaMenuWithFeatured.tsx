@@ -1,4 +1,4 @@
-import { NavigationMenu, Card, Button } from 'apx-ds';
+import { NavigationMenu, Card, Button } from '@apx-ui/ds';
 
 import { CodeIcon, PaintIcon, RocketIcon, ZapIcon } from './_icons';
 

@@ -1,4 +1,4 @@
-import { Card } from 'apx-ds';
+import { Card } from '@apx-ui/ds';
 
 export default function Colors() {
   return (

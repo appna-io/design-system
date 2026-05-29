@@ -1,5 +1,5 @@
 import { Star, Sparkles, Zap } from 'lucide-react';
-import { Badge } from 'apx-ds';
+import { Badge } from '@apx-ui/ds';
 
 export default function WithIcons() {
   return (

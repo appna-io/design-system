@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 
-import { DatePicker, DateRangePicker, type DateRange } from 'apx-ds';
+import { DatePicker, DateRangePicker, type DateRange } from '@apx-ui/ds';
 
 /**
  * Both pickers ride a hidden `<input type="hidden">` with the ISO-8601 (`YYYY-MM-DD`)

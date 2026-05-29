@@ -1,5 +1,5 @@
-import { Button, Drawer } from 'apx-ds';
-import type { DrawerOverlay } from 'apx-ds';
+import { Button, Drawer } from '@apx-ui/ds';
+import type { DrawerOverlay } from '@apx-ui/ds';
 
 const overlays: DrawerOverlay[] = ['dimmed', 'blur', 'transparent'];
 

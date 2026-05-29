@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, HoverCard } from 'apx-ds';
+import { Button, HoverCard } from '@apx-ui/ds';
 
 /**
  * Programmatic open/close — drives the `open` state from a sibling button. Useful for tutorials,

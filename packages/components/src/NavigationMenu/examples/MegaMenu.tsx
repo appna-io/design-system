@@ -1,4 +1,4 @@
-import { NavigationMenu } from 'apx-ds';
+import { NavigationMenu } from '@apx-ui/ds';
 
 import {
   BookIcon,

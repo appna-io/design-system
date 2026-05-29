@@ -1,4 +1,4 @@
-import { TagsInput } from 'apx-ds';
+import { TagsInput } from '@apx-ui/ds';
 
 export default function Disabled() {
   return (

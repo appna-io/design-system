@@ -1,4 +1,4 @@
-import { Timeline } from 'apx-ds';
+import { Timeline } from '@apx-ui/ds';
 
 export default function Horizontal() {
   return (

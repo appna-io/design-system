@@ -1,6 +1,6 @@
 'use client';
 
-import { Scheduler, type SchedulerEvent } from 'apx-ds';
+import { Scheduler, type SchedulerEvent } from '@apx-ui/ds';
 import { useState } from 'react';
 
 export default function Month() {

@@ -1,4 +1,4 @@
-import { Alert, Button } from 'apx-ds';
+import { Alert, Button } from '@apx-ui/ds';
 
 export default function WithAction() {
   return (

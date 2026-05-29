@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pagination } from 'apx-ds';
+import { Pagination } from '@apx-ui/ds';
 
 /**
  * Stress test for `computePageWindow` — 1,000 pages. The window-aware

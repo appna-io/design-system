@@ -1,4 +1,4 @@
-import { Button, type ButtonColor, type ButtonVariant } from 'apx-ds';
+import { Button, type ButtonColor, type ButtonVariant } from '@apx-ui/ds';
 
 const VARIANTS: ButtonVariant[] = ['solid', 'outline', 'ghost'];
 const COLORS: ButtonColor[] = [

@@ -1,4 +1,4 @@
-import { Button } from 'apx-ds';
+import { Button } from '@apx-ui/ds';
 
 export default function FullWidth() {
   return (

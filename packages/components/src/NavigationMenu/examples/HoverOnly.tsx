@@ -1,4 +1,4 @@
-import { NavigationMenu } from 'apx-ds';
+import { NavigationMenu } from '@apx-ui/ds';
 
 /**
  * `trigger="hover"` — dropdowns open ONLY on hover, never on click. Power-user

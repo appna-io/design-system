@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Carousel } from 'apx-ds';
+import { Button, Carousel } from '@apx-ui/ds';
 
 export default function ControlledIndex() {
   const [index, setIndex] = useState(0);

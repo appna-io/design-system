@@ -1,5 +1,5 @@
-import { Button, Modal } from 'apx-ds';
-import type { ModalSize } from 'apx-ds';
+import { Button, Modal } from '@apx-ui/ds';
+import type { ModalSize } from '@apx-ui/ds';
 
 const sizes: ModalSize[] = ['sm', 'md', 'lg', 'xl', 'full', 'fit'];
 

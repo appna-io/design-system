@@ -1,6 +1,6 @@
 # Getting started
 
-`apx-ds` is a themable, RTL-ready, fully overridable React component library. This page walks
+`@apx-ui/ds` is a themable, RTL-ready, fully overridable React component library. This page walks
 through installing it in a fresh Next.js app and wiring up the theme.
 
 <Callout type="info" title="Phase 4 preview">
@@ -11,9 +11,9 @@ through installing it in a fresh Next.js app and wiring up the theme.
 ## Install
 
 ```bash
-npm install apx-ds
+npm install @apx-ui/ds
 # or
-pnpm add apx-ds
+pnpm add @apx-ui/ds
 ```
 
 ## Wire up the provider
@@ -22,8 +22,8 @@ In your root layout, mount `<ThemeProvider>` and inject `<ThemeScript />` in the
 prevent FOUC:
 
 ```tsx
-import { ThemeProvider, ThemeScript } from 'apx-ds';
-import 'apx-ds/styles/reset.css';
+import { ThemeProvider, ThemeScript } from '@apx-ui/ds';
+import '@apx-ui/ds/styles/reset.css';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -41,11 +41,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 ## Configure Tailwind
 
-`apx-ds` ships a Tailwind preset that maps DS tokens to Tailwind theme keys. Add it to your
+`@apx-ui/ds` ships a Tailwind preset that maps DS tokens to Tailwind theme keys. Add it to your
 `tailwind.config.ts`:
 
 ```ts
-import { apxTailwindPreset } from 'apx-ds/tailwind-preset';
+import { apxTailwindPreset } from '@apx-ui/ds/tailwind-preset';
 
 export default {
   presets: [apxTailwindPreset],
@@ -59,7 +59,7 @@ variables and react to mode / variant / direction changes automatically.
 ## Use a component
 
 ```tsx
-import { Placeholder } from 'apx-ds';
+import { Placeholder } from '@apx-ui/ds';
 
 export default function Page() {
   return <Placeholder tone="primary">Hello, apx</Placeholder>;

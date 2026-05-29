@@ -1,4 +1,4 @@
-import { Stack } from 'apx-ds';
+import { Stack } from '@apx-ui/ds';
 
 export default function WithDividers() {
   return (

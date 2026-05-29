@@ -1,4 +1,4 @@
-import { Tabs } from 'apx-ds';
+import { Tabs } from '@apx-ui/ds';
 
 /**
  * `forceMount` keeps each panel mounted even when inactive. Inactive panels are still hidden

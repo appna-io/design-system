@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Calendar } from 'apx-ds';
+import { Calendar } from '@apx-ui/ds';
 
 /**
  * Custom day-cell renderer — draw a tiny dot under days that have an associated event count.

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMode } from 'apx-ds';
+import { useMode } from '@apx-ui/ds';
 import { Monitor, Moon, Sun } from 'lucide-react';
 
 import { cn } from '../primitives/cn';

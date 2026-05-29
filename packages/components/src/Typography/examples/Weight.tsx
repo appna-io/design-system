@@ -1,4 +1,4 @@
-import { Div, Typography } from 'apx-ds';
+import { Div, Typography } from '@apx-ui/ds';
 
 export default function Weight() {
   return (

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Button, Combobox, MultiCombobox } from 'apx-ds';
+import { Button, Combobox, MultiCombobox } from '@apx-ui/ds';
 
 const COUNTRIES = [
   { value: 'us', label: 'United States' },

@@ -1,4 +1,4 @@
-import type { ThemeOverride } from 'apx-ds';
+import type { ThemeOverride } from '@apx-ui/ds';
 
 /**
  * Format a JS value as a copy-pasteable TypeScript source snippet. Mirrors `JSON.stringify`'s
@@ -43,7 +43,7 @@ function formatValue(value: unknown, indent: number): string {
  */
 export function serializeOverridesToTs(overrides: ThemeOverride): string {
   const body = formatValue(overrides, 0);
-  return `import { defineTheme } from 'apx-ds';
+  return `import { defineTheme } from '@apx-ui/ds';
 
 export const myTheme = defineTheme(${body});`;
 }

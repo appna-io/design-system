@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pagination } from 'apx-ds';
+import { Pagination } from '@apx-ui/ds';
 
 export default function PagesOnly() {
   const [pageIndex, setPageIndex] = useState(3);

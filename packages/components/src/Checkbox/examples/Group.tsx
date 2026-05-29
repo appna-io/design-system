@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Checkbox } from 'apx-ds';
+import { Checkbox } from '@apx-ui/ds';
 
 const TOPICS = [
   { id: 'releases', label: 'Releases', defaultChecked: true },

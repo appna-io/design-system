@@ -1,5 +1,5 @@
-import { Accordion } from 'apx-ds';
-import type { AccordionColor } from 'apx-ds';
+import { Accordion } from '@apx-ui/ds';
+import type { AccordionColor } from '@apx-ui/ds';
 
 const COLORS: readonly AccordionColor[] = [
   'primary',

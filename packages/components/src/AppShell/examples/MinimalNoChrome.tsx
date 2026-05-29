@@ -1,4 +1,4 @@
-import { AppShell } from 'apx-ds';
+import { AppShell } from '@apx-ui/ds';
 
 export default function MinimalNoChrome() {
   return (

@@ -1,4 +1,4 @@
-import { Divider } from 'apx-ds';
+import { Divider } from '@apx-ui/ds';
 
 export default function Colors() {
   return (

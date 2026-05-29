@@ -1,5 +1,5 @@
-import { Badge, TreeView } from 'apx-ds';
-import type { TreeNodeData } from 'apx-ds';
+import { Badge, TreeView } from '@apx-ui/ds';
+import type { TreeNodeData } from '@apx-ui/ds';
 
 const data: TreeNodeData[] = [
   {

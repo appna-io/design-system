@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Calendar, type DateRange } from 'apx-ds';
+import { Calendar, type DateRange } from '@apx-ui/ds';
 
 export default function Range() {
   const [value, setValue] = useState<DateRange>({ start: null, end: null });

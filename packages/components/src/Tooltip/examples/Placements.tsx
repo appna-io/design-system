@@ -1,4 +1,4 @@
-import { Button, Tooltip, type TooltipPlacement } from 'apx-ds';
+import { Button, Tooltip, type TooltipPlacement } from '@apx-ui/ds';
 
 const PLACEMENTS: readonly TooltipPlacement[] = [
   'top-start',

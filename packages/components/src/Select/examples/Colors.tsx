@@ -1,5 +1,5 @@
-import { Select } from 'apx-ds';
-import type { SelectColor } from 'apx-ds';
+import { Select } from '@apx-ui/ds';
+import type { SelectColor } from '@apx-ui/ds';
 const colors: SelectColor[] = [
   'primary',
   'secondary',

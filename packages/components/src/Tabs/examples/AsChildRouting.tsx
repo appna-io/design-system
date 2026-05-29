@@ -1,4 +1,4 @@
-import { Tabs } from 'apx-ds';
+import { Tabs } from '@apx-ui/ds';
 
 /**
  * Tabs that drive a router: `asChild` lets `<Tabs.Trigger>` wrap a real anchor/link. The trigger

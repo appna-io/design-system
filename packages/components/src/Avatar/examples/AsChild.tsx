@@ -1,4 +1,4 @@
-import { Avatar } from 'apx-ds';
+import { Avatar } from '@apx-ui/ds';
 
 export default function AsChild() {
   return (

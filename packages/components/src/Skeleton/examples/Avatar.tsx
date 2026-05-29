@@ -1,4 +1,4 @@
-import { SkeletonAvatar } from 'apx-ds';
+import { SkeletonAvatar } from '@apx-ui/ds';
 
 export default function Avatar() {
   return (

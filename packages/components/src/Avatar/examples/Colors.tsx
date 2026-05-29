@@ -1,4 +1,4 @@
-import { Avatar, type AvatarColor } from 'apx-ds';
+import { Avatar, type AvatarColor } from '@apx-ui/ds';
 
 const EXPLICIT_COLORS: readonly Exclude<AvatarColor, 'auto'>[] = [
   'primary',

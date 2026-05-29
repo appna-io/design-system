@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { DatePicker } from 'apx-ds';
+import { DatePicker } from '@apx-ui/ds';
 
 export default function Basic() {
   const [value, setValue] = useState<Date | null>(null);

@@ -1,4 +1,4 @@
-import { Breadcrumbs } from 'apx-ds';
+import { Breadcrumbs } from '@apx-ui/ds';
 
 const items = [
   { label: 'Home', href: '#home' },

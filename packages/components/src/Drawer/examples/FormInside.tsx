@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { Button, Drawer, Input } from 'apx-ds';
+import { Button, Drawer, Input } from '@apx-ui/ds';
 
 export default function FormInside() {
   const [submitted, setSubmitted] = useState<string | null>(null);

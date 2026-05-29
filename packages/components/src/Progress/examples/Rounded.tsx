@@ -1,4 +1,4 @@
-import { Progress, type ProgressRounded } from 'apx-ds';
+import { Progress, type ProgressRounded } from '@apx-ui/ds';
 
 const ROUNDED: readonly ProgressRounded[] = ['sm', 'md', 'lg', 'full'];
 

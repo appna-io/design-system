@@ -1,4 +1,4 @@
-import { Button, Tooltip, type TooltipSize } from 'apx-ds';
+import { Button, Tooltip, type TooltipSize } from '@apx-ui/ds';
 
 const SIZES: readonly TooltipSize[] = ['sm', 'md', 'lg'];
 

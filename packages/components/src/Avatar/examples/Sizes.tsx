@@ -1,4 +1,4 @@
-import { Avatar, type AvatarSize } from 'apx-ds';
+import { Avatar, type AvatarSize } from '@apx-ui/ds';
 
 const SIZES: readonly AvatarSize[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
 

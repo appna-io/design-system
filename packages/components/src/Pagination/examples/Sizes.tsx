@@ -1,5 +1,5 @@
-import { Pagination } from 'apx-ds';
-import type { PaginationSize } from 'apx-ds';
+import { Pagination } from '@apx-ui/ds';
+import type { PaginationSize } from '@apx-ui/ds';
 
 const SIZES: PaginationSize[] = ['sm', 'md', 'lg'];
 

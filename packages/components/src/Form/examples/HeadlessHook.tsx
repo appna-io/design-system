@@ -1,4 +1,4 @@
-import { Button, Field, Input, useForm } from 'apx-ds';
+import { Button, Field, Input, useForm } from '@apx-ui/ds';
 
 export default function HeadlessHook() {
   const form = useForm<{ email: string; password: string } & Record<string, unknown>>({

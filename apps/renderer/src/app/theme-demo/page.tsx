@@ -1,7 +1,7 @@
 'use client';
 
-import { cv } from 'apx-ds';
-import { useMode, useTheme, useThemeDirection, useVariant } from 'apx-ds';
+import { cv } from '@apx-ui/ds';
+import { useMode, useTheme, useThemeDirection, useVariant } from '@apx-ui/ds';
 
 const card = cv({
   base: 'rounded-md border p-4 transition',

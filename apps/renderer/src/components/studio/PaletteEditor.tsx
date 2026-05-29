@@ -7,7 +7,7 @@ import {
   useThemeOverrides,
   type ColorRole,
   type ColorRoleName,
-} from 'apx-ds';
+} from '@apx-ui/ds';
 import { RotateCcw } from 'lucide-react';
 
 const ROLES: ColorRoleName[] = [

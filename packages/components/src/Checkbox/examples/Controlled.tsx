@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Checkbox } from 'apx-ds';
+import { Checkbox } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [controlled, setControlled] = useState(false);

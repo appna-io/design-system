@@ -1,4 +1,4 @@
-import { Alert, type AlertColor, type AlertVariant } from 'apx-ds';
+import { Alert, type AlertColor, type AlertVariant } from '@apx-ui/ds';
 
 const COLORS: readonly AlertColor[] = ['info', 'success', 'warning', 'danger', 'neutral'];
 const VARIANTS: readonly AlertVariant[] = ['solid', 'outline', 'soft', 'inline'];

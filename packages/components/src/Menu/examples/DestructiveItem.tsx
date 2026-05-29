@@ -1,5 +1,5 @@
 import { Trash2 } from 'lucide-react';
-import { Button, Menu } from 'apx-ds';
+import { Button, Menu } from '@apx-ui/ds';
 
 export default function DestructiveItem() {
   return (

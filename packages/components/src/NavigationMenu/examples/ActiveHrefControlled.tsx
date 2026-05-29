@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavigationMenu } from 'apx-ds';
+import { NavigationMenu } from '@apx-ui/ds';
 
 /**
  * Controlled `activeHref` — the consumer keeps the active path in state and

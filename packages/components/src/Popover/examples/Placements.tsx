@@ -1,4 +1,4 @@
-import { Button, Popover, type PopoverPlacement } from 'apx-ds';
+import { Button, Popover, type PopoverPlacement } from '@apx-ui/ds';
 
 const PLACEMENTS: readonly PopoverPlacement[] = [
   'top-start',

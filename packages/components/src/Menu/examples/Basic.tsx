@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Button, Menu } from 'apx-ds';
+import { Button, Menu } from '@apx-ui/ds';
 
 export default function Basic() {
   const [lastAction, setLastAction] = useState<string | null>(null);

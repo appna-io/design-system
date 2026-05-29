@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Checkbox } from 'apx-ds';
+import { Checkbox } from '@apx-ui/ds';
 
 const FRUITS = ['Apple', 'Banana', 'Cherry'] as const;
 

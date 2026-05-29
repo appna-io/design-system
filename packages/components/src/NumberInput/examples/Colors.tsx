@@ -1,4 +1,4 @@
-import { NumberInput } from 'apx-ds';
+import { NumberInput } from '@apx-ui/ds';
 
 export default function Colors() {
   return (

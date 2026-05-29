@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Button, Modal } from 'apx-ds';
+import { Button, Modal } from '@apx-ui/ds';
 
 /**
  * The DS does not ship a `useModal()` hook. Same effect with `useState` + `useCallback`: a tiny

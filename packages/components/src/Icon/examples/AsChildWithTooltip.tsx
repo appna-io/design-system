@@ -1,4 +1,4 @@
-import { Icon, Tooltip } from 'apx-ds';
+import { Icon, Tooltip } from '@apx-ui/ds';
 
 import { Info } from './_glyphs';
 

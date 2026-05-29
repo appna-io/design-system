@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Tabs } from 'apx-ds';
+import { Button, Tabs } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [value, setValue] = useState('overview');

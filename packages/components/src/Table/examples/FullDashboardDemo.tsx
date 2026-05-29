@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Avatar, Badge, Button, Table } from 'apx-ds';
-import type { TableColumn, TableSortState } from 'apx-ds';
+import { Avatar, Badge, Button, Table } from '@apx-ui/ds';
+import type { TableColumn, TableSortState } from '@apx-ui/ds';
 
 interface Member {
   id: string;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Button, Table } from 'apx-ds';
-import type { TableColumn } from 'apx-ds';
+import { Button, Table } from '@apx-ui/ds';
+import type { TableColumn } from '@apx-ui/ds';
 
 interface Order {
   id: string;

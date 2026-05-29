@@ -22,7 +22,7 @@ import {
   type DataGridColumnDef,
   type DataGridDensity,
   type DataGridVariant,
-} from 'apx-ds';
+} from '@apx-ui/ds';
 
 interface Row {
   id: number;

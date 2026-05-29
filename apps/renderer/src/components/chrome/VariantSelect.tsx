@@ -1,6 +1,6 @@
 'use client';
 
-import { usePlatform, useVariant } from 'apx-ds';
+import { usePlatform, useVariant } from '@apx-ui/ds';
 
 import {
   Select,

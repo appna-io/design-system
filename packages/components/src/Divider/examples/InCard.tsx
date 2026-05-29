@@ -1,4 +1,4 @@
-import { Card, Divider } from 'apx-ds';
+import { Card, Divider } from '@apx-ui/ds';
 
 export default function InCard() {
   return (

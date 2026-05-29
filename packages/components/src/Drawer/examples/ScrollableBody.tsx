@@ -1,4 +1,4 @@
-import { Button, Drawer } from 'apx-ds';
+import { Button, Drawer } from '@apx-ui/ds';
 
 export default function ScrollableBody() {
   const sections = Array.from({ length: 30 }, (_, i) => i + 1);

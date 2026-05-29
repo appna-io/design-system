@@ -1,4 +1,4 @@
-import { Skeleton } from 'apx-ds';
+import { Skeleton } from '@apx-ui/ds';
 
 const COLORS = ['primary', 'secondary', 'success', 'warning', 'danger', 'info', 'neutral'] as const;
 

@@ -1,5 +1,5 @@
-import { Pagination } from 'apx-ds';
-import type { PaginationVariant } from 'apx-ds';
+import { Pagination } from '@apx-ui/ds';
+import type { PaginationVariant } from '@apx-ui/ds';
 
 const VARIANTS: PaginationVariant[] = ['ghost', 'outline', 'soft', 'solid'];
 

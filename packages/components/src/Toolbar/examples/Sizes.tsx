@@ -1,4 +1,4 @@
-import { Button, Stack, Toolbar } from 'apx-ds';
+import { Button, Stack, Toolbar } from '@apx-ui/ds';
 
 export default function Sizes() {
   return (

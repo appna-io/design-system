@@ -1,4 +1,4 @@
-import { Avatar, type AvatarRing } from 'apx-ds';
+import { Avatar, type AvatarRing } from '@apx-ui/ds';
 
 const RINGS: readonly Exclude<AvatarRing, 'none'>[] = [
   'primary',

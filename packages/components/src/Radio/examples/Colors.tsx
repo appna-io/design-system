@@ -1,4 +1,4 @@
-import { Radio, RadioGroup, type RadioColor } from 'apx-ds';
+import { Radio, RadioGroup, type RadioColor } from '@apx-ui/ds';
 
 const COLORS: readonly RadioColor[] = [
   'primary',

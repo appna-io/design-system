@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Button, CommandPalette } from 'apx-ds';
-import type { CommandPaletteColor } from 'apx-ds';
+import { Button, CommandPalette } from '@apx-ui/ds';
+import type { CommandPaletteColor } from '@apx-ui/ds';
 
 const COMMANDS = [
   { id: 'a', label: 'Action A', onSelect: () => undefined },

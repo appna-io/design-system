@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Card, Rating, Textarea } from 'apx-ds';
+import { Button, Card, Rating, Textarea } from '@apx-ui/ds';
 
 export default function ProductReviewCard() {
   const [rating, setRating] = useState(0);

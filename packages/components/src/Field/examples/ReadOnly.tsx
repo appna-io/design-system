@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Field, Input } from 'apx-ds';
+import { Button, Field, Input } from '@apx-ui/ds';
 
 export default function ReadOnly() {
   const [readOnly, setReadOnly] = useState(true);

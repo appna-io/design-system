@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-import { Select } from 'apx-ds';
+import { Select } from '@apx-ui/ds';
 
 /**
  * Render the listbox inside a custom container — useful for portalling Select inside a Modal /

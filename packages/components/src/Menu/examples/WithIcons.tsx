@@ -1,5 +1,5 @@
 import { Copy, FileEdit, LogOut, Trash2, User } from 'lucide-react';
-import { Button, Menu } from 'apx-ds';
+import { Button, Menu } from '@apx-ui/ds';
 
 export default function WithIcons() {
   return (

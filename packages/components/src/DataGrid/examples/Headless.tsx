@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-import { DataGrid, useDataGrid } from 'apx-ds';
-import type { DataGridColumnDef } from 'apx-ds';
+import { DataGrid, useDataGrid } from '@apx-ui/ds';
+import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Row {
   id: number;

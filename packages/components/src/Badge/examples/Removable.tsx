@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Badge } from 'apx-ds';
+import { Badge } from '@apx-ui/ds';
 
 const INITIAL_TAGS = ['typescript', 'react', 'design-systems', 'tailwind'];
 

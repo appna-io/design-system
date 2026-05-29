@@ -1,4 +1,4 @@
-import { NavigationMenu } from 'apx-ds';
+import { NavigationMenu } from '@apx-ui/ds';
 
 /**
  * Mobile collapse — when the viewport is below `mobileBreakpoint` the menu

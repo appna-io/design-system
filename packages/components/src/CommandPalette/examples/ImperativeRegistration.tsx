@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, CommandPalette, commands, palette } from 'apx-ds';
+import { Button, CommandPalette, commands, palette } from '@apx-ui/ds';
 
 /**
  * Imperative module-level API. Works from anywhere in the app — a Zustand action, a fetch

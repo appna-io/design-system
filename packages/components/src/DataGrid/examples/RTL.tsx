@@ -1,5 +1,5 @@
-import { DataGrid, DirectionProvider, heDataGridTranslations } from 'apx-ds';
-import type { DataGridColumnDef } from 'apx-ds';
+import { DataGrid, DirectionProvider, heDataGridTranslations } from '@apx-ui/ds';
+import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Row {
   id: number;

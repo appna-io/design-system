@@ -1,4 +1,4 @@
-import { CircularProgress, Progress, type ProgressColor } from 'apx-ds';
+import { CircularProgress, Progress, type ProgressColor } from '@apx-ui/ds';
 
 const COLORS: readonly ProgressColor[] = [
   'primary',

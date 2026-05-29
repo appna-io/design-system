@@ -1,4 +1,4 @@
-import { Button, Toolbar } from 'apx-ds';
+import { Button, Toolbar } from '@apx-ui/ds';
 
 export default function Vertical() {
   return (

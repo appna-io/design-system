@@ -1,4 +1,4 @@
-import { Input, Select } from 'apx-ds';
+import { Input, Select } from '@apx-ui/ds';
 
 /**
  * The Select trigger heights are pinned to the same per-size scale as Input / Textarea

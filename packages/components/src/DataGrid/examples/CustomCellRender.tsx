@@ -1,5 +1,5 @@
-import { Avatar, Badge, DataGrid } from 'apx-ds';
-import type { DataGridColumnDef } from 'apx-ds';
+import { Avatar, Badge, DataGrid } from '@apx-ui/ds';
+import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Member {
   id: string;

@@ -1,4 +1,4 @@
-import { Carousel } from 'apx-ds';
+import { Carousel } from '@apx-ui/ds';
 
 const updates = [
   { title: 'Build #482', body: 'All checks passing on main.' },

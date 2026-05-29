@@ -1,4 +1,4 @@
-import { Button, Select } from 'apx-ds';
+import { Button, Select } from '@apx-ui/ds';
 import { useState } from 'react';
 
 export default function Required() {

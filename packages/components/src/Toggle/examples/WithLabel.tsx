@@ -1,6 +1,6 @@
 import { Bell, BellOff } from 'lucide-react';
 import { useState } from 'react';
-import { Toggle } from 'apx-ds';
+import { Toggle } from '@apx-ui/ds';
 
 export default function WithLabel() {
   const [muted, setMuted] = useState(false);

@@ -1,4 +1,4 @@
-import { Badge } from 'apx-ds';
+import { Badge } from '@apx-ui/ds';
 
 export default function AsChild() {
   return (

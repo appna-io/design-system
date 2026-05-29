@@ -1,4 +1,4 @@
-import { Avatar, Carousel } from 'apx-ds';
+import { Avatar, Carousel } from '@apx-ui/ds';
 
 const testimonials = [
   {

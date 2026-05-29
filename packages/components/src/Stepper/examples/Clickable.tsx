@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Stepper } from 'apx-ds';
+import { Stepper } from '@apx-ui/ds';
 
 const STEPS = [
   { id: 'account', label: 'Account' },

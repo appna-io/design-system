@@ -4,7 +4,7 @@ import {
   Scheduler,
   type SchedulerCalendarSource,
   type SchedulerEvent,
-} from 'apx-ds';
+} from '@apx-ui/ds';
 import { useState } from 'react';
 
 /**

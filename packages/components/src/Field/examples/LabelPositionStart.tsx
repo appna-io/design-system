@@ -1,4 +1,4 @@
-import { Field, Input, Select } from 'apx-ds';
+import { Field, Input, Select } from '@apx-ui/ds';
 
 export default function LabelPositionStart() {
   return (

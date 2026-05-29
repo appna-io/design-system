@@ -1,4 +1,4 @@
-import { Slider } from 'apx-ds';
+import { Slider } from '@apx-ui/ds';
 
 const dollars = (v: number) => `$${v.toFixed(2)}`;
 const percent = (v: number) => `${v}%`;

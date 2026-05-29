@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TagsInput } from 'apx-ds';
+import { TagsInput } from '@apx-ui/ds';
 
 export default function Variants() {
   const [a, setA] = useState<string[]>(['filled']);

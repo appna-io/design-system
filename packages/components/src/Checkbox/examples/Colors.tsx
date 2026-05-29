@@ -1,4 +1,4 @@
-import { Checkbox, type CheckboxColor } from 'apx-ds';
+import { Checkbox, type CheckboxColor } from '@apx-ui/ds';
 
 const COLORS: readonly CheckboxColor[] = [
   'primary',

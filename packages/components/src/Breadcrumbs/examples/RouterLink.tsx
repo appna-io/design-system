@@ -1,4 +1,4 @@
-import { Breadcrumbs } from 'apx-ds';
+import { Breadcrumbs } from '@apx-ui/ds';
 
 /**
  * Router-flavored breadcrumbs. The `asChild` prop on `<Breadcrumbs.Item>` clones the user's

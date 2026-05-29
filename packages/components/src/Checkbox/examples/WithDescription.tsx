@@ -1,4 +1,4 @@
-import { Checkbox } from 'apx-ds';
+import { Checkbox } from '@apx-ui/ds';
 
 export default function WithDescription() {
   return (

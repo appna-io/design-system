@@ -1,4 +1,4 @@
-import { Avatar, Combobox } from 'apx-ds';
+import { Avatar, Combobox } from '@apx-ui/ds';
 
 type User = {
   value: string;

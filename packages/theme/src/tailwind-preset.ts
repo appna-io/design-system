@@ -2,7 +2,7 @@
  * Tailwind preset that maps every `--sds-*` CSS variable to a Tailwind theme key. Consumers add
  * one line to their `tailwind.config.{ts,js,mjs}`:
  *
- *     import { apxTailwindPreset } from 'apx-ds/tailwind-preset';
+ *     import { apxTailwindPreset } from '@apx-ui/ds/tailwind-preset';
  *     export default { presets: [apxTailwindPreset], content: [...] };
  *
  * After that, classes like `bg-primary`, `text-primary-contrast`, `hover:bg-primary-hover`,

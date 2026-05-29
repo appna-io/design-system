@@ -1,4 +1,4 @@
-import { ToggleGroup } from 'apx-ds';
+import { ToggleGroup } from '@apx-ui/ds';
 
 const SIZES = ['sm', 'md', 'lg'] as const;
 

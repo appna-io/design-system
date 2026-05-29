@@ -1,4 +1,4 @@
-import { Spinner } from 'apx-ds';
+import { Spinner } from '@apx-ui/ds';
 
 export default function Variants() {
   return (

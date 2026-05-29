@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup } from 'apx-ds';
+import { Avatar, AvatarGroup } from '@apx-ui/ds';
 
 export default function Group() {
   return (

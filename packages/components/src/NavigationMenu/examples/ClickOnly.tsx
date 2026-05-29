@@ -1,4 +1,4 @@
-import { NavigationMenu } from 'apx-ds';
+import { NavigationMenu } from '@apx-ui/ds';
 
 /**
  * `trigger="click"` — dropdowns open ONLY on click. Used when the menu doubles

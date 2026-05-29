@@ -1,5 +1,5 @@
 import { ArrowRight, Mail, Trash2 } from 'lucide-react';
-import { Button } from 'apx-ds';
+import { Button } from '@apx-ui/ds';
 
 export default function WithIcons() {
   return (

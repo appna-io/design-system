@@ -1,4 +1,4 @@
-import { AppShell, HStack, Stack } from 'apx-ds';
+import { AppShell, HStack, Stack } from '@apx-ui/ds';
 
 export default function CenteredMain() {
   return (

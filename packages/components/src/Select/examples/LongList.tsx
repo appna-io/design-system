@@ -1,4 +1,4 @@
-import { Select } from 'apx-ds';
+import { Select } from '@apx-ui/ds';
 
 const cities = [
   'Amsterdam', 'Athens', 'Bangkok', 'Barcelona', 'Beijing', 'Berlin', 'Bogotá',

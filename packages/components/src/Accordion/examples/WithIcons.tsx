@@ -1,5 +1,5 @@
 import { Bell, Lock, ShieldCheck } from 'lucide-react';
-import { Accordion } from 'apx-ds';
+import { Accordion } from '@apx-ui/ds';
 
 export default function WithIcons() {
   return (

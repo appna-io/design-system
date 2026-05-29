@@ -1,5 +1,5 @@
-import { HoverCard } from 'apx-ds';
-import type { HoverCardVariant } from 'apx-ds';
+import { HoverCard } from '@apx-ui/ds';
+import type { HoverCardVariant } from '@apx-ui/ds';
 
 /**
  * Three visual variants — `solid` (default, paper bg + neutral border), `outline` (paper +

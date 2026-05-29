@@ -1,4 +1,4 @@
-import { EmptyState } from 'apx-ds';
+import { EmptyState } from '@apx-ui/ds';
 
 function FolderIcon() {
   return (

@@ -1,5 +1,5 @@
-import { EmptyState, Table } from 'apx-ds';
-import type { TableColumn } from 'apx-ds';
+import { EmptyState, Table } from '@apx-ui/ds';
+import type { TableColumn } from '@apx-ui/ds';
 
 interface Row {
   id: string;

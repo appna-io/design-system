@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, ColorPicker } from 'apx-ds';
+import { Button, ColorPicker } from '@apx-ui/ds';
 
 export default function AsFormField() {
   const [submitted, setSubmitted] = useState<string | null>(null);

@@ -1,4 +1,4 @@
-import { Button, HoverCard } from 'apx-ds';
+import { Button, HoverCard } from '@apx-ui/ds';
 
 /**
  * Demonstrates the `trigger="hover-focus"` (default) vs `trigger="hover"` axis. Tab from the

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Button, Menu } from 'apx-ds';
+import { Button, Menu } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [open, setOpen] = useState(false);

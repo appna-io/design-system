@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Table } from 'apx-ds';
-import type { TableColumn } from 'apx-ds';
+import { Table } from '@apx-ui/ds';
+import type { TableColumn } from '@apx-ui/ds';
 interface Doc {
   id: string;
   title: string;

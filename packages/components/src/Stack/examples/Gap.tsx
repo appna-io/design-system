@@ -1,4 +1,4 @@
-import { HStack, VStack } from 'apx-ds';
+import { HStack, VStack } from '@apx-ui/ds';
 
 const GAPS = [0, 1, 2, 4, 6, 8] as const;
 

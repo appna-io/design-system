@@ -1,4 +1,4 @@
-import { Icon } from 'apx-ds';
+import { Icon } from '@apx-ui/ds';
 
 export default function BasicChildrenInline() {
   return (

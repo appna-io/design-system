@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Toolbar } from 'apx-ds';
+import { Button, Toolbar } from '@apx-ui/ds';
 
 export default function WithSpacer() {
   const [draft, setDraft] = useState(true);

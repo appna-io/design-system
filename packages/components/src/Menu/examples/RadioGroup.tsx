@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Button, Menu } from 'apx-ds';
+import { Button, Menu } from '@apx-ui/ds';
 
 export default function RadioGroup() {
   const [theme, setTheme] = useState('system');

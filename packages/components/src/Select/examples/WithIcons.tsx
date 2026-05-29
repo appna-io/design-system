@@ -1,6 +1,6 @@
 import { Globe } from 'lucide-react';
 
-import { Select } from 'apx-ds';
+import { Select } from '@apx-ui/ds';
 
 export default function WithIcons() {
   return (

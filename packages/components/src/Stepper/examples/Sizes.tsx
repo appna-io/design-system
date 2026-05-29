@@ -1,4 +1,4 @@
-import { Stepper } from 'apx-ds';
+import { Stepper } from '@apx-ui/ds';
 
 const STEPS = [
   { id: 'a', label: 'Account' },

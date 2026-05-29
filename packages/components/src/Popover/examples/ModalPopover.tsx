@@ -1,4 +1,4 @@
-import { Button, Popover } from 'apx-ds';
+import { Button, Popover } from '@apx-ui/ds';
 
 /**
  * `modal={true}` is the rare middle-ground between a non-modal Popover and a full Modal.

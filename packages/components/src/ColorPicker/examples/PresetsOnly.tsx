@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ColorPicker } from 'apx-ds';
+import { ColorPicker } from '@apx-ui/ds';
 
 const BRAND_PALETTE = [
   '#FF6B6B',

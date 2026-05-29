@@ -1,6 +1,6 @@
 'use client';
 
-import { useThemeDirection } from 'apx-ds';
+import { useThemeDirection } from '@apx-ui/ds';
 
 import { cn } from '../primitives/cn';
 

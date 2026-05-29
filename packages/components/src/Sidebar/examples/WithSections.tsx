@@ -1,4 +1,4 @@
-import { Sidebar } from 'apx-ds';
+import { Sidebar } from '@apx-ui/ds';
 
 import { ChartIcon, FolderIcon, HomeIcon, InboxIcon, StarIcon } from './_icons';
 

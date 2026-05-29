@@ -1,4 +1,4 @@
-import { Badge, Tabs } from 'apx-ds';
+import { Badge, Tabs } from '@apx-ui/ds';
 
 export default function WithBadges() {
   return (

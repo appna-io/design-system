@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Modal } from 'apx-ds';
+import { Button, Modal } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [open, setOpen] = useState(false);

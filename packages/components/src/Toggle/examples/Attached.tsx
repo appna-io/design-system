@@ -1,4 +1,4 @@
-import { ToggleGroup } from 'apx-ds';
+import { ToggleGroup } from '@apx-ui/ds';
 
 export default function Attached() {
   return (

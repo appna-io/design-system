@@ -1,4 +1,4 @@
-import { Button, Input, Modal } from 'apx-ds';
+import { Button, Input, Modal } from '@apx-ui/ds';
 import { useState, type FormEvent } from 'react';
 
 export default function FormInside() {

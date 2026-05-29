@@ -1,5 +1,5 @@
-import { HoverCard } from 'apx-ds';
-import type { HoverCardColor } from 'apx-ds';
+import { HoverCard } from '@apx-ui/ds';
+import type { HoverCardColor } from '@apx-ui/ds';
 
 /**
  * Seven colors × `soft` variant. `soft` is the most color-rich variant — paper-based `solid`

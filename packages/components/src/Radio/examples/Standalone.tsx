@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Radio } from 'apx-ds';
+import { Radio } from '@apx-ui/ds';
 
 export default function Standalone() {
   // Standalone is the documented escape hatch: a lone <Radio> without a <RadioGroup>. Useful for

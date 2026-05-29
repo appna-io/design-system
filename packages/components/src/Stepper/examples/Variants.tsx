@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Stepper, type StepperVariant } from 'apx-ds';
+import { Button, Stepper, type StepperVariant } from '@apx-ui/ds';
 
 const STEPS = [
   { id: 'a', label: 'Account' },

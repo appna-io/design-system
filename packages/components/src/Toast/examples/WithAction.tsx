@@ -1,4 +1,4 @@
-import { Button, Toaster, toast } from 'apx-ds';
+import { Button, Toaster, toast } from '@apx-ui/ds';
 
 export default function WithAction() {
   return (

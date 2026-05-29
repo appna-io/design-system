@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Table } from 'apx-ds';
-import type { TableColumn, TableSortState } from 'apx-ds';
+import { Table } from '@apx-ui/ds';
+import type { TableColumn, TableSortState } from '@apx-ui/ds';
 
 interface Row {
   id: string;

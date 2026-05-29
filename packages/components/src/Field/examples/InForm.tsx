@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Field, Input, Stack } from 'apx-ds';
+import { Button, Field, Input, Stack } from '@apx-ui/ds';
 
 /**
  * Placeholder for the eventual `<Form>` (Phase 50) integration. Today Field reads its values

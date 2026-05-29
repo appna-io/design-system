@@ -1,4 +1,4 @@
-import { Breadcrumbs, type BreadcrumbsColor } from 'apx-ds';
+import { Breadcrumbs, type BreadcrumbsColor } from '@apx-ui/ds';
 
 const colors: BreadcrumbsColor[] = ['primary', 'secondary', 'success', 'warning', 'danger', 'info', 'neutral'];
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useThemeOverrides } from 'apx-ds';
+import { useThemeOverrides } from '@apx-ui/ds';
 import { Check, Copy } from 'lucide-react';
 import { useState } from 'react';
 

@@ -1,4 +1,4 @@
-import { Scheduler, type SchedulerEvent } from 'apx-ds';
+import { Scheduler, type SchedulerEvent } from '@apx-ui/ds';
 
 const base = new Date();
 function day(offset: number, hour = 10, minute = 0): Date {

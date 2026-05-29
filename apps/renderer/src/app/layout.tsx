@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { ThemeProvider, ThemeScript } from 'apx-ds';
-import 'apx-ds/styles/reset.css';
+import { ThemeProvider, ThemeScript } from '@apx-ui/ds';
+import '@apx-ui/ds/styles/reset.css';
 import './globals.css';
 
 import { Chrome } from '../components/chrome/Chrome';

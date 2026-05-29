@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Drawer } from 'apx-ds';
+import { Button, Drawer } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [open, setOpen] = useState(false);

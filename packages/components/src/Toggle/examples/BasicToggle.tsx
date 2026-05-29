@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Toggle } from 'apx-ds';
+import { Toggle } from '@apx-ui/ds';
 
 export default function BasicToggle() {
   const [pinned, setPinned] = useState(false);

@@ -1,4 +1,4 @@
-import { Button, Drawer } from 'apx-ds';
+import { Button, Drawer } from '@apx-ui/ds';
 
 const links = [
   { label: 'Dashboard', href: '#dashboard' },

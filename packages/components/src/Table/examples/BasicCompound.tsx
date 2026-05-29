@@ -1,4 +1,4 @@
-import { Badge, Table } from 'apx-ds';
+import { Badge, Table } from '@apx-ui/ds';
 
 const users = [
   { id: '1', name: 'Maya Singh', email: 'maya@example.com', plan: 'Pro' },

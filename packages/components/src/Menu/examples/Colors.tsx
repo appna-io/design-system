@@ -1,5 +1,5 @@
-import { Button, Menu } from 'apx-ds';
-import type { MenuColor } from 'apx-ds';
+import { Button, Menu } from '@apx-ui/ds';
+import type { MenuColor } from '@apx-ui/ds';
 
 const colors: MenuColor[] = [
   'primary',

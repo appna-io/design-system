@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
 
-import { Badge, Button, DataGrid } from 'apx-ds';
+import { Badge, Button, DataGrid } from '@apx-ui/ds';
 import type {
   DataGridColumnDef,
   DataGridRowAction,
   DataGridSelectionIds,
-} from 'apx-ds';
+} from '@apx-ui/ds';
 
 interface Account {
   id: string;

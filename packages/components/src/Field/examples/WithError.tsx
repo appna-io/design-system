@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Field, Input } from 'apx-ds';
+import { Button, Field, Input } from '@apx-ui/ds';
 
 export default function WithError() {
   const [value, setValue] = useState('not-an-email');

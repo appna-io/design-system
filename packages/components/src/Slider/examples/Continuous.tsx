@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Slider } from 'apx-ds';
+import { Slider } from '@apx-ui/ds';
 
 export default function Continuous() {
   const [value, setValue] = useState(0.5);

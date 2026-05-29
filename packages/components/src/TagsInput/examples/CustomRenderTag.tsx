@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Badge, TagsInput } from 'apx-ds';
+import { Badge, TagsInput } from '@apx-ui/ds';
 
 export default function CustomRenderTag() {
   const [tags, setTags] = useState<string[]>(['design', 'engineering', 'product']);

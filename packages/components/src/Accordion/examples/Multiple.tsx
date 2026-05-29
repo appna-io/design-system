@@ -1,4 +1,4 @@
-import { Accordion } from 'apx-ds';
+import { Accordion } from '@apx-ui/ds';
 
 export default function Multiple() {
   return (

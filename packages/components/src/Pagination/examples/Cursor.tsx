@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pagination } from 'apx-ds';
+import { Pagination } from '@apx-ui/ds';
 
 /**
  * Simulates a server that only exposes prev / next cursors and never reports

@@ -1,4 +1,4 @@
-import { Button, Drawer } from 'apx-ds';
+import { Button, Drawer } from '@apx-ui/ds';
 
 /**
  * One of the headline patterns Drawer enables: bottom-sheet on mobile, side-drawer on desktop.

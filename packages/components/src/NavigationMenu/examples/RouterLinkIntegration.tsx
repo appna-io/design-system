@@ -1,5 +1,5 @@
 import { forwardRef, type AnchorHTMLAttributes } from 'react';
-import { NavigationMenu } from 'apx-ds';
+import { NavigationMenu } from '@apx-ui/ds';
 
 /**
  * Stand-in for a framework router Link (Next.js / React Router / TanStack

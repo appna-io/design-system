@@ -1,4 +1,4 @@
-import { SkeletonText } from 'apx-ds';
+import { SkeletonText } from '@apx-ui/ds';
 
 export default function Text() {
   return (

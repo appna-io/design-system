@@ -1,5 +1,5 @@
-import { TreeView } from 'apx-ds';
-import type { TreeNodeData } from 'apx-ds';
+import { TreeView } from '@apx-ui/ds';
+import type { TreeNodeData } from '@apx-ui/ds';
 
 const seed: TreeNodeData[] = [
   { id: 'root', label: 'Cloud Drive', hasChildren: true },

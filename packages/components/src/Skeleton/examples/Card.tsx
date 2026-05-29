@@ -1,4 +1,4 @@
-import { Skeleton, SkeletonText } from 'apx-ds';
+import { Skeleton, SkeletonText } from '@apx-ui/ds';
 
 export default function Card() {
   return (

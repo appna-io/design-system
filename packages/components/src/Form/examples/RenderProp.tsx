@@ -1,4 +1,4 @@
-import { Button, Form, Input } from 'apx-ds';
+import { Button, Form, Input } from '@apx-ui/ds';
 
 export default function RenderProp() {
   return (

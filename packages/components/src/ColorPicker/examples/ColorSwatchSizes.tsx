@@ -1,4 +1,4 @@
-import { ColorSwatch } from 'apx-ds';
+import { ColorSwatch } from '@apx-ui/ds';
 
 export default function ColorSwatchSizes() {
   return (

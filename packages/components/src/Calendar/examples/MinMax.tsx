@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Calendar } from 'apx-ds';
+import { Calendar } from '@apx-ui/ds';
 
 const today = new Date();
 const inFiveDays = new Date(today);

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, CommandPalette, useRegisterCommand } from 'apx-ds';
+import { Button, CommandPalette, useRegisterCommand } from '@apx-ui/ds';
 
 /**
  * Hook-based registration — commands defined deep in the component tree flow into the palette

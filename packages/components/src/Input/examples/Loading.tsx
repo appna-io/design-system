@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Input } from 'apx-ds';
+import { Input } from '@apx-ui/ds';
 
 export default function Loading() {
   const [value, setValue] = useState('');

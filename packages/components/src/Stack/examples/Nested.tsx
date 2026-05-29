@@ -1,4 +1,4 @@
-import { HStack, Spacer, VStack } from 'apx-ds';
+import { HStack, Spacer, VStack } from '@apx-ui/ds';
 
 export default function Nested() {
   return (

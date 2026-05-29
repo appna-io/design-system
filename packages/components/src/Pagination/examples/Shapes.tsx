@@ -1,5 +1,5 @@
-import { Pagination } from 'apx-ds';
-import type { PaginationShape } from 'apx-ds';
+import { Pagination } from '@apx-ui/ds';
+import type { PaginationShape } from '@apx-ui/ds';
 
 const SHAPES: PaginationShape[] = ['square', 'rounded', 'pill'];
 

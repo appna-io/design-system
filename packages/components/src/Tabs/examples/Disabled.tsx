@@ -1,4 +1,4 @@
-import { Tabs } from 'apx-ds';
+import { Tabs } from '@apx-ui/ds';
 
 export default function Disabled() {
   return (

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, NumberInput } from 'apx-ds';
+import { Button, NumberInput } from '@apx-ui/ds';
 
 export default function FormSubmission() {
   const [submitted, setSubmitted] = useState<string | null>(null);

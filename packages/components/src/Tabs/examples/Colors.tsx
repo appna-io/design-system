@@ -1,4 +1,4 @@
-import { Tabs, type TabsColor } from 'apx-ds';
+import { Tabs, type TabsColor } from '@apx-ui/ds';
 
 const colors: TabsColor[] = ['primary', 'secondary', 'success', 'warning', 'danger', 'info', 'neutral'];
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Sidebar } from 'apx-ds';
+import { Button, Sidebar } from '@apx-ui/ds';
 
 import { CogIcon, FolderIcon, HomeIcon, InboxIcon } from './_icons';
 

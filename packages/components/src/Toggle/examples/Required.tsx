@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ToggleGroup } from 'apx-ds';
+import { ToggleGroup } from '@apx-ui/ds';
 
 export default function Required() {
   const [view, setView] = useState('grid');

@@ -1,4 +1,4 @@
-import { Skeleton, SkeletonAvatar, SkeletonText } from 'apx-ds';
+import { Skeleton, SkeletonAvatar, SkeletonText } from '@apx-ui/ds';
 
 export default function ListItem() {
   return (

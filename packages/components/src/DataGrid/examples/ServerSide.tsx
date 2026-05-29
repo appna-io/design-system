@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { DataGrid } from 'apx-ds';
+import { DataGrid } from '@apx-ui/ds';
 import type {
   DataGridColumnDef,
   DataGridColumnFiltersState,
   DataGridPaginationState,
   DataGridSortDescriptor,
-} from 'apx-ds';
+} from '@apx-ui/ds';
 
 interface ApiRow {
   id: number;

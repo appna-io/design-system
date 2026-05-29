@@ -1,4 +1,4 @@
-import { Menu } from 'apx-ds';
+import { Menu } from '@apx-ui/ds';
 
 export default function ContextMenu() {
   return (

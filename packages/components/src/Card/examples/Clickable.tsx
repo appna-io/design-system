@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card } from 'apx-ds';
+import { Card } from '@apx-ui/ds';
 
 export default function Clickable() {
   const [clicks, setClicks] = useState(0);

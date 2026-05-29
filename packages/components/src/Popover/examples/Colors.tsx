@@ -1,4 +1,4 @@
-import { Button, Popover, type PopoverColor } from 'apx-ds';
+import { Button, Popover, type PopoverColor } from '@apx-ui/ds';
 
 const COLORS: readonly PopoverColor[] = [
   'primary',

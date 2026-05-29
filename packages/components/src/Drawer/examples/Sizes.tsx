@@ -1,5 +1,5 @@
-import { Button, Drawer } from 'apx-ds';
-import type { DrawerSize } from 'apx-ds';
+import { Button, Drawer } from '@apx-ui/ds';
+import type { DrawerSize } from '@apx-ui/ds';
 
 const sizes: DrawerSize[] = ['sm', 'md', 'lg', 'xl', 'full'];
 

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Button, HoverCard, Spinner } from 'apx-ds';
+import { Button, HoverCard, Spinner } from '@apx-ui/ds';
 
 interface UserProfile {
   name: string;

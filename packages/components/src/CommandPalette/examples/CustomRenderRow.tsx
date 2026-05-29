@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, CommandPalette, highlightMatch, Kbd } from 'apx-ds';
+import { Button, CommandPalette, highlightMatch, Kbd } from '@apx-ui/ds';
 
 const COMMANDS = [
   { id: 'a', label: 'New Document', shortcut: '⌘N', category: 'File', description: 'Create an empty doc', onSelect: () => undefined },

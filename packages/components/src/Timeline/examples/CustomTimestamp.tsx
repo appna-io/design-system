@@ -1,4 +1,4 @@
-import { Timeline } from 'apx-ds';
+import { Timeline } from '@apx-ui/ds';
 
 const fmt = (d: Date) => `\u23F1 ${d.getUTCHours().toString().padStart(2, '0')}:${d
   .getUTCMinutes()

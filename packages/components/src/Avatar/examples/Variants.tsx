@@ -1,4 +1,4 @@
-import { Avatar, type AvatarVariant } from 'apx-ds';
+import { Avatar, type AvatarVariant } from '@apx-ui/ds';
 
 const VARIANTS: readonly AvatarVariant[] = ['solid', 'outline', 'soft'];
 

@@ -1,4 +1,4 @@
-import { ColorPicker } from 'apx-ds';
+import { ColorPicker } from '@apx-ui/ds';
 
 export default function Sizes() {
   return (

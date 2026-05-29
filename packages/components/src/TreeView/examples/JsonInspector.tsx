@@ -1,5 +1,5 @@
-import { TreeView } from 'apx-ds';
-import type { TreeNodeData } from 'apx-ds';
+import { TreeView } from '@apx-ui/ds';
+import type { TreeNodeData } from '@apx-ui/ds';
 
 function toNode(key: string, value: unknown, path: string): TreeNodeData {
   const id = `${path}/${key}`;

@@ -1,5 +1,5 @@
-import { Badge, Table } from 'apx-ds';
-import type { TableColumn } from 'apx-ds';
+import { Badge, Table } from '@apx-ui/ds';
+import type { TableColumn } from '@apx-ui/ds';
 
 interface User {
   id: string;

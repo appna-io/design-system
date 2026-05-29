@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AppShell, Button, HStack, Stack } from 'apx-ds';
+import { AppShell, Button, HStack, Stack } from '@apx-ui/ds';
 
 export default function WithAside() {
   const [asideOpen, setAsideOpen] = useState(true);

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Form, FormField, Input } from 'apx-ds';
+import { Button, Form, FormField, Input } from '@apx-ui/ds';
 
 const PROFILES = [
   { id: '1', name: 'Ada Lovelace', email: 'ada@example.com' },

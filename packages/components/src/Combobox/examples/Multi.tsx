@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { MultiCombobox } from 'apx-ds';
+import { MultiCombobox } from '@apx-ui/ds';
 
 const FRAMEWORKS = [
   { value: 'react', label: 'React' },

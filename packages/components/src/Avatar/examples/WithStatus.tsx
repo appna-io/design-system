@@ -1,4 +1,4 @@
-import { Avatar, type AvatarStatus, type AvatarStatusPlacement } from 'apx-ds';
+import { Avatar, type AvatarStatus, type AvatarStatusPlacement } from '@apx-ui/ds';
 
 const STATUSES: readonly AvatarStatus[] = ['online', 'away', 'busy', 'offline'];
 const PLACEMENTS: readonly AvatarStatusPlacement[] = [

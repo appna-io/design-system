@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Button, Drawer } from 'apx-ds';
+import { Button, Drawer } from '@apx-ui/ds';
 
 /**
  * Same controller-object pattern Modal uses. No dedicated `useDrawer()` hook — `useState` +

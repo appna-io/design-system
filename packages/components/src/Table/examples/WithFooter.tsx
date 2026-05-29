@@ -1,4 +1,4 @@
-import { Table } from 'apx-ds';
+import { Table } from '@apx-ui/ds';
 
 const items = [
   { id: '1', label: 'Foundation', qty: 2, total: 58 },

@@ -1,4 +1,4 @@
-import { Combobox } from 'apx-ds';
+import { Combobox } from '@apx-ui/ds';
 
 const FRUITS = [
   { value: 'apple', label: 'Apple' },

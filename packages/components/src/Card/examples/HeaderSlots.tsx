@@ -1,4 +1,4 @@
-import { Avatar, Badge, Button, Card } from 'apx-ds';
+import { Avatar, Badge, Button, Card } from '@apx-ui/ds';
 
 export default function HeaderSlots() {
   return (

@@ -1,4 +1,4 @@
-import { Button, Form, FormField, Input, Textarea } from 'apx-ds';
+import { Button, Form, FormField, Input, Textarea } from '@apx-ui/ds';
 
 interface SettingsValues extends Record<string, unknown> {
   displayName: string;

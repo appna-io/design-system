@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Button, DataGrid } from 'apx-ds';
-import type { DataGridColumnDef, DataGridSelectionIds } from 'apx-ds';
+import { Button, DataGrid } from '@apx-ui/ds';
+import type { DataGridColumnDef, DataGridSelectionIds } from '@apx-ui/ds';
 
 interface Subscriber {
   id: string;

@@ -1,4 +1,4 @@
-import { Input } from 'apx-ds';
+import { Input } from '@apx-ui/ds';
 
 export default function Disabled() {
   return (

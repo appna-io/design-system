@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ColorPicker } from 'apx-ds';
+import { ColorPicker } from '@apx-ui/ds';
 
 export default function WithAlpha() {
   const [color, setColor] = useState('rgba(108, 92, 231, 0.5)');

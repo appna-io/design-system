@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Calendar } from 'apx-ds';
+import { Calendar } from '@apx-ui/ds';
 
 /**
  * Same calendar in three locales — drives weekday/month names + first-day-of-week from

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { DatePicker } from 'apx-ds';
+import { DatePicker } from '@apx-ui/ds';
 
 const today = new Date();
 const inFive = new Date(today);

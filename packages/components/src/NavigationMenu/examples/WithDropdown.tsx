@@ -1,4 +1,4 @@
-import { NavigationMenu } from 'apx-ds';
+import { NavigationMenu } from '@apx-ui/ds';
 
 /**
  * Dropdown navigation — one Item has a `<NavigationMenu.Trigger>` + a sibling

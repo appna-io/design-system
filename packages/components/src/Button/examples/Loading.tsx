@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button } from 'apx-ds';
+import { Button } from '@apx-ui/ds';
 
 export default function Loading() {
   const [busy, setBusy] = useState(false);

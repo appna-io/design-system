@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Switch } from 'apx-ds';
+import { Switch } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [controlled, setControlled] = useState(false);

@@ -1,4 +1,4 @@
-import { Carousel } from 'apx-ds';
+import { Carousel } from '@apx-ui/ds';
 
 const banners = [
   { title: 'Summer Collection', subtitle: 'Bright colors, breezy fabrics.', bg: 'from-amber-400 to-orange-500' },

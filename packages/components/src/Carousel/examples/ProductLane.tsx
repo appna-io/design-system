@@ -1,4 +1,4 @@
-import { Carousel } from 'apx-ds';
+import { Carousel } from '@apx-ui/ds';
 
 const products = [
   { name: 'Linen Tee', price: '$34', color: 'bg-sky-100' },

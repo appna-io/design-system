@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Rating } from 'apx-ds';
+import { Button, Rating } from '@apx-ui/ds';
 
 export default function InForm() {
   const [submitted, setSubmitted] = useState<string | null>(null);

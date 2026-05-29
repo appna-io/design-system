@@ -1,4 +1,4 @@
-import { Typography } from 'apx-ds';
+import { Typography } from '@apx-ui/ds';
 
 export default function Pseudo() {
   return (

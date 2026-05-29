@@ -1,5 +1,5 @@
 import { AlignCenter, AlignJustify, AlignLeft, AlignRight } from 'lucide-react';
-import { ToggleGroup } from 'apx-ds';
+import { ToggleGroup } from '@apx-ui/ds';
 
 export default function IconOnly() {
   return (

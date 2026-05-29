@@ -1,4 +1,4 @@
-import { Spinner } from 'apx-ds';
+import { Spinner } from '@apx-ui/ds';
 
 const SIZES = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
 

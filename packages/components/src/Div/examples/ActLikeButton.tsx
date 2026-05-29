@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Div } from 'apx-ds';
+import { Div } from '@apx-ui/ds';
 
 export default function ActLikeButton() {
   const [count, setCount] = useState(0);

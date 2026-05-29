@@ -1,6 +1,6 @@
 'use client';
 
-import { Scheduler, type SchedulerEvent, type SchedulerHoliday } from 'apx-ds';
+import { Scheduler, type SchedulerEvent, type SchedulerHoliday } from '@apx-ui/ds';
 import { useState } from 'react';
 
 const customHolidays: SchedulerHoliday[] = [

@@ -12,7 +12,7 @@ import {
   Switch,
   TagsInput,
   Textarea,
-} from 'apx-ds';
+} from '@apx-ui/ds';
 
 /**
  * Verifies that every form control that uses the shared `useFormFieldA11y` hook lights up

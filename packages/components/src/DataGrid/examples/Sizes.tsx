@@ -1,5 +1,5 @@
-import { DataGrid } from 'apx-ds';
-import type { DataGridColumnDef, DataGridDensity } from 'apx-ds';
+import { DataGrid } from '@apx-ui/ds';
+import type { DataGridColumnDef, DataGridDensity } from '@apx-ui/ds';
 
 interface Row {
   id: number;

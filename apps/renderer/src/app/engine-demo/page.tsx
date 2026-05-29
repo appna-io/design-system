@@ -1,6 +1,6 @@
 'use client';
 
-import { cn, cv, Slot, useDirection } from 'apx-ds';
+import { cn, cv, Slot, useDirection } from '@apx-ui/ds';
 
 const demoRecipe = cv({
   base: 'inline-flex items-center justify-center rounded-md font-medium transition',

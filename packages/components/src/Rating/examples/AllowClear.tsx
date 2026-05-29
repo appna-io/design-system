@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Rating } from 'apx-ds';
+import { Rating } from '@apx-ui/ds';
 
 export default function AllowClear() {
   const [value, setValue] = useState(3);

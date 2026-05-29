@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import { Button, DataGrid } from 'apx-ds';
-import type { DataGridColumnDef } from 'apx-ds';
+import { Button, DataGrid } from '@apx-ui/ds';
+import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Row {
   id: number;

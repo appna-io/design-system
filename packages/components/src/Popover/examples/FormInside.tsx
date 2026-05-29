@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Button, Input, Popover, Textarea } from 'apx-ds';
+import { Button, Input, Popover, Textarea } from '@apx-ui/ds';
 
 /**
  * Stress-tests the focus trap: a Popover containing a multi-field form. Tabbing cycles between

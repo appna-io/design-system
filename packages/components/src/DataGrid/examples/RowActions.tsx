@@ -1,6 +1,6 @@
 import { Edit3, Trash2 } from 'lucide-react';
-import { DataGrid } from 'apx-ds';
-import type { DataGridColumnDef, DataGridRowAction } from 'apx-ds';
+import { DataGrid } from '@apx-ui/ds';
+import type { DataGridColumnDef, DataGridRowAction } from '@apx-ui/ds';
 
 interface Document {
   id: string;

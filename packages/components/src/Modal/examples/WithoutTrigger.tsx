@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Button, Modal } from 'apx-ds';
+import { Button, Modal } from '@apx-ui/ds';
 
 /**
  * Demonstrates the **without-trigger** API: there is no `<Modal.Trigger>` in the tree. The

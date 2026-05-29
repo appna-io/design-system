@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Button, Select } from 'apx-ds';
+import { Button, Select } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [value, setValue] = useState<string>('apple');

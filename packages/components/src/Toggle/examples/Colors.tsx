@@ -1,5 +1,5 @@
-import { ToggleGroup } from 'apx-ds';
-import type { ToggleColor } from 'apx-ds';
+import { ToggleGroup } from '@apx-ui/ds';
+import type { ToggleColor } from '@apx-ui/ds';
 const COLORS: ToggleColor[] = [
   'primary',
   'secondary',

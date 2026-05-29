@@ -1,4 +1,4 @@
-import { Button, Form, FormField, Input } from 'apx-ds';
+import { Button, Form, FormField, Input } from '@apx-ui/ds';
 
 export default function ServerErrors() {
   return (

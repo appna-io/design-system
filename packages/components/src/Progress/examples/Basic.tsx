@@ -1,4 +1,4 @@
-import { Progress } from 'apx-ds';
+import { Progress } from '@apx-ui/ds';
 
 export default function Basic() {
   return (

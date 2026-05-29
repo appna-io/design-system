@@ -1,4 +1,4 @@
-import { HStack } from 'apx-ds';
+import { HStack } from '@apx-ui/ds';
 
 export default function Horizontal() {
   return (

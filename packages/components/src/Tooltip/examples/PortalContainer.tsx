@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Button, Tooltip } from 'apx-ds';
+import { Button, Tooltip } from '@apx-ui/ds';
 
 /**
  * `portalContainer` lets you mount the tooltip inside a specific element instead of

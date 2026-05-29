@@ -1,5 +1,5 @@
-import { Button, Modal } from 'apx-ds';
-import type { ModalPlacement } from 'apx-ds';
+import { Button, Modal } from '@apx-ui/ds';
+import type { ModalPlacement } from '@apx-ui/ds';
 
 const placements: ModalPlacement[] = ['center', 'top'];
 

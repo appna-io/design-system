@@ -1,4 +1,4 @@
-import { Slider } from 'apx-ds';
+import { Slider } from '@apx-ui/ds';
 
 const COLORS = ['primary', 'secondary', 'success', 'warning', 'danger', 'info', 'neutral'] as const;
 

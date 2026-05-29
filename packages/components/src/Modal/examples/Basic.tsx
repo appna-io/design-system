@@ -1,4 +1,4 @@
-import { Button, Modal } from 'apx-ds';
+import { Button, Modal } from '@apx-ui/ds';
 
 export default function Basic() {
   return (

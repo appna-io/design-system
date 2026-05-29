@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Popover } from 'apx-ds';
+import { Button, Popover } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [open, setOpen] = useState(false);

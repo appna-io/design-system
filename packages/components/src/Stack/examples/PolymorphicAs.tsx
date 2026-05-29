@@ -1,4 +1,4 @@
-import { Stack, VStack } from 'apx-ds';
+import { Stack, VStack } from '@apx-ui/ds';
 
 export default function PolymorphicAs() {
   return (

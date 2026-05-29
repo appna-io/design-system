@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Radio, RadioGroup } from 'apx-ds';
+import { Radio, RadioGroup } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [controlled, setControlled] = useState('medium');

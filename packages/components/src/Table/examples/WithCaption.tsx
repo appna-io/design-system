@@ -1,4 +1,4 @@
-import { Table } from 'apx-ds';
+import { Table } from '@apx-ui/ds';
 
 const rows = [
   { id: '1', name: 'Maya', score: 92 },
