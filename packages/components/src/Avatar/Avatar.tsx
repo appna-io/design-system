@@ -2,7 +2,7 @@
 
 import { Slot, Slottable, forwardRef } from '@apx-ui/engine';
 import { useThemedClasses } from '@apx-ui/theme';
-import { type ReactNode } from 'react';
+import { Children, isValidElement, type ReactNode } from 'react';
 
 import { avatarRecipes } from './Avatar.recipe';
 import { UserIcon } from './Avatar.icons';
@@ -55,6 +55,7 @@ export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(p
     status,
     statusPlacement = 'bottom-right',
     asChild = false,
+    label,
     className,
     style,
     sx,
@@ -109,7 +110,7 @@ export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(p
       src={src}
       srcSet={srcSet}
       alt=""
-      className="absolute inset-0 size-full object-cover transition-opacity duration-fast ease-standard motion-reduce:transition-none"
+      className="absolute inset-0 size-full rounded-[inherit] object-cover transition-opacity duration-fast ease-standard motion-reduce:transition-none"
     />
   ) : null;
 
@@ -129,6 +130,10 @@ export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(p
     // **No `role="img"` here.** The wrapped element (e.g. `<a>`, `<button>`) already carries its
     // own native role and forcing `role="img"` would fail axe's `aria-allowed-role`. The
     // `aria-label` we copy across still gives the link/button a meaningful accessible name.
+    
+    // Filter to get only the valid React element (ignores whitespace text nodes from JSX)
+    const slotChild = Children.toArray(children).find(isValidElement);
+    
     return (
       <Slot
         ref={ref}
@@ -140,15 +145,17 @@ export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(p
         data-loaded={showImage ? 'true' : undefined}
         {...rest}
       >
-        {imageNode}
-        {fallbackNode}
-        <Slottable>{children}</Slottable>
+        <Slottable>{slotChild}</Slottable>
+        <span className="absolute inset-0 overflow-hidden rounded-[inherit]">
+          {imageNode}
+          {fallbackNode}
+        </span>
         {statusNode}
       </Slot>
     );
   }
 
-  return (
+  const avatarElement = (
     <span
       ref={ref}
       className={rootClass}
@@ -160,12 +167,28 @@ export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(p
       data-loaded={showImage ? 'true' : undefined}
       {...rest}
     >
-      {imageNode}
-      {fallbackNode}
-      {children}
+      <span className="absolute inset-0 overflow-hidden rounded-[inherit]">
+        {imageNode}
+        {fallbackNode}
+        {children}
+      </span>
       {statusNode}
     </span>
   );
+
+  // Optional label wrapper. When `label` is provided, render the avatar inside a flex column
+  // with the label as a caption underneath. Without `label`, return the avatar as-is so existing
+  // call sites and layouts are untouched.
+  if (label !== undefined && label !== null && label !== false && label !== '') {
+    return (
+      <span className="inline-flex flex-col items-center gap-2 align-middle">
+        {avatarElement}
+        <span className="text-xs text-fg-muted text-center leading-snug">{label}</span>
+      </span>
+    );
+  }
+
+  return avatarElement;
 }, 'Avatar');
 
 interface StatusDotProps {

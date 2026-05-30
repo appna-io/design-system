@@ -42,6 +42,36 @@ const TOKEN_NAMESPACES: Partial<Record<keyof CSSProperties, string>> = {
   borderRadius: 'radius',
   boxShadow: 'shadows',
   zIndex: 'zIndex',
+  // Spacing-aware properties — numeric / Tailwind-like keys (`"6"`, `"1.5"`) resolve to
+  // `var(--sds-spacing-N)` so `<Div gap="6">` matches `className="gap-6"`.
+  gap: 'spacing',
+  rowGap: 'spacing',
+  columnGap: 'spacing',
+  margin: 'spacing',
+  marginTop: 'spacing',
+  marginRight: 'spacing',
+  marginBottom: 'spacing',
+  marginLeft: 'spacing',
+  marginInline: 'spacing',
+  marginBlock: 'spacing',
+  padding: 'spacing',
+  paddingTop: 'spacing',
+  paddingRight: 'spacing',
+  paddingBottom: 'spacing',
+  paddingLeft: 'spacing',
+  paddingInline: 'spacing',
+  paddingBlock: 'spacing',
+  top: 'spacing',
+  right: 'spacing',
+  bottom: 'spacing',
+  left: 'spacing',
+  inset: 'spacing',
+  width: 'spacing',
+  height: 'spacing',
+  minWidth: 'spacing',
+  minHeight: 'spacing',
+  maxWidth: 'spacing',
+  maxHeight: 'spacing',
 };
 
 const PALETTE_PREFIXES = [
@@ -54,15 +84,26 @@ const PALETTE_PREFIXES = [
   'neutral',
 ];
 
+/** Tailwind-compatible spacing scale keys. Numeric strings (with optional `.5`) resolve as
+ *  `var(--sds-spacing-N)`; also accepts the `px` keyword. Bare scale keys (e.g. `"6"`, `"1.5"`)
+ *  let consumers write `<Div gap="6">` and get Tailwind's `gap-6` (`1.5rem`). */
+const SPACING_KEY_RE = /^([0-9]+(?:\.5)?|px)$/;
+
 function shouldResolveAsToken(prop: keyof CSSProperties, value: string): boolean {
-  // Don't double-wrap already-resolved CSS variable references.
   if (value.startsWith('var(') || value.startsWith('#') || value.startsWith('rgb')) return false;
-  // Don't treat physical-unit values as tokens.
-  if (/^-?[0-9.]+(px|rem|em|%|vh|vw|fr)?$/.test(value)) return false;
   const ns = TOKEN_NAMESPACES[prop];
-  if (!ns) return false;
+  if (!ns) {
+    // Even when not mapped, don't treat physical-unit values as tokens — they pass through.
+    return false;
+  }
+  if (ns === 'spacing') {
+    // Spacing properties: only resolve bare scale keys like "6" / "1.5" / "px". CSS-unit values
+    // (`"24px"`, `"1rem"`, `"100%"`) and CSS keywords (`"auto"`) pass through untouched.
+    return SPACING_KEY_RE.test(value);
+  }
+  // Physical-unit values are not tokens for non-spacing namespaces either.
+  if (/^-?[0-9.]+(px|rem|em|%|vh|vw|fr)?$/.test(value)) return false;
   if (ns === 'palette') {
-    // Only treat strings that look like a palette role path (e.g. 'primary.main', 'border.default').
     return (
       PALETTE_PREFIXES.includes(value.split('.')[0] ?? '') ||
       value.startsWith('border.') ||

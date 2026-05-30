@@ -2,8 +2,9 @@
 
 `<Avatar />` is the canonical user-identity glyph in apx-ds. It handles the three states every
 profile tile has to deal with — image loads, image fails, no image at all — without spreading
-that logic across the consuming app. Reach for it whenever a screen needs to represent a person
-or entity: comment threads, member lists, assignee chips, mention pickers, hero profile sections.
+that logic across the consuming app.
+
+<ExampleBlock for="Overview" title="Overview — with image, initials, custom color" />
 
 `<AvatarGroup />` stacks several avatars with a configurable overlap and an optional `+N` overflow
 tile. Use it for "assigned to" lists, project members, viewers/typing indicators — anywhere a
@@ -53,7 +54,7 @@ the source of truth.
 
 ## Examples
 
-<ExampleBlock for="Basic" title="Basic — image, fallback initials, default icon" />
+<ExampleBlock for="Basic" title="Basic usage — image, initials, icon fallback" />
 <ExampleBlock for="Variants" title="Variants — solid / outline / soft" />
 <ExampleBlock for="Sizes" title="Sizes — xs through 2xl" />
 <ExampleBlock for="Colors" title="Colors — palette + auto hash by name" />

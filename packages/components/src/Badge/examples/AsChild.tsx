@@ -1,8 +1,8 @@
-import { Badge } from '@apx-ui/ds';
+import { Badge, Div } from '@apx-ui/ds';
 
 export default function AsChild() {
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <Div display="flex" flexWrap="wrap" alignItems="center" gap="3">
       <Badge asChild variant="solid" color="info">
         <a href="#inbox" className="no-underline">
           3
@@ -13,6 +13,6 @@ export default function AsChild() {
           Docs →
         </a>
       </Badge>
-    </div>
+    </Div>
   );
 }

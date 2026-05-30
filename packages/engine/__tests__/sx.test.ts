@@ -50,4 +50,47 @@ describe('sxToStyle', () => {
     const style = sxToStyle({ bg: 'transparent' });
     expect(style.backgroundColor).toBe('transparent');
   });
+
+  describe('spacing scale resolution', () => {
+    it('resolves numeric scale keys on gap', () => {
+      const style = sxToStyle({ gap: '6' });
+      expect(style.gap).toBe('var(--sds-spacing-6)');
+    });
+
+    it('resolves fractional scale keys (e.g. "1.5")', () => {
+      const style = sxToStyle({ gap: '1.5' });
+      expect(style.gap).toBe('var(--sds-spacing-1-5)');
+    });
+
+    it('resolves "px" keyword on the spacing scale', () => {
+      const style = sxToStyle({ p: 'px' });
+      expect(style.padding).toBe('var(--sds-spacing-px)');
+    });
+
+    it('resolves spacing on margin / padding aliases', () => {
+      const style = sxToStyle({ m: '4', p: '8', mx: '2', py: '1' });
+      expect(style.margin).toBe('var(--sds-spacing-4)');
+      expect(style.padding).toBe('var(--sds-spacing-8)');
+      expect(style.marginInline).toBe('var(--sds-spacing-2)');
+      expect(style.paddingBlock).toBe('var(--sds-spacing-1)');
+    });
+
+    it('passes raw CSS unit values through untouched on spacing props', () => {
+      const style = sxToStyle({ gap: '24px', p: '1rem', w: '100%' });
+      expect(style.gap).toBe('24px');
+      expect(style.padding).toBe('1rem');
+      expect(style.width).toBe('100%');
+    });
+
+    it('passes numeric values through untouched (consumer opted out of scale)', () => {
+      const style = sxToStyle({ gap: 6 });
+      expect(style.gap).toBe(6);
+    });
+
+    it('passes CSS keywords (e.g. "auto") through untouched', () => {
+      const style = sxToStyle({ m: 'auto', w: 'auto' });
+      expect(style.margin).toBe('auto');
+      expect(style.width).toBe('auto');
+    });
+  });
 });

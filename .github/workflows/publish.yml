@@ -1,0 +1,83 @@
+name: Publish to npm
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    # Skip if commit message contains [skip ci] or [skip publish]
+    if: |
+      !contains(github.event.head_commit.message, '[skip ci]') &&
+      !contains(github.event.head_commit.message, '[skip publish]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Enable Corepack
+        run: corepack enable pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm turbo build --filter='./packages/*'
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version (patch)
+        run: |
+          # Bump version in all publishable packages
+          pnpm --filter '@apx-ui/ds' exec npm version patch --no-git-tag-version
+          pnpm --filter '@apx-ui/components' exec npm version patch --no-git-tag-version
+          pnpm --filter '@apx-ui/engine' exec npm version patch --no-git-tag-version
+          pnpm --filter '@apx-ui/theme' exec npm version patch --no-git-tag-version
+          pnpm --filter '@apx-ui/tokens' exec npm version patch --no-git-tag-version
+          pnpm --filter '@apx-ui/icons' exec npm version patch --no-git-tag-version
+
+      - name: Get new version
+        id: version
+        run: |
+          VERSION=$(node -p "require('./packages/apx-ds/package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Commit version bump
+        run: |
+          git add -A
+          git commit -m "chore: release v${{ steps.version.outputs.version }} [skip ci]"
+          git push
+
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          pnpm --filter '@apx-ui/engine' publish --access public --no-git-checks
+          pnpm --filter '@apx-ui/tokens' publish --access public --no-git-checks
+          pnpm --filter '@apx-ui/theme' publish --access public --no-git-checks
+          pnpm --filter '@apx-ui/icons' publish --access public --no-git-checks
+          pnpm --filter '@apx-ui/components' publish --access public --no-git-checks
+          pnpm --filter '@apx-ui/ds' publish --access public --no-git-checks
+
+      - name: Create Git tag
+        run: |
+          git tag "v${{ steps.version.outputs.version }}"
+          git push origin "v${{ steps.version.outputs.version }}"

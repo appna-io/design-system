@@ -1,12 +1,12 @@
-import { Avatar, AvatarGroup } from '@apx-ui/ds';
+import { Avatar, AvatarGroup, Div, Typography } from '@apx-ui/ds';
 
 export default function Group() {
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium uppercase tracking-wide text-fg-muted">
+    <Div display="flex" flexDirection="column" gap="6">
+      <Div display="flex" flexDirection="column" gap="2">
+        <Typography variant="caption" weight="medium" transform="upper" letterSpacing="wide" color="fg.muted">
           max=4 with overflow
-        </span>
+        </Typography>
         <AvatarGroup max={4}>
           <Avatar name="Ada Lovelace" />
           <Avatar name="Bren Park" />
@@ -16,12 +16,12 @@ export default function Group() {
           <Avatar name="Fae Romero" />
           <Avatar name="Gigi Khan" />
         </AvatarGroup>
-      </div>
+      </Div>
 
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium uppercase tracking-wide text-fg-muted">
+      <Div display="flex" flexDirection="column" gap="2">
+        <Typography variant="caption" weight="medium" transform="upper" letterSpacing="wide" color="fg.muted">
           Soft variant, larger spacing, lg size
-        </span>
+        </Typography>
         <AvatarGroup max={3} variant="soft" size="lg" spacing={-3}>
           <Avatar name="Ada Lovelace" />
           <Avatar name="Bren Park" />
@@ -29,18 +29,18 @@ export default function Group() {
           <Avatar name="Dax Lin" />
           <Avatar name="Eli Tan" />
         </AvatarGroup>
-      </div>
+      </Div>
 
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium uppercase tracking-wide text-fg-muted">
+      <Div display="flex" flexDirection="column" gap="2">
+        <Typography variant="caption" weight="medium" transform="upper" letterSpacing="wide" color="fg.muted">
           No overlap (positive spacing)
-        </span>
+        </Typography>
         <AvatarGroup spacing={2}>
           <Avatar name="Ada Lovelace" />
           <Avatar name="Bren Park" />
           <Avatar name="Cleo Singh" />
         </AvatarGroup>
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

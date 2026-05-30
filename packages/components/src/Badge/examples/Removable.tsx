@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Badge } from '@apx-ui/ds';
+import { Badge, Div, Typography } from '@apx-ui/ds';
 
 const INITIAL_TAGS = ['typescript', 'react', 'design-systems', 'tailwind'];
 
@@ -7,8 +7,8 @@ export default function Removable() {
   const [tags, setTags] = useState<string[]>(INITIAL_TAGS);
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center gap-2">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Div display="flex" flexWrap="wrap" alignItems="center" gap="2">
         {tags.map((tag) => (
           <Badge
             key={tag}
@@ -21,15 +21,17 @@ export default function Removable() {
           </Badge>
         ))}
         {tags.length === 0 ? (
-          <button
-            type="button"
+          <Typography
+            as="button"
+            variant="body3"
+            color="muted"
+            sx={{ textDecoration: 'underline' }}
             onClick={() => setTags(INITIAL_TAGS)}
-            className="text-xs text-fg-muted underline"
           >
             Reset
-          </button>
+          </Typography>
         ) : null}
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

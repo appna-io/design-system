@@ -1,4 +1,4 @@
-import { Avatar, type AvatarStatus, type AvatarStatusPlacement } from '@apx-ui/ds';
+import { Avatar, Div, Typography, type AvatarStatus, type AvatarStatusPlacement } from '@apx-ui/ds';
 
 const STATUSES: readonly AvatarStatus[] = ['online', 'away', 'busy', 'offline'];
 const PLACEMENTS: readonly AvatarStatusPlacement[] = [
@@ -10,33 +10,32 @@ const PLACEMENTS: readonly AvatarStatusPlacement[] = [
 
 export default function WithStatus() {
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium uppercase tracking-wide text-fg-muted">
+    <Div display="flex" flexDirection="column" gap="6">
+      <Div display="flex" flexDirection="column" gap="2">
+        <Typography variant="caption" weight="medium" transform="upper" letterSpacing="wide" color="fg.muted">
           Status tone (bottom-right)
-        </span>
-        <div className="flex flex-wrap items-center gap-5">
+        </Typography>
+        <Div display="flex" flexWrap="wrap" alignItems="center" gap="5">
           {STATUSES.map((status) => (
-            <div key={status} className="flex flex-col items-center gap-1">
-              <Avatar name="Ada Lovelace" status={status} />
-              <span className="text-xs text-fg-muted">{status}</span>
-            </div>
+            <Avatar key={status} name="Ada Lovelace" status={status} label={status} />
           ))}
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium uppercase tracking-wide text-fg-muted">
+        </Div>
+      </Div>
+      <Div display="flex" flexDirection="column" gap="2">
+        <Typography variant="caption" weight="medium" transform="upper" letterSpacing="wide" color="fg.muted">
           Placement (online)
-        </span>
-        <div className="flex flex-wrap items-center gap-5">
-          {PLACEMENTS.map((placement) => (
-            <div key={placement} className="flex flex-col items-center gap-1">
-              <Avatar name="Ada Lovelace" status="online" statusPlacement={placement} />
-              <span className="text-xs text-fg-muted">{placement}</span>
-            </div>
+        </Typography>
+        <Div display="flex" flexWrap="wrap" alignItems="center" gap="5">
+          {PLACEMENTS.slice(0, -1).map((placement) => (
+            <Avatar key={placement} name="Ada Lovelace" status="online" statusPlacement={placement} label={placement} />
           ))}
-        </div>
-      </div>
-    </div>
+          {/* Keep one with custom Typography to show flexibility */}
+          <Div display="flex" flexDirection="column" alignItems="center" gap="1">
+            <Avatar name="Ada Lovelace" status="online" statusPlacement="bottom-right" />
+            <Typography variant="caption" color="fg.muted" weight="semibold">bottom-right</Typography>
+          </Div>
+        </Div>
+      </Div>
+    </Div>
   );
 }

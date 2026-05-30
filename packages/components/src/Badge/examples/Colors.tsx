@@ -1,4 +1,4 @@
-import { Badge, type BadgeColor, type BadgeVariant } from '@apx-ui/ds';
+import { Badge, Div, Typography, type BadgeColor, type BadgeVariant } from '@apx-ui/ds';
 
 const COLORS: readonly BadgeColor[] = [
   'primary',
@@ -14,19 +14,24 @@ const VARIANTS: readonly BadgeVariant[] = ['solid', 'outline', 'soft', 'subtle']
 
 export default function Colors() {
   return (
-    <div className="flex flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3">
       {VARIANTS.map((variant) => (
-        <div key={variant} className="flex flex-wrap items-center gap-3">
-          <span className="text-xs font-medium uppercase tracking-wide text-fg-muted w-16">
+        <Div key={variant} display="flex" flexWrap="wrap" alignItems="center" gap="3">
+          <Typography
+            variant="caption"
+            weight="medium"
+            color="muted"
+            sx={{ textTransform: 'uppercase', letterSpacing: 'wide', width: '4rem' }}
+          >
             {variant}
-          </span>
+          </Typography>
           {COLORS.map((color) => (
             <Badge key={color} variant={variant} color={color} withDot>
               {color.charAt(0).toUpperCase() + color.slice(1)}
             </Badge>
           ))}
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

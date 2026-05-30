@@ -1,6 +1,19 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@apx-ui/ds": ["packages/apx-ds/src/index.ts"],
+      "@apx-ui/ds/*": ["packages/apx-ds/src/*"],
+      "@apx-ui/engine": ["packages/engine/src/index.ts"],
+      "@apx-ui/engine/*": ["packages/engine/src/*"],
+      "@apx-ui/tokens": ["packages/tokens/src/index.ts"],
+      "@apx-ui/tokens/*": ["packages/tokens/src/*"],
+      "@apx-ui/theme": ["packages/theme/src/index.ts"],
+      "@apx-ui/theme/*": ["packages/theme/src/*"],
+      "@apx-ui/components": ["packages/components/src/index.ts"],
+      "@apx-ui/components/*": ["packages/components/src/*"]
+    },
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Bundler",

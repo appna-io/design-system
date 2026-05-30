@@ -21,7 +21,7 @@ import { cv } from '@apx-ui/engine';
 export const avatarRecipes = {
   root: cv({
     base: [
-      'relative inline-flex shrink-0 items-center justify-center overflow-hidden align-middle',
+      'relative inline-flex shrink-0 items-center justify-center overflow-visible align-middle',
       'font-medium leading-none select-none uppercase',
       'transition-[background-color,color,box-shadow] duration-fast ease-standard',
       'bg-bg-subtle text-fg-default',
@@ -111,7 +111,7 @@ export const avatarRecipes = {
    * avatar's background so the boundary stays crisp regardless of palette role.
    */
   status: cv({
-    base: 'absolute block rounded-full ring-2 ring-bg',
+    base: 'absolute z-10 block rounded-full ring-2 ring-[var(--sds-palette-background-default)]',
     variants: {
       size: {
         xs: 'size-1.5',
@@ -122,10 +122,10 @@ export const avatarRecipes = {
         '2xl': 'size-4',
       },
       placement: {
-        'top-right': 'top-0 right-0 translate-x-1/2 -translate-y-1/2',
-        'top-left': 'top-0 left-0 -translate-x-1/2 -translate-y-1/2',
-        'bottom-right': 'bottom-0 right-0 translate-x-1/2 translate-y-1/2',
-        'bottom-left': 'bottom-0 left-0 -translate-x-1/2 translate-y-1/2',
+        'top-right': 'top-0.5 right-0.5',
+        'top-left': 'top-0.5 left-0.5',
+        'bottom-right': 'bottom-0.5 right-0.5',
+        'bottom-left': 'bottom-0.5 left-0.5',
       },
       tone: {
         online: 'bg-success',

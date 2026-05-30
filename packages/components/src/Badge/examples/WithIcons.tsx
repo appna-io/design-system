@@ -1,9 +1,9 @@
 import { Star, Sparkles, Zap } from 'lucide-react';
-import { Badge } from '@apx-ui/ds';
+import { Badge, Div } from '@apx-ui/ds';
 
 export default function WithIcons() {
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <Div display="flex" flexWrap="wrap" alignItems="center" gap="3">
       <Badge variant="soft" color="warning" leftIcon={<Star />}>
         Featured
       </Badge>
@@ -13,6 +13,6 @@ export default function WithIcons() {
       <Badge variant="solid" color="primary" rightIcon={<Zap />}>
         Power
       </Badge>
-    </div>
+    </Div>
   );
 }

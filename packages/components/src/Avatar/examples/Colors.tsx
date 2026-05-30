@@ -1,4 +1,4 @@
-import { Avatar, type AvatarColor } from '@apx-ui/ds';
+import { Avatar, Div, Typography, type AvatarColor } from '@apx-ui/ds';
 
 const EXPLICIT_COLORS: readonly Exclude<AvatarColor, 'auto'>[] = [
   'primary',
@@ -14,27 +14,27 @@ const AUTO_NAMES = ['Ada', 'Bren', 'Cleo', 'Dax', 'Eli', 'Fae', 'Gigi', 'Hugo'];
 
 export default function Colors() {
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium uppercase tracking-wide text-fg-muted">
+    <Div display="flex" flexDirection="column" gap="6">
+      <Div display="flex" flexDirection="column" gap="2">
+        <Typography variant="caption" weight="medium" transform="upper" letterSpacing="wide" color="fg.muted">
           Explicit color
-        </span>
-        <div className="flex flex-wrap items-center gap-3">
+        </Typography>
+        <Div display="flex" flexWrap="wrap" alignItems="center" gap="3">
           {EXPLICIT_COLORS.map((color) => (
             <Avatar key={color} color={color} name={color.charAt(0).toUpperCase()} />
           ))}
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium uppercase tracking-wide text-fg-muted">
+        </Div>
+      </Div>
+      <Div display="flex" flexDirection="column" gap="2">
+        <Typography variant="caption" weight="medium" transform="upper" letterSpacing="wide" color="fg.muted">
           color=&ldquo;auto&rdquo; (deterministic from name)
-        </span>
-        <div className="flex flex-wrap items-center gap-3">
+        </Typography>
+        <Div display="flex" flexWrap="wrap" alignItems="center" gap="3">
           {AUTO_NAMES.map((name) => (
             <Avatar key={name} name={name} />
           ))}
-        </div>
-      </div>
-    </div>
+        </Div>
+      </Div>
+    </Div>
   );
 }

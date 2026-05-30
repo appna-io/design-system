@@ -1,8 +1,8 @@
-import { Avatar } from '@apx-ui/ds';
+import { Avatar, Div } from '@apx-ui/ds';
 
 export default function AsChild() {
   return (
-    <div className="flex items-center gap-4">
+    <Div display="flex" alignItems="center" gap="4">
       <Avatar asChild name="Ada Lovelace">
         <a href="#profile" className="no-underline">
           {''}
@@ -13,6 +13,6 @@ export default function AsChild() {
           {''}
         </a>
       </Avatar>
-    </div>
+    </Div>
   );
 }

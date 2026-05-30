@@ -101,6 +101,12 @@ export interface AvatarProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'colo
    * child element (e.g. wrap an `<a>` to render a clickable profile avatar).
    */
   asChild?: boolean | undefined;
+  /**
+   * Optional label rendered below the avatar. When provided, Avatar auto-wraps itself in a flex
+   * column container with the label as a `<Typography variant="caption">` underneath. Omit to
+   * render just the avatar (original behavior preserved). Incompatible with `asChild`.
+   */
+  label?: ReactNode | undefined;
   /** Theme-aware inline style object. */
   sx?: Sx | undefined;
 }

@@ -1,48 +1,54 @@
-import { Badge } from '@apx-ui/ds';
+import { Badge, Div, Typography } from '@apx-ui/ds';
 
 export default function CountAndStatus() {
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2 text-sm font-medium">
-          Inbox
+    <Div display="flex" flexDirection="column" gap="4">
+      <Div display="flex" alignItems="center" gap="4">
+        <Div display="flex" alignItems="center" gap="2">
+          <Typography variant="body2" weight="medium">
+            Inbox
+          </Typography>
           <Badge variant="subtle" color="info">
             12
           </Badge>
-        </div>
-        <div className="flex items-center gap-2 text-sm font-medium">
-          Drafts
+        </Div>
+        <Div display="flex" alignItems="center" gap="2">
+          <Typography variant="body2" weight="medium">
+            Drafts
+          </Typography>
           <Badge variant="subtle" color="neutral">
             3
           </Badge>
-        </div>
-        <div className="flex items-center gap-2 text-sm font-medium">
-          Archive
+        </Div>
+        <Div display="flex" alignItems="center" gap="2">
+          <Typography variant="body2" weight="medium">
+            Archive
+          </Typography>
           <Badge variant="subtle" color="neutral">
             128
           </Badge>
-        </div>
-      </div>
-      <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2 text-sm">
-          <span>Server</span>
+        </Div>
+      </Div>
+      <Div display="flex" alignItems="center" gap="3">
+        <Div display="flex" alignItems="center" gap="2">
+          <Typography variant="body2">Server</Typography>
           <Badge variant="soft" color="success" withDot dotPulse>
             Online
           </Badge>
-        </div>
-        <div className="flex items-center gap-2 text-sm">
-          <span>Cache</span>
+        </Div>
+        <Div display="flex" alignItems="center" gap="2">
+          <Typography variant="body2">Cache</Typography>
           <Badge variant="soft" color="warning" withDot>
             Degraded
           </Badge>
-        </div>
-        <div className="flex items-center gap-2 text-sm">
-          <span>Worker</span>
+        </Div>
+        <Div display="flex" alignItems="center" gap="2">
+          <Typography variant="body2">Worker</Typography>
           <Badge variant="soft" color="danger" withDot>
             Offline
           </Badge>
-        </div>
-      </div>
-    </div>
+        </Div>
+      </Div>
+    </Div>
   );
 }

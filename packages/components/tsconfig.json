@@ -3,8 +3,15 @@
   "compilerOptions": {
     "outDir": "./dist",
     "baseUrl": "./src",
+    "paths": {
+      "@apx-ui/ds": ["../../apx-ds/src/index.ts"],
+      "@apx-ui/engine": ["../../engine/src/index.ts"],
+      "@apx-ui/tokens": ["../../tokens/src/index.ts"],
+      "@apx-ui/theme": ["../../theme/src/index.ts"],
+      "@apx-ui/components": ["./index.ts"]
+    },
     "noEmit": true
   },
   "include": ["src/**/*", "__tests__/**/*", "vitest.config.ts", "vitest.setup.ts"],
-  "exclude": ["node_modules", "dist", ".turbo", "src/**/examples/**"]
+  "exclude": ["node_modules", "dist", ".turbo"]
 }
