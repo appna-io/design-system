@@ -1,8 +1,8 @@
-import { Button } from '@apx-ui/ds';
+import { Button, Div } from '@apx-ui/ds';
 
 export default function Colors() {
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <Div display="flex" flexWrap="wrap" alignItems="center" gap="3">
       <Button color="primary">Primary</Button>
       <Button color="secondary">Secondary</Button>
       <Button color="success">Success</Button>
@@ -10,6 +10,6 @@ export default function Colors() {
       <Button color="danger">Danger</Button>
       <Button color="info">Info</Button>
       <Button color="neutral">Neutral</Button>
-    </div>
+    </Div>
   );
 }

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   Checkbox,
   Combobox,
+  Div,
   Field,
   Input,
   NumberInput,
@@ -23,7 +24,7 @@ export default function EveryControl() {
   const [tags, setTags] = useState<string[]>(['design-system', 'react']);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl">
+    <Div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl">
       <Field label="Full name" required helperText="As shown on your ID.">
         <Input name="name" placeholder="Jane Doe" />
       </Field>
@@ -58,13 +59,13 @@ export default function EveryControl() {
       </Field>
 
       <Field as="fieldset" label="Notifications" helperText="Pick at least one channel.">
-        <div className="flex flex-col gap-1">
+        <Div display="flex" flexDirection="column" gap="1">
           <Checkbox name="notify-email" defaultChecked>
             Email
           </Checkbox>
           <Checkbox name="notify-sms">SMS</Checkbox>
           <Checkbox name="notify-push">Push notifications</Checkbox>
-        </div>
+        </Div>
       </Field>
 
       <Field label="Two-factor authentication" helperText="Requires an authenticator app.">
@@ -90,6 +91,6 @@ export default function EveryControl() {
       <Field label="Interests" helperText="Press Enter or comma to add.">
         <TagsInput name="interests" value={tags} onChange={(next) => setTags([...next])} />
       </Field>
-    </div>
+    </Div>
   );
 }

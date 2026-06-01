@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import { Alert, Input } from '@apx-ui/ds';
+import { Alert, Div, Input, Typography } from '@apx-ui/ds';
 
 export default function FormValidation() {
   const [value, setValue] = useState('');
   const invalid = value.length > 0 && value.length < 3;
 
   return (
-    <div className="flex flex-col gap-1.5">
-      <label htmlFor="form-validation-username" className="text-sm font-medium text-fg">
+    <Div display="flex" flexDirection="column" className="gap-1.5">
+      <Typography as="label" htmlFor="form-validation-username" variant="bodySmall" weight="medium" color="fg.default">
         Username
-      </label>
+      </Typography>
       <Input
         id="form-validation-username"
         value={value}
@@ -28,6 +28,6 @@ export default function FormValidation() {
           Username must be at least 3 characters.
         </Alert>
       ) : null}
-    </div>
+    </Div>
   );
 }

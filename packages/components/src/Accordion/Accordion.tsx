@@ -218,4 +218,3 @@ function resolveColor(value: AccordionProps['color']): AccordionColor {
   }
   return 'neutral';
 }
-

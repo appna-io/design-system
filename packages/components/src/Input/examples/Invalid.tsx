@@ -1,8 +1,8 @@
-import { Input } from '@apx-ui/ds';
+import { Div, Input, Typography } from '@apx-ui/ds';
 
 export default function Invalid() {
   return (
-    <div className="flex w-full max-w-sm flex-col gap-1.5 text-sm">
+    <Div display="flex" flexDirection="column" gap="1.5" className="w-full max-w-sm text-sm">
       <label htmlFor="email-bad" className="text-fg">
         Email address
       </label>
@@ -13,9 +13,9 @@ export default function Invalid() {
         invalid
         aria-describedby="email-bad-error"
       />
-      <p id="email-bad-error" className="text-xs text-danger">
+      <Typography id="email-bad-error" variant="caption" color="danger">
         Please enter a valid email address.
-      </p>
-    </div>
+      </Typography>
+    </Div>
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { DatePicker } from '@apx-ui/ds';
+import { DatePicker, Div, Typography } from '@apx-ui/ds';
 
 const today = new Date();
 const inFive = new Date(today);
@@ -12,11 +12,11 @@ export default function MinMax() {
   const [value, setValue] = useState<Date | null>(null);
 
   return (
-    <div className="flex flex-col items-start gap-3 max-w-sm">
-      <p className="text-sm text-fg-muted">
+    <Div display="flex" flexDirection="column" alignItems="flex-start" gap="3" className="max-w-sm">
+      <Typography variant="bodySmall" color="fg.muted">
         Allowed: {inFive.toLocaleDateString()} – {inThirty.toLocaleDateString()}
-      </p>
+      </Typography>
       <DatePicker value={value} onChange={setValue} min={inFive} max={inThirty} />
-    </div>
+    </Div>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavigationMenu } from '@apx-ui/ds';
+import { Div, NavigationMenu } from '@apx-ui/ds';
 
 /**
  * Controlled `activeHref` — the consumer keeps the active path in state and
@@ -10,8 +10,8 @@ export default function ActiveHrefControlled() {
   const [activeHref, setActiveHref] = useState('/pricing');
 
   return (
-    <div className="space-y-3">
-      <div className="flex gap-2">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Div display="flex" gap="2">
         {['/features', '/pricing', '/docs', '/blog'].map((path) => (
           <button
             key={path}
@@ -22,9 +22,9 @@ export default function ActiveHrefControlled() {
             Set active to {path}
           </button>
         ))}
-      </div>
+      </Div>
 
-      <div className="rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+      <Div className="rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
         <NavigationMenu indicator activeHref={activeHref}>
           <NavigationMenu.Item>
             <NavigationMenu.Link href="/features">Features</NavigationMenu.Link>
@@ -39,7 +39,7 @@ export default function ActiveHrefControlled() {
             <NavigationMenu.Link href="/blog">Blog</NavigationMenu.Link>
           </NavigationMenu.Item>
         </NavigationMenu>
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

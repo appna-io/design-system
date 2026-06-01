@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Button, HoverCard, Spinner } from '@apx-ui/ds';
+import { Button, Div, HoverCard, Spinner, Typography } from '@apx-ui/ds';
 
 interface UserProfile {
   name: string;
@@ -12,10 +12,6 @@ interface UserProfile {
  * The canonical async-load pattern: defer the (fake) network request until the card actually
  * opens. `onOpenChange` is the hook — when `open` flips to `true`, we kick off the fetch.
  * Subsequent opens reuse the cached value.
- *
- * **Renderer-safety**: no real network. We use a deterministic `setTimeout` resolved promise so
- * Ahmad sees the loading state for ~600ms before the data renders. The `Reset` button clears the
- * cache so Ahmad can re-trigger the loading state without a page reload (per ship-gate).
  */
 export default function AsyncContent() {
   const [data, setData] = useState<UserProfile | null>(null);
@@ -49,12 +45,12 @@ export default function AsyncContent() {
   }, []);
 
   return (
-    <div className="flex flex-col items-start gap-3">
-      <p className="text-sm text-fg-muted">
+    <Div display="flex" flexDirection="column" alignItems="flex-start" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Hover the @mention to fetch the profile lazily. First open shows a Spinner; subsequent
         opens reuse the cached data.
-      </p>
-      <p className="text-sm">
+      </Typography>
+      <Typography variant="bodySmall" as="p">
         Reviewed by{' '}
         <HoverCard onOpenChange={handleOpenChange}>
           <HoverCard.Trigger>
@@ -64,24 +60,28 @@ export default function AsyncContent() {
           </HoverCard.Trigger>
           <HoverCard.Content size="md">
             {loading || !data ? (
-              <div className="flex items-center gap-2">
+              <Div display="flex" alignItems="center" gap="2">
                 <Spinner size="sm" />
-                <span className="text-xs text-fg-muted">Loading profile…</span>
-              </div>
+                <Typography as="span" variant="caption" color="fg.muted">
+                  Loading profile…
+                </Typography>
+              </Div>
             ) : (
-              <div className="flex flex-col gap-1">
+              <Div display="flex" flexDirection="column" gap="1">
                 <strong className="text-sm">{data.name}</strong>
-                <span className="text-xs text-fg-muted">@{data.username}</span>
-                <p className="text-xs">{data.bio}</p>
-                <span className="text-xs text-fg-muted">
+                <Typography as="span" variant="caption" color="fg.muted">
+                  @{data.username}
+                </Typography>
+                <Typography variant="caption">{data.bio}</Typography>
+                <Typography as="span" variant="caption" color="fg.muted">
                   {data.followers.toLocaleString()} followers
-                </span>
-              </div>
+                </Typography>
+              </Div>
             )}
           </HoverCard.Content>
         </HoverCard>
         .
-      </p>
+      </Typography>
       <Button
         variant="ghost"
         size="sm"
@@ -92,6 +92,6 @@ export default function AsyncContent() {
       >
         Reset cache
       </Button>
-    </div>
+    </Div>
   );
 }

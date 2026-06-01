@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { Button, Tabs } from '@apx-ui/ds';
+import { Button, Div, Tabs, Typography } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [value, setValue] = useState('overview');
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-2">
-        <span className="text-sm text-fg-muted">External controls:</span>
+    <Div display="flex" flexDirection="column" gap="3">
+      <Div display="flex" alignItems="center" gap="2">
+        <Typography as="span" variant="bodySmall" color="fg.muted">
+          External controls:
+        </Typography>
         <Button size="sm" variant="ghost" onClick={() => setValue('overview')}>
           Overview
         </Button>
@@ -17,7 +19,7 @@ export default function Controlled() {
         <Button size="sm" variant="ghost" onClick={() => setValue('settings')}>
           Settings
         </Button>
-      </div>
+      </Div>
       <Tabs value={value} onValueChange={setValue} aria-label="Controlled tabs">
         <Tabs.List>
           <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
@@ -28,6 +30,6 @@ export default function Controlled() {
         <Tabs.Panel value="activity">Activity panel content.</Tabs.Panel>
         <Tabs.Panel value="settings">Settings panel content.</Tabs.Panel>
       </Tabs>
-    </div>
+    </Div>
   );
 }

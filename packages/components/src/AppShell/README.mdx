@@ -17,6 +17,8 @@ a `useAppShell()` context hook for header components.
   with a CSS transition.
 - **Skip-to-content** link, focusable on Tab, lands focus directly inside `<main>`.
 
+<ExampleBlock for="Overview" title="Overview — header, sidebar, footer dashboard" />
+
 ## Anatomy
 
 ```tsx
@@ -149,12 +151,6 @@ behavior automatically based on viewport size.
 
 AppShell reads from `theme.components.AppShell.styleOverrides.{root, header, sidebar, aside, main, footer, skipLink}`. Every slot shares the same component key so a single theme block
 targets the whole family. Consumer `className` always wins via `tailwind-merge`.
-
-## Bundle
-
-Target: **< 5 KB gz** (excluding `<Drawer>`, which is externalized — it's already in the
-bundle if the consumer uses it elsewhere, and AppShell only pays its cost when
-`sidebarBreakpoint` actually triggers).
 
 ## Do / Don't
 

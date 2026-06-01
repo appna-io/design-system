@@ -1,7 +1,7 @@
 ## Overview
 
 `<Switch />` is the binary on/off toggle. It uses the same hidden-input + custom-painted-indicator
-technique as `<Checkbox />` (Phase 9), but with a sliding thumb instead of a glyph. The visual
+technique as `<Checkbox />`, but with a sliding thumb instead of a glyph. The visual
 language is intentionally different so users learn the affordance:
 
 - **Switch** flips a setting **now** (often async, often server-confirmed).
@@ -10,6 +10,8 @@ language is intentionally different so users learn the affordance:
 Switch ships three independently overridable slots: `root`, `track`, `thumb`. The slide is pure
 CSS (`transition-transform`) and respects `prefers-reduced-motion` — no Motion-library cost is
 paid for the most common interaction.
+
+<ExampleBlock for="Overview" title="Overview — off, on, with description, and disabled" />
 
 ## Anatomy
 
@@ -130,6 +132,6 @@ the spring engine.
 - **Don't** use Switch inside a form that requires Submit before changes apply — that's
   `<Checkbox />`'s job. The user expects switches to take effect immediately.
 - **Don't** wrap multiple switches in a `<RadioGroup>`-style single-selection container —
-  that's `<Radio />` (Phase 11). Switches are independent boolean toggles.
+  that's `<Radio />`. Switches are independent boolean toggles.
 - **Don't** use a switch for navigation or for opening a dialog — that's `<Button>`'s job. The
   switch metaphor implies persistent state.

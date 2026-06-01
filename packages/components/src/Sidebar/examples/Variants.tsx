@@ -1,4 +1,4 @@
-import { Sidebar } from '@apx-ui/ds';
+import { Div, Sidebar, Typography } from '@apx-ui/ds';
 
 import { CogIcon, HomeIcon, InboxIcon } from './_icons';
 
@@ -23,20 +23,25 @@ export default function Variants() {
     </>
   );
   return (
-    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+    <Div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
       {(['default', 'bordered', 'floating', 'ghost'] as const).map((variant) => (
-        <div
+        <Div
           key={variant}
-          className="h-[280px] overflow-hidden rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-muted)"
+          height={280}
+          className="overflow-hidden rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-muted)"
         >
-          <div className="border-b border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) px-3 py-1.5 text-xs font-mono text-(--sds-color-text-muted)">
+          <Typography
+            variant="caption"
+            color="fg.muted"
+            className="border-b border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) px-3 py-1.5 font-mono"
+          >
             variant=&quot;{variant}&quot;
-          </div>
+          </Typography>
           <Sidebar ariaLabel={`Variant ${variant}`} variant={variant} width="100%">
             {items}
           </Sidebar>
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

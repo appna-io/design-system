@@ -2,6 +2,8 @@
 
 The dashboard metric tile. `<Stat />` ships a single primitive for **label + value + delta + formatting + states**, replacing the ~7-line hand-rolled card pattern that every B2B dashboard reinvents. `<StatGroup />` lays out several stats with consistent dividers and responsive collapse.
 
+<ExampleBlock for="Overview" title="Overview — revenue, users, and conversion with trends" />
+
 ```tsx
 import { Stat, StatGroup } from 'apx-ds';
 
@@ -208,14 +210,6 @@ For responsive directions the divider orientation is fixed at runtime to the **b
 - Delta arrows are vertical (`up` / `down`) — unaffected by writing direction.
 - `Intl.NumberFormat` handles locale-aware currency placement (`$12,400` in en-US vs `12 400 $` in fr-FR).
 - `tabular-nums` works in both directions.
-
----
-
-## Performance
-
-- Stateless. Loading / error are conditional renders, not stateful animations.
-- `formatValue` runs once per render — fast enough that memoization would be premature optimization. Profile first if you have hundreds of stats on screen.
-- Bundle: small. The recipe and helpers add a few hundred bytes each on top of the engine + Spinner + Divider deps.
 
 ---
 

@@ -1,8 +1,8 @@
-import { Textarea } from '@apx-ui/ds';
+import { Div, Textarea } from '@apx-ui/ds';
 
 export default function Disabled() {
   return (
-    <div className="flex w-full max-w-md flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3" className="w-full max-w-md">
       <Textarea
         disabled
         defaultValue="This textarea is disabled — not even tab-focusable."
@@ -15,6 +15,6 @@ export default function Disabled() {
         aria-label="Read-only textarea"
         rows={2}
       />
-    </div>
+    </Div>
   );
 }

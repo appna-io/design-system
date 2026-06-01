@@ -68,6 +68,9 @@ importers:
       '@apx-ui/ds':
         specifier: workspace:*
         version: link:../../packages/apx-ds
+      '@apx-ui/icons':
+        specifier: workspace:*
+        version: link:../../packages/icons
       '@radix-ui/react-dialog':
         specifier: ^1.1.15
         version: 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -147,9 +150,6 @@ importers:
       '@apx-ui/engine':
         specifier: workspace:*
         version: link:../engine
-      '@apx-ui/icons':
-        specifier: workspace:*
-        version: link:../icons
       '@apx-ui/theme':
         specifier: workspace:*
         version: link:../theme

@@ -1,4 +1,4 @@
-import { DataGrid } from '@apx-ui/ds';
+import { DataGrid, Div, Typography } from '@apx-ui/ds';
 import type { DataGridColumnDef, DataGridDensity } from '@apx-ui/ds';
 
 interface Row {
@@ -34,13 +34,17 @@ const DENSITIES: { id: DataGridDensity; label: string; rowHeight: string }[] = [
  */
 export default function Sizes() {
   return (
-    <div className="flex flex-col gap-6">
+    <Div display="flex" flexDirection="column" gap="6">
       {DENSITIES.map(({ id, label, rowHeight }) => (
-        <div key={id} className="flex flex-col gap-2">
-          <div className="flex items-baseline gap-3">
-            <h3 className="text-fg-default text-sm font-semibold">{label}</h3>
-            <span className="text-fg-muted text-xs">{rowHeight}</span>
-          </div>
+        <Div key={id} display="flex" flexDirection="column" gap="2">
+          <Div display="flex" alignItems="baseline" gap="3">
+            <Typography as="h3" variant="bodySmall" weight="semibold" color="fg.default">
+              {label}
+            </Typography>
+            <Typography variant="caption" color="fg.muted">
+              {rowHeight}
+            </Typography>
+          </Div>
           <DataGrid<Row>
             data={data}
             columns={columns}
@@ -52,8 +56,8 @@ export default function Sizes() {
             globalSearch={false}
             defaultPagination={{ pageIndex: 0, pageSize: 0 }}
           />
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

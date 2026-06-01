@@ -52,7 +52,11 @@ export const StepperRoot = forwardRef<HTMLOListElement, StepperProps>(function S
     variant = 'numbered',
     size,
     orientation,
-    align = 'start',
+    // Default to `center`: in horizontal mode the label sits centered under its indicator, which
+    // is the modern norm (Linear / Vercel / Stripe). Vertical mode is force-aligned `start`
+    // via a compound variant in the item recipe regardless of this prop, so the default is safe
+    // across orientations. Consumers who want the old left-aligned look pass `align="start"`.
+    align = 'center',
     showLabels = true,
     showDescriptions = true,
     clickable = false,

@@ -1,13 +1,13 @@
 'use client';
 
-import { Scheduler, type SchedulerEvent } from '@apx-ui/ds';
+import { Div, Scheduler, type SchedulerEvent } from '@apx-ui/ds';
 import { useState } from 'react';
 
 export default function Month() {
   const [events, setEvents] = useState<SchedulerEvent[]>(() => seedMonthEvents());
 
   return (
-    <div style={{ height: 680 }}>
+    <Div height={680}>
       <Scheduler
         events={events}
         defaultView="month"
@@ -22,7 +22,7 @@ export default function Month() {
           return created;
         }}
       />
-    </div>
+    </Div>
   );
 }
 

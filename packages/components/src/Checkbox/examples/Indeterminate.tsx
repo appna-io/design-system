@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Checkbox } from '@apx-ui/ds';
+import { Checkbox, Div } from '@apx-ui/ds';
 
 const FRUITS = ['Apple', 'Banana', 'Cherry'] as const;
 
@@ -15,7 +15,7 @@ export default function Indeterminate() {
   const parentIndeterminate = !allChecked && !noneChecked;
 
   return (
-    <div className="flex flex-col gap-2">
+    <Div display="flex" flexDirection="column" gap="2">
       <Checkbox
         checked={allChecked}
         indeterminate={parentIndeterminate}
@@ -26,7 +26,7 @@ export default function Indeterminate() {
       >
         Select all fruits
       </Checkbox>
-      <div className="flex flex-col gap-2 ms-6">
+      <Div display="flex" flexDirection="column" gap="2" className="ms-6">
         {FRUITS.map((fruit) => (
           <Checkbox
             key={fruit}
@@ -38,7 +38,7 @@ export default function Indeterminate() {
             {fruit}
           </Checkbox>
         ))}
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pagination } from '@apx-ui/ds';
+import { Div, Pagination, Typography } from '@apx-ui/ds';
 
 /**
  * Stress test for `computePageWindow` — 1,000 pages. The window-aware
@@ -10,12 +10,12 @@ export default function ManyPages() {
   const [pageIndex, setPageIndex] = useState(489);
 
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-sm text-fg-muted">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         1,000 pages of 50 rows each (50,000 rows total). The window stays
         compact regardless of where you are; click the ellipsis-adjacent
         pages to jump.
-      </p>
+      </Typography>
       <Pagination
         totalCount={50_000}
         pageIndex={pageIndex}
@@ -25,6 +25,6 @@ export default function ManyPages() {
         boundaryCount={1}
         hidePageSize
       />
-    </div>
+    </Div>
   );
 }

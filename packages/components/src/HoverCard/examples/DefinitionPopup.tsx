@@ -1,4 +1,4 @@
-import { HoverCard } from '@apx-ui/ds';
+import { Div, HoverCard, Typography } from '@apx-ui/ds';
 
 /**
  * Inline glossary / definition pattern. Hover a term in running text to see a short definition.
@@ -7,7 +7,7 @@ import { HoverCard } from '@apx-ui/ds';
  */
 export default function DefinitionPopup() {
   return (
-    <p className="max-w-prose text-sm">
+    <Typography variant="bodySmall" as="p" className="max-w-prose">
       A{' '}
       <HoverCard>
         <HoverCard.Trigger asChild>
@@ -20,14 +20,14 @@ export default function DefinitionPopup() {
         </HoverCard.Trigger>
         <HoverCard.Content variant="soft" color="info" size="md">
           <strong className="block text-sm">design token</strong>
-          <p className="mt-1 text-xs">
+          <Typography variant="caption" className="mt-1">
             A single source-of-truth value (color, spacing, radius, typography) that every
             component reads through. Changing a token re-themes every consumer at once.
-          </p>
+          </Typography>
         </HoverCard.Content>
       </HoverCard>{' '}
       is the smallest unit a design system distributes. Every component reads from them, so a
       theme swap is one update at the root.
-    </p>
+    </Typography>
   );
 }

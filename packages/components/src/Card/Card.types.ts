@@ -55,6 +55,26 @@ export interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'color'>
   sx?: Sx | undefined;
 }
 
+/**
+ * Visual treatment of the `<Card.Header icon>` tile. Mirrors the Badge variant set so the icon
+ * tile reads as "the same family" of accent surfaces consumers already know.
+ *
+ *   - `soft`    → subtle palette background + matching tint foreground (default; quiet feature card)
+ *   - `solid`   → fully-saturated palette background + contrast foreground (loud / hero card)
+ *   - `outline` → transparent background + bordered ring in palette tint
+ */
+export type CardHeaderIconVariant = 'soft' | 'solid' | 'outline';
+
+/** Palette role used to tint the `<Card.Header icon>` tile. Mirrors {@link CardColor}. */
+export type CardHeaderIconColor =
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'warning'
+  | 'danger'
+  | 'info'
+  | 'neutral';
+
 export interface CardHeaderProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   /**
    * Heading-text slot. Render as a `<div>` by default — pass `<h3>title</h3>` to control level.
@@ -68,6 +88,28 @@ export interface CardHeaderProps extends Omit<HTMLAttributes<HTMLDivElement>, 't
   avatar?: ReactNode;
   /** Trailing slot (typically `<Button>` or `<Badge>`). Sits at the logical end. */
   action?: ReactNode;
+  /**
+   * Block-placed icon slot. Renders an opinionated icon tile **above** the title row (in its own
+   * flex row) — the canonical "feature card" layout. The tile owns its own size + color + corner
+   * radius, all derived from the Card's `size` context and the {@link iconColor} / {@link iconVariant}
+   * props, so consumers never need to hand-roll a `<span>` wrapper just to make a card with an
+   * icon look right.
+   *
+   * Mutually compatible with `avatar` — `avatar` sits inline with the title row, `icon` sits
+   * stacked above it. Use one or the other, not both, unless you want both layouts at once.
+   *
+   * @example
+   *   <Card.Header
+   *     icon={<Sparkles size={20} />}
+   *     iconColor="primary"
+   *     title={<Typography variant="h4">Composable everything</Typography>}
+   *   />
+   */
+  icon?: ReactNode;
+  /** Palette role for the {@link icon} tile. @default 'primary' */
+  iconColor?: CardHeaderIconColor | undefined;
+  /** Visual treatment for the {@link icon} tile. @default 'soft' */
+  iconVariant?: CardHeaderIconVariant | undefined;
   /** Theme-aware inline style object. */
   sx?: Sx | undefined;
 }

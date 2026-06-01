@@ -4,7 +4,9 @@ The canonical loading-placeholder primitive. `<Skeleton />` claims layout space 
 that isn't ready yet, and animates lightly so users can tell the page is alive without
 demanding their attention.
 
-Three exports ship in one phase on a single shared recipe:
+<ExampleBlock for="Overview" title="Overview — avatar + text, card, and list-item patterns" />
+
+Three exports ship on a single shared recipe:
 
 - **`<Skeleton />`** — the block primitive; any width × height × radius.
 - **`<SkeletonText />`** — multi-line text placeholder; auto-shortens the last line.
@@ -153,15 +155,3 @@ style:
 
 Both have sensible RGB fallbacks baked into the gradient string, so the shimmer works out of
 the box on every theme — these overrides are pure refinement.
-
-## Out of scope (future phases)
-
-- **`<SkeletonImage>`** — `<Skeleton rounded="md" />` already covers the case. Not worth a
-  named export.
-- **Auto-measure to child** — composing a skeleton that exactly shadows an absent child
-  element is a consumer-land render-prop, not a primitive.
-- **Embedded icons** (e.g. `ImageOff` while a thumbnail loads) — consumer decision; not a
-  job for the loading primitive.
-- **Per-theme `--sds-skeleton-*` tokens emitted by `themeToCssVars`** — the gradient already
-  works via CSS fallbacks; promoting these to first-class tokens is a follow-up if any
-  theme needs them on per-variant overrides.

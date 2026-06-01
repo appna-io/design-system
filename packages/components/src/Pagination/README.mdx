@@ -9,6 +9,8 @@ visual matrix (4 variants × 7 colors × 3 sizes × 3 shapes = **252 cells**).
 `<DataGrid.Pagination>` is implemented as a thin wrapper over this component, so
 the two surfaces never visually drift apart.
 
+<ExampleBlock for="Overview" title="Overview — full bar on page 3 of 12" />
+
 ## Anatomy
 
 | Subpart                    | Element                                     | Role                                                    |
@@ -233,37 +235,3 @@ export function DataGridPagination() {
 
 The two surfaces share styling, accessibility, RTL behavior, and i18n bundles —
 fixing a bug in `<Pagination>` fixes it in `<DataGrid.Pagination>` simultaneously.
-
-## DRY self-check
-
-- All styling lives in the slot recipes (`paginationRootRecipe`,
-  `paginationButtonRecipe`, `paginationListRecipe`,
-  `paginationEllipsisRecipe`, `paginationRangeLabelRecipe`,
-  `paginationSizePickerRecipe`) — built with the same `cv()` primitive every
-  other DS recipe uses.
-- `computePageWindow` is pure — no DOM, no React. Testable in isolation
-  (`__tests__/Pagination.compute.test.ts`).
-- No `clsx` import — `useThemedClasses` handles class composition via
-  `tailwind-merge`.
-- DataGrid's pagination is a thin wrapper — no duplicate code paths.
-- Translations namespace overlaps with DataGrid's — single source of truth
-  inside any `<I18nProvider>` that ships either bundle.
-
-## Bundle
-
-| Surface                                                   | gz          |
-| --------------------------------------------------------- | ----------- |
-| `Pagination` only                                         | **4.49 KB** |
-| + `usePagination` + English bundle                        | **4.50 KB** |
-| + Hebrew + Arabic locale bundles                          | **4.84 KB** |
-| Full named-export surface (every recipe + helper)         | **5.23 KB** |
-| Peer: `<Select>` (only rendered when `hidePageSize=false`) | —           |
-
-Measured via `packages/components/scripts/measure-pagination.mjs` (esbuild +
-zlib, externalising peer deps + every sibling DS component including
-`<Select>`). Plan budget was **< 4 KB gz excluding `<Select>`** — the actual
-delta is `+0.49 KB` over that target, driven by the 28-rule (variant × color)
-compound matrix in `paginationButtonRecipe`. The matrix is the single largest
-contributor (6.3 KB raw → ~1.4 KB gz) and is non-negotiable given the
-acceptance criterion "4 variants × 7 colors × 3 sizes × 3 shapes (252 cells)
-snapshot."

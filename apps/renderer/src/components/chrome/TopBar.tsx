@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { ThemeStudio } from '../studio/ThemeStudio';
 import { DirectionToggle } from './DirectionToggle';
 import { ModeToggle } from './ModeToggle';
+import { PortalSizeSelect } from './PortalSizeSelect';
 import { VariantSelect } from './VariantSelect';
 
 interface TopBarProps {
@@ -15,8 +16,12 @@ export function TopBar({ title, children }: TopBarProps) {
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-4 border-b border-border bg-bg/85 px-6 backdrop-blur">
       <div className="min-w-0 flex-1 truncate text-sm font-medium text-fg">{title}</div>
-      <div className="flex items-center gap-3">
+      {/* `overflow-x-auto` on the control rail lets the bar stay usable on narrow screens — and
+          on the simulated narrow viewports the `<PortalSizeSelect>` itself flips on — without
+          forcing every consumer to think about wrapping. */}
+      <div className="flex items-center gap-3 overflow-x-auto">
         {children}
+        <PortalSizeSelect />
         <VariantSelect />
         <DirectionToggle />
         <ModeToggle />

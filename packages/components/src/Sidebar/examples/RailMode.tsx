@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Sidebar } from '@apx-ui/ds';
+import { Button, Div, Sidebar, Typography } from '@apx-ui/ds';
 
 import { CogIcon, FolderIcon, HomeIcon, InboxIcon } from './_icons';
 
@@ -15,8 +15,11 @@ import { CogIcon, FolderIcon, HomeIcon, InboxIcon } from './_icons';
 export default function RailMode() {
   const [collapsed, setCollapsed] = useState(false);
   return (
-    <div className="h-[460px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
-      <div className="flex h-full">
+    <Div
+      height={460}
+      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+    >
+      <Div display="flex" className="h-full">
         <Sidebar
           ariaLabel="Rail-mode navigation"
           variant="bordered"
@@ -38,15 +41,15 @@ export default function RailMode() {
             Settings
           </Sidebar.Item>
         </Sidebar>
-        <div className="flex-1 p-6">
+        <Div className="flex-1 p-6">
           <Button onClick={() => setCollapsed((c) => !c)} variant="outline" size="sm">
             {collapsed ? 'Expand sidebar' : 'Collapse to rail'}
           </Button>
-          <p className="mt-4 text-sm text-(--sds-color-text-muted)">
+          <Typography variant="bodySmall" color="fg.muted" className="mt-4">
             Hover any rail icon to see its label in a Tooltip.
-          </p>
-        </div>
-      </div>
-    </div>
+          </Typography>
+        </Div>
+      </Div>
+    </Div>
   );
 }

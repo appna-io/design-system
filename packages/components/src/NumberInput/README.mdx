@@ -7,6 +7,8 @@ values**, **locale-aware formatting + parsing**, **clamping + precision rounding
 accelerating step**, full **keyboard control**, and a hidden `<input type="hidden">` for HTML
 form submission with the canonical value.
 
+<ExampleBlock for="Overview" title="Overview — labeled inputs with steppers and constraints" />
+
 ## Why a separate component
 
 Native `type="number"` accepts arbitrary scientific notation (`1e5`), silently rejects bad input
@@ -59,6 +61,8 @@ operate on the input itself. Pointer-only users get the buttons.
 
 ## Examples
 
+<ExampleBlock for="Overview" />
+
 <ExampleBlock for="Basic" title="Basic — `number | null` value, default stepper" />
 <ExampleBlock for="Range" title="Min / max / step" />
 <ExampleBlock for="Step" title="step + largeStep (Shift+Arrow)" />
@@ -88,21 +92,3 @@ operate on the input itself. Pointer-only users get the buttons.
 - Wires through `useFormFieldA11y` — invalid + required + describedby flow exactly like Input.
 - Dev-only warning fires once when no `aria-label` / `aria-labelledby` / wrapping `<label>` is
   found (same shape as Input's `INPUT_NO_LABEL`).
-
-## Bundle
-
-Target: < 3.5 KB gz. Roughly the parse + format helpers (`Intl.NumberFormat` itself is a platform
-primitive, paid once), the controllable state, the stepper hold hook, the stepper recipes, the
-inline glyph SVGs (no `lucide-react` dependency), and the React event wiring.
-
-## Sibling primitives introduced
-
-- **`useStepperHold`** — generic "press and hold to repeat" hook with an accelerating ramp. Lives
-  next to NumberInput today; promote to `_shared/` when the second consumer (Spinner /
-  Quantity-stepper) arrives.
-- **`parseLocalizedNumber`** — pure locale-aware parser. Handles thousand separators, locale
-  decimal separators, Arabic-Indic + Persian digits, and rejects scientific notation. Exported
-  for tests; future date / measurement parsers can borrow the digit-normalization step.
-- **`formatNumber`** — cached `Intl.NumberFormat` wrapper. Same caching strategy any future
-  formatter (DatePicker, FileSize, Duration) should adopt.
-- **`clampToRange` + `roundToPrecision`** — pure math, no DOM. Slider / NumberRange will pull these in.

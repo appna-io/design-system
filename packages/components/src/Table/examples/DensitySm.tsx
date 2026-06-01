@@ -1,4 +1,4 @@
-import { Table } from '@apx-ui/ds';
+import { Table, Typography } from '@apx-ui/ds';
 import type { TableColumn } from '@apx-ui/ds';
 
 interface Row {
@@ -24,10 +24,10 @@ const columns: TableColumn<Row>[] = [
     header: 'Change',
     align: 'end',
     cell: (r) => (
-      <span className={r.change >= 0 ? 'text-success' : 'text-danger'}>
+      <Typography as="span" variant="bodySmall" className={r.change >= 0 ? 'text-success' : 'text-danger'}>
         {r.change >= 0 ? '+' : ''}
         {r.change.toFixed(2)}%
-      </span>
+      </Typography>
     ),
   },
 ];

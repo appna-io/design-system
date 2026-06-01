@@ -1,4 +1,4 @@
-import { HStack, Spacer, VStack } from '@apx-ui/ds';
+import { Div, HStack, Spacer, Typography, VStack } from '@apx-ui/ds';
 
 export default function Nested() {
   return (
@@ -7,10 +7,14 @@ export default function Nested() {
       className="max-w-md rounded-lg border border-border bg-bg-paper p-4"
     >
       <HStack gap={3} align="center">
-        <div className="h-10 w-10 shrink-0 rounded-full bg-primary" />
+        <Div className="h-10 w-10 shrink-0 rounded-full bg-primary" />
         <VStack gap={0.5}>
-          <strong className="text-fg-default">Ada Lovelace</strong>
-          <span className="text-xs text-fg-muted">ada@example.com</span>
+          <Typography as="strong" weight="semibold" color="fg.default">
+            Ada Lovelace
+          </Typography>
+          <Typography variant="caption" color="fg.muted">
+            ada@example.com
+          </Typography>
         </VStack>
         <Spacer />
         <button
@@ -21,10 +25,10 @@ export default function Nested() {
         </button>
       </HStack>
 
-      <p className="text-fg-default">
+      <Typography color="fg.default">
         Stack vocabularies compose: an <code>HStack</code> inside a <code>VStack</code> covers most
         card-row patterns in product UIs without reaching for raw flex utilities.
-      </p>
+      </Typography>
 
       <HStack gap={2} justify="end">
         <button

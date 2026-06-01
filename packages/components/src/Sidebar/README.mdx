@@ -4,6 +4,8 @@
 — or stands alone with its own width — and powers the left-hand nav of dashboards, admin
 panels, docs sites, and internal tools.
 
+<ExampleBlock for="Overview" title="Overview — sections, badges, and an expanded item" />
+
 - **Compound primitive**: `Sidebar.Header`, `Sidebar.Section`, `Sidebar.Item`, `Sidebar.SubItems`,
   `Sidebar.Spacer`, `Sidebar.Footer`.
 - **Rail mode** (`collapsed`): item labels go `sr-only`, items auto-wrap in Tooltips, section
@@ -164,11 +166,6 @@ Set `collapsed` on the root — typically wired to `useAppShell().isSidebarColla
 
 Sidebar reads from `theme.components.Sidebar.styleOverrides.{root, item, sectionLabel, sectionBody, disclosure, header, footer, subItems}`. Consumer `className` always wins via
 `tailwind-merge`.
-
-## Bundle
-
-Target: **< 4 KB gz** with Tooltip / Badge / Slot externalized (they're already in the bundle
-if the consumer uses them elsewhere; Sidebar only pays the marginal cost of its own surface).
 
 ## Do / Don't
 

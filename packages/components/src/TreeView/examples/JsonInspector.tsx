@@ -1,4 +1,4 @@
-import { TreeView } from '@apx-ui/ds';
+import { Div, TreeView, Typography } from '@apx-ui/ds';
 import type { TreeNodeData } from '@apx-ui/ds';
 
 function toNode(key: string, value: unknown, path: string): TreeNodeData {
@@ -10,10 +10,14 @@ function toNode(key: string, value: unknown, path: string): TreeNodeData {
     return {
       id,
       label: (
-        <span>
-          <span className="font-medium text-fg-default">{key}</span>{' '}
-          <span className="text-fg-muted">{Array.isArray(value) ? `[${entries.length}]` : `{${entries.length}}`}</span>
-        </span>
+        <Typography as="span" variant="bodySmall">
+          <Typography as="span" variant="bodySmall" weight="medium" color="fg.default">
+            {key}
+          </Typography>{' '}
+          <Typography as="span" variant="bodySmall" color="fg.muted">
+            {Array.isArray(value) ? `[${entries.length}]` : `{${entries.length}}`}
+          </Typography>
+        </Typography>
       ),
       children: entries,
     };
@@ -21,10 +25,15 @@ function toNode(key: string, value: unknown, path: string): TreeNodeData {
   return {
     id,
     label: (
-      <span>
-        <span className="font-medium text-fg-default">{key}</span>:{' '}
-        <span className="text-primary-emphasis">{JSON.stringify(value)}</span>
-      </span>
+      <Typography as="span" variant="bodySmall">
+        <Typography as="span" variant="bodySmall" weight="medium" color="fg.default">
+          {key}
+        </Typography>
+        :{' '}
+        <Typography as="span" variant="bodySmall" color="primary.emphasis">
+          {JSON.stringify(value)}
+        </Typography>
+      </Typography>
     ),
   };
 }
@@ -39,13 +48,13 @@ const data: TreeNodeData[] = Object.entries(sample).map(([k, v]) => toNode(k, v,
 
 export default function JsonInspector() {
   return (
-    <div className="max-w-md border border-border-subtle rounded-md p-2">
+    <Div className="max-w-md rounded-md border border-border-subtle p-2">
       <TreeView
         ariaLabel="JSON inspector"
         data={data}
         defaultExpanded={['/user', '/preferences']}
         selectionMode="none"
       />
-    </div>
+    </Div>
   );
 }

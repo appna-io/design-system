@@ -1,9 +1,11 @@
-import { Accordion } from '@apx-ui/ds';
+import { Accordion, Div, Typography } from '@apx-ui/ds';
 
 export default function FAQ() {
   return (
-    <div className="mx-auto max-w-2xl">
-      <h2 className="mb-4 text-xl font-semibold">Frequently asked questions</h2>
+    <Div className="mx-auto max-w-2xl">
+      <Typography as="h2" variant="titleSmall" weight="semibold" sx={{ mb: 4 }}>
+        Frequently asked questions
+      </Typography>
       <Accordion type="single" variant="solid">
         <Accordion.Item value="trial">
           <Accordion.Trigger>Is there a free trial?</Accordion.Trigger>
@@ -33,6 +35,6 @@ export default function FAQ() {
           </Accordion.Content>
         </Accordion.Item>
       </Accordion>
-    </div>
+    </Div>
   );
 }

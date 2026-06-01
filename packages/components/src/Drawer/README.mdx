@@ -14,9 +14,7 @@ Modal anchors at the viewport center, Drawer anchors at one of four edges (`left
 What's different lives on `<Drawer.Content>`: a `side` prop instead of `placement`, and a
 direction-aware `size` axis (width on horizontal sides, height on vertical sides).
 
-Drawer is the **second consumer of `useScrollLock`**, validating the engine's reference-count
-discipline (Modal-over-Drawer = single lock + unlock pair). It's also the **third consumer of
-`mergeRefs`**, the threshold that triggered the engine promotion landed in this phase.
+<ExampleBlock for="Overview" title="Overview — trigger, header, body, and footer" />
 
 ## When to use
 
@@ -31,8 +29,8 @@ discipline (Modal-over-Drawer = single lock + unlock pair). It's also the **thir
 - The content is purely a hint with no interactivity → `<Tooltip />`.
 - The content is a small interactive panel anchored to a trigger → `<Popover />`.
 - The content is a destructive confirmation centered on the page → `<Modal />`.
-- The content is a list of actions on a button → `<Menu />` (Phase 22).
-- The content is a transient acknowledgement → `<Toast />` (Phase 21).
+- The content is a list of actions on a button → `<Menu />`.
+- The content is a transient acknowledgement → `<Toast />`.
 - You want a **persistent** side panel that doesn't darken the page → that's a `<SideNav />`
   pattern (separate component, not yet shipped).
 
@@ -180,40 +178,3 @@ defineTheme({
 
 Per-instance overrides via `<Drawer.Content className sx style />` (and the equivalent on every
 subpart) merge on top of the theme overrides, which merge on top of the recipe.
-
-## Engine consumption — Phase 17 Core sweep stays closed
-
-Drawer reuses every overlay primitive Modal validated, with two new validation outcomes:
-
-| Primitive | Drawer's role | Status |
-|---|---|---|
-| `<Portal>` | Re-validated with edge-anchored content. | ✅ |
-| `useEscapeStack` | Re-validated for nested-Drawer unwind. | ✅ |
-| `useFocusTrap` | Re-validated on a non-positioned (edge-anchored) overlay. | ✅ |
-| `useScrollLock` | **Second consumer.** Validates reference-counted lock discipline (Modal + Drawer concurrent → 1 lock pair). | ✅ |
-| `usePosition` | Not consumed (Drawer is anchored, not positioned). | n/a |
-| `useOutsideClick` | Not consumed (backdrop sentinel handles it inline). | n/a |
-| **`mergeRefs`** | **Third consumer — promoted to engine in this phase.** Tooltip / Popover / Modal updated to import from `@apx-ds/engine` instead of redeclaring inline. | ✅ promoted |
-
-### Engine API feedback
-
-- `mergeRefs` engine promotion happened cleanly. Shape is final:
-  `mergeRefs<T>(...refs: Array<Ref<T> | undefined>) => (node: T | null) => void`. Skips falsy
-  refs, supports both callback and object refs, fires `null` on unmount to every input.
-- The `useScrollLock(active: boolean)` boolean shape held up: a Drawer-over-Modal stress test
-  doesn't double-lock or strand body styles; the reference count collapses correctly.
-
-No breaking changes were forced on the engine.
-
-## DRY notes
-
-- No `clsx`/`cn` imports — every class composition flows through `useThemedClasses`.
-- Header / Body / Footer / Close are visually identical to Modal's. The plan called this out as
-  the right fork point for a shared `padBySize()` helper; Drawer is exactly the second consumer,
-  so the helper is justified now. Deferring the extraction to a follow-up phase to keep this PR
-  focused on Drawer's unique surface (sides, motion, sizing).
-- Compound assembly (`Object.assign`) follows Modal's pattern verbatim.
-- `mergeRefs` is now sourced from `@apx-ds/engine` everywhere overlay-side. The form-side
-  copies (Checkbox / Input / Textarea / NumberInput) use a slightly different `AnyRef<T>` typing
-  and remain in place; their owners can migrate when convenient — the new engine helper accepts
-  the same inputs.

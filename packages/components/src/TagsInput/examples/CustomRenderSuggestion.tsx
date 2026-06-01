@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TagsInput } from '@apx-ui/ds';
+import { Div, TagsInput, Typography } from '@apx-ui/ds';
 
 interface Tag {
   value: string;
@@ -21,17 +21,17 @@ export default function CustomRenderSuggestion() {
       suggestions={LIBRARIES}
       getSuggestionValue={(item) => item.value}
       renderSuggestion={(item, { query }) => (
-        <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
+        <Div display="flex" flexDirection="column" sx={{ lineHeight: 1.2 }}>
           <strong>{item.value}</strong>
-          <span style={{ fontSize: 12, color: 'var(--sds-color-fg-muted)' }}>
+          <Typography as="span" variant="caption" color="fg.muted">
             {item.description}
-          </span>
+          </Typography>
           {query ? (
-            <span style={{ fontSize: 10, color: 'var(--sds-color-fg-muted)' }}>
-              matching “{query}”
-            </span>
+            <Typography as="span" variant="caption" color="fg.muted" sx={{ fontSize: 10 }}>
+              matching &ldquo;{query}&rdquo;
+            </Typography>
           ) : null}
-        </div>
+        </Div>
       )}
       value={tags}
       onChange={(next) => setTags([...next])}

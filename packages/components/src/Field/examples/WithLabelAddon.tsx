@@ -1,8 +1,8 @@
-import { Badge, Field, Select } from '@apx-ui/ds';
+import { Badge, Div, Field, Select } from '@apx-ui/ds';
 
 export default function WithLabelAddon() {
   return (
-    <div className="flex flex-col gap-4 max-w-sm">
+    <Div display="flex" flexDirection="column" gap="4" className="max-w-sm">
       <Field
         label="Plan"
         labelAddon={
@@ -38,6 +38,6 @@ export default function WithLabelAddon() {
           </Select.Content>
         </Select>
       </Field>
-    </div>
+    </Div>
   );
 }

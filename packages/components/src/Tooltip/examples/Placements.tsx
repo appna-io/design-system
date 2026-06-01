@@ -1,4 +1,4 @@
-import { Button, Tooltip, type TooltipPlacement } from '@apx-ui/ds';
+import { Button, Div, Tooltip, type TooltipPlacement } from '@apx-ui/ds';
 
 const PLACEMENTS: readonly TooltipPlacement[] = [
   'top-start',
@@ -17,7 +17,7 @@ const PLACEMENTS: readonly TooltipPlacement[] = [
 
 export default function Placements() {
   return (
-    <div className="grid grid-cols-3 gap-3">
+    <Div className="grid grid-cols-3 gap-3">
       {PLACEMENTS.map((placement) => (
         <Tooltip key={placement} content={placement} placement={placement} openDelay={100}>
           <Button variant="outline" size="sm" className="w-full">
@@ -25,6 +25,6 @@ export default function Placements() {
           </Button>
         </Tooltip>
       ))}
-    </div>
+    </Div>
   );
 }

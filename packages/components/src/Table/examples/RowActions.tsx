@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Table } from '@apx-ui/ds';
+import { Button, Div, Table, Typography } from '@apx-ui/ds';
 import type { TableColumn } from '@apx-ui/ds';
 
 interface Order {
@@ -25,17 +25,17 @@ export default function RowActions() {
   const [lastAction, setLastAction] = useState<string>('none');
 
   return (
-    <div className="flex flex-col gap-2">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="2">
+      <Typography variant="bodySmall" color="fg.muted">
         Last action: <code>{lastAction}</code>
-      </p>
+      </Typography>
       <Table
         ariaLabel="Orders with row actions"
         columns={columns}
         data={orders}
         getRowId={(o) => o.id}
         rowActions={(o) => (
-          <div className="flex gap-1">
+          <Div display="flex" gap="1">
             <Button
               size="sm"
               variant="ghost"
@@ -56,9 +56,9 @@ export default function RowActions() {
             >
               Delete
             </Button>
-          </div>
+          </Div>
         )}
       />
-    </div>
+    </Div>
   );
 }

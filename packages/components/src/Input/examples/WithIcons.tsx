@@ -1,9 +1,9 @@
 import { Mail, Search, X } from 'lucide-react';
-import { Input } from '@apx-ui/ds';
+import { Div, Input } from '@apx-ui/ds';
 
 export default function WithIcons() {
   return (
-    <div className="flex w-full max-w-sm flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3" className="w-full max-w-sm">
       <Input leftIcon={<Search />} placeholder="Search…" aria-label="Search" />
       <Input
         leftIcon={<Mail />}
@@ -18,6 +18,6 @@ export default function WithIcons() {
         placeholder="Solid + leading icon"
         aria-label="Solid with search icon"
       />
-    </div>
+    </Div>
   );
 }

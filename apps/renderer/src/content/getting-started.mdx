@@ -1,14 +1,33 @@
-# Getting started
+# Getting Started
 
-`@apx-ui/ds` is a themable, RTL-ready, fully overridable React component library. This page walks
-through installing it in a fresh Next.js app and wiring up the theme.
+## What is APX Design System?
 
-<Callout type="info" title="Phase 4 preview">
-  The library is still under active development. Only the throwaway `Placeholder` component is
-  shipped today — the real `Button` arrives in Phase 5.
+APX DS is a production-ready React component library built for modern applications. It's designed with three core principles:
+
+- **Themable** — Switch between light/dark modes, apply visual variants (default, tetsu, origami, katana), and override any token or component style without forking
+- **RTL-Ready** — Full bidirectional support using CSS logical properties — flip between LTR and RTL with a single attribute change
+- **Fully Overridable** — A strict 5-layer styling precedence lets you customize everything from design tokens down to individual component instances
+
+---
+
+## Packages
+
+The design system ships as two separate npm packages:
+
+| Package | Description | Bundle Impact |
+|---------|-------------|---------------|
+| `@apx-ui/ds` | Core library — 60+ components, theme engine, Tailwind preset | Required |
+| `@apx-ui/icons` | SVG icon set — tree-shakable, only ships what you import | Optional |
+
+<Callout type="info" title="Why separate packages?">
+  Icons are intentionally excluded from the core bundle. This keeps `@apx-ui/ds` lean for projects that already have an icon solution or don't need icons at all. When you do need them, `@apx-ui/icons` tree-shakes perfectly — unused icons never reach your bundle.
 </Callout>
 
-## Install
+---
+
+## Installation
+
+### Core Library (Required)
 
 ```bash
 npm install @apx-ui/ds
@@ -16,10 +35,21 @@ npm install @apx-ui/ds
 pnpm add @apx-ui/ds
 ```
 
-## Wire up the provider
+### Icons Library (Optional)
 
-In your root layout, mount `<ThemeProvider>` and inject `<ThemeScript />` in the document head to
-prevent FOUC:
+```bash
+npm install @apx-ui/icons
+# or
+pnpm add @apx-ui/icons
+```
+
+---
+
+## Setup
+
+### Step 1: Configure the Root Provider
+
+Wrap your application with `<ThemeProvider>` and inject `<ThemeScript />` in the document head. The script runs before React hydrates, preventing any flash of unstyled content:
 
 ```tsx
 import { ThemeProvider, ThemeScript } from '@apx-ui/ds';
@@ -39,10 +69,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-## Configure Tailwind
+The provider manages three orthogonal axes that propagate via CSS variables:
 
-`@apx-ui/ds` ships a Tailwind preset that maps DS tokens to Tailwind theme keys. Add it to your
-`tailwind.config.ts`:
+| Axis | Values | Default |
+|------|--------|---------|
+| **Mode** | `light`, `dark`, `system` | `system` |
+| **Variant** | `default`, `tetsu`, `origami`, `katana` | `default` |
+| **Direction** | `ltr`, `rtl` | `ltr` |
+
+### Step 2: Configure Tailwind
+
+Add the APX Tailwind preset to your config. This maps all design tokens to Tailwind theme keys:
 
 ```ts
 import { apxTailwindPreset } from '@apx-ui/ds/tailwind-preset';
@@ -53,17 +90,112 @@ export default {
 };
 ```
 
-Once configured, class names like `bg-primary`, `text-fg`, `border-border` resolve via DS CSS
-variables and react to mode / variant / direction changes automatically.
+Now utility classes like `bg-primary`, `text-fg`, `border-border`, `rounded-md` resolve through DS CSS variables — they automatically respond to mode, variant, and direction changes without any JavaScript re-renders.
 
-## Use a component
+---
+
+## Usage
+
+### Components
+
+Import and use components directly. Every component supports consistent props for `variant`, `size`, `color`, and full style overrides:
 
 ```tsx
-import { Placeholder } from '@apx-ui/ds';
+import { Button, Input, Card, Badge } from '@apx-ui/ds';
 
-export default function Page() {
-  return <Placeholder tone="primary">Hello, apx</Placeholder>;
+export default function UserCard() {
+  return (
+    <Card variant="elevated" size="md">
+      <Card.Header>
+        <Card.Header.Title>Welcome Back</Card.Header.Title>
+        <Badge color="success">Online</Badge>
+      </Card.Header>
+      <Card.Body>
+        <Input placeholder="Search your projects..." />
+        <Button color="primary" size="lg">
+          Get Started
+        </Button>
+      </Card.Body>
+    </Card>
+  );
 }
 ```
 
-Open the [components index](/components) to see everything that's available today.
+### Icons
+
+Icons are standalone React components with consistent sizing and color inheritance:
+
+```tsx
+import { Search, Check, ChevronRight } from '@apx-ui/icons';
+import { Input, Button } from '@apx-ui/ds';
+
+export default function SearchField() {
+  return (
+    <div className="flex items-center gap-2">
+      <Search className="text-fg-muted" size={18} />
+      <Input placeholder="Search..." className="flex-1" />
+      <Button color="primary">
+        Go <ChevronRight size={16} />
+      </Button>
+    </div>
+  );
+}
+```
+
+Browse all available icons in the [Icons Gallery](/icons).
+
+---
+
+## Theme Engine & Customization
+
+The theme engine gives you complete control over the visual layer without touching component internals. You can:
+
+- **Switch modes** — Toggle light/dark/system with `useMode()` hook
+- **Apply variants** — Swap entire visual families (radii, shadows, spacing) at once
+- **Override tokens** — Customize colors, typography, motion at the design-token level
+- **Override components** — Target specific components with `styleOverrides` in your theme
+- **Override instances** — Use `className`, `sx`, or `style` props on individual elements
+
+```tsx
+import { ThemeProvider, defineTheme } from '@apx-ui/ds';
+
+const customTheme = defineTheme({
+  variants: {
+    brand: {
+      radius: { md: '12px', lg: '16px' },
+      colors: {
+        primary: { 500: '#6366f1' },
+      },
+    },
+  },
+});
+
+export default function App({ children }) {
+  return (
+    <ThemeProvider theme={customTheme} defaultVariant="brand">
+      {children}
+    </ThemeProvider>
+  );
+}
+```
+
+<Callout type="info" title="Deep dive into theming">
+  The [Theming](/theming) page covers the full architecture: mode switching, variant definitions, direction handling, and the 5-layer override precedence that ensures you can customize anything without forking components.
+</Callout>
+
+---
+
+## What's Next?
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+
+**[Components](/components)**  
+Explore the full catalog — from basic inputs to complex data grids, calendars, and schedulers.
+
+**[Icons](/icons)**  
+Browse the icon gallery with search, copy-to-clipboard, and live previews.
+
+**[Theming](/theming)**  
+Master the theme engine — modes, variants, tokens, and the override precedence system.
+
+</div>

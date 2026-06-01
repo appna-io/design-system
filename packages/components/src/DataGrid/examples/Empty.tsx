@@ -1,5 +1,5 @@
 import { Button } from '@apx-ui/ds';
-import { DataGrid } from '@apx-ui/ds';
+import { DataGrid, Div, Typography } from '@apx-ui/ds';
 import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Row {
@@ -15,13 +15,13 @@ const columns: DataGridColumnDef<Row>[] = [
 
 export default function Empty() {
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         With zero rows, the grid mounts the canonical empty state below the header.
         Pass a string to <code>emptyState</code> for a quick copy override, or render
         <code>&lt;DataGrid.Empty&gt;</code> yourself with a CTA for the full
         compound surface.
-      </p>
+      </Typography>
       <DataGrid<Row>
         data={[]}
         columns={columns}
@@ -34,6 +34,6 @@ export default function Empty() {
           />
         }
       />
-    </div>
+    </Div>
   );
 }

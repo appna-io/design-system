@@ -1,4 +1,4 @@
-import { NavigationMenu } from '@apx-ui/ds';
+import { Div, NavigationMenu, Typography } from '@apx-ui/ds';
 
 /**
  * Animated indicator under the active / focused / hovered item. Pass
@@ -7,12 +7,16 @@ import { NavigationMenu } from '@apx-ui/ds';
  */
 export default function ActiveIndicator() {
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-(--sds-color-text-muted)">
+    <Div display="flex" flexDirection="column" gap="6">
+      <Div>
+        <Typography
+          variant="caption"
+          weight="semibold"
+          className="mb-2 uppercase tracking-wide text-(--sds-color-text-muted)"
+        >
           underline (default)
-        </p>
-        <div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+        </Typography>
+        <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
           <NavigationMenu indicator activeHref="/pricing">
             <NavigationMenu.Item>
               <NavigationMenu.Link href="/features">Features</NavigationMenu.Link>
@@ -27,14 +31,18 @@ export default function ActiveIndicator() {
               <NavigationMenu.Link href="/contact">Contact</NavigationMenu.Link>
             </NavigationMenu.Item>
           </NavigationMenu>
-        </div>
-      </div>
+        </Div>
+      </Div>
 
-      <div>
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-(--sds-color-text-muted)">
+      <Div>
+        <Typography
+          variant="caption"
+          weight="semibold"
+          className="mb-2 uppercase tracking-wide text-(--sds-color-text-muted)"
+        >
           pill
-        </p>
-        <div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+        </Typography>
+        <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
           <NavigationMenu indicator indicatorVariant="pill" activeHref="/docs">
             <NavigationMenu.Item>
               <NavigationMenu.Link href="/features">Features</NavigationMenu.Link>
@@ -46,14 +54,18 @@ export default function ActiveIndicator() {
               <NavigationMenu.Link href="/docs">Docs</NavigationMenu.Link>
             </NavigationMenu.Item>
           </NavigationMenu>
-        </div>
-      </div>
+        </Div>
+      </Div>
 
-      <div>
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-(--sds-color-text-muted)">
+      <Div>
+        <Typography
+          variant="caption"
+          weight="semibold"
+          className="mb-2 uppercase tracking-wide text-(--sds-color-text-muted)"
+        >
           bar
-        </p>
-        <div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+        </Typography>
+        <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
           <NavigationMenu indicator indicatorVariant="bar" activeHref="/features">
             <NavigationMenu.Item>
               <NavigationMenu.Link href="/features">Features</NavigationMenu.Link>
@@ -65,8 +77,8 @@ export default function ActiveIndicator() {
               <NavigationMenu.Link href="/docs">Docs</NavigationMenu.Link>
             </NavigationMenu.Item>
           </NavigationMenu>
-        </div>
-      </div>
-    </div>
+        </Div>
+      </Div>
+    </Div>
   );
 }

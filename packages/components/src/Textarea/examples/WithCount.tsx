@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Textarea } from '@apx-ui/ds';
+import { Div, Textarea } from '@apx-ui/ds';
 
 export default function WithCount() {
   const [value, setValue] = useState(
@@ -7,8 +7,8 @@ export default function WithCount() {
   );
 
   return (
-    <div className="flex w-full max-w-md flex-col gap-4">
-      <div className="flex flex-col gap-1.5 text-sm text-fg">
+    <Div display="flex" flexDirection="column" gap="4" className="w-full max-w-md">
+      <Div display="flex" flexDirection="column" gap="1.5" className="text-sm text-fg">
         <label htmlFor="count-limited">With maxLength + showCount</label>
         <Textarea
           id="count-limited"
@@ -17,15 +17,15 @@ export default function WithCount() {
           showCount
           maxLength={120}
         />
-      </div>
-      <div className="flex flex-col gap-1.5 text-sm text-fg">
+      </Div>
+      <Div display="flex" flexDirection="column" gap="1.5" className="text-sm text-fg">
         <label htmlFor="count-only">Just showCount (no cap)</label>
         <Textarea
           id="count-only"
           showCount
           placeholder="Start typing to see the live count…"
         />
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

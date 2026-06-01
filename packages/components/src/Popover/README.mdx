@@ -8,6 +8,8 @@ overlay lifecycle: positioning, portaling, focus trapping, escape stack, outside
 It is the **first compound overlay** in the DS — `Popover.Trigger` + `Popover.Content` +
 `Popover.Arrow` + `Popover.Close` — and the canonical shape Menu, Select, Combobox will copy.
 
+<ExampleBlock for="Overview" title="Overview — account menu trigger + open panel" />
+
 ## When to use
 
 - A small floating panel of related actions: "More options" → 3-button menu.
@@ -19,9 +21,9 @@ It is the **first compound overlay** in the DS — `Popover.Trigger` + `Popover.
 ## When NOT to use
 
 - The content is purely a hint with no interactivity → use `<Tooltip />`.
-- The content is critical and blocks the page → use `<Modal />` (Phase 19, blocked on this).
-- The content is a list of actions → wait for `<Menu />` (Phase 22, builds on Popover).
-- The content is a `<select>`-style chooser → wait for `<Select />` (Phase 23).
+- The content is critical and blocks the page → use `<Modal />`.
+- The content is a list of actions → use `<Menu />`.
+- The content is a `<select>`-style chooser → use `<Select />` or `<Combobox />`.
 
 ## Anatomy
 
@@ -144,42 +146,4 @@ defineTheme({
 ```
 
 Per-instance overrides via `<Popover.Content className sx style />` merge on top of the theme
-overrides, which merge on top of the recipe — same precedence as everywhere else in the DS, and
-re-validated for compound components by Core 18's `defaultProps` wiring.
-
-## Engine consumption (Phase 17 Core full sweep)
-
-Popover is the **first consumer** of every overlay primitive `@apx-ds/engine` ships:
-
-| Primitive | First consumer | What this validates |
-|---|---|---|
-| `usePosition` | Tooltip (Phase 17) | Re-validated with interactive content + arrow + flip. |
-| `<Portal>` | Tooltip (Phase 17) | Re-validated with focus-trapped content. |
-| `useEscapeStack` | Tooltip (Phase 17) | Validated for nested overlay ordering. |
-| `useFocusTrap` | **Popover** | Initial focus, cycle-tab, return-focus on close, `active: open` discipline. |
-| `useOutsideClick` | **Popover** | Multi-ref (trigger + content), capture-phase pointerdown. |
-| `useScrollLock` | (deferred) | Wired up by Modal — Popover coexists with the page. |
-
-### Engine-API feedback
-
-Two consumer-side conventions surfaced in implementation; both are documented inline so the next
-overlay author (Modal / Menu) doesn't rediscover them:
-
-- **Refs that need to fan out** → `mergeRefs` is now used in two consumers (Tooltip's trigger,
-  Popover's content + trigger). Promote to `@apx-ds/engine` when a third arrives. The shape
-  is stable (`Array<Ref<T> | undefined> → (node: T | null) => void`).
-- **`active: open` not `active: mounted`** — `useFocusTrap` must subscribe / unsubscribe based on
-  the consumer's declarative `open` state, not on the AnimatePresence-driven mount flag.
-  Otherwise the trap stays active during the exit animation and the focus-restore queues against
-  a still-mounted Content. Same lesson `useEscapeStack` documented in Tooltip.
-
-No breaking changes were forced on the engine.
-
-## DRY notes
-
-- No `clsx`/`cn` imports — every class composition flows through `useThemedClasses`.
-- `@floating-ui/react` is only imported by the engine's `usePosition`; Popover never sees it.
-- `PopoverPlacement = TooltipPlacement` — single source of truth for the 12-placement vocab.
-- Adding a new color = palette entry + 2 compound rows.
-- Adding a new variant = one base row + 7 compound rows.
-- Compound assembly (`Object.assign`) follows Card's pattern verbatim.
+overrides, which merge on top of the recipe — same precedence as everywhere else in the DS.

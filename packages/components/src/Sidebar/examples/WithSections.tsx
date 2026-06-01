@@ -1,4 +1,4 @@
-import { Sidebar } from '@apx-ui/ds';
+import { Div, Sidebar } from '@apx-ui/ds';
 
 import { ChartIcon, FolderIcon, HomeIcon, InboxIcon, StarIcon } from './_icons';
 
@@ -9,7 +9,10 @@ import { ChartIcon, FolderIcon, HomeIcon, InboxIcon, StarIcon } from './_icons';
  */
 export default function WithSections() {
   return (
-    <div className="h-[460px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div
+      height={460}
+      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+    >
       <Sidebar
         ariaLabel="Sectioned navigation"
         variant="bordered"
@@ -44,6 +47,6 @@ export default function WithSections() {
           </Sidebar.Item>
         </Sidebar.Section>
       </Sidebar>
-    </div>
+    </Div>
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { MultiCombobox } from '@apx-ui/ds';
+import { MultiCombobox, Div } from '@apx-ui/ds';
 
 type Tag = { value: string; label: string };
 
@@ -23,7 +23,7 @@ export default function MultiCreatable() {
   const [value, setValue] = useState<string[]>([]);
 
   return (
-    <div className="max-w-sm">
+    <Div className="max-w-sm">
       <MultiCombobox<Tag>
         aria-label="Tags"
         placeholder="Type a tag and press Enter…"
@@ -37,6 +37,6 @@ export default function MultiCreatable() {
           return newOption;
         }}
       />
-    </div>
+    </Div>
   );
 }

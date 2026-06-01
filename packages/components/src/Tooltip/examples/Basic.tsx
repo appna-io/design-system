@@ -1,18 +1,14 @@
-import { Button, Tooltip } from '@apx-ui/ds';
+import { Button, Div, Tooltip, Typography } from '@apx-ui/ds';
 
-/**
- * Tooltip is hover/focus driven, not click driven — the button below is the test control. Hover
- * it (or Tab to it from the keyboard) and the tooltip surfaces after a short delay.
- */
 export default function Basic() {
   return (
-    <div className="flex flex-col items-start gap-2">
-      <p className="text-sm text-fg-muted">
+    <Div display="flex" flexDirection="column" alignItems="flex-start" gap="2">
+      <Typography variant="bodySmall" color="fg.muted">
         Hover the button (or focus it with Tab) to see the tooltip.
-      </p>
+      </Typography>
       <Tooltip content="Saved 3 minutes ago">
         <Button variant="soft">Hover me — Saved</Button>
       </Tooltip>
-    </div>
+    </Div>
   );
 }

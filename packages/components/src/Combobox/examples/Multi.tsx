@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { MultiCombobox } from '@apx-ui/ds';
+import { MultiCombobox, Div } from '@apx-ui/ds';
 
 const FRAMEWORKS = [
   { value: 'react', label: 'React' },
@@ -15,7 +15,7 @@ const FRAMEWORKS = [
 export default function Multi() {
   const [value, setValue] = useState<string[]>(['react', 'svelte']);
   return (
-    <div className="max-w-sm">
+    <Div className="max-w-sm">
       <MultiCombobox
         aria-label="Frameworks"
         placeholder="Pick frameworks"
@@ -23,6 +23,6 @@ export default function Multi() {
         value={value}
         onChange={setValue}
       />
-    </div>
+    </Div>
   );
 }

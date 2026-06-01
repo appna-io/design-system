@@ -518,4 +518,3 @@ For reference, comparable layout primitives: Chakra `<Stack>` ~3.5 KB gz, MUI `<
 2. **Visual regression (Playwright)** carryover from prior phases — Stack's responsive direction × align × justify matrix deserves a snapshot pass alongside Card / Drawer / Modal.
 3. **Section / Container / Grid layout primitives** (future Tier 1 phases) slot in alongside Stack as a coherent layout vocabulary. Plan callout #3 in the original spec.
 4. **`<Box />` primitive (not in scope here)** — if/when added, it should compose with Stack via `asChild` instead of duplicating axes.
-

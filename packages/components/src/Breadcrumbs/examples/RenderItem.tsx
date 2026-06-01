@@ -1,4 +1,4 @@
-import { Breadcrumbs } from '@apx-ui/ds';
+import { Breadcrumbs, Typography } from '@apx-ui/ds';
 
 export default function RenderItem() {
   return (
@@ -10,9 +10,9 @@ export default function RenderItem() {
       ]}
       renderItem={({ item, isCurrent, defaultClassName }) =>
         isCurrent ? (
-          <span aria-current="page" className={`${defaultClassName} font-semibold`}>
+          <Typography as="span" aria-current="page" className={`${defaultClassName} font-semibold`}>
             {item.label}
-          </span>
+          </Typography>
         ) : (
           <a href={item.href ?? item.to} className={defaultClassName}>
             {item.label}

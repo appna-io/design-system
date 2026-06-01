@@ -164,6 +164,56 @@ export const apxTailwindPreset = {
           '0%': { transform: 'scale(0.6)', opacity: '1' },
           '100%': { transform: 'scale(1.4)', opacity: '0' },
         },
+        // SplashScreen — `fade` variant: gentle scale-in + opacity ramp for the logo / title /
+        // subtitle stack. Reads as a clean, deliberate first-paint without any horizontal motion
+        // so it pairs well with brand marks that have their own internal motion.
+        'splash-fade-in': {
+          '0%': { opacity: '0', transform: 'translateY(8px) scale(0.96)' },
+          '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+        },
+        // SplashScreen — `pulse` variant: concentric radar rings expanding out from the logo.
+        // Each ring starts at 60% scale + full opacity and ends at 180% scale + zero opacity.
+        // Three rings on staggered delays produce the canonical "sonar pulse" sweep.
+        'splash-ring-pulse': {
+          '0%': { transform: 'scale(0.6)', opacity: '0.6' },
+          '80%': { opacity: '0' },
+          '100%': { transform: 'scale(1.8)', opacity: '0' },
+        },
+        // SplashScreen — `gradient` variant: the immersive flowing-gradient background. The
+        // backdrop carries a wide multi-stop linear gradient at `background-size: 200% 200%` and
+        // this keyframe shifts the background-position so the gradient sweeps diagonally
+        // across the viewport. Pure CSS — no JS frame loop.
+        'splash-gradient-shift': {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
+        // SplashScreen — `particles` variant: each particle orbits around the central logo. The
+        // child sits on an absolute orbit ring and this keyframe rotates the ring; `rotate(0)`
+        // → `rotate(360deg)` gives a uniform orbit so multiple particles can share one keyframe
+        // and stagger only via `animation-delay`.
+        'splash-orbit': {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+        // SplashScreen — `particles` variant: a tiny breathing scale on each particle so the
+        // orbit doesn't read as rigid. Paired with `splash-orbit` on a parent.
+        'splash-particle-breathe': {
+          '0%, 100%': { transform: 'scale(0.7)', opacity: '0.5' },
+          '50%': { transform: 'scale(1.1)', opacity: '1' },
+        },
+        // SplashScreen — `wave` variant: the bottom decorative wave gently translates up / down
+        // so the surface feels alive without competing with the logo. Slow + subtle on purpose;
+        // splash screens shouldn't read as "loading frantically".
+        'splash-wave': {
+          '0%, 100%': { transform: 'translate3d(0, 0, 0)' },
+          '50%': { transform: 'translate3d(-2%, -6px, 0)' },
+        },
+        // SplashScreen — `wave` variant (secondary band): a phase-offset translate so two wave
+        // bands stacked produce a parallax illusion instead of moving in lockstep.
+        'splash-wave-back': {
+          '0%, 100%': { transform: 'translate3d(0, 0, 0)' },
+          '50%': { transform: 'translate3d(2%, 4px, 0)' },
+        },
       },
       animation: {
         'badge-pulse': 'badge-pulse 1.4s ease-in-out infinite',
@@ -178,6 +228,16 @@ export const apxTailwindPreset = {
         // works without any inline style.
         'spinner-bounce': 'spinner-bounce 0.8s ease-in-out infinite both',
         'spinner-pulse': 'spinner-pulse 0.8s ease-in-out infinite',
+        // SplashScreen — five canonical animations. Each maps to a `variant` on
+        // `<SplashScreen />` and is registered here so any preset consumer gets the utility
+        // class without an extra `globals.css` import.
+        'splash-fade-in': 'splash-fade-in 700ms cubic-bezier(0.16,1,0.3,1) both',
+        'splash-ring-pulse': 'splash-ring-pulse 2.4s ease-out infinite',
+        'splash-gradient-shift': 'splash-gradient-shift 8s ease-in-out infinite',
+        'splash-orbit': 'splash-orbit 6s linear infinite',
+        'splash-particle-breathe': 'splash-particle-breathe 2.4s ease-in-out infinite',
+        'splash-wave': 'splash-wave 6s ease-in-out infinite',
+        'splash-wave-back': 'splash-wave-back 8s ease-in-out infinite',
       },
     },
   },

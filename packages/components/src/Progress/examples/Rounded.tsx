@@ -1,23 +1,29 @@
-import { Progress, type ProgressRounded } from '@apx-ui/ds';
+import { Div, Progress, Typography, type ProgressRounded } from '@apx-ui/ds';
 
 const ROUNDED: readonly ProgressRounded[] = ['sm', 'md', 'lg', 'full'];
 
 export default function Rounded() {
   return (
-    <div className="flex w-full max-w-sm flex-col gap-4">
+    <Div display="flex" flexDirection="column" gap="4" className="w-full max-w-sm">
       {ROUNDED.map((rounded) => (
-        <div key={rounded} className="flex flex-col gap-1.5">
-          <span className="text-xs font-medium uppercase tracking-wide text-fg-muted">
+        <Div key={rounded} display="flex" flexDirection="column" gap="1.5">
+          <Typography
+            as="span"
+            variant="caption"
+            weight="medium"
+            color="fg.muted"
+            className="uppercase tracking-wide"
+          >
             rounded={rounded}
-          </span>
+          </Typography>
           <Progress
             rounded={rounded}
             value={62}
             size="lg"
             aria-label={`Rounded ${rounded}`}
           />
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

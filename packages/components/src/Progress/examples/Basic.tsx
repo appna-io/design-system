@@ -1,9 +1,9 @@
-import { Progress } from '@apx-ui/ds';
+import { Div, Progress } from '@apx-ui/ds';
 
 export default function Basic() {
   return (
-    <div className="flex w-full max-w-sm flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3" className="w-full max-w-sm">
       <Progress value={66} aria-label="Upload progress" />
-    </div>
+    </Div>
   );
 }

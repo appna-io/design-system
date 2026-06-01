@@ -1,10 +1,14 @@
-import { HStack, Spacer } from '@apx-ui/ds';
+import { HStack, Spacer, Typography } from '@apx-ui/ds';
 
 export default function WithSpacer() {
   return (
     <HStack gap={2} align="center" className="w-full rounded-lg border border-border p-3">
-      <strong>Document</strong>
-      <span className="text-fg-muted">/ edited just now</span>
+      <Typography as="strong" weight="semibold">
+        Document
+      </Typography>
+      <Typography variant="caption" color="fg.muted">
+        / edited just now
+      </Typography>
       <Spacer />
       <button
         type="button"

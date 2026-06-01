@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Card, Input, Stepper } from '@apx-ui/ds';
+import { Button, Card, Div, Input, Stepper, Typography, VStack } from '@apx-ui/ds';
 
 const STEPS = [
   { id: 'account', label: 'Account', description: 'Email + password' },
@@ -20,11 +20,11 @@ export default function Wizard() {
     return (
       <Card>
         <Card.Body>
-          <p className="font-medium">All done!</p>
-          <p className="text-sm text-fg-muted">
+          <Typography weight="medium">All done!</Typography>
+          <Typography variant="bodySmall" color="fg.muted">
             Pretend your form just got POSTed. Click reset to play again.
-          </p>
-          <div className="mt-3">
+          </Typography>
+          <Div className="mt-3">
             <Button
               variant="ghost"
               onClick={() => {
@@ -35,7 +35,7 @@ export default function Wizard() {
             >
               Reset
             </Button>
-          </div>
+          </Div>
         </Card.Body>
       </Card>
     );
@@ -51,9 +51,9 @@ export default function Wizard() {
           linear
           onStepClick={({ index }) => setActive(index)}
         />
-        <div className="mt-6 flex flex-col gap-3">
+        <Div className="mt-6 flex flex-col gap-3">
           {active === 0 && (
-            <div className="flex flex-col gap-1">
+            <VStack gap={1}>
               <label htmlFor="wizard-name" className="text-sm font-medium">
                 Display name
               </label>
@@ -63,22 +63,24 @@ export default function Wizard() {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Sakura"
               />
-            </div>
+            </VStack>
           )}
           {active === 1 && (
-            <p className="text-sm text-fg-muted">
+            <Typography variant="bodySmall" color="fg.muted">
               Pretend there&rsquo;s a profile form here, {name || 'friend'}.
-            </p>
+            </Typography>
           )}
           {active === 2 && (
-            <p className="text-sm text-fg-muted">Pretend there&rsquo;s a plan picker here.</p>
+            <Typography variant="bodySmall" color="fg.muted">
+              Pretend there&rsquo;s a plan picker here.
+            </Typography>
           )}
           {active === 3 && (
-            <p className="text-sm">
+            <Typography variant="bodySmall">
               Ready to ship, <strong>{name || 'friend'}</strong>?
-            </p>
+            </Typography>
           )}
-          <div className="flex gap-2">
+          <Div display="flex" gap="2">
             <Button variant="ghost" onClick={() => setActive((i) => Math.max(0, i - 1))}>
               Back
             </Button>
@@ -89,8 +91,8 @@ export default function Wizard() {
             ) : (
               <Button onClick={() => setActive((i) => Math.min(total - 1, i + 1))}>Next</Button>
             )}
-          </div>
-        </div>
+          </Div>
+        </Div>
       </Card.Body>
     </Card>
   );

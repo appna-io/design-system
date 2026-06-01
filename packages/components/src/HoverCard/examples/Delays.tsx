@@ -1,4 +1,4 @@
-import { HoverCard } from '@apx-ui/ds';
+import { Div, HoverCard, Typography } from '@apx-ui/ds';
 
 /**
  * Three delay profiles for the same card so Ahmad can feel the difference. HoverCard ships with
@@ -7,11 +7,11 @@ import { HoverCard } from '@apx-ui/ds';
  */
 export default function Delays() {
   return (
-    <div className="flex flex-col items-start gap-3">
-      <p className="text-sm text-fg-muted">
+    <Div display="flex" flexDirection="column" alignItems="flex-start" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Hover each link to compare the delay profiles.
-      </p>
-      <div className="flex flex-wrap items-center gap-6 text-sm">
+      </Typography>
+      <Div display="flex" alignItems="center" gap="6" className="flex-wrap text-sm">
         <HoverCard openDelay={150} closeDelay={150}>
           <HoverCard.Trigger>
             <a href="#snappy" className="text-primary underline">
@@ -42,7 +42,7 @@ export default function Delays() {
             Long-form / heavy content — only fires on deliberate dwell.
           </HoverCard.Content>
         </HoverCard>
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

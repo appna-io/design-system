@@ -1,4 +1,4 @@
-import { Sidebar } from '@apx-ui/ds';
+import { Div, Sidebar } from '@apx-ui/ds';
 
 import { CogIcon, FolderIcon, HomeIcon, InboxIcon } from './_icons';
 
@@ -9,7 +9,10 @@ import { CogIcon, FolderIcon, HomeIcon, InboxIcon } from './_icons';
  */
 export default function BasicFlat() {
   return (
-    <div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div
+      height={420}
+      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+    >
       <Sidebar ariaLabel="Basic flat navigation" variant="bordered" width={220} activeHref="/inbox">
         <Sidebar.Item href="/" icon={<HomeIcon />}>
           Home
@@ -24,6 +27,6 @@ export default function BasicFlat() {
           Settings
         </Sidebar.Item>
       </Sidebar>
-    </div>
+    </Div>
   );
 }

@@ -1,17 +1,23 @@
-import { Skeleton, SkeletonAvatar, SkeletonText } from '@apx-ui/ds';
+import { Div, Skeleton, SkeletonAvatar, SkeletonText, Typography } from '@apx-ui/ds';
 
 export default function ListItem() {
   return (
-    <ul className="flex flex-col gap-4" style={{ maxWidth: 480, listStyle: 'none', padding: 0 }}>
+    <Div
+      as="ul"
+      display="flex"
+      flexDirection="column"
+      gap="4"
+      className="max-w-[480px] list-none p-0"
+    >
       {[0, 1, 2].map((i) => (
-        <li key={i} className="flex items-start gap-3">
+        <Typography as="li" key={i} className="flex items-start gap-3">
           <SkeletonAvatar size="md" />
-          <div className="flex flex-1 flex-col gap-2">
+          <Div display="flex" flexDirection="column" gap="2" className="flex-1">
             <Skeleton width="40%" height={14} />
             <SkeletonText lines={2} height={10} lastLineWidth="70%" />
-          </div>
-        </li>
+          </Div>
+        </Typography>
       ))}
-    </ul>
+    </Div>
   );
 }

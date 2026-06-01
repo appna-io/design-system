@@ -1,8 +1,8 @@
-import { Checkbox } from '@apx-ui/ds';
+import { Checkbox, Div } from '@apx-ui/ds';
 
 export default function WithDescription() {
   return (
-    <div className="flex flex-col gap-4">
+    <Div display="flex" flexDirection="column" gap="4">
       <Checkbox description="You can change this later in Settings.">
         Subscribe to product updates
       </Checkbox>
@@ -13,6 +13,6 @@ export default function WithDescription() {
       >
         Allow account notifications
       </Checkbox>
-    </div>
+    </Div>
   );
 }

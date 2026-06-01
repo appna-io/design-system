@@ -1,18 +1,24 @@
-import { Progress, type ProgressVariant } from '@apx-ui/ds';
+import { Div, Progress, Typography, type ProgressVariant } from '@apx-ui/ds';
 
 const VARIANTS: readonly ProgressVariant[] = ['solid', 'soft', 'striped'];
 
 export default function Variants() {
   return (
-    <div className="flex w-full max-w-sm flex-col gap-4">
+    <Div display="flex" flexDirection="column" gap="4" className="w-full max-w-sm">
       {VARIANTS.map((variant) => (
-        <div key={variant} className="flex flex-col gap-1.5">
-          <span className="text-xs font-medium uppercase tracking-wide text-fg-muted">
+        <Div key={variant} display="flex" flexDirection="column" gap="1.5">
+          <Typography
+            as="span"
+            variant="caption"
+            weight="medium"
+            color="fg.muted"
+            className="uppercase tracking-wide"
+          >
             {variant}
-          </span>
+          </Typography>
           <Progress variant={variant} value={62} aria-label={`${variant} progress`} />
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

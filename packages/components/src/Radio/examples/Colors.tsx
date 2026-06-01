@@ -1,4 +1,4 @@
-import { Radio, RadioGroup, type RadioColor } from '@apx-ui/ds';
+import { Div, Radio, RadioGroup, type RadioColor } from '@apx-ui/ds';
 
 const COLORS: readonly RadioColor[] = [
   'primary',
@@ -12,7 +12,7 @@ const COLORS: readonly RadioColor[] = [
 
 export default function Colors() {
   return (
-    <div className="flex flex-col gap-2">
+    <Div display="flex" flexDirection="column" gap="2">
       {COLORS.map((color) => (
         <RadioGroup
           key={color}
@@ -23,6 +23,6 @@ export default function Colors() {
           <Radio value="x">{color.charAt(0).toUpperCase() + color.slice(1)}</Radio>
         </RadioGroup>
       ))}
-    </div>
+    </Div>
   );
 }

@@ -1,4 +1,4 @@
-import { Button, Drawer } from '@apx-ui/ds';
+import { Button, Div, Drawer, Typography } from '@apx-ui/ds';
 
 const links = [
   { label: 'Dashboard', href: '#dashboard' },
@@ -18,20 +18,20 @@ export default function NavigationDrawer() {
         <Drawer.Close />
         <Drawer.Header title="Navigation" />
         <Drawer.Body>
-          <nav>
-            <ul className="flex flex-col gap-1">
+          <Div as="nav">
+            <Div as="ul" display="flex" flexDirection="column" gap="1">
               {links.map((link) => (
-                <li key={link.href}>
+                <Typography as="li" key={link.href} variant="bodySmall">
                   <a
                     href={link.href}
-                    className="block rounded-md px-3 py-2 text-sm hover:bg-bg-subtle"
+                    className="block rounded-md px-3 py-2 hover:bg-bg-subtle"
                   >
                     {link.label}
                   </a>
-                </li>
+                </Typography>
               ))}
-            </ul>
-          </nav>
+            </Div>
+          </Div>
         </Drawer.Body>
         <Drawer.Footer align="start">
           <Drawer.Close asChild>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, CommandPalette, useRegisterCommand } from '@apx-ui/ds';
+import { Button, CommandPalette, Typography, useRegisterCommand } from '@apx-ui/ds';
 
 /**
  * Hook-based registration — commands defined deep in the component tree flow into the palette
@@ -22,9 +22,9 @@ function EditorToolbar() {
     onSelect: () => alert('Italic toggled'),
   });
   return (
-    <p className="text-sm text-fg-muted">
+    <Typography variant="bodySmall" color="fg.muted">
       Open the palette — {'"Bold"'} + {'"Italic"'} are registered via hook.
-    </p>
+    </Typography>
   );
 }
 

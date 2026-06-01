@@ -1,20 +1,26 @@
-import { Spinner } from '@apx-ui/ds';
+import { Div, Spinner, Typography } from '@apx-ui/ds';
 
 export default function TrackOpacity() {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+    <Div display="flex" alignItems="center" gap="8">
+      <Div display="flex" flexDirection="column" alignItems="center" gap="1.5">
         <Spinner trackOpacity={0} size="xl" />
-        <span style={{ fontSize: 12, opacity: 0.7 }}>trackOpacity=0 (trackless)</span>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+        <Typography variant="caption" color="fg.muted">
+          trackOpacity=0 (trackless)
+        </Typography>
+      </Div>
+      <Div display="flex" flexDirection="column" alignItems="center" gap="1.5">
         <Spinner trackOpacity={0.2} size="xl" />
-        <span style={{ fontSize: 12, opacity: 0.7 }}>trackOpacity=0.2 (default)</span>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+        <Typography variant="caption" color="fg.muted">
+          trackOpacity=0.2 (default)
+        </Typography>
+      </Div>
+      <Div display="flex" flexDirection="column" alignItems="center" gap="1.5">
         <Spinner trackOpacity={0.5} size="xl" />
-        <span style={{ fontSize: 12, opacity: 0.7 }}>trackOpacity=0.5</span>
-      </div>
-    </div>
+        <Typography variant="caption" color="fg.muted">
+          trackOpacity=0.5
+        </Typography>
+      </Div>
+    </Div>
   );
 }

@@ -1,16 +1,16 @@
-import { AppShell, HStack, Stack } from '@apx-ui/ds';
+import { AppShell, Div, HStack, Stack, Typography } from '@apx-ui/ds';
 
 export default function InsetLayout() {
   return (
-    <div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
       <AppShell
         layout="inset"
         header={
           <HStack gap={3} className="w-full">
             <strong>GitHub-style header</strong>
-            <span className="text-sm text-(--sds-color-text-muted)">
+            <Typography as="span" variant="bodySmall" color="fg.muted">
               spans the full width of the screen
-            </span>
+            </Typography>
           </HStack>
         }
         sidebar={
@@ -21,11 +21,13 @@ export default function InsetLayout() {
           </Stack>
         }
       >
-        <h2 className="text-lg font-semibold">Inset variant</h2>
-        <p className="mt-2 text-sm text-(--sds-color-text-muted)">
+        <Typography as="h2" variant="titleSmall" weight="semibold">
+          Inset variant
+        </Typography>
+        <Typography variant="bodySmall" color="fg.muted" sx={{ mt: 2 }}>
           Header lives above both sidebar and main content.
-        </p>
+        </Typography>
       </AppShell>
-    </div>
+    </Div>
   );
 }

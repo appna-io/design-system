@@ -1,4 +1,4 @@
-import { NavigationMenu } from '@apx-ui/ds';
+import { Div, NavigationMenu } from '@apx-ui/ds';
 
 /**
  * The simplest NavigationMenu — flat list of links, no dropdowns. Pass
@@ -8,7 +8,7 @@ import { NavigationMenu } from '@apx-ui/ds';
  */
 export default function BasicLinks() {
   return (
-    <div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+    <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
       <NavigationMenu activeHref="/pricing">
         <NavigationMenu.Item>
           <NavigationMenu.Link href="/features">Features</NavigationMenu.Link>
@@ -23,6 +23,6 @@ export default function BasicLinks() {
           <NavigationMenu.Link href="/docs">Docs</NavigationMenu.Link>
         </NavigationMenu.Item>
       </NavigationMenu>
-    </div>
+    </Div>
   );
 }

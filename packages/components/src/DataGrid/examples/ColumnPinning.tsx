@@ -1,4 +1,4 @@
-import { DataGrid } from '@apx-ui/ds';
+import { DataGrid, Div, Typography } from '@apx-ui/ds';
 import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Row {
@@ -32,15 +32,15 @@ const columns: DataGridColumnDef<Row>[] = [
 
 export default function ColumnPinning() {
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         The first column is pinned to the start and the last to the end. As you scroll
         horizontally they stay glued to the grid edges. Open any column&apos;s kebab menu
         to pin or unpin it on the fly.
-      </p>
-      <div className="max-w-[640px]">
+      </Typography>
+      <Div maxWidth="640px">
         <DataGrid<Row> data={data} columns={columns} getRowId={(r) => r.id} />
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

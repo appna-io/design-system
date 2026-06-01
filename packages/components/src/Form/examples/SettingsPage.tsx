@@ -1,4 +1,4 @@
-import { Button, Form, FormField, Input, Textarea } from '@apx-ui/ds';
+import { Button, Div, Form, FormField, Input, Textarea } from '@apx-ui/ds';
 
 interface SettingsValues extends Record<string, unknown> {
   displayName: string;
@@ -28,10 +28,10 @@ export default function SettingsPage() {
       <FormField name="website" label="Website" helperText="Must start with https://">
         <Input type="url" />
       </FormField>
-      <div style={{ display: 'flex', gap: 8 }}>
+      <Div display="flex" gap="2">
         <Button type="submit" variant="solid">Save changes</Button>
         <Button type="reset" variant="ghost">Reset</Button>
-      </div>
+      </Div>
     </Form>
   );
 }

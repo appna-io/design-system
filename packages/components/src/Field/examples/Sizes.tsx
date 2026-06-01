@@ -1,8 +1,8 @@
-import { Field, Input } from '@apx-ui/ds';
+import { Div, Field, Input } from '@apx-ui/ds';
 
 export default function Sizes() {
   return (
-    <div className="flex flex-col gap-4 max-w-sm">
+    <Div display="flex" flexDirection="column" gap="4" className="max-w-sm">
       <Field label="Small" size="sm" helperText="Compact size — for dense forms.">
         <Input size="sm" name="sm" placeholder="size=sm" />
       </Field>
@@ -12,6 +12,6 @@ export default function Sizes() {
       <Field label="Large" size="lg" helperText="Comfortable size — for hero forms.">
         <Input size="lg" name="lg" placeholder="size=lg" />
       </Field>
-    </div>
+    </Div>
   );
 }

@@ -5,11 +5,7 @@ shell and `<Menu />`'s listbox. A single-select dropdown with the W3C Listbox + 
 pattern, type-ahead, keyboard navigation, native form integration via a hidden `<input>`, and a
 trigger that matches Input / Textarea heights per size so they line up on the same form row.
 
-Select is the first component that lives at the boundary of two families. The trigger speaks
-form-control vocabulary (same 4 variants × 7 colors × 3 sizes as Input / Textarea); the listbox
-speaks overlay vocabulary (same `solid` / `outline` / `soft` × 7 colors as Popover / Menu). Both
-families' shared primitives compose without conflict — that's the cross-cutting DRY payoff this
-phase was designed to prove.
+<ExampleBlock for="Overview" title="Overview — country selector with realistic options" />
 
 ## When to use
 
@@ -68,9 +64,7 @@ phase was designed to prove.
 
 ### Trigger variants (form-control vocabulary)
 
-The Trigger reuses Input / Textarea's 4 × 7 matrix verbatim. Adding a color or variant happens
-once in `_shared/variantColorMatrix.ts` — Input, Textarea, and Select all pick it up. Select is
-the third consumer of the matrix, validating the Phase 8 extraction.
+The Trigger reuses Input / Textarea's 4 × 7 matrix verbatim.
 
 | Variant     | Chrome                                                  |
 | ----------- | ------------------------------------------------------- |
@@ -166,7 +160,7 @@ invalid / grouped states.
 
 ## Examples
 
-<ExampleBlock for="Basic" />
+<ExampleBlock for="Basic" title="Basic usage — pick from a short list" />
 
 <ExampleBlock for="WithGroups" />
 
@@ -220,74 +214,4 @@ defineTheme({
 
 Per-instance overrides via `<Select.Trigger className sx style />` and `<Select.Content className
 sx style />` merge on top of the theme overrides, which merge on top of the recipe — same
-precedence chain everywhere else in the DS, validated for compound components by Core 18's
-`defaultProps` wiring.
-
-## Engine consumption
-
-Select consumes the entire overlay + form-control surface — no new engine primitives requested.
-The one new shared utility added in this phase (`_shared/useListKeyboard.ts`) was promoted from
-`Menu/useMenuKeyboard.ts` because Select is now the second consumer of the same keyboard logic.
-
-| Primitive | Used for |
-|---|---|
-| `usePosition` | Position Content against trigger; **first DS consumer** of `matchTriggerWidth: true` (Floating UI's `size` middleware path). |
-| `<Portal>` | Render Content outside the DOM tree so z-index + overflow clip-paths can't trap the listbox. |
-| `useEscapeStack` | Esc closes the listbox. |
-| `useOutsideClick` | Pointer-down outside trigger + content closes. |
-| `useControllableState` | `value` / `defaultValue` / `onValueChange` and `open` / `defaultOpen` / `onOpenChange`. |
-| `mergeRefs` | Compose Floating UI's setReference + local ref + forwarded ref + root's trigger ref. |
-| `_shared/controlBase` | Trigger's form-control shell. |
-| `_shared/useFormFieldA11y` | `id` + `aria-invalid` + `aria-required` + `aria-describedby` bridging. |
-| `_shared/variantColorMatrix` | Trigger's 4 × 7 compound matrix — **third consumer**. |
-| `_shared/useListKeyboard` | Arrow / Home / End / Enter / Space / Esc / Tab / type-ahead — **second consumer** (Menu was the first). |
-
-Select **does not** use `useFocusTrap` — focus stays on Content and items are
-`aria-activedescendant`-tracked (not tab-focused). Same discipline Menu uses; consistent with the
-W3C Listbox pattern.
-
-`SelectPlacement = PopoverPlacement` — single source of truth for the 12-placement vocab; Modal /
-Menu / Select / future Combobox all alias from this canonical type.
-
-## Notes for consumers
-
-A few patterns surfaced during implementation; documented so the next overlay-plus-form-control
-author (Combobox, future) doesn't rediscover them:
-
-- **The listbox is always mounted, just hidden when closed.** Unlike Menu, which unmounts its
-  Content via AnimatePresence, Select keeps Content rendered with `visibility: hidden` +
-  `pointer-events: none` when closed. Reason: items have to register their `value → label`
-  mapping with the root *before* the user opens the listbox so the trigger can render the right
-  label for a controlled `defaultValue`. Toggling visibility is the simplest way to keep the
-  registration alive across open/close cycles.
-- **The trigger's accessible name comes from the author, not from contents.** `role="combobox"`
-  is a nameFromAuthor role. We auto-fall-back to `placeholder` for the accessible name when
-  neither `aria-label` nor `aria-labelledby` is provided, but a real `<label htmlFor>` is always
-  preferable.
-- **Value→label cache is keyed by value, not by item id.** Items can unmount + remount with new
-  React ids; as long as the value stays the same, the cache survives, so the trigger keeps
-  rendering the right label.
-
-## DRY notes
-
-- No `clsx` / `cn` imports — every class composition flows through `useThemedClasses`.
-- `useListKeyboard` lives in `_shared/`; Menu now imports from there too (single source of
-  truth for the keyboard hook). Future Combobox can reuse the same hook with optional filter
-  hooks.
-- `controlBase`, `useFormFieldA11y`, `variantColorMatrix` all sourced from `_shared/` — the
-  Trigger doesn't duplicate any form-control logic. Adding a new form-control color = one entry
-  in the matrix; Input, Textarea, and Select all light up.
-- `SelectPlacement = PopoverPlacement` — alias for the 12-placement vocab.
-- Compound assembly (`Object.assign`) follows Popover / Menu / Card verbatim.
-
-## Out of scope (V1)
-
-- **`<Select.Value>` subpart** — Trigger renders the value via the registry's label cache; a
-  separate `Value` subpart is V2 if a consumer needs to render the value outside the trigger.
-- **`position="item-aligned"`** — the legacy native `<select>` position where the selected item
-  overlays the trigger. We ship `position="popper"` only (anchored below).
-- **Multi-select / chips** — separate `<MultiSelect />` component.
-- **Typeable filter / autocomplete** — separate `<Combobox />` component, will reuse Select's
-  listbox + Input's text shell.
-- **Async-loaded items / virtualization** — V2; render-all-items is fine up to ~500 entries.
-- **Custom dropdown-aligned placement** — Floating UI handles it via standard placement props.
+precedence chain everywhere else in the DS.

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pagination } from '@apx-ui/ds';
+import { Div, Pagination, Typography } from '@apx-ui/ds';
 
 /**
  * Simulates a server that only exposes prev / next cursors and never reports
@@ -15,11 +15,11 @@ export default function Cursor() {
   const [pageLabel, setPageLabel] = useState(1);
 
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-sm text-fg-muted">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Currently on cursor-driven page <strong>{pageLabel}</strong>. The
         server returns the next / previous cursor with each response.
-      </p>
+      </Typography>
       <Pagination
         mode="cursor"
         hasPreviousPage={cursor.prev !== null}
@@ -39,6 +39,6 @@ export default function Cursor() {
           }));
         }}
       />
-    </div>
+    </Div>
   );
 }

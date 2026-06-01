@@ -1,13 +1,15 @@
-import { Tabs } from '@apx-ui/ds';
+import { Div, Tabs, Typography } from '@apx-ui/ds';
 
 const variants = ['underline', 'solid', 'pills', 'enclosed'] as const;
 
 export default function Variants() {
   return (
-    <div className="flex flex-col gap-8">
+    <Div display="flex" flexDirection="column" gap="8">
       {variants.map((variant) => (
-        <div key={variant} className="flex flex-col gap-2">
-          <span className="text-xs uppercase tracking-wide text-fg-muted">{variant}</span>
+        <Div key={variant} display="flex" flexDirection="column" gap="2">
+          <Typography as="span" variant="caption" color="fg.muted" className="uppercase tracking-wide">
+            {variant}
+          </Typography>
           <Tabs variant={variant} defaultValue="overview" aria-label={`${variant} tabs example`}>
             <Tabs.List>
               <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
@@ -18,8 +20,8 @@ export default function Variants() {
             <Tabs.Panel value="activity">Activity panel</Tabs.Panel>
             <Tabs.Panel value="settings">Settings panel</Tabs.Panel>
           </Tabs>
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

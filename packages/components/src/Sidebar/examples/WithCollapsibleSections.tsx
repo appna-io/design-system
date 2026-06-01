@@ -1,4 +1,4 @@
-import { Sidebar } from '@apx-ui/ds';
+import { Div, Sidebar } from '@apx-ui/ds';
 
 import { ChartIcon, FolderIcon, HomeIcon, InboxIcon } from './_icons';
 
@@ -10,7 +10,10 @@ import { ChartIcon, FolderIcon, HomeIcon, InboxIcon } from './_icons';
  */
 export default function WithCollapsibleSections() {
   return (
-    <div className="h-[480px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div
+      height={480}
+      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+    >
       <Sidebar
         ariaLabel="Collapsible navigation"
         variant="bordered"
@@ -42,6 +45,6 @@ export default function WithCollapsibleSections() {
           </Sidebar.Item>
         </Sidebar.Section>
       </Sidebar>
-    </div>
+    </Div>
   );
 }

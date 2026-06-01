@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Button, Tooltip } from '@apx-ui/ds';
+import { Button, Div, Tooltip, Typography } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [open, setOpen] = useState(false);
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <Div display="flex" flexWrap="wrap" alignItems="center" gap="3">
       <Tooltip
         content="Controlled — toggle me with the buttons →"
         open={open}
@@ -18,7 +18,9 @@ export default function Controlled() {
       <Button variant="outline" size="sm" onClick={() => setOpen(false)}>
         Close
       </Button>
-      <span className="text-xs text-fg-muted">open: {String(open)}</span>
-    </div>
+      <Typography variant="caption" color="fg.muted">
+        open: {String(open)}
+      </Typography>
+    </Div>
   );
 }

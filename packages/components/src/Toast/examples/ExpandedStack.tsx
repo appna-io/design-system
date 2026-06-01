@@ -1,8 +1,8 @@
-import { Button, Toaster, toast } from '@apx-ui/ds';
+import { Button, Div, Toaster, Typography, toast } from '@apx-ui/ds';
 
 export default function ExpandedStack() {
   return (
-    <div className="space-y-3">
+    <Div display="flex" flexDirection="column" gap="3">
       <Button
         onClick={() => {
           toast('First message');
@@ -12,11 +12,11 @@ export default function ExpandedStack() {
       >
         Fire three toasts
       </Button>
-      <p className="text-sm text-fg-muted">
+      <Typography variant="bodySmall" color="fg.muted">
         With <code className="font-mono">expand</code>, the stack always renders expanded
         instead of collapsed-with-hover-to-expand.
-      </p>
+      </Typography>
       <Toaster expand richColors max={5} />
-    </div>
+    </Div>
   );
 }

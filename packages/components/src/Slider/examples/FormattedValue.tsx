@@ -1,4 +1,4 @@
-import { Slider } from '@apx-ui/ds';
+import { Div, Slider, Typography } from '@apx-ui/ds';
 
 const dollars = (v: number) => `$${v.toFixed(2)}`;
 const percent = (v: number) => `${v}%`;
@@ -7,9 +7,11 @@ const time = (v: number) =>
 
 export default function FormattedValue() {
   return (
-    <div className="w-72 flex flex-col gap-10 pt-10">
-      <div>
-        <div className="text-xs text-fg-muted mb-2">Currency</div>
+    <Div display="flex" flexDirection="column" gap="10" className="w-72 pt-10">
+      <Div>
+        <Typography variant="caption" color="fg.muted" className="mb-2">
+          Currency
+        </Typography>
         <Slider
           aria-label="Budget"
           defaultValue={49.99}
@@ -19,18 +21,22 @@ export default function FormattedValue() {
           showValueLabel="always"
           formatValue={dollars}
         />
-      </div>
-      <div>
-        <div className="text-xs text-fg-muted mb-2">Percentage</div>
+      </Div>
+      <Div>
+        <Typography variant="caption" color="fg.muted" className="mb-2">
+          Percentage
+        </Typography>
         <Slider
           aria-label="Opacity"
           defaultValue={62}
           showValueLabel="always"
           formatValue={percent}
         />
-      </div>
-      <div>
-        <div className="text-xs text-fg-muted mb-2">Time (mm:ss)</div>
+      </Div>
+      <Div>
+        <Typography variant="caption" color="fg.muted" className="mb-2">
+          Time (mm:ss)
+        </Typography>
         <Slider
           aria-label="Track position"
           defaultValue={73}
@@ -40,7 +46,7 @@ export default function FormattedValue() {
           showValueLabel="always"
           formatValue={time}
         />
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

@@ -1,15 +1,15 @@
-import { AppShell, HStack, Stack } from '@apx-ui/ds';
+import { AppShell, Div, HStack, Stack, Typography } from '@apx-ui/ds';
 
 export default function CenteredMain() {
   return (
-    <div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
       <AppShell
         header={
           <HStack gap={3} className="w-full">
             <strong>Docs site</strong>
-            <span className="text-sm text-(--sds-color-text-muted)">
+            <Typography as="span" variant="bodySmall" color="fg.muted">
               max-width main with centered content
-            </span>
+            </Typography>
           </HStack>
         }
         sidebar={
@@ -21,17 +21,19 @@ export default function CenteredMain() {
         }
         main={{ maxWidth: '2xl', centered: true, padding: 8 }}
       >
-        <h1 className="text-2xl font-semibold">Body content stays readable</h1>
-        <p className="mt-3 text-sm text-(--sds-color-text-muted)">
+        <Typography as="h1" variant="titleMedium" weight="semibold">
+          Body content stays readable
+        </Typography>
+        <Typography variant="bodySmall" color="fg.muted" sx={{ mt: 3 }}>
           Use `main.maxWidth` to keep prose at a comfortable measure (60–80 chars) without
           stretching across wide monitors. Set `centered: true` to horizontally center it inside
           the main column.
-        </p>
-        <p className="mt-3 text-sm text-(--sds-color-text-muted)">
+        </Typography>
+        <Typography variant="bodySmall" color="fg.muted" sx={{ mt: 3 }}>
           This pattern is the foundation for documentation, marketing, and long-form content
           surfaces.
-        </p>
+        </Typography>
       </AppShell>
-    </div>
+    </Div>
   );
 }

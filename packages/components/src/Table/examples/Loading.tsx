@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Table } from '@apx-ui/ds';
+import { Button, Div, Table } from '@apx-ui/ds';
 import type { TableColumn } from '@apx-ui/ds';
 
 interface Row {
@@ -22,7 +22,7 @@ const columns: TableColumn<Row>[] = [
 export default function Loading() {
   const [loading, setLoading] = useState(true);
   return (
-    <div className="flex flex-col gap-2">
+    <Div display="flex" flexDirection="column" gap="2">
       <Button size="sm" onClick={() => setLoading((value) => !value)}>
         {loading ? 'Stop loading' : 'Start loading'}
       </Button>
@@ -34,6 +34,6 @@ export default function Loading() {
         loading={loading}
         loadingRowCount={4}
       />
-    </div>
+    </Div>
   );
 }

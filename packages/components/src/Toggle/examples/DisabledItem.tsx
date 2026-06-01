@@ -1,10 +1,12 @@
-import { ToggleGroup } from '@apx-ui/ds';
+import { Div, ToggleGroup, Typography } from '@apx-ui/ds';
 
 export default function DisabledItem() {
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium text-fg-muted">Per-item disabled</span>
+    <Div display="flex" flexDirection="column" gap="6">
+      <Div display="flex" flexDirection="column" gap="2">
+        <Typography variant="caption" weight="medium" color="fg.muted">
+          Per-item disabled
+        </Typography>
         <ToggleGroup
           type="single"
           aria-label="Plan tier"
@@ -18,10 +20,12 @@ export default function DisabledItem() {
             Enterprise (coming soon)
           </ToggleGroup.Item>
         </ToggleGroup>
-      </div>
+      </Div>
 
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium text-fg-muted">Group disabled</span>
+      <Div display="flex" flexDirection="column" gap="2">
+        <Typography variant="caption" weight="medium" color="fg.muted">
+          Group disabled
+        </Typography>
         <ToggleGroup
           type="multiple"
           aria-label="Read-only formatting"
@@ -29,16 +33,16 @@ export default function DisabledItem() {
           disabled
         >
           <ToggleGroup.Item value="bold" aria-label="Bold">
-            <span className="font-bold">B</span>
+            <strong>B</strong>
           </ToggleGroup.Item>
           <ToggleGroup.Item value="italic" aria-label="Italic">
-            <span className="italic">I</span>
+            <em>I</em>
           </ToggleGroup.Item>
           <ToggleGroup.Item value="underline" aria-label="Underline">
-            <span className="underline">U</span>
+            <u>U</u>
           </ToggleGroup.Item>
         </ToggleGroup>
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

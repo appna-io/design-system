@@ -1,8 +1,8 @@
-import { Card } from '@apx-ui/ds';
+import { Card, Div } from '@apx-ui/ds';
 
 export default function Variants() {
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <Div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       <Card variant="outline">
         <Card.Header title="Outline" subtitle="Default" />
         <Card.Body>1px border + paper background. The conventional shell.</Card.Body>
@@ -19,6 +19,6 @@ export default function Variants() {
         <Card.Header title="Ghost" subtitle="Hover to reveal" />
         <Card.Body>No edge, no fill. Frame only appears on hover.</Card.Body>
       </Card>
-    </div>
+    </Div>
   );
 }

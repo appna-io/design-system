@@ -1,14 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { Accordion, Button } from '@apx-ui/ds';
+import { Accordion, Button, Div, Typography } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [open, setOpen] = useState<string>('two');
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap gap-2 text-sm">
-        <span className="text-fg-muted">Open from outside:</span>
+    <Div display="flex" flexDirection="column" gap="3">
+      <Div display="flex" flexWrap="wrap" gap="2" className="text-sm">
+        <Typography as="span" variant="bodySmall" color="fg.muted">
+          Open from outside:
+        </Typography>
         <Button size="sm" variant="soft" onClick={() => setOpen('one')}>
           Open #1
         </Button>
@@ -21,7 +23,7 @@ export default function Controlled() {
         <Button size="sm" variant="outline" onClick={() => setOpen('')}>
           Close all
         </Button>
-      </div>
+      </Div>
       <Accordion type="single" value={open} onValueChange={setOpen}>
         <Accordion.Item value="one">
           <Accordion.Trigger>Section one</Accordion.Trigger>
@@ -36,6 +38,6 @@ export default function Controlled() {
           <Accordion.Content>Controlled body three.</Accordion.Content>
         </Accordion.Item>
       </Accordion>
-    </div>
+    </Div>
   );
 }

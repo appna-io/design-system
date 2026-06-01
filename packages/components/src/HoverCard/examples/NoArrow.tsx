@@ -1,4 +1,4 @@
-import { HoverCard } from '@apx-ui/ds';
+import { Div, HoverCard, Typography } from '@apx-ui/ds';
 
 /**
  * `<HoverCard.Content showArrow={false}>` removes the SVG arrow. Useful for richer card layouts
@@ -7,7 +7,7 @@ import { HoverCard } from '@apx-ui/ds';
  */
 export default function NoArrow() {
   return (
-    <div className="flex items-center gap-8">
+    <Div display="flex" alignItems="center" gap="8">
       <HoverCard openDelay={200} closeDelay={200}>
         <HoverCard.Trigger>
           <a href="#with-arrow" className="text-primary underline">
@@ -15,7 +15,9 @@ export default function NoArrow() {
           </a>
         </HoverCard.Trigger>
         <HoverCard.Content>
-          <p className="text-xs">Default card with arrow pointing back at the trigger.</p>
+          <Typography variant="caption">
+            Default card with arrow pointing back at the trigger.
+          </Typography>
         </HoverCard.Content>
       </HoverCard>
 
@@ -26,9 +28,11 @@ export default function NoArrow() {
           </a>
         </HoverCard.Trigger>
         <HoverCard.Content showArrow={false}>
-          <p className="text-xs">Same card, no arrow. Cleaner for richer layouts.</p>
+          <Typography variant="caption">
+            Same card, no arrow. Cleaner for richer layouts.
+          </Typography>
         </HoverCard.Content>
       </HoverCard>
-    </div>
+    </Div>
   );
 }

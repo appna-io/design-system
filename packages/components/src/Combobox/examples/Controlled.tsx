@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Button, Combobox } from '@apx-ui/ds';
+import { Button, Combobox, Div, Typography } from '@apx-ui/ds';
 
 const COUNTRIES = [
   { value: 'us', label: 'United States' },
@@ -14,7 +14,7 @@ export default function Controlled() {
   const [inputValue, setInputValue] = useState<string>('France');
 
   return (
-    <div className="flex flex-col gap-3 max-w-sm">
+    <Div display="flex" flexDirection="column" gap="3" className="max-w-sm">
       <Combobox
         aria-label="Country"
         placeholder="Pick a country"
@@ -24,10 +24,10 @@ export default function Controlled() {
         inputValue={inputValue}
         onInputValueChange={setInputValue}
       />
-      <div className="flex items-center gap-2 text-sm text-fg-muted">
-        <span>
+      <Div display="flex" alignItems="center" gap="2" className="text-sm text-fg-muted">
+        <Typography as="span" variant="bodySmall" color="fg.muted">
           Value: <code>{value ?? '(none)'}</code> · Query: <code>{inputValue || '(empty)'}</code>
-        </span>
+        </Typography>
         <Button
           size="sm"
           variant="ghost"
@@ -38,7 +38,7 @@ export default function Controlled() {
         >
           Clear
         </Button>
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

@@ -1,11 +1,11 @@
-import { Divider } from '@apx-ui/ds';
+import { Divider, Div, Typography } from '@apx-ui/ds';
 
 export default function Basic() {
   return (
-    <div className="space-y-4">
-      <p className="text-sm">Above the rule.</p>
+    <Div className="space-y-4">
+      <Typography variant="bodySmall">Above the rule.</Typography>
       <Divider />
-      <p className="text-sm">Below the rule.</p>
-    </div>
+      <Typography variant="bodySmall">Below the rule.</Typography>
+    </Div>
   );
 }

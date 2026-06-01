@@ -1,12 +1,12 @@
-import { Accordion } from '@apx-ui/ds';
+import { Accordion, Div, Typography } from '@apx-ui/ds';
 
 export default function Collapsible() {
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <p className="mb-2 text-sm text-fg-muted">
+    <Div display="flex" flexDirection="column" gap="6">
+      <Div>
+        <Typography variant="bodySmall" color="fg.muted" sx={{ mb: 2 }}>
           <code>collapsible</code> = <code>true</code> (default) — click an open item to close it.
-        </p>
+        </Typography>
         <Accordion type="single" defaultValue="one" collapsible>
           <Accordion.Item value="one">
             <Accordion.Trigger>I close when re-clicked</Accordion.Trigger>
@@ -19,11 +19,11 @@ export default function Collapsible() {
             <Accordion.Content>Each item independently respects collapsible.</Accordion.Content>
           </Accordion.Item>
         </Accordion>
-      </div>
-      <div>
-        <p className="mb-2 text-sm text-fg-muted">
+      </Div>
+      <Div>
+        <Typography variant="bodySmall" color="fg.muted" sx={{ mb: 2 }}>
           <code>collapsible</code> = <code>false</code> — one item must stay open.
-        </p>
+        </Typography>
         <Accordion type="single" defaultValue="one" collapsible={false}>
           <Accordion.Item value="one">
             <Accordion.Trigger>I stay open on re-click</Accordion.Trigger>
@@ -34,7 +34,7 @@ export default function Collapsible() {
             <Accordion.Content>Switching items still works — only re-closing is blocked.</Accordion.Content>
           </Accordion.Item>
         </Accordion>
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

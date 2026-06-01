@@ -1,9 +1,9 @@
-import { Button, Toaster, toast } from '@apx-ui/ds';
+import { Button, Div, Toaster, toast } from '@apx-ui/ds';
 
 export default function DismissAll() {
   return (
-    <div className="space-y-3">
-      <div className="flex flex-wrap gap-2">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Div display="flex" flexWrap="wrap" gap="2">
         <Button
           onClick={() => {
             toast('First');
@@ -16,8 +16,8 @@ export default function DismissAll() {
         <Button variant="outline" onClick={() => toast.dismiss()}>
           Dismiss all
         </Button>
-      </div>
+      </Div>
       <Toaster duration={10_000} expand />
-    </div>
+    </Div>
   );
 }

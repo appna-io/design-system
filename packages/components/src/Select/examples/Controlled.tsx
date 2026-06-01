@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
-import { Button, Select } from '@apx-ui/ds';
+import { Button, Div, Select, Typography } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [value, setValue] = useState<string>('apple');
 
   return (
-    <div className="flex flex-col gap-3 max-w-sm">
+    <Div display="flex" flexDirection="column" gap="3" className="max-w-sm">
       <Select value={value} onValueChange={setValue} placeholder="Pick a fruit" aria-label="Fruit">
         <Select.Trigger />
         <Select.Content>
@@ -15,17 +15,17 @@ export default function Controlled() {
           <Select.Item value="cherry">Cherry</Select.Item>
         </Select.Content>
       </Select>
-      <div className="flex items-center gap-2 text-sm text-fg-muted">
-        <span>
+      <Div display="flex" alignItems="center" gap="2">
+        <Typography variant="bodySmall" color="fg.muted" as="span">
           Current: <code>{value || '(empty)'}</code>
-        </span>
+        </Typography>
         <Button size="sm" variant="ghost" onClick={() => setValue('')}>
           Clear
         </Button>
         <Button size="sm" variant="ghost" onClick={() => setValue('cherry')}>
           Set Cherry
         </Button>
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

@@ -90,6 +90,34 @@ describe('TreeView — expansion', () => {
     expect(animals).toHaveAttribute('aria-expanded', 'true');
   });
 
+  it('toggles aria-expanded when clicking the label of a branch', async () => {
+    const user = userEvent.setup();
+    render(<TreeView ariaLabel="t" data={flatData} />);
+    const animals = screen.getByRole('treeitem', { name: /Animals/ });
+    expect(animals).toHaveAttribute('aria-expanded', 'false');
+    await user.click(animals.querySelector('[data-tree-label]') as HTMLElement);
+    expect(animals).toHaveAttribute('aria-expanded', 'true');
+    await user.click(animals.querySelector('[data-tree-label]') as HTMLElement);
+    expect(animals).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('selects and expands a branch in a single click', async () => {
+    const user = userEvent.setup();
+    const onSelect = vi.fn();
+    render(
+      <TreeView
+        ariaLabel="t"
+        data={flatData}
+        selectionMode="single"
+        onSelect={onSelect}
+      />,
+    );
+    const animals = screen.getByRole('treeitem', { name: /Animals/ });
+    await user.click(animals.querySelector('[data-tree-label]') as HTMLElement);
+    expect(onSelect).toHaveBeenLastCalledWith('animals');
+    expect(animals).toHaveAttribute('aria-expanded', 'true');
+  });
+
   it('fires onExpandedChange in controlled mode', async () => {
     const user = userEvent.setup();
     const onExpandedChange = vi.fn();

@@ -1,23 +1,39 @@
-import { Field, Input } from '@apx-ui/ds';
+import { Div, Field, Input, Typography } from '@apx-ui/ds';
 
 export default function WithStartEndAdornment() {
   return (
-    <div className="flex flex-col gap-4 max-w-sm">
+    <Div display="flex" flexDirection="column" gap="4" className="max-w-sm">
       <Field
         label="Amount"
-        startAdornment={<span className="text-sm font-medium">$</span>}
-        endAdornment={<span className="text-xs text-fg-muted">USD</span>}
+        startAdornment={
+          <Typography as="span" variant="bodySmall" weight="medium">
+            $
+          </Typography>
+        }
+        endAdornment={
+          <Typography as="span" variant="caption" color="fg.muted">
+            USD
+          </Typography>
+        }
       >
         <Input type="number" name="amount" placeholder="0.00" />
       </Field>
       <Field
         label="Subdomain"
-        startAdornment={<span className="text-xs text-fg-muted">https://</span>}
-        endAdornment={<span className="text-xs text-fg-muted">.apx.dev</span>}
+        startAdornment={
+          <Typography as="span" variant="caption" color="fg.muted">
+            https://
+          </Typography>
+        }
+        endAdornment={
+          <Typography as="span" variant="caption" color="fg.muted">
+            .apx.dev
+          </Typography>
+        }
         helperText="Lowercase letters, numbers, and hyphens only."
       >
         <Input name="subdomain" placeholder="my-team" />
       </Field>
-    </div>
+    </Div>
   );
 }

@@ -1,4 +1,4 @@
-import { Stepper } from '@apx-ui/ds';
+import { Div, Stepper, Typography } from '@apx-ui/ds';
 
 const STEPS = [
   { id: 'a', label: 'Account' },
@@ -8,13 +8,15 @@ const STEPS = [
 
 export default function Sizes() {
   return (
-    <div className="flex flex-col gap-6">
+    <Div display="flex" flexDirection="column" gap="6">
       {(['sm', 'md', 'lg'] as const).map((size) => (
-        <div key={size} className="flex flex-col gap-2">
-          <span className="text-xs uppercase tracking-wide text-fg-muted">{size}</span>
+        <Div key={size} display="flex" flexDirection="column" gap="2">
+          <Typography variant="caption" color="fg.muted" className="uppercase tracking-wide">
+            {size}
+          </Typography>
           <Stepper active={1} steps={STEPS} size={size} />
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

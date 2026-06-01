@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Button, Modal } from '@apx-ui/ds';
+import { Button, Div, Modal, Typography } from '@apx-ui/ds';
 
 /**
  * Demonstrates the **without-trigger** API: there is no `<Modal.Trigger>` in the tree. The
@@ -20,12 +20,12 @@ export default function WithoutTrigger() {
   }, []);
 
   return (
-    <div className="flex flex-col items-start gap-3">
-      <p className="text-sm text-fg-muted">
+    <Div display="flex" flexDirection="column" alignItems="flex-start" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Click the button to schedule the Modal to open in 1.5 seconds. There is
         no `Modal.Trigger` in the tree &mdash; the parent owns the lifecycle
         directly.
-      </p>
+      </Typography>
       <Button onClick={handleSchedule}>Show welcome in 1.5s</Button>
       <Modal open={open} onOpenChange={setOpen}>
         <Modal.Content size="sm">
@@ -35,11 +35,11 @@ export default function WithoutTrigger() {
             description="No trigger required — the parent owns when to show this."
           />
           <Modal.Body>
-            <p className="text-sm">
+            <Typography variant="bodySmall">
               This pattern is common for onboarding banners, session timeouts,
               and announcements where the trigger is &quot;a background event&quot;
               such as a server message rather than an in-tree click.
-            </p>
+            </Typography>
           </Modal.Body>
           <Modal.Footer>
             <Modal.Close asChild>
@@ -48,6 +48,6 @@ export default function WithoutTrigger() {
           </Modal.Footer>
         </Modal.Content>
       </Modal>
-    </div>
+    </Div>
   );
 }

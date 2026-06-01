@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, CommandPalette, highlightMatch, Kbd } from '@apx-ui/ds';
+import { Button, CommandPalette, Div, highlightMatch, Kbd, Typography } from '@apx-ui/ds';
 
 const COMMANDS = [
   { id: 'a', label: 'New Document', shortcut: '⌘N', category: 'File', description: 'Create an empty doc', onSelect: () => undefined },
@@ -22,15 +22,19 @@ export default function CustomRenderRow() {
         onOpenChange={setOpen}
         commands={COMMANDS}
         renderCommand={({ command, query }) => (
-          <div className="flex items-center gap-3 w-full">
-            <div className="flex-1 min-w-0">
-              <div className="font-medium truncate">{highlightMatch(command.label, query)}</div>
+          <Div display="flex" alignItems="center" gap="3" className="w-full">
+            <Div className="flex-1 min-w-0">
+              <Typography weight="medium" className="truncate">
+                {highlightMatch(command.label, query)}
+              </Typography>
               {command.description ? (
-                <div className="text-xs text-fg-muted truncate">{command.description}</div>
+                <Typography variant="caption" color="fg.muted" className="truncate">
+                  {command.description}
+                </Typography>
               ) : null}
-            </div>
+            </Div>
             {command.shortcut ? <Kbd size="sm">{command.shortcut}</Kbd> : null}
-          </div>
+          </Div>
         )}
       />
     </>

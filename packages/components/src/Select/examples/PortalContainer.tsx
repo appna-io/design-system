@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-import { Select } from '@apx-ui/ds';
+import { Div, Select, Typography } from '@apx-ui/ds';
 
 /**
  * Render the listbox inside a custom container — useful for portalling Select inside a Modal /
@@ -10,7 +10,7 @@ export default function PortalContainer() {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   return (
-    <div className="flex flex-col gap-4">
+    <Div display="flex" flexDirection="column" gap="4">
       <Select placeholder="Pick" aria-label="Region">
         <Select.Trigger />
         <Select.Content portalContainer={containerRef.current ?? undefined}>
@@ -19,12 +19,14 @@ export default function PortalContainer() {
           <Select.Item value="apac">APAC</Select.Item>
         </Select.Content>
       </Select>
-      <div
+      <Div
         ref={containerRef}
         className="border border-dashed border-border rounded-md p-3 min-h-[8rem] relative"
       >
-        <p className="text-sm text-fg-muted">Listbox renders inside this dashed container.</p>
-      </div>
-    </div>
+        <Typography variant="bodySmall" color="fg.muted">
+          Listbox renders inside this dashed container.
+        </Typography>
+      </Div>
+    </Div>
   );
 }

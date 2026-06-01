@@ -1,8 +1,8 @@
-import { Switch } from '@apx-ui/ds';
+import { Div, Switch } from '@apx-ui/ds';
 
 export default function WithDescription() {
   return (
-    <div className="flex flex-col gap-4">
+    <Div display="flex" flexDirection="column" gap="4">
       <Switch description="We'll email you when something needs your attention.">
         Notifications
       </Switch>
@@ -13,6 +13,6 @@ export default function WithDescription() {
       >
         Automatic renewal
       </Switch>
-    </div>
+    </Div>
   );
 }

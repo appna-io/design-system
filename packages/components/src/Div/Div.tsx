@@ -14,6 +14,7 @@ import { motion } from 'motion/react';
 import { createElement, type CSSProperties, type ElementType } from 'react';
 
 import { divRecipe } from './Div.recipe';
+import { buildGradientBackground } from './gradient';
 import { buildPseudoClassName, type PseudoPropMap } from './pseudoProps';
 import { extractStyleProps } from './styleProps';
 import type { DivProps } from './Div.types';
@@ -36,18 +37,26 @@ import type { DivProps } from './Div.types';
  *   3. **`centered` shortcut** — when set, defaults `display: flex; align-items: center;
  *      justify-content: center;`. Inserted at the **bottom** of the style stack, so any
  *      explicit consumer override naturally wins.
- *   4. **`style` overlay** — the consumer's React `style` prop layers on top (highest priority).
- *   5. **Recipe classes** — `useThemedClasses(divRecipe, ...)` handles `hideOn` / `displayOn`
+ *   4. **`decorative` shortcut** — when set, defaults `position: absolute; inset: 0;
+ *      pointer-events: none;` and adds `aria-hidden="true"`. Same low-priority slot as
+ *      `centered`, so explicit overrides win.
+ *   5. **`gradient` shortcut** — resolves to a `background-image` string (theme-aware
+ *      radial gradient by default; accepts a config object or raw CSS). Layered just
+ *      below `sx` so explicit `backgroundImage` consumer values still win.
+ *   6. **`style` overlay** — the consumer's React `style` prop layers on top (highest priority).
+ *   7. **Recipe classes** — `useThemedClasses(divRecipe, ...)` handles `hideOn` / `displayOn`
  *      plus the theme override pipeline + consumer `className`.
- *   6. **Pseudo classes** — `buildPseudoClassName` walks the pseudo prop map and emits Tailwind
+ *   8. **Pseudo classes** — `buildPseudoClassName` walks the pseudo prop map and emits Tailwind
  *      prefixed classes (`hover:...`, `focus-visible:...`, `active:...`, ...), then merges.
- *   7. **Render** — `asChild` → `<Slot>`; `animation` → `motion.create(Element)` (skipped when
+ *   9. **Render** — `asChild` → `<Slot>`; `animation` → `motion.create(Element)` (skipped when
  *      `useReducedMotion()` is true); otherwise `createElement(Element, ...)`.
  *
  * @example
  *   <Div display="flex" p={4} bg="primary.50" radius="md">Hello</Div>
  *   <Div hideOn="md">Mobile only</Div>
  *   <Div centered h="100vh"><Spinner /></Div>
+ *   <Div decorative gradient />
+ *   <Div decorative gradient={{ position: 'top', size: '60%' }} />
  *   <Div actLike="button" onClick={open}>Click me</Div>
  *   <Div onHover="bg-primary-100 scale-[1.02]">Hover me</Div>
  *   <Div animation="fadeIn">Enters fading</Div>
@@ -59,6 +68,8 @@ export const Div = forwardRef<HTMLElement, DivProps>(function Div(props, ref) {
     asChild = false,
     animation,
     centered = false,
+    decorative = false,
+    gradient,
     hideOn,
     displayOn,
     onHover,
@@ -109,24 +120,41 @@ export const Div = forwardRef<HTMLElement, DivProps>(function Div(props, ref) {
 
   const { styleObj, restProps } = extractStyleProps(rest as Record<string, unknown>);
   const sxStyle = sx ? sxToStyle(sx) : undefined;
+  const gradientImage = buildGradientBackground(gradient);
+
+  // `decorative` adds the absolute-fill overlay defaults at the lowest priority so
+  // any explicit position / inset / pointerEvents from sx, style props, or the
+  // consumer `style` prop wins naturally.
+  const decorativeStyle: CSSProperties | undefined = decorative
+    ? {
+        position: 'absolute',
+        inset: 0,
+        pointerEvents: 'none',
+      }
+    : undefined;
 
   // Compose the inline style stack. Order (lowest → highest priority):
-  //   centered defaults → sx → curated style props → consumer style.
-  // Putting centered defaults FIRST means any explicit display/alignItems/justifyContent
-  // from later layers wins naturally — no extra "check before assign" logic needed.
+  //   centered defaults → decorative defaults → gradient backgroundImage → sx →
+  //   curated style props → consumer style.
+  // Putting low-level shortcuts FIRST means any explicit value from later layers
+  // wins naturally — no extra "check before assign" logic needed.
   let finalStyle: CSSProperties | undefined;
   const hasExplicitStyle = Boolean(sxStyle || styleObj || style);
-  if (centered) {
+  const gradientStyle: CSSProperties | undefined = gradientImage
+    ? { backgroundImage: gradientImage }
+    : undefined;
+
+  if (centered || decorativeStyle || gradientStyle || hasExplicitStyle) {
     finalStyle = {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+      ...(centered
+        ? { display: 'flex', alignItems: 'center', justifyContent: 'center' }
+        : {}),
+      ...(decorativeStyle ?? {}),
+      ...(gradientStyle ?? {}),
       ...(sxStyle ?? {}),
       ...(styleObj ?? {}),
       ...(style ?? {}),
     };
-  } else if (hasExplicitStyle) {
-    finalStyle = { ...(sxStyle ?? {}), ...(styleObj ?? {}), ...(style ?? {}) };
   }
 
   const pseudoCls = buildPseudoClassName({
@@ -141,6 +169,13 @@ export const Div = forwardRef<HTMLElement, DivProps>(function Div(props, ref) {
 
   const finalCls = pseudoCls ? cn(themedCls, pseudoCls) : themedCls;
 
+  // `decorative` defaults `aria-hidden="true"` so screen readers skip the purely
+  // visual overlay. Spread order means an explicit consumer `aria-hidden` always
+  // wins — the default is only applied when the consumer didn't pass one.
+  const mergedRest: Record<string, unknown> = decorative
+    ? { 'aria-hidden': true, ...(restProps as Record<string, unknown>) }
+    : (restProps as Record<string, unknown>);
+
   // `asChild` short-circuits everything else: <Slot> merges Div's props onto the child element.
   // Animation is intentionally dropped here (warned above) — wrapping <Slot> with `motion.create`
   // would double-clone the child and break ref forwarding.
@@ -150,7 +185,7 @@ export const Div = forwardRef<HTMLElement, DivProps>(function Div(props, ref) {
         ref={ref}
         className={finalCls || undefined}
         style={finalStyle}
-        {...(restProps as Record<string, unknown>)}
+        {...mergedRest}
       >
         {children}
       </Slot>
@@ -172,7 +207,7 @@ export const Div = forwardRef<HTMLElement, DivProps>(function Div(props, ref) {
         initial: variant.initial,
         animate: variant.animate,
         exit: variant.exit,
-        ...restProps,
+        ...mergedRest,
       },
       children,
     );
@@ -184,7 +219,7 @@ export const Div = forwardRef<HTMLElement, DivProps>(function Div(props, ref) {
       ref,
       className: finalCls || undefined,
       style: finalStyle,
-      ...restProps,
+      ...mergedRest,
     },
     children,
   );

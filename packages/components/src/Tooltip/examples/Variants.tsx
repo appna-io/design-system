@@ -1,10 +1,10 @@
-import { Button, Tooltip, type TooltipVariant } from '@apx-ui/ds';
+import { Button, Div, Tooltip, type TooltipVariant } from '@apx-ui/ds';
 
 const VARIANTS: readonly TooltipVariant[] = ['solid', 'outline', 'soft', 'inverted'];
 
 export default function Variants() {
   return (
-    <div className="flex flex-wrap gap-4">
+    <Div display="flex" flexWrap="wrap" gap="4">
       {VARIANTS.map((variant) => (
         <Tooltip
           key={variant}
@@ -16,6 +16,6 @@ export default function Variants() {
           <Button variant="soft">{variant}</Button>
         </Tooltip>
       ))}
-    </div>
+    </Div>
   );
 }

@@ -12,7 +12,9 @@
       "@apx-ui/theme": ["packages/theme/src/index.ts"],
       "@apx-ui/theme/*": ["packages/theme/src/*"],
       "@apx-ui/components": ["packages/components/src/index.ts"],
-      "@apx-ui/components/*": ["packages/components/src/*"]
+      "@apx-ui/components/*": ["packages/components/src/*"],
+      "@apx-ui/icons": ["packages/icons/src/index.ts"],
+      "@apx-ui/icons/*": ["packages/icons/src/*"]
     },
     "target": "ES2022",
     "module": "ESNext",

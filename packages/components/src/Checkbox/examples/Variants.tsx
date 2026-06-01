@@ -1,8 +1,8 @@
-import { Checkbox } from '@apx-ui/ds';
+import { Checkbox, Div } from '@apx-ui/ds';
 
 export default function Variants() {
   return (
-    <div className="flex flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3">
       <Checkbox variant="solid" defaultChecked>
         Solid (default)
       </Checkbox>
@@ -12,6 +12,6 @@ export default function Variants() {
       <Checkbox variant="soft" defaultChecked>
         Soft
       </Checkbox>
-    </div>
+    </Div>
   );
 }

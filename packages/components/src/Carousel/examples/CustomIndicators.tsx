@@ -1,4 +1,4 @@
-import { Carousel } from '@apx-ui/ds';
+import { Carousel, Div } from '@apx-ui/ds';
 
 export default function CustomIndicators() {
   return (
@@ -7,9 +7,9 @@ export default function CustomIndicators() {
         <Carousel.Track>
           {['Inbox', 'Drafts', 'Sent', 'Archive'].map((label) => (
             <Carousel.Slide key={label}>
-              <div className="flex h-40 items-center justify-center rounded-md bg-bg-subtle text-2xl font-semibold">
+              <Div display="flex" alignItems="center" justifyContent="center" className="h-40 rounded-md bg-bg-subtle text-2xl font-semibold">
                 {label}
-              </div>
+              </Div>
             </Carousel.Slide>
           ))}
         </Carousel.Track>

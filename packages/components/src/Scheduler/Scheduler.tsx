@@ -52,6 +52,7 @@ function SchedulerImpl(
   ref: React.ForwardedRef<HTMLDivElement>,
 ): ReactElement {
   const {
+    /* visual / chrome props consumed below */
     variant,
     size,
     color,
@@ -81,6 +82,60 @@ function SchedulerImpl(
     renderHolidayCell: _renderHolidayCell,
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledBy,
+
+    /* Scheduler-domain props that are forwarded to `useScheduler` via `headlessOptions`
+     * below. We destructure them here ONLY to keep them out of `rest`, otherwise React
+     * would warn "Unknown event handler property" / "React does not recognize the X prop
+     * on a DOM element" when `rest` is spread onto the root `<div>`. */
+    events: _events,
+    holidays: _holidays,
+    holidaysProvider: _holidaysProvider,
+    calendars: _calendars,
+    resources: _resources,
+    view: _view,
+    defaultView: _defaultView,
+    onViewChange: _onViewChange,
+    date: _date,
+    defaultDate: _defaultDate,
+    onDateChange: _onDateChange,
+    onRangeChange: _onRangeChange,
+    readOnly: _readOnly,
+    isEventEditable: _isEventEditable,
+    onEventCreate: _onEventCreate,
+    onEventUpdate: _onEventUpdate,
+    onEventDelete: _onEventDelete,
+    onEventMove: _onEventMove,
+    onEventResize: _onEventResize,
+    onConflict: _onConflict,
+    onEventClick: _onEventClick,
+    onEventDoubleClick: _onEventDoubleClick,
+    onSlotClick: _onSlotClick,
+    selectedEventId: _selectedEventId,
+    onSelectedEventChange: _onSelectedEventChange,
+    state: _state,
+    onStateChange: _onStateChange,
+    defaultFilters: _defaultFilters,
+    defaultDensity: _defaultDensity,
+    hourHeight: _hourHeight,
+    snapMinutes: _snapMinutes,
+    workingHours: _workingHours,
+    workingDays: _workingDays,
+    timeFormat: _timeFormat,
+    locale: _locale,
+    weekStartsOn: _weekStartsOn,
+    multiDayCount: _multiDayCount,
+    resourceGranularity: _resourceGranularity,
+    showNowIndicator: _showNowIndicator,
+    showHolidays: _showHolidays,
+    enableDragCreate: _enableDragCreate,
+    enableDragMove: _enableDragMove,
+    enableDragResize: _enableDragResize,
+    enableRightClickMenu: _enableRightClickMenu,
+    mobileBreakpoint: _mobileBreakpoint,
+    storage: _storage,
+    storageKey: _storageKey,
+    translations: _translations,
+
     ...rest
   } = props as SchedulerProps & {
     [k: string]: unknown;
@@ -95,6 +150,57 @@ function SchedulerImpl(
   // prop here so the public API surface stays stable, but the default sidebar already
   // renders a mini-month so passing `miniMonth={true}` alone (without `sidebar`) is a no-op.
   void miniMonth;
+  // The "_"-prefixed identifiers above are intentionally unused at this layer — they're
+  // consumed by `useScheduler` through the `headlessOptions` clone of `props`. Touch them
+  // to silence `noUnusedLocals` while keeping their exclusion from `rest` explicit.
+  void _events;
+  void _holidays;
+  void _holidaysProvider;
+  void _calendars;
+  void _resources;
+  void _view;
+  void _defaultView;
+  void _onViewChange;
+  void _date;
+  void _defaultDate;
+  void _onDateChange;
+  void _onRangeChange;
+  void _readOnly;
+  void _isEventEditable;
+  void _onEventCreate;
+  void _onEventUpdate;
+  void _onEventDelete;
+  void _onEventMove;
+  void _onEventResize;
+  void _onConflict;
+  void _onEventClick;
+  void _onEventDoubleClick;
+  void _onSlotClick;
+  void _selectedEventId;
+  void _onSelectedEventChange;
+  void _state;
+  void _onStateChange;
+  void _defaultFilters;
+  void _defaultDensity;
+  void _hourHeight;
+  void _snapMinutes;
+  void _workingHours;
+  void _workingDays;
+  void _timeFormat;
+  void _locale;
+  void _weekStartsOn;
+  void _multiDayCount;
+  void _resourceGranularity;
+  void _showNowIndicator;
+  void _showHolidays;
+  void _enableDragCreate;
+  void _enableDragMove;
+  void _enableDragResize;
+  void _enableRightClickMenu;
+  void _mobileBreakpoint;
+  void _storage;
+  void _storageKey;
+  void _translations;
 
   const headlessOptions = { ...(props as SchedulerProps) };
   if (densityProp !== undefined) headlessOptions.density = densityProp;

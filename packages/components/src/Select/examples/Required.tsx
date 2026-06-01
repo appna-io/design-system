@@ -1,5 +1,6 @@
-import { Button, Select } from '@apx-ui/ds';
 import { useState } from 'react';
+
+import { Button, Select, Typography } from '@apx-ui/ds';
 
 export default function Required() {
   const [submitted, setSubmitted] = useState<string | null>(null);
@@ -28,9 +29,9 @@ export default function Required() {
         Subscribe
       </Button>
       {submitted ? (
-        <p className="text-sm text-fg-muted">
+        <Typography variant="bodySmall" color="fg.muted">
           Submitted: <code>{submitted}</code>
-        </p>
+        </Typography>
       ) : null}
     </form>
   );

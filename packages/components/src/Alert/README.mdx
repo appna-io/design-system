@@ -4,6 +4,8 @@ The canonical inline status banner. `<Alert />` is the DS's first opinionated fe
 surface — it covers `info` / `success` / `warning` / `danger` / `neutral` messages with
 auto-icon, optional title + description + action area, and a Motion-driven dismiss.
 
+<ExampleBlock for="Overview" title="Overview — info, success, warning, and closable danger" />
+
 ## Why this exists
 
 Three jobs land in this component that other status surfaces (Toast, Banner, Inline-error)
@@ -106,15 +108,3 @@ defineTheme({
 ```
 
 `Alert` is consumed by the renderer's Theme Studio for live preview.
-
-## Out of scope (future phases)
-
-- `<Toast>` — overlays batch (separate component, reuses Alert's recipe shape + the shared
-  `iconForColor` mapping plus a portal + queue).
-- Auto-dismiss timer — belongs to Toast. Alert is "until-acknowledged" by design.
-- Stacked alerts UI (`<AlertList>`) — composition, not a primitive.
-
-## Sibling APIs introduced
-
-- `_shared/iconForColor.ts` — color → lucide-react icon map. First consumer is Alert;
-  Toast/Banner will import the same map.

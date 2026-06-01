@@ -1,12 +1,12 @@
-import { Stepper } from '@apx-ui/ds';
+import { Div, Stepper, Typography } from '@apx-ui/ds';
 
 export default function Responsive() {
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-xs text-fg-muted">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="caption" color="fg.muted">
         Vertical at narrow widths, horizontal from <code>md</code> up. Resize the renderer
         viewport to see the switch.
-      </p>
+      </Typography>
       <Stepper
         active={1}
         orientation={{ base: 'vertical', md: 'horizontal' }}
@@ -17,6 +17,6 @@ export default function Responsive() {
           { id: 'd', label: 'Launch' },
         ]}
       />
-    </div>
+    </Div>
   );
 }

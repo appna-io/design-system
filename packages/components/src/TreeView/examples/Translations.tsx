@@ -1,4 +1,4 @@
-import { TreeView } from '@apx-ui/ds';
+import { Div, TreeView } from '@apx-ui/ds';
 import type { TreeNodeData } from '@apx-ui/ds';
 
 const data: TreeNodeData[] = [
@@ -14,13 +14,13 @@ const data: TreeNodeData[] = [
 
 export default function Translations() {
   return (
-    <div className="max-w-sm border border-border-subtle rounded-md p-2" dir="rtl">
+    <Div className="max-w-sm rounded-md border border-border-subtle p-2" dir="rtl">
       <TreeView
         ariaLabel="עץ דוחות"
         data={data}
         defaultExpanded={['דוחות']}
-        translations={{ expand: 'הרחב', collapse: 'כווץ', loading: 'טוען\u2026' }}
+        translations={{ expand: 'הרחב', collapse: 'כווץ', loading: 'טוען…' }}
       />
-    </div>
+    </Div>
   );
 }

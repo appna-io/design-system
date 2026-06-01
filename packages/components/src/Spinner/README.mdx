@@ -4,18 +4,7 @@ The standalone loading indicator. Drop `<Spinner />` anywhere — beside text, i
 a button, as an EmptyState graphic — and it does the right thing with a few hundred
 bytes of CSS-driven motion. No JS render loops. No Motion library. No `useEffect`.
 
-## Why this exists
-
-The inline spinner pattern used to live in three different places:
-
-- `<Button loading>` rendered its own SVG spinner.
-- `<CircularProgress indeterminate>` had its own keyframe animation.
-- `<Toast variant="loading">` shipped a third copy.
-
-Promoting `<Spinner />` to a first-class export deduplicates these and gives
-consumers a building block for their own loading states. The three existing
-consumers can migrate at their leisure — Phase 39 ships the primitive without
-forcing a refactor.
+<ExampleBlock for="Overview" title="Overview — sizes, colors, and variants" />
 
 ## Anatomy
 
@@ -122,23 +111,3 @@ defineTheme({
   },
 });
 ```
-
-## Integration with existing components
-
-| Consumer                  | Today                          | After Phase 39 (opt-in)                                            |
-| ------------------------- | ------------------------------ | ------------------------------------------------------------------ |
-| `<Button loading>`        | inline SVG spinner             | `<Spinner size="sm" color="inverse" labelPlacement="hidden" />`    |
-| `<CircularProgress indeterminate>` | own keyframe animation | optionally delegates to `<Spinner variant="ring">`                  |
-| `<Toast variant="loading">` | inline SVG                  | renders `<Spinner size="sm" />`                                     |
-
-Phase 39 ships the primitive only — the three consumers can migrate in follow-up PRs
-without breaking anything.
-
-## Out of scope (future phases)
-
-- **`<Spinner.Overlay>`** — full-page loading overlay; lives in EmptyState (Phase 42)
-  / Modal compositions, not in the primitive.
-- **Custom keyframes** — three variants cover ~95% of needs; consumers needing a
-  bespoke spinner can render their own `<svg>` with `className="animate-spin"`.
-- **Progress mode** — if you have a value, reach for `<CircularProgress value={...} />`
-  instead of `<Spinner />`.

@@ -1,4 +1,4 @@
-import { DataGrid, DirectionProvider, heDataGridTranslations } from '@apx-ui/ds';
+import { DataGrid, DirectionProvider, Div, Typography, heDataGridTranslations } from '@apx-ui/ds';
 import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Row {
@@ -33,15 +33,15 @@ const columns: DataGridColumnDef<Row>[] = [
 
 export default function RTL() {
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Hebrew strings + <code>dir=&quot;rtl&quot;</code>. The pinned <strong>שם</strong> column
         sticks to the logical-start edge (the right side under RTL), the sort indicator on{' '}
         <strong>הרשמות</strong> flips with the text direction, and every visible string flows
         through <code>heDataGridTranslations</code>.
-      </p>
+      </Typography>
       <DirectionProvider dir="rtl">
-        <div dir="rtl">
+        <Div dir="rtl">
           <DataGrid<Row>
             data={data}
             columns={columns}
@@ -49,8 +49,8 @@ export default function RTL() {
             selectionMode="multiple"
             translations={heDataGridTranslations}
           />
-        </div>
+        </Div>
       </DirectionProvider>
-    </div>
+    </Div>
   );
 }

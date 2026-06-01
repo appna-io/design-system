@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Table } from '@apx-ui/ds';
+import { Div, Table, Typography } from '@apx-ui/ds';
 import type { TableColumn } from '@apx-ui/ds';
 
 interface User {
@@ -22,10 +22,10 @@ const columns: TableColumn<User>[] = [
 export default function SingleSelect() {
   const [selected, setSelected] = useState<string>('2');
   return (
-    <div className="flex flex-col gap-2">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="2">
+      <Typography variant="bodySmall" color="fg.muted">
         Single-select mode. Active row: <code>{selected || 'none'}</code>
-      </p>
+      </Typography>
       <Table
         ariaLabel="Single-select"
         columns={columns}
@@ -35,6 +35,6 @@ export default function SingleSelect() {
         selected={selected}
         onSelectedChange={(next) => setSelected(next as string)}
       />
-    </div>
+    </Div>
   );
 }

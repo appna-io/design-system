@@ -1,4 +1,4 @@
-import { Button, Popover, type PopoverColor } from '@apx-ui/ds';
+import { Button, Div, Popover, Typography, type PopoverColor } from '@apx-ui/ds';
 
 const COLORS: readonly PopoverColor[] = [
   'primary',
@@ -12,7 +12,7 @@ const COLORS: readonly PopoverColor[] = [
 
 export default function Colors() {
   return (
-    <div className="flex flex-wrap gap-3">
+    <Div display="flex" className="flex-wrap gap-3">
       {COLORS.map((color) => (
         <Popover key={color}>
           <Popover.Trigger>
@@ -21,13 +21,15 @@ export default function Colors() {
             </Button>
           </Popover.Trigger>
           <Popover.Content variant="outline" color={color}>
-            <p className="text-sm font-medium capitalize">{color}</p>
-            <p className="mt-1 text-xs opacity-80">
+            <Typography variant="bodySmall" weight="medium" className="capitalize">
+              {color}
+            </Typography>
+            <Typography variant="caption" className="mt-1 opacity-80">
               Outline variant uses the colored border + arrow stroke.
-            </p>
+            </Typography>
           </Popover.Content>
         </Popover>
       ))}
-    </div>
+    </Div>
   );
 }

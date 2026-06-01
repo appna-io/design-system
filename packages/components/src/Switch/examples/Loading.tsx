@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Switch } from '@apx-ui/ds';
+import { Div, Switch } from '@apx-ui/ds';
 
 export default function Loading() {
   const [connected, setConnected] = useState(false);
@@ -15,7 +15,7 @@ export default function Loading() {
   }
 
   return (
-    <div className="flex flex-col gap-3 max-w-sm">
+    <Div display="flex" flexDirection="column" gap="3" className="max-w-sm">
       <Switch
         size="lg"
         color="success"
@@ -32,6 +32,6 @@ export default function Loading() {
       >
         Slack integration
       </Switch>
-    </div>
+    </Div>
   );
 }

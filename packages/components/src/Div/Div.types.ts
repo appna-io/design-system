@@ -1,6 +1,8 @@
 import type { CSSProperties, ElementType, HTMLAttributes, ReactNode, Ref } from 'react';
 import type { MotionPresetName, Sx } from '@apx-ui/engine';
 
+import type { DivGradient } from './gradient';
+
 /**
  * Breakpoint keys recognized by `<Div hideOn />` / `<Div displayOn />`. Matches the engine's
  * responsive scale minus `base` (which would be a no-op for both directions).
@@ -225,6 +227,35 @@ export interface DivOwnProps {
    * style props win — if any of the three keys is also supplied, the consumer value is kept.
    */
   centered?: boolean | undefined;
+  /**
+   * Theme-aware background gradient — replaces the verbose
+   * `className="bg-[radial-gradient(...)]"` recipe with a single typed prop.
+   *
+   *   - `true` → emit a default radial gradient using the active palette
+   *     (`primary.subtle` → `transparent`, anchored top-left). Tracks the active
+   *     theme variant for free.
+   *   - `DivGradientConfig` object → tweak the gradient (`type`, `from`, `to`,
+   *     `position`, `size`, `fromStop`, `toStop`). `from` / `to` accept palette
+   *     token paths (`'success.subtle'`) or any raw CSS color.
+   *   - `string` → escape hatch — used verbatim as `background-image` (drop in
+   *     any `radial-gradient(...)` / `linear-gradient(...)` / `url(...)`).
+   *
+   * Sits in the inline style stack just **above** `sx` and just **below** the
+   * curated style props, so explicit `backgroundImage` / `background` overrides
+   * still win. Often paired with `decorative` for the "soft backdrop" pattern:
+   *
+   *   <Div decorative gradient />                       // theme default
+   *   <Div decorative gradient={{ position: 'top' }} /> // override one field
+   */
+  gradient?: DivGradient | undefined;
+  /**
+   * Shortcut for the "decorative overlay" pattern — fills the parent (`position:
+   * absolute; inset: 0;`), declines pointer events, and adds `aria-hidden="true"`
+   * so screen readers skip the purely visual layer. Compose with `gradient` for
+   * the soft backdrop pattern, or use it standalone with a custom
+   * `backgroundImage` / `className`.
+   */
+  decorative?: boolean | undefined;
   /** Hide the element at the named breakpoint and above (Tailwind "from upward" semantics). */
   hideOn?: DivBreakpoint | undefined;
   /** Start hidden, reveal the element at the named breakpoint and above. */

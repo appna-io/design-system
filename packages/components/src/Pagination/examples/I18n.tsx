@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { I18nProvider } from '@apx-ui/engine';
 import {
+  Div,
   Pagination,
   arPaginationTranslations,
   enPaginationTranslations,
@@ -21,8 +22,8 @@ export default function I18nExample() {
   const bundle = BUNDLES[locale];
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-2">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Div display="flex" alignItems="center" gap="2">
         {(Object.keys(BUNDLES) as LocaleKey[]).map((key) => (
           <button
             key={key}
@@ -38,12 +39,12 @@ export default function I18nExample() {
             {BUNDLES[key].label}
           </button>
         ))}
-      </div>
+      </Div>
       <I18nProvider
         locale={bundle.locale}
         messages={{ Pagination: bundle.messages }}
       >
-        <div dir={bundle.dir}>
+        <Div dir={bundle.dir}>
           <Pagination
             totalCount={120}
             pageSize={10}
@@ -52,8 +53,8 @@ export default function I18nExample() {
             color="primary"
             variant="soft"
           />
-        </div>
+        </Div>
       </I18nProvider>
-    </div>
+    </Div>
   );
 }

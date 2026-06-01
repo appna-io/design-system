@@ -1,4 +1,4 @@
-import { HoverCard } from '@apx-ui/ds';
+import { Div, HoverCard, Typography } from '@apx-ui/ds';
 import type { HoverCardVariant } from '@apx-ui/ds';
 
 /**
@@ -10,9 +10,11 @@ const variants: HoverCardVariant[] = ['solid', 'outline', 'soft'];
 
 export default function Variants() {
   return (
-    <div className="flex flex-col items-start gap-3">
-      <p className="text-sm text-fg-muted">Hover each label to see the variant chrome.</p>
-      <div className="flex flex-wrap items-center gap-6 text-sm">
+    <Div display="flex" flexDirection="column" alignItems="flex-start" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
+        Hover each label to see the variant chrome.
+      </Typography>
+      <Div display="flex" alignItems="center" gap="6" className="flex-wrap text-sm">
         {variants.map((variant) => (
           <HoverCard key={variant} openDelay={200} closeDelay={200}>
             <HoverCard.Trigger>
@@ -22,17 +24,17 @@ export default function Variants() {
             </HoverCard.Trigger>
             <HoverCard.Content variant={variant} color="primary" size="sm">
               <strong className="text-sm">variant: {variant}</strong>
-              <p className="mt-1 text-xs">
+              <Typography variant="caption" className="mt-1">
                 {variant === 'solid'
                   ? 'Paper background + neutral border. Default.'
                   : variant === 'outline'
                     ? 'Paper background + 1px colored border.'
                     : 'Subtle tinted background + low-opacity colored border.'}
-              </p>
+              </Typography>
             </HoverCard.Content>
           </HoverCard>
         ))}
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

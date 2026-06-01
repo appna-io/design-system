@@ -1,14 +1,14 @@
 import { useState } from 'react';
 
-import { Button, Menu } from '@apx-ui/ds';
+import { Button, Div, Menu, Typography } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [open, setOpen] = useState(false);
   const [count, setCount] = useState(0);
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-3">
+    <Div display="flex" flexDirection="column" gap="2">
+      <Div display="flex" alignItems="center" gap="3">
         <Menu open={open} onOpenChange={setOpen}>
           <Menu.Trigger asChild>
             <Button>{open ? 'Close menu' : 'Open menu'}</Button>
@@ -21,10 +21,10 @@ export default function Controlled() {
         <Button variant="outline" onClick={() => setOpen((o) => !o)}>
           Toggle from outside
         </Button>
-      </div>
-      <p className="text-sm text-fg-muted">
+      </Div>
+      <Typography variant="bodySmall" color="fg.muted">
         Count: <strong>{count}</strong> · Open: <strong>{String(open)}</strong>
-      </p>
-    </div>
+      </Typography>
+    </Div>
   );
 }

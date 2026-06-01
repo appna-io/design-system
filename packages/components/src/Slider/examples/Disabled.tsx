@@ -1,8 +1,8 @@
-import { Slider } from '@apx-ui/ds';
+import { Div, Slider } from '@apx-ui/ds';
 
 export default function Disabled() {
   return (
-    <div className="w-72 flex flex-col gap-6">
+    <Div display="flex" flexDirection="column" gap="6" className="w-72">
       <Slider aria-label="Disabled single" disabled defaultValue={40} />
       <Slider
         aria-label="Disabled range"
@@ -10,6 +10,6 @@ export default function Disabled() {
         disabled
         defaultValue={[20, 70]}
       />
-    </div>
+    </Div>
   );
 }

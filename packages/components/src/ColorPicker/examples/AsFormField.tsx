@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, ColorPicker } from '@apx-ui/ds';
+import { Button, ColorPicker, Typography } from '@apx-ui/ds';
 
 export default function AsFormField() {
   const [submitted, setSubmitted] = useState<string | null>(null);
@@ -24,9 +24,9 @@ export default function AsFormField() {
         Save
       </Button>
       {submitted ? (
-        <span style={{ fontSize: 12, color: 'var(--sds-color-fg-muted)' }}>
+        <Typography as="span" variant="caption" color="fg.muted">
           Submitted: <strong>{submitted}</strong>
-        </span>
+        </Typography>
       ) : null}
     </form>
   );

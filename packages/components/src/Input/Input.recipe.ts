@@ -79,7 +79,8 @@ export const inputRecipe = cv({
 /**
  * Padding-X + per-size icon dimensions for the bare `<input>` slot. Kept separate from the
  * frame recipe so the wrapper can carry the ring/border without the input's padding fighting
- * with the addon borders (addons absorb their side's padding-X to keep the visual flush join).
+ * with the addon borders (addons own their outer padding-X; the input contributes a small
+ * inner gutter so text doesn't sit flush against the addon divider).
  */
 export const inputInnerRecipe = cv({
   base: [
@@ -105,8 +106,8 @@ export const inputInnerRecipe = cv({
     },
     hasLeftIcon: { true: '' },
     hasRightIcon: { true: '' },
-    hasLeftAddon: { true: 'ps-0' },
-    hasRightAddon: { true: 'pe-0' },
+    hasLeftAddon: { true: '' },
+    hasRightAddon: { true: '' },
   },
   compoundVariants: [
     // Trim the leading padding-X when an icon already lives in the slot — keeps the visual gap
@@ -117,6 +118,15 @@ export const inputInnerRecipe = cv({
     { hasRightIcon: true, size: 'sm', class: 'pe-1.5' },
     { hasRightIcon: true, size: 'md', class: 'pe-2' },
     { hasRightIcon: true, size: 'lg', class: 'pe-2.5' },
+    // Addons absorb their own outer padding-X via the addon recipe; the input still needs a
+    // small gutter on the divider side so the text/placeholder doesn't sit flush against the
+    // addon's `border-e` / `border-s` line. Mirrors the icon spacing for visual consistency.
+    { hasLeftAddon: true, size: 'sm', class: 'ps-1.5' },
+    { hasLeftAddon: true, size: 'md', class: 'ps-2' },
+    { hasLeftAddon: true, size: 'lg', class: 'ps-2.5' },
+    { hasRightAddon: true, size: 'sm', class: 'pe-1.5' },
+    { hasRightAddon: true, size: 'md', class: 'pe-2' },
+    { hasRightAddon: true, size: 'lg', class: 'pe-2.5' },
   ],
   defaultVariants: {
     size: 'md',

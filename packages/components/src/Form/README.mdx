@@ -4,6 +4,8 @@ A dependency-free form state engine + JSX wrappers. The point: turn the "I have 
 want errors / submission / dirty tracking" problem into one `<Form initialValues onSubmit>`
 without reaching for React Hook Form / Formik / your own `useState` soup.
 
+<ExampleBlock for="Overview" title="Overview — validation, errors, and submit in one form" />
+
 Three pieces, useful independently:
 
 | Export          | What it does                                                                            |
@@ -12,13 +14,13 @@ Three pieces, useful independently:
 | `<Form>`        | `<form noValidate>` that owns a `useForm` and publishes the live `FormApi` on context.   |
 | `<FormField>`   | Name-bound adapter. Reads form state for `name`, wires the inner control automatically.  |
 
-You can use one, two, or all three — they compose cleanly with `<Field>` from Phase 49.
+You can use one, two, or all three — they compose cleanly with `<Field>`.
 
 ## Why this (instead of RHF / Formik)?
 
-Formik is unmaintained. React Hook Form is excellent but adds ~9 KB and an API surface that's
-overkill for "I have a settings page." This trio ships in **~4 KB gz** with the controls you
-already have wired through `<Field>` doing the heavy a11y lifting.
+Formik is unmaintained. React Hook Form is excellent but its API surface can be overkill for
+"I have a settings page." This trio stays lightweight and pairs with the controls you already
+have wired through `<Field>` for a11y.
 
 It's **not** schema-first — no Yup / Zod / Joi adapter baked in. The `validate` prop is a plain
 `(values) => errors` function; Zod is a 5-line `safeParse` wrapper at the call site (see the
@@ -188,7 +190,7 @@ interface FormApi<Values> {
 
 ## See also
 
-- **`<Field>`** (Phase 49) — the wrapper `<FormField>` renders underneath.
+- **`<Field>`** — the wrapper `<FormField>` renders underneath.
 - **`useFormFieldA11y`** — the shared hook every form control already calls; ensures Field +
   Form integration is 100% additive with zero source-code changes to existing controls.
 - **`<TagsInput>` / `<Combobox>` / `<Select>` / `<Rating>`** — value-callback controls; bind via

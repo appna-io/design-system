@@ -1,4 +1,4 @@
-import { Icon, IconProvider, createIconRegistry } from '@apx-ui/ds';
+import { Div, Icon, IconProvider, createIconRegistry } from '@apx-ui/ds';
 import type { SVGProps } from 'react';
 
 import { Mail } from './_glyphs';
@@ -17,10 +17,10 @@ function Fallback(props: SVGProps<SVGSVGElement>) {
 export default function MissingNameFallback() {
   return (
     <IconProvider value={icons} fallback={Fallback} onMissing={() => undefined}>
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+      <Div display="flex" gap="3" alignItems="center">
         <Icon name="mail" size="lg" label="Mail (registered)" />
         <Icon name="not-registered" size="lg" label="Fallback rendered" />
-      </div>
+      </Div>
     </IconProvider>
   );
 }

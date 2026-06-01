@@ -1,8 +1,8 @@
-import { Button } from '@apx-ui/ds';
+import { Button, Div } from '@apx-ui/ds';
 
 export default function Disabled() {
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <Div display="flex" flexWrap="wrap" alignItems="center" gap="3">
       <Button disabled>Disabled primary</Button>
       <Button disabled color="danger">
         Disabled danger
@@ -10,6 +10,6 @@ export default function Disabled() {
       <Button disabled loading>
         Disabled + loading
       </Button>
-    </div>
+    </Div>
   );
 }

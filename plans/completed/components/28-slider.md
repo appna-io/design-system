@@ -498,4 +498,3 @@ ever wants a sweep across all components.
   `useFormFieldA11y` (each thumb is its own ARIA control, not a hidden `<input>` underneath a
   label, so the standard form-field a11y bridge doesn't apply).
 - Renderer was **not** touched. No dev-server start/restart was performed on my side.
-

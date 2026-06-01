@@ -1,4 +1,4 @@
-import { Button, Form, FormField, Input } from '@apx-ui/ds';
+import { Button, Div, Form, FormField, Input, Typography } from '@apx-ui/ds';
 
 export default function DirtyWarning() {
   return (
@@ -13,16 +13,16 @@ export default function DirtyWarning() {
           <FormField name="title" label="Title">
             <Input />
           </FormField>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <Div display="flex" gap="2" alignItems="center">
             <Button type="submit" variant="solid" disabled={!form.isDirty}>
               {form.isDirty ? 'Save changes' : 'Saved'}
             </Button>
             {form.isDirty ? (
-              <span style={{ fontSize: 12, color: 'var(--sds-color-warning-fg)' }}>
+              <Typography variant="caption" color="warning">
                 You have unsaved changes.
-              </span>
+              </Typography>
             ) : null}
-          </div>
+          </Div>
         </>
       )}
     </Form>

@@ -1,22 +1,28 @@
-import { Icon } from '@apx-ui/ds';
+import { Div, Icon, Typography } from '@apx-ui/ds';
 
 import { Mail } from './_glyphs';
 
 export default function MeaningfulVsDecorative() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+    <Div display="flex" flexDirection="column" gap="3">
       <button type="button" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
         <Icon as={Mail} /> Inbox
       </button>
-      <span>Decorative (aria-hidden) — paired with visible text</span>
+      <Typography as="span" variant="bodySmall">
+        Decorative (aria-hidden) — paired with visible text
+      </Typography>
 
       <button type="button" aria-label="Inbox">
         <Icon as={Mail} />
       </button>
-      <span>Decorative with aria-label on the button</span>
+      <Typography as="span" variant="bodySmall">
+        Decorative with aria-label on the button
+      </Typography>
 
       <Icon as={Mail} label="Inbox" />
-      <span>Meaningful via label — role=&quot;img&quot; + aria-label</span>
-    </div>
+      <Typography as="span" variant="bodySmall">
+        Meaningful via label — role=&quot;img&quot; + aria-label
+      </Typography>
+    </Div>
   );
 }

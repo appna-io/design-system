@@ -21,13 +21,15 @@ export const modalBackdropRecipe = cv({
   base: 'fixed inset-0 z-modal flex justify-center px-4 transition-opacity duration-fast',
   variants: {
     overlay: {
-      // `/60` matches Radix Dialog, MUI Dialog, Mantine Modal, Chakra Modal — all sit at
-      // 0.5–0.6 opacity. Earlier `/40` looked too gentle on the renderer's bg-paper, so the
-      // page behind a Modal didn't read as "blocked". `/60` restores the affordance without
-      // crushing dark-mode legibility (fg-default is the inverted color in dark mode, so the
-      // dim is still semantically correct).
-      dimmed: 'bg-fg-default/60',
-      blur: 'bg-fg-default/50 backdrop-blur-sm',
+      // Uses the dedicated `bg-overlay` token (`--sds-overlay`: `rgba(0,0,0,.5)` light /
+      // `rgba(0,0,0,.7)` dark) instead of `bg-fg-default/60`. The Tailwind `/N` opacity
+      // modifier requires the underlying color to be decomposable into RGB triplets — our
+      // palette vars are hex strings, so `rgb(var(--sds-palette-foreground-default) / 0.6)`
+      // evaluated to invalid CSS and the browser silently fell back to transparent (= no
+      // dim at all, which read as "the modal isn't blocking the page"). The overlay token
+      // sidesteps the issue and is always actually-dark across modes.
+      dimmed: 'bg-overlay',
+      blur: 'bg-overlay backdrop-blur-sm',
       transparent: 'bg-transparent',
     },
     placement: {

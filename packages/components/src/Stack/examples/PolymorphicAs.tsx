@@ -1,10 +1,16 @@
-import { Stack, VStack } from '@apx-ui/ds';
+import { Div, Stack, Typography, VStack } from '@apx-ui/ds';
 
 export default function PolymorphicAs() {
   return (
     <VStack gap={4}>
-      <div>
-        <div className="mb-1 text-xs uppercase tracking-wide text-fg-muted">as=&quot;nav&quot;</div>
+      <Div>
+        <Typography
+          variant="caption"
+          color="fg.muted"
+          className="mb-1 uppercase tracking-wide"
+        >
+          as=&quot;nav&quot;
+        </Typography>
         <Stack as="nav" direction="row" gap={4} aria-label="Primary">
           <a className="text-primary underline" href="#a">
             Docs
@@ -16,16 +22,22 @@ export default function PolymorphicAs() {
             Blog
           </a>
         </Stack>
-      </div>
+      </Div>
 
-      <div>
-        <div className="mb-1 text-xs uppercase tracking-wide text-fg-muted">as=&quot;ul&quot;</div>
+      <Div>
+        <Typography
+          variant="caption"
+          color="fg.muted"
+          className="mb-1 uppercase tracking-wide"
+        >
+          as=&quot;ul&quot;
+        </Typography>
         <Stack as="ul" gap={1} className="list-disc pl-5">
-          <li>One</li>
-          <li>Two</li>
-          <li>Three</li>
+          <Typography as="li">One</Typography>
+          <Typography as="li">Two</Typography>
+          <Typography as="li">Three</Typography>
         </Stack>
-      </div>
+      </Div>
     </VStack>
   );
 }

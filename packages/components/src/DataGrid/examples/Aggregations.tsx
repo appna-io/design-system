@@ -1,4 +1,4 @@
-import { DataGrid } from '@apx-ui/ds';
+import { DataGrid, Div, Typography } from '@apx-ui/ds';
 import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Row {
@@ -41,13 +41,13 @@ const columns: DataGridColumnDef<Row>[] = [
 
 export default function Aggregations() {
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Columns declare their aggregations on the column definition. Totals run on the
         currently filtered rows (not just the visible page), so flipping pages doesn&apos;t
         change the displayed values.
-      </p>
+      </Typography>
       <DataGrid<Row> data={data} columns={columns} getRowId={(r) => r.id} />
-    </div>
+    </Div>
   );
 }

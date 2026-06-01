@@ -1,18 +1,18 @@
 import { useState } from 'react';
-import { Button, Popover } from '@apx-ui/ds';
+import { Button, Div, Popover, Typography } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [open, setOpen] = useState(false);
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <Div display="flex" alignItems="center" className="flex-wrap gap-3">
       <Popover open={open} onOpenChange={setOpen}>
         <Popover.Trigger>
           <Button variant="outline">Trigger (controlled)</Button>
         </Popover.Trigger>
         <Popover.Content>
-          <p className="text-sm">
+          <Typography variant="bodySmall">
             Parent owns <code className="font-mono">open</code>.
-          </p>
+          </Typography>
         </Popover.Content>
       </Popover>
       <Button variant="ghost" size="sm" onClick={() => setOpen(true)}>
@@ -21,7 +21,9 @@ export default function Controlled() {
       <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>
         External close
       </Button>
-      <span className="text-xs text-fg-muted">open: {String(open)}</span>
-    </div>
+      <Typography as="span" variant="caption" color="fg.muted">
+        open: {String(open)}
+      </Typography>
+    </Div>
   );
 }

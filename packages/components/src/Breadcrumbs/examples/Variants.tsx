@@ -1,4 +1,4 @@
-import { Breadcrumbs } from '@apx-ui/ds';
+import { Breadcrumbs, Div, Typography } from '@apx-ui/ds';
 
 const items = [
   { label: 'Home', href: '#home' },
@@ -8,19 +8,25 @@ const items = [
 
 export default function Variants() {
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1">
-        <span className="text-xs uppercase tracking-wide text-fg-muted">ghost (default)</span>
+    <Div display="flex" flexDirection="column" gap="4">
+      <Div display="flex" flexDirection="column" gap="1">
+        <Typography as="span" variant="caption" color="fg.muted" className="uppercase tracking-wide">
+          ghost (default)
+        </Typography>
         <Breadcrumbs items={items} variant="ghost" />
-      </div>
-      <div className="flex flex-col gap-1">
-        <span className="text-xs uppercase tracking-wide text-fg-muted">soft</span>
+      </Div>
+      <Div display="flex" flexDirection="column" gap="1">
+        <Typography as="span" variant="caption" color="fg.muted" className="uppercase tracking-wide">
+          soft
+        </Typography>
         <Breadcrumbs items={items} variant="soft" color="primary" />
-      </div>
-      <div className="flex flex-col gap-1">
-        <span className="text-xs uppercase tracking-wide text-fg-muted">underline</span>
+      </Div>
+      <Div display="flex" flexDirection="column" gap="1">
+        <Typography as="span" variant="caption" color="fg.muted" className="uppercase tracking-wide">
+          underline
+        </Typography>
         <Breadcrumbs items={items} variant="underline" color="primary" />
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

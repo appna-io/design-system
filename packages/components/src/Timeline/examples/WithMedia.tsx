@@ -1,4 +1,4 @@
-import { Timeline } from '@apx-ui/ds';
+import { Div, Timeline } from '@apx-ui/ds';
 
 export default function WithMedia() {
   return (
@@ -7,15 +7,20 @@ export default function WithMedia() {
         <Timeline.Title>Shipped a redesign</Timeline.Title>
         <Timeline.Description>The new dashboard ships with denser KPI tiles.</Timeline.Description>
         <Timeline.Media>
-          <div className="bg-bg-subtle text-fg-muted flex h-32 w-full items-center justify-center text-sm">
+          <Div
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            className="h-32 w-full bg-bg-subtle text-sm text-fg-muted"
+          >
             screenshot placeholder
-          </div>
+          </Div>
         </Timeline.Media>
       </Timeline.Item>
 
       <Timeline.Item tone="success" timestamp={new Date(Date.now() - 86_400_000)}>
         <Timeline.Title>Customer milestone</Timeline.Title>
-        <Timeline.Description>10 000 active accounts \U0001f389</Timeline.Description>
+        <Timeline.Description>10 000 active accounts 🎉</Timeline.Description>
       </Timeline.Item>
     </Timeline>
   );

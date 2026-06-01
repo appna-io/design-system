@@ -15,6 +15,8 @@ It ships in two flavors that resolve to the same `<nav><ol>…</ol></nav>` shape
 The component supports custom separators, overflow collapse via `<Menu>`, polymorphic items
 for router integration, and full RTL.
 
+<ExampleBlock for="Overview" title="Overview — product detail path" />
+
 ## Anatomy
 
 | Subpart                     | Element                        | Role                                                 |
@@ -63,8 +65,8 @@ When `items.length > maxItems`, the middle items collapse into a single `<Menu>`
 (visualized as an ellipsis button). `itemsBeforeCollapse` / `itemsAfterCollapse` (default `1`
 each) control how many items remain on each end.
 
-The overflow dropdown is rendered through the same `<Menu>` primitive (Phase 22) that powers
-the rest of the DS — no custom dropdown logic lives in Breadcrumbs. Clicking a hidden crumb
+The overflow dropdown is rendered through the same `<Menu>` primitive that powers the rest of
+the DS — no custom dropdown logic lives in Breadcrumbs. Clicking a hidden crumb
 navigates to its `href` / `to`; consumers using a router should provide `renderItem` so each
 hidden crumb renders inside the menu as their router-aware element.
 
@@ -147,14 +149,6 @@ is merged through the same `useThemedClasses` precedence chain every DS componen
 - Chevron separators should use a logical icon (`<ChevronEnd />`) so they flip; symmetric
   separators like `/` or `·` need no change.
 
-## i18n
-
-The plan calls for `<I18nProvider>` integration (translatable `Breadcrumb` and
-`Show hidden navigation items` strings). That primitive hasn't shipped yet, so this phase
-exposes both strings as overridable props (`aria-label`, `overflowAriaLabel`). When
-`<I18nProvider>` lands, the same prop surface will plug into the translation hook with no
-breaking changes.
-
 ## Do / Don't
 
 - **Do** use the array API for dynamic paths from your router.
@@ -163,9 +157,3 @@ breaking changes.
 - **Do** use `maxItems` to keep deep paths inside narrow containers.
 - **Don't** wrap individual crumbs in a separate `<nav>` — the root already handles that.
 - **Don't** put critical actions in a breadcrumb — it's a navigation indicator, not a toolbar.
-
-## Out of scope (future)
-
-- Per-item overflow priority (e.g. always keep crumb #2 visible when collapsing).
-- Drag-to-reorder — not a DS concern.
-- Animated collapse — overflow opens through Menu's existing animation.

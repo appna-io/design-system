@@ -1,17 +1,21 @@
-import { useState } from 'react';
-import { Button, Rating } from '@apx-ui/ds';
+import { useState, type FormEvent } from 'react';
+import { Button, Div, Rating, Typography } from '@apx-ui/ds';
 
 export default function InForm() {
   const [submitted, setSubmitted] = useState<string | null>(null);
 
   return (
-    <form
-      onSubmit={(event) => {
+    <Div
+      as="form"
+      onSubmit={(event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         setSubmitted(String(data.get('quality') ?? ''));
       }}
-      style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start' }}
+      display="flex"
+      flexDirection="column"
+      gap="3"
+      alignItems="flex-start"
     >
       <Rating
         name="quality"
@@ -21,10 +25,10 @@ export default function InForm() {
       />
       <Button type="submit" variant="solid">Submit</Button>
       {submitted ? (
-        <span style={{ fontSize: 12, color: 'var(--sds-color-fg-muted)' }}>
+        <Typography as="span" variant="caption" color="fg.muted">
           Submitted value: <strong>{submitted || '(empty)'}</strong>
-        </span>
+        </Typography>
       ) : null}
-    </form>
+    </Div>
   );
 }

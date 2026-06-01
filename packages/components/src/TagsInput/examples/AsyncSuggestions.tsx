@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TagsInput } from '@apx-ui/ds';
+import { Div, TagsInput, Typography } from '@apx-ui/ds';
 
 interface User {
   id: string;
@@ -33,10 +33,12 @@ export default function AsyncSuggestions() {
       getSuggestionValue={(user) => user.email}
       getSuggestionKey={(user) => user.id}
       renderSuggestion={(user) => (
-        <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
+        <Div display="flex" flexDirection="column" sx={{ lineHeight: 1.2 }}>
           <strong>{user.name}</strong>
-          <span style={{ fontSize: 12, color: 'var(--sds-color-fg-muted)' }}>{user.email}</span>
-        </div>
+          <Typography as="span" variant="caption" color="fg.muted">
+            {user.email}
+          </Typography>
+        </Div>
       )}
       value={recipients}
       onChange={(next) => setRecipients([...next])}

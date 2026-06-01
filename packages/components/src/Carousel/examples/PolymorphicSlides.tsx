@@ -1,4 +1,4 @@
-import { Carousel } from '@apx-ui/ds';
+import { Carousel, Div, Typography } from '@apx-ui/ds';
 
 const articles = [
   { href: '#a', title: 'Why scroll-snap is enough', tag: 'engineering' },
@@ -15,8 +15,12 @@ export default function PolymorphicSlides() {
             href={a.href}
             className="block h-32 rounded-md border border-border bg-bg-default p-4 text-sm no-underline transition-colors hover:bg-bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
-            <div className="text-xs uppercase tracking-wide text-fg-muted">{a.tag}</div>
-            <div className="mt-1 text-base font-semibold text-fg-default">{a.title}</div>
+            <Typography variant="caption" color="fg.muted" className="uppercase tracking-wide">
+              {a.tag}
+            </Typography>
+            <Typography variant="body" weight="semibold" color="fg.default" className="mt-1">
+              {a.title}
+            </Typography>
           </a>
         </Carousel.Slide>
       ))}

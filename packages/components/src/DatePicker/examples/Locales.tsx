@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { DatePicker } from '@apx-ui/ds';
+import { DatePicker, Div, Typography } from '@apx-ui/ds';
 
 export default function Locales() {
   const [a, setA] = useState<Date | null>(new Date());
@@ -8,7 +8,7 @@ export default function Locales() {
   const [c, setC] = useState<Date | null>(new Date());
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl">
+    <Div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl">
       <Field label="en-US (Sun start)">
         <DatePicker value={a} onChange={setA} locale="en-US" format="MM/dd/yyyy" />
       </Field>
@@ -18,14 +18,16 @@ export default function Locales() {
       <Field label="ja-JP">
         <DatePicker value={c} onChange={setC} locale="ja-JP" format="yyyy/MM/dd" />
       </Field>
-    </div>
+    </Div>
   );
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="flex flex-col gap-1">
-      <span className="text-xs font-medium text-fg-muted">{label}</span>
+      <Typography as="span" variant="caption" weight="medium" color="fg.muted">
+        {label}
+      </Typography>
       {children}
     </label>
   );

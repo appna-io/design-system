@@ -1,20 +1,20 @@
-import { Divider } from '@apx-ui/ds';
+import { Divider, Div, Typography } from '@apx-ui/ds';
 
 export default function Colors() {
   return (
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <p className="text-xs text-fg-muted">Subtle (default)</p>
+    <Div className="space-y-6">
+      <Div className="space-y-2">
+        <Typography variant="caption" color="fg.muted">Subtle (default)</Typography>
         <Divider color="subtle" />
-      </div>
-      <div className="space-y-2">
-        <p className="text-xs text-fg-muted">Default</p>
+      </Div>
+      <Div className="space-y-2">
+        <Typography variant="caption" color="fg.muted">Default</Typography>
         <Divider color="default" />
-      </div>
-      <div className="space-y-2">
-        <p className="text-xs text-fg-muted">Strong</p>
+      </Div>
+      <Div className="space-y-2">
+        <Typography variant="caption" color="fg.muted">Strong</Typography>
         <Divider color="strong" />
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

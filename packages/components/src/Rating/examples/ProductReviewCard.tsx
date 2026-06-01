@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Card, Rating, Textarea } from '@apx-ui/ds';
+import { Button, Card, Div, Rating, Textarea } from '@apx-ui/ds';
 
 export default function ProductReviewCard() {
   const [rating, setRating] = useState(0);
@@ -12,7 +12,7 @@ export default function ProductReviewCard() {
         subtitle="Help other shoppers by sharing your honest opinion."
       />
       <Card.Body>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <Div display="flex" flexDirection="column" gap="4">
           <Rating
             label="Overall rating"
             value={rating}
@@ -28,7 +28,7 @@ export default function ProductReviewCard() {
             onChange={(event) => setBody(event.currentTarget.value)}
             rows={4}
           />
-        </div>
+        </Div>
       </Card.Body>
       <Card.Footer>
         <Button variant="solid" disabled={rating === 0}>

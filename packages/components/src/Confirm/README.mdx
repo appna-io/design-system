@@ -1,0 +1,157 @@
+# Confirm
+
+A native-feeling **confirm dialog** that you don't render as JSX. Mount the singleton
+`<ConfirmProvider />` once at your app root (next to `<ThemeProvider />`) and call the
+imperative `confirm.display({ ... })` facade from anywhere — a click handler, an interceptor,
+an async action. The call returns a `Promise<boolean>` that resolves to `true` when the user
+confirms and `false` when they cancel, press <kbd>Esc</kbd>, or click the backdrop.
+
+This mirrors the `SplashProvider` + `splash(...)` and `Toaster` + `toast(...)` patterns used
+elsewhere in the design system: the provider owns the portal and the lifecycle; consumers
+reach for a stateless function. No `useState` for `open`, no `onConfirm` / `onCancel`
+callbacks threaded through props — just an `await`.
+
+```tsx
+// app/layout.tsx — mount once
+import { ThemeProvider, ConfirmProvider } from '@apx-ui/ds';
+
+export default function RootLayout({ children }) {
+  return (
+    <ThemeProvider>
+      <ConfirmProvider /> {/* portal-owned, picks up theme via the surrounding provider */}
+      {children}
+    </ThemeProvider>
+  );
+}
+```
+
+```tsx
+// anywhere else — just call `confirm`
+import { confirm } from '@apx-ui/ds';
+
+async function onDelete() {
+  const ok = await confirm.display({
+    variant: 'error',
+    title: 'Delete project?',
+    description: 'This action cannot be undone.',
+    confirmText: 'Yes, delete',
+  });
+  if (!ok) return;
+  await deleteProject();
+}
+
+// or use the variant shortcut
+const ok = await confirm.warning({ title: 'Reset filters?' });
+```
+
+<ExampleBlock for="Overview" title="Five variants — one button each" />
+
+## Why imperative
+
+A confirm dialog is conceptually **outside** the component tree that triggered it. A button in
+a settings page that wants to ask "are you sure?" shouldn't have to hoist `open` state to a
+sibling, render a `<Modal />` somewhere, and thread callbacks through props. The same is true
+for non-React code paths (route guards, fetch interceptors, command-palette actions).
+
+Instead, the provider lives at the root, owns the portal + focus trap + scroll lock once, and
+any caller gets a one-liner:
+
+```ts
+const ok = await confirm.display({ /* ... */ });
+if (!ok) return;
+// do the thing
+```
+
+The returned promise **never rejects** — `false` covers every dismiss path. That means you can
+treat the call as a pure boolean gate without `try` / `catch` boilerplate.
+
+## The imperative API
+
+| Call                                | Purpose                                                          |
+| ----------------------------------- | ---------------------------------------------------------------- |
+| `confirm.display(options)`          | Open the dialog. Returns `Promise<boolean>`.                     |
+| `confirm.info(options)`             | Variant shortcut for `{ variant: 'info', ... }`.                 |
+| `confirm.success(options)`          | Variant shortcut for `{ variant: 'success', ... }`.              |
+| `confirm.warning(options)`          | Variant shortcut for `{ variant: 'warning', ... }`.              |
+| `confirm.error(options)`            | Variant shortcut for `{ variant: 'error', ... }`.                |
+| `confirm.cancel()`                  | Dismiss the active dialog (resolves with `false`). No-op if closed. |
+| `confirm.isOpen()`                  | `true` if a confirm dialog is currently visible.                 |
+
+Calling `confirm.display(...)` while a dialog is already open **resolves the previous promise
+with `false`** (treating the displaced dialog as cancelled) before the new record takes over.
+This matches how a blocking native `window.confirm()` would have prevented the second call
+from running, but without the UI freeze.
+
+<ExampleBlock for="Basic" title="The minimal call" />
+
+## Variants
+
+| Variant   | Palette role | Default icon       | Confirm button color | Reach for it when…                                  |
+| --------- | ------------ | ------------------ | -------------------- | --------------------------------------------------- |
+| `default` | `neutral`    | `MessageCircle`    | `primary`            | The question doesn't tie to a specific status feel. |
+| `info`    | `info`       | `Info`             | `info`               | The action is informational — switching contexts.   |
+| `success` | `success`    | `CheckCircle2`     | `success`            | The action commits a positive change — publish.     |
+| `warning` | `warning`    | `AlertTriangle`    | `warning`            | The action is reversible but has consequences.      |
+| `error`   | `danger`     | `AlertOctagon`     | `danger`             | The action is destructive / irreversible.           |
+
+The variant axis drives **three** things at once: the leading-icon halo tint, the icon glyph
+itself (override via `icon`), and the confirm button's color. Pick by **what the action is**,
+not by what the dialog should look like — the visual treatment falls out automatically.
+
+<ExampleBlock for="VariantShortcuts" title="Variant shortcuts" />
+
+## Async flows
+
+The canonical pattern: `await` the confirm, bail out on `false`, run the real work after.
+
+<ExampleBlock for="AsyncFlow" title="Guard a destructive action" />
+
+For high-stakes confirms (account deletion, billing changes), set
+`closeOnBackdropClick: false` so an accidental click outside the dialog doesn't read as a
+cancel — the user has to take an explicit choice on one of the two buttons or press
+<kbd>Esc</kbd>.
+
+## Dropping the icon
+
+Some prompts read better without a leading status icon — a plain "do you want to continue?"
+question, or a confirm that's already next to a strong visual context (e.g. a delete button
+on a card that's already highlighted). Pass `showIcon: false`:
+
+<ExampleBlock for="WithoutIcon" title="Without the leading icon" />
+
+## Accessibility
+
+- The dialog renders as `role="alertdialog"` (not `dialog`) because confirms always require a
+  response. Screen readers announce the title + description on open without waiting for the
+  user to navigate to them.
+- `aria-labelledby` / `aria-describedby` are wired automatically when `title` / `description`
+  are present.
+- Focus moves to the **confirm** button on open (the desktop convention — <kbd>Enter</kbd>
+  activates the primary action) and returns to the trigger on close.
+- A focus trap keeps <kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd> inside the dialog.
+- <kbd>Esc</kbd> resolves the promise with `false` (unless `closeOnEscape: false`).
+- Body scroll is locked while the dialog is open via the engine's reference-counted
+  `useScrollLock`, so a Confirm-over-Modal combo collapses to a single lock + unlock pair.
+
+## Props
+
+The `ConfirmDisplayOptions` shape — every field is optional.
+
+| Prop                   | Type                            | Default       | Purpose                                                          |
+| ---------------------- | ------------------------------- | ------------- | ---------------------------------------------------------------- |
+| `variant`              | `ConfirmVariant`                | `'default'`   | Drives icon, header tint, and confirm-button color.              |
+| `showIcon`             | `boolean`                       | `true`        | Whether to render the leading icon halo.                         |
+| `icon`                 | `ReactNode`                     | per variant   | Override the auto-picked variant icon.                           |
+| `title`                | `ReactNode`                     | —             | Headline rendered as `h2` and wired to `aria-labelledby`.        |
+| `description`          | `ReactNode`                     | —             | Supporting copy wired to `aria-describedby`.                     |
+| `confirmText`          | `ReactNode`                     | `'Confirm'`   | Label on the confirm (primary) button.                           |
+| `cancelText`           | `ReactNode`                     | `'Cancel'`    | Label on the cancel (secondary) button.                          |
+| `closeOnEscape`        | `boolean`                       | `true`        | <kbd>Esc</kbd> resolves the promise with `false`.                |
+| `closeOnBackdropClick` | `boolean`                       | `true`        | Clicking the backdrop resolves the promise with `false`.         |
+| `sx` / `style` / `className` | theme escape hatches      | —             | Applied to the dialog surface.                                   |
+
+## Related
+
+- `Modal` — declarative, slot-based dialog when you need a custom form / body / footer.
+- `SplashScreen` — full-screen first-paint surface with the same imperative pattern.
+- `Toast` — non-blocking feedback (use this for confirmations that don't need a yes/no).

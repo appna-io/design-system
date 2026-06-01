@@ -1,20 +1,26 @@
-import { Spinner } from '@apx-ui/ds';
+import { Div, Spinner, Typography } from '@apx-ui/ds';
 
 export default function Speeds() {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+    <Div display="flex" alignItems="center" gap="8">
+      <Div display="flex" flexDirection="column" alignItems="center" gap="1.5">
         <Spinner speed="slow" size="lg" />
-        <span style={{ fontSize: 12, opacity: 0.7 }}>slow (1200ms)</span>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+        <Typography variant="caption" color="fg.muted">
+          slow (1200ms)
+        </Typography>
+      </Div>
+      <Div display="flex" flexDirection="column" alignItems="center" gap="1.5">
         <Spinner speed="normal" size="lg" />
-        <span style={{ fontSize: 12, opacity: 0.7 }}>normal (800ms)</span>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+        <Typography variant="caption" color="fg.muted">
+          normal (800ms)
+        </Typography>
+      </Div>
+      <Div display="flex" flexDirection="column" alignItems="center" gap="1.5">
         <Spinner speed="fast" size="lg" />
-        <span style={{ fontSize: 12, opacity: 0.7 }}>fast (500ms)</span>
-      </div>
-    </div>
+        <Typography variant="caption" color="fg.muted">
+          fast (500ms)
+        </Typography>
+      </Div>
+    </Div>
   );
 }

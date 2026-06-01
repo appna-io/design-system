@@ -1,7 +1,7 @@
 import { forwardRef, type AnchorHTMLAttributes } from 'react';
-import { Sidebar } from '@apx-ui/ds';
+import { Div, Sidebar } from '@apx-ui/ds';
 
-import { HomeIcon, InboxIcon, FolderIcon } from './_icons';
+import { FolderIcon, HomeIcon, InboxIcon } from './_icons';
 
 /**
  * Stand-in for a framework router Link (Next.js / React Router / TanStack Router). The key
@@ -31,7 +31,10 @@ const RouterLink = forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchor
 
 export default function RouterLinkIntegration() {
   return (
-    <div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div
+      height={420}
+      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+    >
       <Sidebar
         ariaLabel="Router-link example"
         variant="bordered"
@@ -48,6 +51,6 @@ export default function RouterLinkIntegration() {
           <RouterLink to="/projects">Projects</RouterLink>
         </Sidebar.Item>
       </Sidebar>
-    </div>
+    </Div>
   );
 }

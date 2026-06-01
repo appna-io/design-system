@@ -1,8 +1,8 @@
-import { Button, Toaster, toast } from '@apx-ui/ds';
+import { Button, Div, Toaster, toast } from '@apx-ui/ds';
 
 export default function WithAction() {
   return (
-    <div className="space-y-3">
+    <Div display="flex" flexDirection="column" gap="3">
       <Button
         onClick={() =>
           toast('Email moved to Archive', {
@@ -21,6 +21,6 @@ export default function WithAction() {
         Archive email
       </Button>
       <Toaster closeButton />
-    </div>
+    </Div>
   );
 }

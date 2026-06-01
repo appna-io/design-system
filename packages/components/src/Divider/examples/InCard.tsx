@@ -1,22 +1,34 @@
-import { Card, Divider } from '@apx-ui/ds';
+import { Card, Divider, Div, Typography } from '@apx-ui/ds';
 
 export default function InCard() {
   return (
     <Card>
-      <div className="p-4">
-        <h3 className="text-sm font-semibold">Account</h3>
-        <p className="mt-1 text-sm text-fg-muted">Manage personal details.</p>
-      </div>
+      <Div className="p-4">
+        <Typography as="h3" variant="bodySmall" weight="semibold">
+          Account
+        </Typography>
+        <Typography variant="bodySmall" color="fg.muted" className="mt-1">
+          Manage personal details.
+        </Typography>
+      </Div>
       <Divider />
-      <div className="p-4">
-        <h3 className="text-sm font-semibold">Security</h3>
-        <p className="mt-1 text-sm text-fg-muted">Passwords and two-factor.</p>
-      </div>
+      <Div className="p-4">
+        <Typography as="h3" variant="bodySmall" weight="semibold">
+          Security
+        </Typography>
+        <Typography variant="bodySmall" color="fg.muted" className="mt-1">
+          Passwords and two-factor.
+        </Typography>
+      </Div>
       <Divider />
-      <div className="p-4">
-        <h3 className="text-sm font-semibold">Notifications</h3>
-        <p className="mt-1 text-sm text-fg-muted">Email and push preferences.</p>
-      </div>
+      <Div className="p-4">
+        <Typography as="h3" variant="bodySmall" weight="semibold">
+          Notifications
+        </Typography>
+        <Typography variant="bodySmall" color="fg.muted" className="mt-1">
+          Email and push preferences.
+        </Typography>
+      </Div>
     </Card>
   );
 }

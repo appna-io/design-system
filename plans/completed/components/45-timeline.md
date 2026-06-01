@@ -489,4 +489,3 @@ Measured with `esbuild` minify + treeshake, externalising `react`, `react-dom`, 
 - **CSS-only Divider that flips orientation responsively** — same Divider-v2 follow-up flagged by Phase 40. Would let `Timeline orientation="horizontal" responsive` get pixel-perfect connector orientation on every breakpoint rather than falling back to the layout-direction default.
 - **`defaultExpanded` per `<Timeline.Item>`** — opt-in initial open state when `collapsible`. Add when a consumer requests it.
 - **Live "now" tick.** Relative timestamps recalc on every render; for long-lived dashboards a `useNow(interval)` hook in the engine would let consumers refresh "5 minutes ago" → "6 minutes ago" without touching Timeline. Tracked.
-

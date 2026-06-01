@@ -1,12 +1,12 @@
 import { useRef, useState } from 'react';
-import { Button, Carousel, type CarouselRef } from '@apx-ui/ds';
+import { Button, Carousel, Div, Typography, type CarouselRef } from '@apx-ui/ds';
 
 export default function ProgrammaticRef() {
   const ref = useRef<CarouselRef>(null);
   const [index, setIndex] = useState(0);
 
   return (
-    <div className="flex flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3">
       <Carousel
         ariaLabel="Programmatic carousel"
         ref={ref}
@@ -14,13 +14,13 @@ export default function ProgrammaticRef() {
       >
         {Array.from({ length: 6 }, (_, i) => (
           <Carousel.Slide key={i}>
-            <div className="flex h-40 items-center justify-center rounded-md bg-bg-subtle text-2xl font-semibold">
+            <Div display="flex" alignItems="center" justifyContent="center" className="h-40 rounded-md bg-bg-subtle text-2xl font-semibold">
               Slide {i + 1}
-            </div>
+            </Div>
           </Carousel.Slide>
         ))}
       </Carousel>
-      <div className="flex flex-wrap items-center gap-2">
+      <Div display="flex" className="flex-wrap items-center gap-2">
         <Button size="sm" onClick={() => ref.current?.prev()}>
           Prev (ref.prev)
         </Button>
@@ -33,8 +33,10 @@ export default function ProgrammaticRef() {
         <Button size="sm" variant="outline" onClick={() => ref.current?.scrollTo(5)}>
           Jump to last
         </Button>
-        <span className="text-xs text-fg-muted">ref.getIndex() = {index}</span>
-      </div>
-    </div>
+        <Typography as="span" variant="caption" color="fg.muted">
+          ref.getIndex() = {index}
+        </Typography>
+      </Div>
+    </Div>
   );
 }

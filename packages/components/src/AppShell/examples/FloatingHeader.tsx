@@ -1,16 +1,16 @@
-import { AppShell, HStack, Stack } from '@apx-ui/ds';
+import { AppShell, Div, HStack, Stack, Typography } from '@apx-ui/ds';
 
 export default function FloatingHeader() {
   return (
-    <div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-subtle)">
+    <Div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-subtle)">
       <AppShell
         headerVariant="floating"
         header={
           <HStack gap={3} className="w-full">
             <strong>Floating chrome</strong>
-            <span className="text-sm text-(--sds-color-text-muted)">
+            <Typography as="span" variant="bodySmall" color="fg.muted">
               Header is detached with a shadow + rounded corners.
-            </span>
+            </Typography>
           </HStack>
         }
         sidebar={
@@ -21,12 +21,14 @@ export default function FloatingHeader() {
           </Stack>
         }
       >
-        <h2 className="text-lg font-semibold">Marketing-style layout</h2>
-        <p className="mt-2 text-sm text-(--sds-color-text-muted)">
+        <Typography as="h2" variant="titleSmall" weight="semibold">
+          Marketing-style layout
+        </Typography>
+        <Typography variant="bodySmall" color="fg.muted" sx={{ mt: 2 }}>
           Pair `headerVariant=&quot;floating&quot;` with `layout=&quot;inset&quot;` for a
           Notion-marketing look.
-        </p>
+        </Typography>
       </AppShell>
-    </div>
+    </Div>
   );
 }

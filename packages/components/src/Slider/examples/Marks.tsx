@@ -1,8 +1,8 @@
-import { Slider } from '@apx-ui/ds';
+import { Div, Slider } from '@apx-ui/ds';
 
 export default function Marks() {
   return (
-    <div className="w-72 pb-6">
+    <Div className="w-72 pb-6">
       <Slider
         aria-label="Brightness"
         defaultValue={50}
@@ -15,6 +15,6 @@ export default function Marks() {
           { value: 100, label: '100' },
         ]}
       />
-    </div>
+    </Div>
   );
 }

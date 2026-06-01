@@ -1,16 +1,22 @@
-import { Pagination } from '@apx-ui/ds';
+import { Div, Pagination, Typography } from '@apx-ui/ds';
 import type { PaginationVariant } from '@apx-ui/ds';
 
 const VARIANTS: PaginationVariant[] = ['ghost', 'outline', 'soft', 'solid'];
 
 export default function Variants() {
   return (
-    <div className="flex flex-col gap-4">
+    <Div display="flex" flexDirection="column" gap="4">
       {VARIANTS.map((variant) => (
-        <div key={variant} className="flex flex-col gap-1">
-          <span className="text-xs font-medium uppercase tracking-wide text-fg-muted">
+        <Div key={variant} display="flex" flexDirection="column" gap="1">
+          <Typography
+            as="span"
+            variant="caption"
+            weight="medium"
+            color="fg.muted"
+            className="uppercase tracking-wide"
+          >
             {variant}
-          </span>
+          </Typography>
           <Pagination
             totalCount={100}
             pageSize={10}
@@ -20,8 +26,8 @@ export default function Variants() {
             showRangeLabel={false}
             responsive={false}
           />
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

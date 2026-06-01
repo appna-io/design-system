@@ -1,10 +1,10 @@
-import { Button, Icon, toast } from '@apx-ui/ds';
+import { Button, Div, Icon, toast } from '@apx-ui/ds';
 
 import { AlertTriangle, Check, Info, X } from './_glyphs';
 
 export default function InToastIntents() {
   return (
-    <div style={{ display: 'flex', gap: 8 }}>
+    <Div display="flex" gap="2">
       <Button
         onClick={() => toast.success({ title: 'Saved', icon: <Icon as={Check} /> })}
       >
@@ -25,6 +25,6 @@ export default function InToastIntents() {
       >
         Error
       </Button>
-    </div>
+    </Div>
   );
 }

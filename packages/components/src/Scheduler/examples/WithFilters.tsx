@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Div,
   Scheduler,
   type SchedulerCalendarSource,
   type SchedulerEvent,
@@ -29,7 +30,7 @@ export default function WithFilters() {
   ]);
 
   return (
-    <div style={{ height: 680 }}>
+    <Div height={680}>
       <Scheduler
         events={events}
         calendars={calendars}
@@ -47,7 +48,7 @@ export default function WithFilters() {
           return created;
         }}
       />
-    </div>
+    </Div>
   );
 }
 

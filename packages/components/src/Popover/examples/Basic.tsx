@@ -1,4 +1,4 @@
-import { Button, Popover } from '@apx-ui/ds';
+import { Button, Div, Popover, Typography } from '@apx-ui/ds';
 
 export default function Basic() {
   return (
@@ -7,9 +7,9 @@ export default function Basic() {
         <Button>Open popover</Button>
       </Popover.Trigger>
       <Popover.Content>
-        <p className="text-sm">
+        <Typography variant="bodySmall">
           Popovers carry interactive content. Click outside or press Escape to close.
-        </p>
+        </Typography>
       </Popover.Content>
     </Popover>
   );

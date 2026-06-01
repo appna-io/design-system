@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { DataGrid } from '@apx-ui/ds';
+import { DataGrid, Div, Typography } from '@apx-ui/ds';
 import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Row {
@@ -23,12 +23,12 @@ export default function Error() {
   const [tries, setTries] = useState(0);
 
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Passing <code>errorState</code> swaps the body for the error UI and elevates
         the surrounding region&apos;s role to <code>alert</code> so screen readers
         announce it immediately.
-      </p>
+      </Typography>
       <DataGrid<Row>
         data={data}
         columns={columns}
@@ -41,6 +41,6 @@ export default function Error() {
           />
         }
       />
-    </div>
+    </Div>
   );
 }

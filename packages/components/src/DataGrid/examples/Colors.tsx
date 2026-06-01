@@ -1,4 +1,4 @@
-import { DataGrid } from '@apx-ui/ds';
+import { DataGrid, Div, Typography } from '@apx-ui/ds';
 import type { DataGridColor, DataGridColumnDef } from '@apx-ui/ds';
 
 interface Row {
@@ -37,10 +37,12 @@ const COLORS: DataGridColor[] = [
  */
 export default function Colors() {
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+    <Div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
       {COLORS.map((color) => (
-        <div key={color} className="flex flex-col gap-2">
-          <h3 className="text-fg-default text-sm font-semibold capitalize">{color}</h3>
+        <Div key={color} display="flex" flexDirection="column" gap="2">
+          <Typography as="h3" variant="bodySmall" weight="semibold" color="fg.default" transform="capitalize">
+            {color}
+          </Typography>
           <DataGrid<Row>
             data={data}
             columns={columns}
@@ -53,8 +55,8 @@ export default function Colors() {
             globalSearch={false}
             defaultPagination={{ pageIndex: 0, pageSize: 0 }}
           />
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

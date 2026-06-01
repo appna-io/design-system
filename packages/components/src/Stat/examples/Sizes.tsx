@@ -1,8 +1,8 @@
-import { Stat } from '@apx-ui/ds';
+import { Div, Stat } from '@apx-ui/ds';
 
 export default function Sizes() {
   return (
-    <div className="flex flex-col gap-8">
+    <Div display="flex" flexDirection="column" gap="8">
       <Stat
         size="sm"
         label="Small — compact widgets"
@@ -21,6 +21,6 @@ export default function Sizes() {
         value={1240}
         delta={{ value: 5, direction: 'up' }}
       />
-    </div>
+    </Div>
   );
 }

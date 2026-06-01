@@ -10,6 +10,7 @@
  */
 export { Div } from './Div';
 export { divRecipe } from './Div.recipe';
+export { buildGradientBackground } from './gradient';
 export { extractStyleProps, STYLE_PROP_KEYS } from './styleProps';
 export { buildPseudoClassName, PSEUDO_PREFIX } from './pseudoProps';
 
@@ -22,5 +23,11 @@ export type {
   DivPseudoState,
   DivStyleProps,
 } from './Div.types';
+export type {
+  DivGradient,
+  DivGradientConfig,
+  DivGradientPosition,
+  DivGradientType,
+} from './gradient';
 export type { PseudoPropMap, PseudoPropName } from './pseudoProps';
 export type { ExtractStylePropsResult } from './styleProps';

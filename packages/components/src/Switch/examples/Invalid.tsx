@@ -1,11 +1,11 @@
-import { Switch } from '@apx-ui/ds';
+import { Div, Switch } from '@apx-ui/ds';
 
 export default function Invalid() {
   return (
-    <div className="flex flex-col gap-2">
+    <Div display="flex" flexDirection="column" gap="2">
       <Switch invalid description="Two-factor must be on for admin accounts.">
         Two-factor authentication
       </Switch>
-    </div>
+    </Div>
   );
 }

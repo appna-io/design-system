@@ -1,13 +1,15 @@
-import { Tabs } from '@apx-ui/ds';
+import { Div, Tabs, Typography } from '@apx-ui/ds';
 
 const sizes = ['sm', 'md', 'lg'] as const;
 
 export default function Sizes() {
   return (
-    <div className="flex flex-col gap-6">
+    <Div display="flex" flexDirection="column" gap="6">
       {sizes.map((size) => (
-        <div key={size} className="flex flex-col gap-2">
-          <span className="text-xs uppercase tracking-wide text-fg-muted">{size}</span>
+        <Div key={size} display="flex" flexDirection="column" gap="2">
+          <Typography as="span" variant="caption" color="fg.muted" className="uppercase tracking-wide">
+            {size}
+          </Typography>
           <Tabs size={size} defaultValue="overview" aria-label={`${size} tabs example`}>
             <Tabs.List>
               <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
@@ -18,8 +20,8 @@ export default function Sizes() {
             <Tabs.Panel value="activity">Activity panel</Tabs.Panel>
             <Tabs.Panel value="settings">Settings panel</Tabs.Panel>
           </Tabs>
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

@@ -1,4 +1,4 @@
-import { Combobox } from '@apx-ui/ds';
+import { Combobox, Div } from '@apx-ui/ds';
 
 const COMMANDS = [
   { value: 'open-file', label: 'Open File…' },
@@ -13,13 +13,13 @@ const COMMANDS = [
 
 export default function FuzzyMatch() {
   return (
-    <div className="max-w-md">
+    <Div className="max-w-md">
       <Combobox
         aria-label="Command"
         placeholder="Try typing 'tgsb' or 'rldw'…"
         options={COMMANDS}
         matchStrategy="fuzzy"
       />
-    </div>
+    </Div>
   );
 }

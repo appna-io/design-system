@@ -1,4 +1,4 @@
-import { Avatar, Badge, DataGrid } from '@apx-ui/ds';
+import { Avatar, Badge, DataGrid, Div, Typography } from '@apx-ui/ds';
 import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Member {
@@ -38,13 +38,17 @@ const columns: DataGridColumnDef<Member>[] = [
     sortable: true,
     type: 'text',
     cell: ({ row }) => (
-      <div className="flex items-center gap-3">
+      <Div display="flex" alignItems="center" gap="3">
         <Avatar src={row.avatarUrl} alt={row.name} size="sm" />
-        <div className="flex flex-col">
-          <span className="text-fg-default font-medium">{row.name}</span>
-          <span className="text-fg-muted text-xs">{row.email}</span>
-        </div>
-      </div>
+        <Div display="flex" flexDirection="column">
+          <Typography as="span" variant="body" weight="medium" color="fg.default">
+            {row.name}
+          </Typography>
+          <Typography as="span" variant="caption" color="fg.muted">
+            {row.email}
+          </Typography>
+        </Div>
+      </Div>
     ),
   },
   {
@@ -53,7 +57,9 @@ const columns: DataGridColumnDef<Member>[] = [
     accessor: 'role',
     type: 'text',
     cell: ({ value }) => (
-      <span className="text-fg-default text-sm capitalize">{String(value)}</span>
+      <Typography as="span" variant="bodySmall" color="fg.default" transform="capitalize">
+        {String(value)}
+      </Typography>
     ),
   },
   {
@@ -87,13 +93,13 @@ const columns: DataGridColumnDef<Member>[] = [
  */
 export default function CustomCellRender() {
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Columns can opt out of the default text renderer with a <code>cell</code> function
         that receives <code>{'{ value, row, column, rowIndex, columnIndex }'}</code> and returns
         any React tree.
-      </p>
+      </Typography>
       <DataGrid<Member> data={members} columns={columns} getRowId={(m) => m.id} />
-    </div>
+    </Div>
   );
 }

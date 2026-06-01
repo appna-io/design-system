@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card } from '@apx-ui/ds';
+import { Card, Div, Typography } from '@apx-ui/ds';
 
 const PLANS = [
   { id: 'starter', name: 'Starter', price: '$0', tagline: 'For tinkering' },
@@ -11,7 +11,7 @@ export default function Selectable() {
   const [selected, setSelected] = useState('pro');
 
   return (
-    <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+    <Div className="grid grid-cols-1 gap-3 md:grid-cols-3">
       {PLANS.map((plan) => (
         <Card
           key={plan.id}
@@ -22,11 +22,16 @@ export default function Selectable() {
         >
           <Card.Header title={plan.name} subtitle={plan.tagline} />
           <Card.Body>
-            <span className="text-2xl font-semibold">{plan.price}</span>
-            <span className="text-fg-muted"> / mo</span>
+            <Typography as="span" variant="h3" weight="semibold">
+              {plan.price}
+            </Typography>
+            <Typography as="span" variant="bodySmall" color="fg.muted">
+              {' '}
+              / mo
+            </Typography>
           </Card.Body>
         </Card>
       ))}
-    </div>
+    </Div>
   );
 }

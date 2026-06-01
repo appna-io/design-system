@@ -1,13 +1,15 @@
-import { ToggleGroup } from '@apx-ui/ds';
+import { Div, ToggleGroup, Typography } from '@apx-ui/ds';
 
 const VARIANTS = ['solid', 'outline', 'ghost'] as const;
 
 export default function Variants() {
   return (
-    <div className="flex flex-col gap-4">
+    <Div display="flex" flexDirection="column" gap="4">
       {VARIANTS.map((variant) => (
-        <div key={variant} className="flex items-center gap-4">
-          <span className="w-20 text-xs font-medium text-fg-muted capitalize">{variant}</span>
+        <Div key={variant} display="flex" alignItems="center" gap="4">
+          <Typography variant="caption" weight="medium" color="fg.muted" className="w-20 capitalize">
+            {variant}
+          </Typography>
           <ToggleGroup
             type="single"
             aria-label={`${variant} group`}
@@ -19,8 +21,8 @@ export default function Variants() {
             <ToggleGroup.Item value="b" aria-label="Option B">B</ToggleGroup.Item>
             <ToggleGroup.Item value="c" aria-label="Option C">C</ToggleGroup.Item>
           </ToggleGroup>
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

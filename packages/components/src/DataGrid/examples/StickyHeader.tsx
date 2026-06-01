@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { DataGrid } from '@apx-ui/ds';
+import { DataGrid, Div, Typography } from '@apx-ui/ds';
 import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Player {
@@ -41,11 +41,11 @@ const columns: DataGridColumnDef<Player>[] = [
 export default function StickyHeader() {
   const data = useMemo(() => build(120), []);
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         <code>stickyHeader</code> pins the column headers to the top of the scroll viewport.
         Combine with a bounded <code>scrollerStyle</code> to create a self-contained scrollable grid.
-      </p>
+      </Typography>
       <DataGrid<Player>
         data={data}
         columns={columns}
@@ -54,6 +54,6 @@ export default function StickyHeader() {
         scrollerStyle={{ maxHeight: 320 }}
         defaultPagination={{ pageIndex: 0, pageSize: 0 }}
       />
-    </div>
+    </Div>
   );
 }

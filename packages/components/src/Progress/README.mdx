@@ -1,20 +1,11 @@
 ## Overview
 
-Phase 24 ships **two** progress indicators in one phase:
+**`<Progress />`** is the linear bar (determinate + indeterminate). **`<CircularProgress />`**
+is the SVG ring variant. Both share the same prop vocabulary (`value`, `min`, `max`, `variant`,
+`size`, `color`, `indeterminate`, `showLabel`, `labelFormat`, `animated`) and the same ARIA
+semantics — CSS-only animations with no external motion library.
 
-- **`<Progress />`** — linear bar (determinate + indeterminate). Three slots: `track`, `bar`,
-  `label`.
-- **`<CircularProgress />`** — SVG ring (determinate + indeterminate). Four slots: `root`, `svg`,
-  `track`, `arc`, `label`.
-
-Both share the same prop vocabulary (`value`, `min`, `max`, `variant`, `size`, `color`,
-`indeterminate`, `showLabel`, `labelFormat`, `animated`) and the same ARIA semantics. The math
-is shared via `useProgressValue()`; the indeterminate keyframes live in the Tailwind preset
-alongside Badge's `badge-pulse`.
-
-**No Motion library.** Both surfaces are CSS-only — the linear sweep is a `transform` keyframe
-and the circular spinner is a combination of `rotate` (whole SVG) + `stroke-dashoffset`
-oscillation (the arc). Bundle delta target: < 2 KB gzipped combined.
+<ExampleBlock for="Overview" title="Overview — indeterminate, 35%, and 80% bars" />
 
 ## Variants
 
@@ -31,7 +22,7 @@ oscillation (the arc). Bundle delta target: < 2 KB gzipped combined.
 - **`soft`** — role `-subtle` track + role-colored arc.
 
 (No `striped` for circular — SVG strokes can't carry a diagonal pattern without a `<pattern>`
-def. Logged in the plan as a deferred follow-up.)
+def.)
 
 ## Sizes
 
@@ -117,10 +108,7 @@ def. Logged in the plan as a deferred follow-up.)
 - **Indeterminate (circular)**: `circular-indeterminate-spin` rotates the whole SVG; in parallel
   `circular-indeterminate-dash` modulates `stroke-dashoffset` so the arc grows then shrinks. Both
   loops are 1.4s.
-- All four keyframes live in `packages/theme/src/tailwind-preset.ts` — **deviation from the plan**
-  (the plan called out `packages/theme/src/styles/globals.css`, which does not exist in the repo).
-  Following the Phase 12 / Badge convention keeps the preset as the single source of truth and
-  avoids consumers needing an extra CSS import.
+- All four keyframes live in `packages/theme/src/tailwind-preset.ts`.
 - Reduced-motion fallback: indeterminate animations halt; the static state drops to 60% opacity
   so the surface still reads as "in progress" without motion.
 

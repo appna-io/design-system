@@ -1,9 +1,9 @@
-import { Stat } from '@apx-ui/ds';
+import { Div, Stat } from '@apx-ui/ds';
 import { DollarSign, ShoppingCart, Users } from 'lucide-react';
 
 export default function WithIcon() {
   return (
-    <div className="flex flex-col gap-6">
+    <Div display="flex" flexDirection="column" gap="6">
       <Stat
         label="Revenue"
         icon={<DollarSign />}
@@ -23,6 +23,6 @@ export default function WithIcon() {
         value={1240}
         delta={{ value: 12.3, direction: 'up' }}
       />
-    </div>
+    </Div>
   );
 }

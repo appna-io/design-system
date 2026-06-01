@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { DataGrid } from '@apx-ui/ds';
+import { DataGrid, Div, Typography } from '@apx-ui/ds';
 import type {
   DataGridColumnDef,
   DataGridColumnFiltersState,
@@ -119,12 +119,12 @@ export default function ServerSide() {
   }, [query]);
 
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Server-side mode: every interaction (sort, filter, search, page) round-trips through{' '}
         <code>fetchPage()</code>. The grid uses <code>rowCount</code> + the <code>manual*</code> flags
         to skip its own derivations and trust the consumer&apos;s data.
-      </p>
+      </Typography>
       <DataGrid<ApiRow>
         data={rows}
         columns={columns}
@@ -143,6 +143,6 @@ export default function ServerSide() {
           setPagination(next.pagination);
         }}
       />
-    </div>
+    </Div>
   );
 }

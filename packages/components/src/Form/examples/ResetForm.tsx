@@ -1,4 +1,4 @@
-import { Button, Form, FormField, Input } from '@apx-ui/ds';
+import { Button, Div, Form, FormField, Input } from '@apx-ui/ds';
 
 export default function ResetForm() {
   return (
@@ -14,7 +14,7 @@ export default function ResetForm() {
           <FormField name="city" label="City">
             <Input />
           </FormField>
-          <div style={{ display: 'flex', gap: 8 }}>
+          <Div display="flex" gap="2">
             <Button type="submit" variant="solid">Save</Button>
             <Button type="button" variant="ghost" onClick={() => form.resetForm()}>
               Reset to initial
@@ -26,7 +26,7 @@ export default function ResetForm() {
             >
               Reset to empty
             </Button>
-          </div>
+          </Div>
         </>
       )}
     </Form>

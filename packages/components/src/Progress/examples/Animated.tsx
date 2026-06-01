@@ -1,6 +1,6 @@
 'use client';
 
-import { CircularProgress, Progress } from '@apx-ui/ds';
+import { CircularProgress, Div, Progress } from '@apx-ui/ds';
 import { useEffect, useState } from 'react';
 
 export default function Animated() {
@@ -14,9 +14,9 @@ export default function Animated() {
   }, []);
 
   return (
-    <div className="flex w-full max-w-sm flex-col gap-6">
+    <Div display="flex" flexDirection="column" gap="6" className="w-full max-w-sm">
       <Progress value={value} size="lg" showLabel aria-label="Animated upload" />
-      <div className="flex items-center gap-6">
+      <Div display="flex" alignItems="center" gap="6">
         <CircularProgress value={value} showLabel aria-label="Animated circular" />
         <CircularProgress
           value={value}
@@ -26,7 +26,7 @@ export default function Animated() {
           size="lg"
           aria-label="Animated circular soft"
         />
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

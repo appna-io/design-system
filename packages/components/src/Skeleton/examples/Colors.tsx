@@ -1,16 +1,18 @@
-import { Skeleton } from '@apx-ui/ds';
+import { Div, Skeleton, Typography } from '@apx-ui/ds';
 
 const COLORS = ['primary', 'secondary', 'success', 'warning', 'danger', 'info', 'neutral'] as const;
 
 export default function Colors() {
   return (
-    <div className="flex flex-col gap-3" style={{ maxWidth: 360 }}>
+    <Div display="flex" flexDirection="column" gap="3" className="max-w-[360px]">
       {COLORS.map((color) => (
-        <div key={color} className="flex items-center gap-3">
-          <span className="w-20 text-xs font-medium text-fg-muted">{color}</span>
+        <Div key={color} display="flex" alignItems="center" gap="3">
+          <Typography as="span" variant="caption" weight="medium" color="fg.muted" className="w-20">
+            {color}
+          </Typography>
           <Skeleton variant="soft" color={color} width="100%" height={20} />
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

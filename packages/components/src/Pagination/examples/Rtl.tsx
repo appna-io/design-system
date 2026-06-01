@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { DirectionProvider } from '@apx-ui/engine';
-import { Pagination, hePaginationTranslations } from '@apx-ui/ds';
+import { Div, Pagination, Typography, hePaginationTranslations } from '@apx-ui/ds';
 
 /**
  * `<DirectionProvider dir="rtl">` flips the chevron icons + flow direction;
@@ -12,10 +12,10 @@ export default function Rtl() {
   const [pageIndex, setPageIndex] = useState(3);
   return (
     <DirectionProvider dir="rtl">
-      <div dir="rtl" className="flex flex-col gap-3">
-        <p className="text-sm text-fg-muted">
+      <Div dir="rtl" display="flex" flexDirection="column" gap="3">
+        <Typography variant="bodySmall" color="fg.muted">
           הדפדוף יציג חצים בכיוון הפוך ותווית טווח בעברית.
-        </p>
+        </Typography>
         <Pagination
           totalCount={120}
           pageSize={10}
@@ -25,7 +25,7 @@ export default function Rtl() {
           color="primary"
           variant="soft"
         />
-      </div>
+      </Div>
     </DirectionProvider>
   );
 }

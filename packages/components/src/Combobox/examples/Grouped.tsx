@@ -1,8 +1,8 @@
-import { Combobox } from '@apx-ui/ds';
+import { Combobox, Div } from '@apx-ui/ds';
 
 export default function Grouped() {
   return (
-    <div className="max-w-sm">
+    <Div className="max-w-sm">
       <Combobox
         aria-label="Country"
         placeholder="Pick a country"
@@ -38,6 +38,6 @@ export default function Grouped() {
           },
         ]}
       />
-    </div>
+    </Div>
   );
 }

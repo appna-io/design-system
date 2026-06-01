@@ -1,28 +1,28 @@
-import { Breadcrumbs } from '@apx-ui/ds';
+import { Breadcrumbs, Div, Typography } from '@apx-ui/ds';
 
 export default function LongLabels() {
   return (
-    <div className="max-w-md border border-border rounded-md p-3">
+    <Div className="max-w-md border border-border rounded-md p-3">
       <Breadcrumbs
         items={[
           { label: 'Home', href: '#home' },
           {
             label: (
-              <span className="inline-block max-w-[12rem] truncate align-bottom">
+              <Typography as="span" className="inline-block max-w-[12rem] truncate align-bottom">
                 A very long workspace name that should ellipsis
-              </span>
+              </Typography>
             ),
             href: '#workspace',
           },
           {
             label: (
-              <span className="inline-block max-w-[10rem] truncate align-bottom">
+              <Typography as="span" className="inline-block max-w-[10rem] truncate align-bottom">
                 Even longer issue title goes here
-              </span>
+              </Typography>
             ),
           },
         ]}
       />
-    </div>
+    </Div>
   );
 }

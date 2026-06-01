@@ -1,4 +1,4 @@
-import { Combobox } from '@apx-ui/ds';
+import { Combobox, Div } from '@apx-ui/ds';
 
 const ALL_LANGUAGES = [
   'JavaScript',
@@ -49,13 +49,13 @@ function fakeFetchLanguages(query: string, signal: AbortSignal): Promise<{ value
 
 export default function Async() {
   return (
-    <div className="max-w-sm">
+    <Div className="max-w-sm">
       <Combobox
         aria-label="Language"
         placeholder="Start typing a language…"
         loadOptions={(query, { signal }) => fakeFetchLanguages(query, signal)}
         debounceMs={250}
       />
-    </div>
+    </Div>
   );
 }

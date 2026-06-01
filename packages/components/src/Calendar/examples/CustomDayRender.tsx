@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Calendar } from '@apx-ui/ds';
+import { Calendar, Div, Typography } from '@apx-ui/ds';
 
 /**
  * Custom day-cell renderer — draw a tiny dot under days that have an associated event count.
@@ -22,8 +22,9 @@ export default function CustomDayRender() {
       onChange={(v) => setD(v as Date)}
       variant="outline"
       renderDay={(ctx) => (
-        <div className="relative flex h-8 w-8 items-center justify-center rounded-md text-sm">
-          <span
+        <Div className="relative flex h-8 w-8 items-center justify-center rounded-md text-sm">
+          <Typography
+            as="span"
             className={[
               'flex h-8 w-8 items-center justify-center rounded-md tabular-nums',
               ctx.isSelected ? 'bg-primary text-fg-onPrimary' : 'hover:bg-bg-subtle',
@@ -31,14 +32,15 @@ export default function CustomDayRender() {
             ].join(' ')}
           >
             {ctx.label}
-          </span>
+          </Typography>
           {eventCountByIso[iso(ctx.date)] ? (
-            <span
+            <Typography
+              as="span"
               className="absolute bottom-0.5 h-1 w-1 rounded-full bg-info"
               aria-label={`${eventCountByIso[iso(ctx.date)]} events`}
             />
           ) : null}
-        </div>
+        </Div>
       )}
     />
   );

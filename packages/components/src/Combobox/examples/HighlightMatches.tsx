@@ -1,4 +1,4 @@
-import { Combobox, highlightMatch } from '@apx-ui/ds';
+import { Combobox, Div, Typography, highlightMatch } from '@apx-ui/ds';
 
 const FRUITS = [
   { value: 'apple', label: 'Apple' },
@@ -12,17 +12,17 @@ const FRUITS = [
 
 export default function HighlightMatches() {
   return (
-    <div className="max-w-sm">
+    <Div className="max-w-sm">
       <Combobox
         aria-label="Fruit"
         placeholder="Type to filter…"
         options={FRUITS}
         renderOption={({ option, query }) => (
-          <span className="flex-1 truncate">
+          <Typography as="span" className="flex-1 truncate">
             {highlightMatch(option.label, query, 'bg-transparent text-primary font-semibold')}
-          </span>
+          </Typography>
         )}
       />
-    </div>
+    </Div>
   );
 }

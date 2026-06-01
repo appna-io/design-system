@@ -1,8 +1,8 @@
-import { Stat } from '@apx-ui/ds';
+import { Div, Stat } from '@apx-ui/ds';
 
 export default function Variants() {
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+    <Div className="grid grid-cols-1 gap-6 md:grid-cols-3">
       <Stat
         variant="default"
         label="Default"
@@ -24,6 +24,6 @@ export default function Variants() {
         delta={{ value: 5.4, direction: 'up' }}
         caption="Tight spacing — for dense data tables."
       />
-    </div>
+    </Div>
   );
 }

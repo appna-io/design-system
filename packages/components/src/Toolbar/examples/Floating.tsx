@@ -1,12 +1,12 @@
-import { Button, Toolbar } from '@apx-ui/ds';
+import { Button, Div, Toolbar, Typography } from '@apx-ui/ds';
 
 export default function Floating() {
   return (
-    <div className="rounded-lg border border-border bg-bg-paper p-6">
-      <p className="mb-6 text-sm text-fg-muted">
+    <Div className="rounded-lg border border-border bg-bg-paper p-6">
+      <Typography variant="bodySmall" color="fg.muted" className="mb-6">
         Selected 3 items. A contextual action bar appears for batch operations — a common
         pattern in admin tables and file managers.
-      </p>
+      </Typography>
 
       <Toolbar variant="floating" aria-label="Selection actions">
         <Button variant="ghost" aria-label="Edit">
@@ -24,6 +24,6 @@ export default function Floating() {
           Apply to selection
         </Button>
       </Toolbar>
-    </div>
+    </Div>
   );
 }

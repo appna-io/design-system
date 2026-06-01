@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Form, FormField, Input } from '@apx-ui/ds';
+import { Button, Div, Form, FormField, Input } from '@apx-ui/ds';
 
 const PROFILES = [
   { id: '1', name: 'Ada Lovelace', email: 'ada@example.com' },
@@ -10,8 +10,8 @@ export default function EnableReinitialize() {
   const [selectedId, setSelectedId] = useState('1');
   const profile = PROFILES.find((p) => p.id === selectedId)!;
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <div style={{ display: 'flex', gap: 8 }}>
+    <Div display="flex" flexDirection="column" gap="3">
+      <Div display="flex" gap="2">
         {PROFILES.map((p) => (
           <Button
             key={p.id}
@@ -21,7 +21,7 @@ export default function EnableReinitialize() {
             {p.name}
           </Button>
         ))}
-      </div>
+      </Div>
       <Form
         key={profile.id}
         initialValues={{ name: profile.name, email: profile.email }}
@@ -36,6 +36,6 @@ export default function EnableReinitialize() {
         </FormField>
         <Button type="submit" variant="solid">Save</Button>
       </Form>
-    </div>
+    </Div>
   );
 }

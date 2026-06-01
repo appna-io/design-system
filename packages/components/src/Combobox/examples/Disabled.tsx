@@ -1,4 +1,4 @@
-import { Combobox } from '@apx-ui/ds';
+import { Combobox, Div } from '@apx-ui/ds';
 
 const FRUITS = [
   { value: 'apple', label: 'Apple' },
@@ -9,7 +9,7 @@ const FRUITS = [
 
 export default function Disabled() {
   return (
-    <div className="flex flex-col gap-3 max-w-sm">
+    <Div display="flex" flexDirection="column" gap="3" className="max-w-sm">
       <Combobox
         aria-label="Fruit (disabled)"
         placeholder="Pick a fruit"
@@ -22,6 +22,6 @@ export default function Disabled() {
         options={FRUITS}
         defaultOpen
       />
-    </div>
+    </Div>
   );
 }

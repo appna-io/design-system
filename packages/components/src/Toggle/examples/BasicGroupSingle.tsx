@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { ToggleGroup } from '@apx-ui/ds';
+import { Div, ToggleGroup, Typography } from '@apx-ui/ds';
 
 export default function BasicGroupSingle() {
   const [view, setView] = useState('grid');
   return (
-    <div className="flex flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3">
       <ToggleGroup
         type="single"
         aria-label="View mode"
@@ -15,7 +15,9 @@ export default function BasicGroupSingle() {
         <ToggleGroup.Item value="list" aria-label="List">List</ToggleGroup.Item>
         <ToggleGroup.Item value="kanban" aria-label="Kanban">Kanban</ToggleGroup.Item>
       </ToggleGroup>
-      <span className="text-sm text-fg-muted">Active view: {view || '(none)'}</span>
-    </div>
+      <Typography variant="bodySmall" color="fg.muted">
+        Active view: {view || '(none)'}
+      </Typography>
+    </Div>
   );
 }

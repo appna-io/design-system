@@ -1,8 +1,8 @@
-import { Button, Divider } from '@apx-ui/ds';
+import { Button, Divider, Div } from '@apx-ui/ds';
 
 export default function Vertical() {
   return (
-    <div className="flex h-10 items-center gap-3 text-sm">
+    <Div display="flex" alignItems="center" gap="3" className="h-10 text-sm">
       <Button variant="ghost" size="sm">
         Cut
       </Button>
@@ -13,6 +13,6 @@ export default function Vertical() {
       <Button variant="ghost" size="sm">
         Paste
       </Button>
-    </div>
+    </Div>
   );
 }

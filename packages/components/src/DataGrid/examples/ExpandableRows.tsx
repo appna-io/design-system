@@ -1,4 +1,4 @@
-import { DataGrid } from '@apx-ui/ds';
+import { DataGrid, Div, Typography } from '@apx-ui/ds';
 import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Order {
@@ -51,36 +51,44 @@ const columns: DataGridColumnDef<Order>[] = [
 
 export default function ExpandableRows() {
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Click the chevron in any row to reveal the order&apos;s items and shipping address.
         The expansion row is composed by the consumer, so you can render whatever
         detail JSX makes sense — a sub-table, a chart, a form, anything.
-      </p>
+      </Typography>
       <DataGrid<Order>
         data={data}
         columns={columns}
         getRowId={(r) => r.id}
         renderExpandedRow={(row) => (
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <h4 className="text-fg-default text-sm font-semibold">Items</h4>
-              <ul className="text-fg-muted mt-1 text-sm">
+          <Div display="grid" gridTemplateColumns="1fr 1fr" gap="6">
+            <Div>
+              <Typography as="h4" variant="bodySmall" weight="semibold" color="fg.default">
+                Items
+              </Typography>
+              <Div as="ul" mt="1" display="flex" flexDirection="column">
                 {row.items.map((item) => (
-                  <li key={item.sku}>
+                  <Typography as="li" key={item.sku} variant="bodySmall" color="fg.muted">
                     {item.qty} × {item.name}{' '}
-                    <span className="text-fg-muted/70 text-xs">({item.sku})</span>
-                  </li>
+                    <Typography as="span" variant="caption" color="fg.muted" sx={{ opacity: 0.7 }}>
+                      ({item.sku})
+                    </Typography>
+                  </Typography>
                 ))}
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-fg-default text-sm font-semibold">Ship to</h4>
-              <p className="text-fg-muted mt-1 text-sm">{row.shippingAddress}</p>
-            </div>
-          </div>
+              </Div>
+            </Div>
+            <Div>
+              <Typography as="h4" variant="bodySmall" weight="semibold" color="fg.default">
+                Ship to
+              </Typography>
+              <Typography variant="bodySmall" color="fg.muted" mt="1">
+                {row.shippingAddress}
+              </Typography>
+            </Div>
+          </Div>
         )}
       />
-    </div>
+    </Div>
   );
 }

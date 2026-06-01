@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, HoverCard } from '@apx-ui/ds';
+import { Button, Div, HoverCard, Typography } from '@apx-ui/ds';
 
 /**
  * Programmatic open/close — drives the `open` state from a sibling button. Useful for tutorials,
@@ -10,11 +10,11 @@ export default function Controlled() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex flex-col items-start gap-3">
-      <p className="text-sm text-fg-muted">
+    <Div display="flex" flexDirection="column" alignItems="flex-start" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Click the button to open / close the card programmatically. Hover still works too.
-      </p>
-      <div className="flex items-center gap-3">
+      </Typography>
+      <Div display="flex" alignItems="center" gap="3">
         <Button size="sm" onClick={() => setOpen((prev) => !prev)}>
           {open ? 'Close card' : 'Open card'}
         </Button>
@@ -26,13 +26,13 @@ export default function Controlled() {
           </HoverCard.Trigger>
           <HoverCard.Content>
             <strong className="text-sm">Ahmad Igbaryya</strong>
-            <p className="mt-1 text-xs text-fg-muted">
+            <Typography variant="caption" color="fg.muted" className="mt-1">
               State is driven by the button — `onOpenChange` fires for hover, focus, blur,
               outside-click, and Esc.
-            </p>
+            </Typography>
           </HoverCard.Content>
         </HoverCard>
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

@@ -4,6 +4,8 @@
 They cover ~95% of layout composition in product surfaces so consumers can stop reaching for raw
 `<div className="flex …">` everywhere.
 
+<ExampleBlock for="Overview" title="Overview — vertical stack with title, body, and actions" />
+
 - **`<Stack>`** — generic flex container. Defaults to `direction="column"`.
 - **`<HStack>`** — same surface, `direction` locked to `row`. Reads better at the call site.
 - **`<VStack>`** — same surface, `direction` locked to `column`. Reads as explicit intent.
@@ -146,11 +148,6 @@ wins at runtime.
 Stack and the two alias components (HStack / VStack) all read from `theme.components.Stack.styleOverrides.root` —
 override once, applies to all three. Spacer reads from `theme.components.Spacer.styleOverrides.root`.
 Consumer `className` always wins via `tailwind-merge`.
-
-## Bundle
-
-Target: **< 1 KB gz combined** for `Stack + HStack + VStack + Spacer`. No state, no effects, no
-icons; only a tiny pure transform (`stackChildrenWithDivider`) and a literal-class gap resolver.
 
 ## Do / Don't
 

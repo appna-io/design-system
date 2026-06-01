@@ -1,20 +1,20 @@
-import { Divider } from '@apx-ui/ds';
+import { Divider, Div, Typography } from '@apx-ui/ds';
 
 export default function Variant() {
   return (
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <p className="text-xs text-fg-muted">Solid</p>
+    <Div className="space-y-6">
+      <Div className="space-y-2">
+        <Typography variant="caption" color="fg.muted">Solid</Typography>
         <Divider variant="solid" />
-      </div>
-      <div className="space-y-2">
-        <p className="text-xs text-fg-muted">Dashed</p>
+      </Div>
+      <Div className="space-y-2">
+        <Typography variant="caption" color="fg.muted">Dashed</Typography>
         <Divider variant="dashed" />
-      </div>
-      <div className="space-y-2">
-        <p className="text-xs text-fg-muted">Dotted</p>
+      </Div>
+      <Div className="space-y-2">
+        <Typography variant="caption" color="fg.muted">Dotted</Typography>
         <Divider variant="dotted" />
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

@@ -1,8 +1,8 @@
-import { Button } from '@apx-ui/ds';
+import { Button, Div } from '@apx-ui/ds';
 
 export default function GhostColors() {
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <Div display="flex" flexWrap="wrap" alignItems="center" gap="3">
       <Button variant="ghost" color="primary">
         Primary
       </Button>
@@ -24,6 +24,6 @@ export default function GhostColors() {
       <Button variant="ghost" color="neutral">
         Neutral
       </Button>
-    </div>
+    </Div>
   );
 }

@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Alert, Button } from '@apx-ui/ds';
+import { Alert, Button, Div } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [open, setOpen] = useState(true);
 
   return (
-    <div className="flex flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3">
       <Alert
         open={open}
         onClose={() => setOpen(false)}
@@ -22,6 +22,6 @@ export default function Controlled() {
           Show alert again
         </Button>
       ) : null}
-    </div>
+    </Div>
   );
 }

@@ -1,8 +1,8 @@
-import { TreeView } from '@apx-ui/ds';
+import { Div, TreeView } from '@apx-ui/ds';
 
 export default function Compound() {
   return (
-    <div className="max-w-sm border border-border-subtle rounded-md p-2">
+    <Div className="max-w-sm rounded-md border border-border-subtle p-2">
       <TreeView ariaLabel="Compound tree">
         <TreeView.Node id="src" label="src" defaultExpanded>
           <TreeView.Node id="src/components" label="components" defaultExpanded>
@@ -13,6 +13,6 @@ export default function Compound() {
         </TreeView.Node>
         <TreeView.Node id="package.json" label="package.json" />
       </TreeView>
-    </div>
+    </Div>
   );
 }

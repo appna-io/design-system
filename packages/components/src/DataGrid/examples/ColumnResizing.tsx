@@ -1,4 +1,4 @@
-import { DataGrid } from '@apx-ui/ds';
+import { DataGrid, Div, Typography } from '@apx-ui/ds';
 import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Row {
@@ -24,13 +24,13 @@ const columns: DataGridColumnDef<Row>[] = [
 
 export default function ColumnResizing() {
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Drag the trailing edge of any header to resize its column. Double-click the
         handle to auto-size to the widest visible cell. Hold <kbd>Shift</kbd> while
         nudging via the keyboard for 32-px steps; <kbd>Delete</kbd> clears the override.
-      </p>
+      </Typography>
       <DataGrid<Row> data={data} columns={columns} getRowId={(r) => r.id} />
-    </div>
+    </Div>
   );
 }

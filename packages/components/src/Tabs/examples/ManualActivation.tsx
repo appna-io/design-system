@@ -1,13 +1,13 @@
-import { Tabs } from '@apx-ui/ds';
+import { Div, Tabs, Typography } from '@apx-ui/ds';
 
 export default function ManualActivation() {
   return (
-    <div className="flex flex-col gap-4">
-      <p className="text-sm text-fg-muted">
+    <Div display="flex" flexDirection="column" gap="4">
+      <Typography variant="bodySmall" color="fg.muted">
         With <code>activation=&quot;manual&quot;</code>, arrow keys only move focus — press
         <code className="mx-1">Enter</code> or <code className="mx-1">Space</code> to activate the
         focused tab. Useful when switching panels is expensive (large lists, fetches, etc.).
-      </p>
+      </Typography>
       <Tabs activation="manual" defaultValue="overview" aria-label="Manual activation example">
         <Tabs.List>
           <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
@@ -18,6 +18,6 @@ export default function ManualActivation() {
         <Tabs.Panel value="activity">Activity panel content.</Tabs.Panel>
         <Tabs.Panel value="settings">Settings panel content.</Tabs.Panel>
       </Tabs>
-    </div>
+    </Div>
   );
 }

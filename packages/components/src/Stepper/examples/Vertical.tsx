@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Stepper } from '@apx-ui/ds';
+import { Button, Div, Stepper, VStack } from '@apx-ui/ds';
 
 export default function Vertical() {
   const [active, setActive] = useState(1);
@@ -11,14 +11,14 @@ export default function Vertical() {
   ];
 
   return (
-    <div className="flex gap-6">
+    <Div display="flex" gap="6">
       <Stepper active={active} steps={steps} orientation="vertical" />
-      <div className="flex flex-col gap-2 self-end">
+      <VStack gap={2} className="self-end">
         <Button onClick={() => setActive((i) => Math.min(steps.length - 1, i + 1))}>Next</Button>
         <Button variant="ghost" onClick={() => setActive((i) => Math.max(0, i - 1))}>
           Back
         </Button>
-      </div>
-    </div>
+      </VStack>
+    </Div>
   );
 }

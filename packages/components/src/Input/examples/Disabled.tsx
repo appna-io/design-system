@@ -1,8 +1,8 @@
-import { Input } from '@apx-ui/ds';
+import { Div, Input } from '@apx-ui/ds';
 
 export default function Disabled() {
   return (
-    <div className="flex w-full max-w-sm flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3" className="w-full max-w-sm">
       <Input
         disabled
         defaultValue="Can't touch this"
@@ -15,6 +15,6 @@ export default function Disabled() {
         aria-label="Read-only input"
         placeholder="Read-only"
       />
-    </div>
+    </Div>
   );
 }

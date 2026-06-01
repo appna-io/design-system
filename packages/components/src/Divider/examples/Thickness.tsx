@@ -1,20 +1,20 @@
-import { Divider } from '@apx-ui/ds';
+import { Divider, Div, Typography } from '@apx-ui/ds';
 
 export default function Thickness() {
   return (
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <p className="text-xs text-fg-muted">1px (default)</p>
+    <Div className="space-y-6">
+      <Div className="space-y-2">
+        <Typography variant="caption" color="fg.muted">1px (default)</Typography>
         <Divider thickness={1} />
-      </div>
-      <div className="space-y-2">
-        <p className="text-xs text-fg-muted">2px</p>
+      </Div>
+      <Div className="space-y-2">
+        <Typography variant="caption" color="fg.muted">2px</Typography>
         <Divider thickness={2} />
-      </div>
-      <div className="space-y-2">
-        <p className="text-xs text-fg-muted">4px</p>
+      </Div>
+      <Div className="space-y-2">
+        <Typography variant="caption" color="fg.muted">4px</Typography>
         <Divider thickness={4} />
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

@@ -1,4 +1,4 @@
-import { Button, Drawer } from '@apx-ui/ds';
+import { Button, Drawer, Typography } from '@apx-ui/ds';
 
 /**
  * One of the headline patterns Drawer enables: bottom-sheet on mobile, side-drawer on desktop.
@@ -21,10 +21,10 @@ export default function ResponsiveSide() {
           description="Bottom sheet on mobile, right drawer on desktop."
         />
         <Drawer.Body>
-          <p className="text-sm">
+          <Typography variant="bodySmall">
             Resize the viewport across the `md` breakpoint to see the panel
             switch sides without any rerender or layout glitch.
-          </p>
+          </Typography>
         </Drawer.Body>
         <Drawer.Footer>
           <Drawer.Close asChild>

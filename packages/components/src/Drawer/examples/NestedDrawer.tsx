@@ -1,4 +1,4 @@
-import { Button, Drawer } from '@apx-ui/ds';
+import { Button, Div, Drawer, Typography } from '@apx-ui/ds';
 
 export default function NestedDrawer() {
   return (
@@ -13,12 +13,12 @@ export default function NestedDrawer() {
           description="Open the inner drawer to test the escape stack."
         />
         <Drawer.Body>
-          <p className="text-sm">
+          <Typography variant="bodySmall">
             Pressing <kbd>Escape</kbd> closes the topmost drawer first. The
             engine&apos;s escape-stack ordering ensures only one layer unwinds
             per press.
-          </p>
-          <div className="mt-4">
+          </Typography>
+          <Div className="mt-4">
             <Drawer>
               <Drawer.Trigger>
                 <Button variant="outline">Open inner</Button>
@@ -27,10 +27,10 @@ export default function NestedDrawer() {
                 <Drawer.Close />
                 <Drawer.Header title="Inner drawer" />
                 <Drawer.Body>
-                  <p className="text-sm">
+                  <Typography variant="bodySmall">
                     Pressing Escape here closes only this drawer. The outer
                     one stays open.
-                  </p>
+                  </Typography>
                 </Drawer.Body>
                 <Drawer.Footer>
                   <Drawer.Close asChild>
@@ -39,7 +39,7 @@ export default function NestedDrawer() {
                 </Drawer.Footer>
               </Drawer.Content>
             </Drawer>
-          </div>
+          </Div>
         </Drawer.Body>
         <Drawer.Footer>
           <Drawer.Close asChild>

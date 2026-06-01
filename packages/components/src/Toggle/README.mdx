@@ -6,9 +6,9 @@ remember whether they're currently "on". `<Toggle>` is the one-off case (a sideb
 controls, single-pick toolbars, multi-pick formatting bars).
 
 They share a visual language with `<Button>` on purpose — a pressed toggle should look like a
-button that's been activated, not a different control altogether — and lean entirely on the
-already-shipped engine (`useControllableState`, `cv()`, `useThemedClasses`) plus a small
-group-level state machine to coordinate single-vs-multi selection.
+button that's been activated, not a different control altogether.
+
+<ExampleBlock for="Overview" title="Overview — text-only, icon-only, labeled, and grouped toggles" />
 
 ## Why this exists
 
@@ -70,14 +70,6 @@ the color role:
 | `solid`   | subtle tinted surface (color-subtle bg)  | bold tinted surface (color-solid bg + inverted fg)  |
 | `outline` | bordered, transparent bg                 | filled (color-solid bg + inverted fg)               |
 | `ghost`   | transparent                              | filled tint (color-subtle bg + color-solid fg)      |
-
-**Note on `soft`:** the original phase plan called for a 4th `soft` variant. The DS's
-`<Button>` ships three variants (`solid` / `outline` / `ghost`), and the plan also
-specified that `<Toggle>` must **reuse `buttonRecipe` without modifying it**. Those two
-constraints conflict, and modifying `<Button>` to add a fourth variant is out of scope
-here. The `solid` variant's off-state already gives you the tinted-surface look that a
-`soft` variant would have provided, so the visual gap is small. We'll revisit
-`soft` for both Button and Toggle in a follow-up phase.
 
 ## Sizes
 
@@ -197,14 +189,3 @@ defineTheme({
 ```
 
 Slot keys: `root` (and `item` on `ToggleGroup` for the attached-position styling).
-
-## Out of scope (future phases)
-
-- **`soft` variant.** Requires extending `<Button>` first — out of scope here. The `solid`
-  variant's off state already covers most of what `soft` would have provided.
-- **`size="xs"`**. Three sizes covers ~95% of toolbar / segmented-control use cases. We'll add
-  `xs` if the DS standardizes on a 4-size scale across all controls.
-- **Two-line items (icon above label).** Tray-style controls. Composition over the existing
-  recipe is fine; not a new variant.
-- **Drag-to-reorder of items.** Outside the toggle/segmented-control problem; will land
-  alongside a sortable-list primitive.

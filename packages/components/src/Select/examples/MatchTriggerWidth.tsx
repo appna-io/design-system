@@ -1,4 +1,4 @@
-import { Select } from '@apx-ui/ds';
+import { Div, Select, Typography } from '@apx-ui/ds';
 
 /**
  * Default is `matchTriggerWidth={true}` — the listbox stretches to the trigger's width via
@@ -7,9 +7,11 @@ import { Select } from '@apx-ui/ds';
  */
 export default function MatchTriggerWidth() {
   return (
-    <div className="flex flex-col gap-6 max-w-md">
-      <div>
-        <p className="mb-2 text-sm text-fg-muted">matchTriggerWidth (default)</p>
+    <Div display="flex" flexDirection="column" gap="6" className="max-w-md">
+      <Div>
+        <Typography variant="bodySmall" color="fg.muted" className="mb-2">
+          matchTriggerWidth (default)
+        </Typography>
         <Select placeholder="Pick" aria-label="Default">
           <Select.Trigger />
           <Select.Content>
@@ -17,9 +19,11 @@ export default function MatchTriggerWidth() {
             <Select.Item value="b">Short</Select.Item>
           </Select.Content>
         </Select>
-      </div>
-      <div>
-        <p className="mb-2 text-sm text-fg-muted">matchTriggerWidth={'{false}'}</p>
+      </Div>
+      <Div>
+        <Typography variant="bodySmall" color="fg.muted" className="mb-2">
+          matchTriggerWidth={'{false}'}
+        </Typography>
         <Select placeholder="Pick" aria-label="Content-sized">
           <Select.Trigger />
           <Select.Content matchTriggerWidth={false}>
@@ -27,7 +31,7 @@ export default function MatchTriggerWidth() {
             <Select.Item value="b">Short</Select.Item>
           </Select.Content>
         </Select>
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

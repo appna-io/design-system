@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Textarea } from '@apx-ui/ds';
+import { Div, Textarea, Typography } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [value, setValue] = useState('hello\nworld');
 
   return (
-    <div className="grid w-full max-w-2xl gap-4 sm:grid-cols-2">
-      <div className="flex flex-col gap-1.5 text-sm text-fg">
+    <Div className="grid w-full max-w-2xl gap-4 sm:grid-cols-2">
+      <Div display="flex" flexDirection="column" gap="1.5" className="text-sm text-fg">
         <label htmlFor="controlled-textarea">Controlled</label>
         <Textarea
           id="controlled-textarea"
@@ -14,13 +14,17 @@ export default function Controlled() {
           onChange={(e) => setValue(e.target.value)}
           rows={3}
         />
-        <span className="text-xs text-fg-muted">value length: {value.length}</span>
-      </div>
-      <div className="flex flex-col gap-1.5 text-sm text-fg">
+        <Typography variant="caption" color="fg.muted">
+          value length: {value.length}
+        </Typography>
+      </Div>
+      <Div display="flex" flexDirection="column" gap="1.5" className="text-sm text-fg">
         <label htmlFor="uncontrolled-textarea">Uncontrolled</label>
         <Textarea id="uncontrolled-textarea" defaultValue="hello\nworld" rows={3} />
-        <span className="text-xs text-fg-muted">read via ref / form data</span>
-      </div>
-    </div>
+        <Typography variant="caption" color="fg.muted">
+          read via ref / form data
+        </Typography>
+      </Div>
+    </Div>
   );
 }

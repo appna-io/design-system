@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { DataGrid } from '@apx-ui/ds';
+import { DataGrid, Div, Typography } from '@apx-ui/ds';
 import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Row {
@@ -32,18 +32,18 @@ export default function Loading() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         The loading overlay dims the existing rows so users can still parse the chrome
         while a refresh is in flight. A polite live region announces &ldquo;Loading…&rdquo; once
         per mount. Toggles automatically every 4 seconds for this demo.
-      </p>
+      </Typography>
       <DataGrid<Row>
         data={data}
         columns={columns}
         getRowId={(r) => r.id}
         loading={loading}
       />
-    </div>
+    </Div>
   );
 }

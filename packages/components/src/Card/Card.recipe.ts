@@ -150,15 +150,101 @@ export const cardRecipes = {
   }),
 
   header: cv({
-    base: 'flex items-start gap-3',
+    // `withIcon=false` keeps the historical single-row layout (avatar / title / action). When an
+    // icon is present we flip the outer container to a column so the icon tile sits as its own
+    // block ABOVE the title row — the canonical "feature card" rhythm: icon → title → body.
+    base: 'flex',
     variants: {
       size: {
         sm: 'p-3',
         md: 'p-4',
         lg: 'p-6',
       },
+      withIcon: {
+        false: 'items-start gap-3',
+        true: 'flex-col',
+      },
     },
-    defaultVariants: { size: 'md' },
+    compoundVariants: [
+      // Tight icon → title rhythm proportional to Card size. The icon tile is a block element
+      // styled by `cardRecipes.headerIcon`; this gap is the vertical breathing room between
+      // it and the title row directly below.
+      { withIcon: true, size: 'sm', class: 'gap-2.5' },
+      { withIcon: true, size: 'md', class: 'gap-3' },
+      { withIcon: true, size: 'lg', class: 'gap-4' },
+    ],
+    defaultVariants: { size: 'md', withIcon: false },
+  }),
+
+  // Inner row inside the icon-led header layout — keeps the avatar / title / action triplet on
+  // a single line below the block-placed icon tile. Same `items-start gap-3` rhythm the legacy
+  // single-row header has always used, factored out so both code paths render identical title rows.
+  headerRow: cv({
+    base: 'flex items-start gap-3 w-full',
+    variants: {},
+  }),
+
+  /**
+   * Opinionated icon tile rendered by `<Card.Header icon=…>`. Tile size + corner radius scale
+   * with `CardContext.size` so the icon always reads as proportional to its card. Color
+   * compounds (variant × color) are written flat so Tailwind's literal-text scanner finds them
+   * — same DRY discipline as `Badge` / Card's hoverable+color matrix.
+   *
+   * The 7 colors × 3 variants matrix is enumerated below; pruning a row also prunes the
+   * matching compound rule. New palette roles ship by extending both lists.
+   */
+  headerIcon: cv({
+    base: 'inline-flex items-center justify-center shrink-0',
+    variants: {
+      size: {
+        sm: 'h-8 w-8 rounded-md',
+        md: 'h-10 w-10 rounded-lg',
+        lg: 'h-12 w-12 rounded-xl',
+      },
+      variant: {
+        soft: '',
+        solid: '',
+        outline: 'bg-transparent border',
+      },
+      color: {
+        primary: '',
+        secondary: '',
+        success: '',
+        warning: '',
+        danger: '',
+        info: '',
+        neutral: '',
+      },
+    },
+    compoundVariants: [
+      // ── soft × color ────────────────────────────────────────────────────────────────────────
+      { variant: 'soft', color: 'primary', class: 'bg-primary-subtle text-primary' },
+      { variant: 'soft', color: 'secondary', class: 'bg-secondary-subtle text-secondary' },
+      { variant: 'soft', color: 'success', class: 'bg-success-subtle text-success' },
+      { variant: 'soft', color: 'warning', class: 'bg-warning-subtle text-warning' },
+      { variant: 'soft', color: 'danger', class: 'bg-danger-subtle text-danger' },
+      { variant: 'soft', color: 'info', class: 'bg-info-subtle text-info' },
+      { variant: 'soft', color: 'neutral', class: 'bg-bg-subtle text-fg-muted' },
+
+      // ── solid × color ───────────────────────────────────────────────────────────────────────
+      { variant: 'solid', color: 'primary', class: 'bg-primary text-primary-contrast' },
+      { variant: 'solid', color: 'secondary', class: 'bg-secondary text-secondary-contrast' },
+      { variant: 'solid', color: 'success', class: 'bg-success text-success-contrast' },
+      { variant: 'solid', color: 'warning', class: 'bg-warning text-warning-contrast' },
+      { variant: 'solid', color: 'danger', class: 'bg-danger text-danger-contrast' },
+      { variant: 'solid', color: 'info', class: 'bg-info text-info-contrast' },
+      { variant: 'solid', color: 'neutral', class: 'bg-fg-muted text-bg' },
+
+      // ── outline × color ─────────────────────────────────────────────────────────────────────
+      { variant: 'outline', color: 'primary', class: 'border-primary/40 text-primary' },
+      { variant: 'outline', color: 'secondary', class: 'border-secondary/40 text-secondary' },
+      { variant: 'outline', color: 'success', class: 'border-success/40 text-success' },
+      { variant: 'outline', color: 'warning', class: 'border-warning/40 text-warning' },
+      { variant: 'outline', color: 'danger', class: 'border-danger/40 text-danger' },
+      { variant: 'outline', color: 'info', class: 'border-info/40 text-info' },
+      { variant: 'outline', color: 'neutral', class: 'border-border text-fg-muted' },
+    ],
+    defaultVariants: { size: 'md', variant: 'soft', color: 'primary' },
   }),
 
   body: cv({

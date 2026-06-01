@@ -1,8 +1,3 @@
----
-title: Icon
-category: Primitives
----
-
 # Icon
 
 `<Icon>` is the canonical DS icon primitive — **library-agnostic**, with three render modes
@@ -10,6 +5,8 @@ category: Primitives
 props for `rotate` / `flip` / `spin`. Ships with `<IconProvider>` + `createIconRegistry` so
 your app's icon library wires into every shipped DS component through a stable string-name
 contract.
+
+<ExampleBlock for="Overview" title="Overview — sizes and semantic colors at a glance" />
 
 ## Why a primitive at all?
 
@@ -21,7 +18,7 @@ That meant:
 - A11y bugs leaked through (icons stuck in the tab order, no `aria-hidden` defaults, etc.).
 - `currentColor` cascade was inconsistent (fill vs stroke).
 
-`<Icon>` standardizes all of it in **~1 KB**, without locking you to a library.
+`<Icon>` standardizes all of it without locking you to a library.
 
 ## Quick start
 
@@ -76,6 +73,42 @@ When multiple sources are passed, the runtime picks in this order:
 
 Missing `name` (no registry / unregistered key) → fires `onMissing`, then renders the provider
 `fallback` (or an empty placeholder when no fallback is set).
+
+## Examples
+
+<ExampleBlock for="BasicAsLucide" title="Basic — inline lucide glyph via as" />
+
+<ExampleBlock for="BasicNameRegistry" title="Basic — registry lookup by name" />
+
+<ExampleBlock for="BasicChildrenInline" title="Basic — inline SVG children" />
+
+<ExampleBlock for="Sizes" title="Sizes — xs through xl tokens" />
+
+<ExampleBlock for="SizesNumeric" title="Sizes — numeric and CSS lengths" />
+
+<ExampleBlock for="Colors" title="Colors — palette tokens + arbitrary values" />
+
+<ExampleBlock for="Rotate" title="Rotate — quarter-turn utility" />
+
+<ExampleBlock for="Flip" title="Flip — horizontal / vertical mirror" />
+
+<ExampleBlock for="Spin" title="Spin — loading animation" />
+
+<ExampleBlock for="MeaningfulVsDecorative" title="A11y — decorative vs meaningful" />
+
+<ExampleBlock for="MissingNameFallback" title="Missing name — provider fallback" />
+
+<ExampleBlock for="AsChildWithTooltip" title="asChild — compose with Tooltip" />
+
+<ExampleBlock for="InButton" title="In Button — leading / trailing slots" />
+
+<ExampleBlock for="InBadge" title="In Badge — status icons" />
+
+<ExampleBlock for="InAlert" title="In Alert — intent icons" />
+
+<ExampleBlock for="InToastIntents" title="In Toast — intent icons" />
+
+<ExampleBlock for="DSIconCatalog" title="DS icon catalog — stable string names" />
 
 ## A11y
 
@@ -136,14 +169,3 @@ const icons = createIconRegistry(
 - `flip="horizontal" | "vertical" | "both"` — CSS scale mirror.
 - `spin` — applies the spinner ring animation; honors `prefers-reduced-motion`.
 - `asChild` — render via `<Slot>`; child element receives the merged className + ARIA wiring.
-
-## Bundle
-
-- Icon + IconProvider + helpers: target **< 1 KB gz**.
-- Registry lookup: O(1) Map access.
-- Zero icon-library imports in the Icon source — every glyph is the consumer's import.
-
-## Non-breaking
-
-Phase 57 doesn't migrate any existing component. Every icon slot that accepts `ReactNode`
-keeps accepting `ReactNode`; the recommended new pattern is `<Icon name="…" />` inside it.

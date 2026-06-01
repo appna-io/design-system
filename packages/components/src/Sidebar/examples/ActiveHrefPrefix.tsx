@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, HStack, Sidebar } from '@apx-ui/ds';
+import { Button, Div, HStack, Sidebar, Typography } from '@apx-ui/ds';
 
 import { FolderIcon, HomeIcon, InboxIcon } from './_icons';
 
@@ -13,8 +13,11 @@ import { FolderIcon, HomeIcon, InboxIcon } from './_icons';
 export default function ActiveHrefPrefix() {
   const [path, setPath] = useState('/inbox/42');
   return (
-    <div className="h-[460px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
-      <div className="flex h-full">
+    <Div
+      height={460}
+      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+    >
+      <Div display="flex" className="h-full">
         <Sidebar
           ariaLabel="Prefix-match example"
           variant="bordered"
@@ -32,10 +35,10 @@ export default function ActiveHrefPrefix() {
             Projects
           </Sidebar.Item>
         </Sidebar>
-        <div className="flex-1 p-6">
-          <p className="text-sm text-(--sds-color-text-muted)">
+        <Div className="flex-1 p-6">
+          <Typography variant="bodySmall" color="fg.muted">
             Current path: <code className="font-mono">{path}</code>
-          </p>
+          </Typography>
           <HStack gap={2} className="mt-4 flex-wrap">
             <Button size="sm" variant="outline" onClick={() => setPath('/')}>
               /
@@ -50,8 +53,8 @@ export default function ActiveHrefPrefix() {
               /projects/launch
             </Button>
           </HStack>
-        </div>
-      </div>
-    </div>
+        </Div>
+      </Div>
+    </Div>
   );
 }

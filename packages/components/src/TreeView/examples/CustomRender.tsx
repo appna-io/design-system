@@ -1,4 +1,4 @@
-import { Badge, TreeView } from '@apx-ui/ds';
+import { Badge, Div, TreeView, Typography } from '@apx-ui/ds';
 import type { TreeNodeData } from '@apx-ui/ds';
 
 const data: TreeNodeData[] = [
@@ -15,27 +15,29 @@ const data: TreeNodeData[] = [
 
 export default function CustomRender() {
   return (
-    <div className="max-w-sm border border-border-subtle rounded-md p-2">
+    <Div className="max-w-sm rounded-md border border-border-subtle p-2">
       <TreeView
         ariaLabel="Custom render"
         data={data}
         defaultExpanded={['app']}
         renderNode={(node, state) => (
-          <span className="flex w-full items-center gap-2">
-            <span className={state.hasChildren ? 'text-fg-default font-medium' : 'text-fg-default'}>
+          <Typography as="span" variant="bodySmall" className="flex w-full items-center gap-2">
+            <Typography as="span" variant="bodySmall" color="fg.default" weight={state.hasChildren ? 'medium' : undefined}>
               {state.hasChildren ? (state.expanded ? '📂' : '📁') : '📄'} {node.label}
-            </span>
+            </Typography>
             {typeof node.meta?.badge === 'number' ? (
               <Badge variant="subtle" color="primary">
                 {String(node.meta.badge)}
               </Badge>
             ) : null}
             {node.meta?.active ? (
-              <span className="text-success-emphasis ml-auto text-xs">live</span>
+              <Typography as="span" variant="caption" color="success.emphasis" className="ml-auto">
+                live
+              </Typography>
             ) : null}
-          </span>
+          </Typography>
         )}
       />
-    </div>
+    </Div>
   );
 }

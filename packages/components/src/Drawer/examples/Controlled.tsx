@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Button, Drawer } from '@apx-ui/ds';
+import { Button, Div, Drawer, Typography } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex flex-col items-start gap-3">
-      <div className="flex gap-2">
+    <Div display="flex" flexDirection="column" alignItems="flex-start" gap="3">
+      <Div display="flex" gap="2">
         <Button onClick={() => setOpen(true)}>Open externally</Button>
         <Button
           variant="outline"
@@ -15,20 +15,20 @@ export default function Controlled() {
         >
           Close externally
         </Button>
-      </div>
-      <p className="text-sm text-fg-muted">
+      </Div>
+      <Typography variant="bodySmall" color="fg.muted">
         State is owned by the parent. The Drawer mirrors `open` and emits
         `onOpenChange` for every transition.
-      </p>
+      </Typography>
       <Drawer open={open} onOpenChange={setOpen}>
         <Drawer.Content side="right" size="sm">
           <Drawer.Close />
           <Drawer.Header title="Controlled drawer" />
           <Drawer.Body>
-            <p className="text-sm">
+            <Typography variant="bodySmall">
               The parent is the source of truth. This shape is correct when a
               drawer needs to react to async work (e.g. close after save).
-            </p>
+            </Typography>
           </Drawer.Body>
           <Drawer.Footer>
             <Drawer.Close asChild>
@@ -37,6 +37,6 @@ export default function Controlled() {
           </Drawer.Footer>
         </Drawer.Content>
       </Drawer>
-    </div>
+    </Div>
   );
 }

@@ -1,8 +1,8 @@
-import { Select } from '@apx-ui/ds';
+import { Div, Select } from '@apx-ui/ds';
 
 export default function Variants() {
   return (
-    <div className="flex flex-col gap-4 max-w-sm">
+    <Div display="flex" flexDirection="column" gap="4" className="max-w-sm">
       <Select variant="outline" placeholder="Outline" aria-label="Outline">
         <Select.Trigger />
         <Select.Content>
@@ -31,6 +31,6 @@ export default function Variants() {
           <Select.Item value="b">Option B</Select.Item>
         </Select.Content>
       </Select>
-    </div>
+    </Div>
   );
 }

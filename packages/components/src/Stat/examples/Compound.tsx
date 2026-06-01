@@ -1,14 +1,14 @@
-import { Stat } from '@apx-ui/ds';
+import { Div, Stat, Typography } from '@apx-ui/ds';
 import { TrendingUp } from 'lucide-react';
 
 export default function Compound() {
   return (
-    <div className="flex flex-col gap-6">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="6">
+      <Typography variant="bodySmall" color="fg.muted">
         Compound mode lets you take full control of the layout. When any
         <code className="bg-bg-subtle mx-1 rounded px-1.5 py-0.5 text-xs">Stat.*</code>
         subcomponent is passed as a child, the shortcut props (<code>label</code>, <code>value</code>, …) are ignored.
-      </p>
+      </Typography>
 
       <Stat>
         <Stat.Icon>
@@ -26,6 +26,6 @@ export default function Compound() {
         <Stat.Delta value={12} direction="up" suffix="%" />
         <Stat.Caption>Active sessions this week</Stat.Caption>
       </Stat>
-    </div>
+    </Div>
   );
 }

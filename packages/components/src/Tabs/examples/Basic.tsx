@@ -1,4 +1,4 @@
-import { Tabs } from '@apx-ui/ds';
+import { Div, Tabs, Typography } from '@apx-ui/ds';
 
 export default function Basic() {
   return (
@@ -9,13 +9,19 @@ export default function Basic() {
         <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
       </Tabs.List>
       <Tabs.Panel value="overview">
-        <p>Headline metrics, status, and recent timeline.</p>
+        <Typography variant="bodySmall" color="fg.default">
+          Headline metrics, status, and recent timeline.
+        </Typography>
       </Tabs.Panel>
       <Tabs.Panel value="activity">
-        <p>Audit log of edits, commits, and reviews.</p>
+        <Typography variant="bodySmall" color="fg.default">
+          Audit log of edits, commits, and reviews.
+        </Typography>
       </Tabs.Panel>
       <Tabs.Panel value="settings">
-        <p>Project name, default branch, integrations.</p>
+        <Typography variant="bodySmall" color="fg.default">
+          Project name, default branch, integrations.
+        </Typography>
       </Tabs.Panel>
     </Tabs>
   );

@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Button, Field, Input } from '@apx-ui/ds';
+import { Button, Div, Field, Input } from '@apx-ui/ds';
 
 export default function Disabled() {
   const [disabled, setDisabled] = useState(true);
 
   return (
-    <div className="flex flex-col gap-4 max-w-sm">
+    <Div display="flex" flexDirection="column" gap="4" className="max-w-sm">
       <Field
         label="API endpoint"
         disabled={disabled}
@@ -16,6 +16,6 @@ export default function Disabled() {
       <Button variant="ghost" onClick={() => setDisabled((value) => !value)}>
         {disabled ? 'Unlock field' : 'Lock field'}
       </Button>
-    </div>
+    </Div>
   );
 }

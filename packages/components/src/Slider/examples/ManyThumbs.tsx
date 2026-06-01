@@ -1,8 +1,8 @@
-import { Slider } from '@apx-ui/ds';
+import { Div, Slider } from '@apx-ui/ds';
 
 export default function ManyThumbs() {
   return (
-    <div className="w-80 pt-10">
+    <Div className="w-80 pt-10">
       <Slider
         mode="range"
         aria-label="EQ bands"
@@ -11,6 +11,6 @@ export default function ManyThumbs() {
         showValueLabel="hover"
         getThumbAriaLabel={(i) => `Band ${i + 1}`}
       />
-    </div>
+    </Div>
   );
 }

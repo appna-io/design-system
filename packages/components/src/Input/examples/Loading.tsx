@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Input } from '@apx-ui/ds';
+import { Div, Input } from '@apx-ui/ds';
 
 export default function Loading() {
   const [value, setValue] = useState('');
   const [busy, setBusy] = useState(false);
 
   return (
-    <div className="flex w-full max-w-sm flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3" className="w-full max-w-sm">
       <Input loading defaultValue="Validating…" aria-label="Async-validating input" />
       <Input
         value={value}
@@ -19,6 +19,6 @@ export default function Loading() {
         placeholder="Type to trigger a fake 800ms check"
         aria-label="Live-validating input"
       />
-    </div>
+    </Div>
   );
 }

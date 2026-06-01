@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Button } from '@apx-ui/ds';
+import { Button, Div } from '@apx-ui/ds';
 
 export default function Loading() {
   const [busy, setBusy] = useState(false);
 
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <Div display="flex" flexWrap="wrap" alignItems="center" gap="3">
       <Button loading>Submitting…</Button>
       <Button loading loadingText="Saving…" color="success">
         Save
@@ -19,6 +19,6 @@ export default function Loading() {
       >
         {busy ? 'Working' : 'Trigger 1.5s load'}
       </Button>
-    </div>
+    </Div>
   );
 }

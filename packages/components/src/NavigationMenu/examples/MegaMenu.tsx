@@ -1,4 +1,4 @@
-import { NavigationMenu } from '@apx-ui/ds';
+import { Div, NavigationMenu } from '@apx-ui/ds';
 
 import {
   BookIcon,
@@ -18,7 +18,7 @@ import {
  */
 export default function MegaMenu() {
   return (
-    <div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+    <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
       <NavigationMenu>
         <NavigationMenu.Item>
           <NavigationMenu.Trigger>Solutions</NavigationMenu.Trigger>
@@ -104,6 +104,6 @@ export default function MegaMenu() {
           <NavigationMenu.Link href="/docs">Docs</NavigationMenu.Link>
         </NavigationMenu.Item>
       </NavigationMenu>
-    </div>
+    </Div>
   );
 }

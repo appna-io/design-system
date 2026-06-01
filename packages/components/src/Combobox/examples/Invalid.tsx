@@ -1,4 +1,4 @@
-import { Combobox } from '@apx-ui/ds';
+import { Combobox, Div, Typography } from '@apx-ui/ds';
 
 const FRUITS = [
   { value: 'apple', label: 'Apple' },
@@ -8,7 +8,7 @@ const FRUITS = [
 
 export default function Invalid() {
   return (
-    <div className="flex flex-col gap-1 max-w-sm">
+    <Div display="flex" flexDirection="column" gap="1" className="max-w-sm">
       <label htmlFor="cb-invalid" className="text-sm font-medium">
         Fruit
       </label>
@@ -19,9 +19,9 @@ export default function Invalid() {
         invalid
         aria-describedby="cb-invalid-err"
       />
-      <span id="cb-invalid-err" className="text-xs text-danger">
+      <Typography as="span" id="cb-invalid-err" variant="caption" color="danger">
         Please pick a fruit.
-      </span>
-    </div>
+      </Typography>
+    </Div>
   );
 }

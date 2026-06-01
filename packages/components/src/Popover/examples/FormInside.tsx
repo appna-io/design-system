@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Button, Input, Popover, Textarea } from '@apx-ui/ds';
+import { Button, Div, Input, Popover, Textarea, Typography } from '@apx-ui/ds';
 
 /**
  * Stress-tests the focus trap: a Popover containing a multi-field form. Tabbing cycles between
@@ -14,7 +14,7 @@ export default function FormInside() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex items-center gap-3">
+    <Div display="flex" alignItems="center" gap="3">
       <Popover open={open} onOpenChange={setOpen}>
         <Popover.Trigger>
           <Button>Subscribe</Button>
@@ -29,7 +29,9 @@ export default function FormInside() {
               setOpen(false);
             }}
           >
-            <p className="text-sm font-medium">Subscribe to updates</p>
+            <Typography variant="bodySmall" weight="medium">
+              Subscribe to updates
+            </Typography>
             <Input
               ref={emailRef}
               type="email"
@@ -45,8 +47,10 @@ export default function FormInside() {
         </Popover.Content>
       </Popover>
       {submitted ? (
-        <span className="text-xs text-fg-muted">Thanks! Form was submitted.</span>
+        <Typography as="span" variant="caption" color="fg.muted">
+          Thanks! Form was submitted.
+        </Typography>
       ) : null}
-    </div>
+    </Div>
   );
 }

@@ -1,4 +1,4 @@
-import { NavigationMenu } from '@apx-ui/ds';
+import { Div, NavigationMenu } from '@apx-ui/ds';
 
 /**
  * `trigger="hover"` — dropdowns open ONLY on hover, never on click. Power-user
@@ -8,7 +8,7 @@ import { NavigationMenu } from '@apx-ui/ds';
  */
 export default function HoverOnly() {
   return (
-    <div className="rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+    <Div className="rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
       <NavigationMenu trigger="hover" hoverDelay={100} closeDelay={200}>
         <NavigationMenu.Item>
           <NavigationMenu.Trigger>Product</NavigationMenu.Trigger>
@@ -30,6 +30,6 @@ export default function HoverOnly() {
           <NavigationMenu.Link href="/pricing">Pricing</NavigationMenu.Link>
         </NavigationMenu.Item>
       </NavigationMenu>
-    </div>
+    </Div>
   );
 }

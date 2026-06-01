@@ -5,6 +5,8 @@ header or a SaaS app's chrome. It pairs flat links with hoverable / clickable dr
 ships with the W3C Menubar keyboard pattern, an animated active-state indicator, and mega-menu
 support out of the box.
 
+<ExampleBlock for="Overview" title="Overview — horizontal nav with dropdown" />
+
 - **Compound primitive**: `NavigationMenu.Item`, `.Trigger`, `.Link`, `.Content`, `.Group`,
   `.Featured`, `.Indicator`.
 - **W3C Menubar keyboard pattern** — Arrow Left/Right between items (vertical: Up/Down), ArrowDown
@@ -151,3 +153,39 @@ directly via `<NavigationMenu translations={…}>`.
 | `label`                   | "Main navigation"       | `<nav>` accessible name.                       |
 | `toggleSection`           | "Toggle {label} menu"   | Trigger sr-only label (only used when label is non-string). |
 | `activeItem`              | "current page"          | sr-only suffix after the active link.          |
+
+## Examples
+
+<ExampleBlock for="Overview" />
+
+<ExampleBlock for="BasicLinks" title="Basic links — flat nav with activeHref" />
+
+<ExampleBlock for="WithDropdown" title="With dropdown — trigger + content panel" />
+
+<ExampleBlock for="MegaMenu" title="Mega menu — multi-column grid layout" />
+
+<ExampleBlock for="MegaMenuWithFeatured" title="Mega menu with featured promo slot" />
+
+<ExampleBlock for="StripeLikeDemo" title="Stripe-like demo — full marketing header" />
+
+<ExampleBlock for="ActiveIndicator" title="Active indicator — underline / pill / bar" />
+
+<ExampleBlock for="IndicatorPill" title="Indicator pill variant" />
+
+<ExampleBlock for="Variants" title="Variants — default / ghost / pill" />
+
+<ExampleBlock for="Sizes" title="Sizes — sm / md / lg" />
+
+<ExampleBlock for="Vertical" title="Vertical orientation — side-rail nav" />
+
+<ExampleBlock for="HoverOnly" title="Hover only — pointer-enter trigger" />
+
+<ExampleBlock for="ClickOnly" title="Click only — intentional open" />
+
+<ExampleBlock for="HoverVsClick" title="Hover vs click vs both" />
+
+<ExampleBlock for="ActiveHrefControlled" title="Controlled activeHref" />
+
+<ExampleBlock for="MobileCollapse" title="Mobile collapse — hide below breakpoint" />
+
+<ExampleBlock for="RouterLinkIntegration" title="Router link integration — asChild" />

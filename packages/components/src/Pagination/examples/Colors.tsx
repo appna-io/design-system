@@ -1,4 +1,4 @@
-import { Pagination } from '@apx-ui/ds';
+import { Div, Pagination, Typography } from '@apx-ui/ds';
 import type { PaginationColor } from '@apx-ui/ds';
 
 const COLORS: PaginationColor[] = [
@@ -13,12 +13,18 @@ const COLORS: PaginationColor[] = [
 
 export default function Colors() {
   return (
-    <div className="flex flex-col gap-4">
+    <Div display="flex" flexDirection="column" gap="4">
       {COLORS.map((color) => (
-        <div key={color} className="flex flex-col gap-1">
-          <span className="text-xs font-medium uppercase tracking-wide text-fg-muted">
+        <Div key={color} display="flex" flexDirection="column" gap="1">
+          <Typography
+            as="span"
+            variant="caption"
+            weight="medium"
+            color="fg.muted"
+            className="uppercase tracking-wide"
+          >
             {color}
-          </span>
+          </Typography>
           <Pagination
             totalCount={100}
             pageSize={10}
@@ -29,8 +35,8 @@ export default function Colors() {
             showRangeLabel={false}
             responsive={false}
           />
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

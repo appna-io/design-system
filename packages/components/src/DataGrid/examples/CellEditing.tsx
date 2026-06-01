@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { DataGrid } from '@apx-ui/ds';
+import { DataGrid, Div, Typography } from '@apx-ui/ds';
 import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Row {
@@ -55,13 +55,13 @@ export default function CellEditing() {
   ];
 
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Double-click any cell (or focus + press <kbd>F2</kbd> / <kbd>Enter</kbd>) to
         edit it in place. <kbd>Enter</kbd> commits, <kbd>Escape</kbd> cancels. The
         consumer&apos;s <code>onCellEdit</code> handler decides what to do with the value.
-      </p>
+      </Typography>
       <DataGrid<Row> data={rows} columns={columns} getRowId={(r) => r.id} />
-    </div>
+    </Div>
   );
 }

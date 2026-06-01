@@ -1,11 +1,11 @@
-import { Button, Modal } from '@apx-ui/ds';
+import { Button, Div, Modal, Typography } from '@apx-ui/ds';
 import type { ModalOverlay } from '@apx-ui/ds';
 
 const overlays: ModalOverlay[] = ['dimmed', 'blur', 'transparent'];
 
 export default function Overlays() {
   return (
-    <div className="flex flex-wrap gap-3">
+    <Div display="flex" flexWrap="wrap" gap="3">
       {overlays.map((overlay) => (
         <Modal key={overlay}>
           <Modal.Trigger>
@@ -15,17 +15,17 @@ export default function Overlays() {
             <Modal.Close />
             <Modal.Header title={`Overlay: ${overlay}`} />
             <Modal.Body>
-              <p className="text-sm">
+              <Typography variant="bodySmall">
                 {overlay === 'blur'
                   ? 'A glassy backdrop. Use sparingly — it can hurt readability of the page behind it.'
                   : overlay === 'transparent'
                     ? 'No backdrop tint. Best when paired with a light Content shadow that stands out on its own.'
                     : 'The default semi-transparent dim. Always safe.'}
-              </p>
+              </Typography>
             </Modal.Body>
           </Modal.Content>
         </Modal>
       ))}
-    </div>
+    </Div>
   );
 }

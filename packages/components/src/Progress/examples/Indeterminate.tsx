@@ -1,10 +1,10 @@
-import { CircularProgress, Progress } from '@apx-ui/ds';
+import { CircularProgress, Div, Progress } from '@apx-ui/ds';
 
 export default function Indeterminate() {
   return (
-    <div className="flex w-full max-w-sm flex-col gap-6">
+    <Div display="flex" flexDirection="column" gap="6" className="w-full max-w-sm">
       <Progress indeterminate aria-label="Loading…" />
-      <div className="flex items-center gap-6">
+      <Div display="flex" alignItems="center" gap="6">
         <CircularProgress indeterminate aria-label="Loading…" />
         <CircularProgress indeterminate variant="soft" color="info" aria-label="Loading…" />
         <CircularProgress
@@ -13,7 +13,7 @@ export default function Indeterminate() {
           size="lg"
           aria-label="Loading…"
         />
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

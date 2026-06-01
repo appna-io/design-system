@@ -11,6 +11,8 @@ phase: 27
 state machine, four chrome variants × seven accent colors × three densities, end-to-end
 RTL support, and a first-class i18n contract that every visible string flows through.
 
+<ExampleBlock for="Overview" title="Overview — sortable grid with badges, selection, and an aggregations footer" />
+
 > **Mental model**
 >
 > Reach for `<Table>` for static or paginated lists ≤ a few hundred rows.
@@ -19,20 +21,6 @@ RTL support, and a first-class i18n contract that every visible string flows thr
 > editing, expandable detail rows, aggregations, server-driven data, persistent
 > state, or any combination of these. The component is built to be the **only**
 > grid the consumer ever needs at the price of being ~10× the bundle of `<Table>`.
-
-The full plan lives in [`plans/pending/components/27-data-grid.md`](../../../../plans/pending/components/27-data-grid.md).
-It ships in **8 PRs**; this page is the consolidated docs for all eight.
-
-| PR | Scope | Status |
-| --- | --- | --- |
-| 1 | Engine `<I18nProvider>` primitive (consumed by DataGrid, Pagination, Breadcrumbs, Calendar, Combobox, Scheduler) | Shipped |
-| 2 | Headless `useDataGrid()` + reducers + derivations + filter engine + exporters | Shipped |
-| 3 | DOM scaffolding (`<DataGrid />` + 7 base subparts + ARIA Grid + keyboard nav) | Shipped |
-| 4 | Toolbar + Pagination + Selection + Filter UX + Density toggle + Export + ColumnVisibility | Shipped |
-| 5 | Column pinning + resize + row expansion + cell editing + aggregations + states | Shipped |
-| 6 | Virtualization (50k rows via `@tanstack/react-virtual`, peer dep) | Shipped |
-| 7 | RTL polish + Hebrew + Arabic translation bundles + persistence + responsive | Shipped |
-| 8 | Visual snapshot suite (168 Playwright PNGs) + full a11y matrix (168 axe runs) + perf benchmarks + bundle audit (22.8–25.6 KB gz) + this README | Shipped |
 
 ---
 

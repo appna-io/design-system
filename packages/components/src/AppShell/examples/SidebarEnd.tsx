@@ -1,15 +1,15 @@
-import { AppShell, HStack, Stack } from '@apx-ui/ds';
+import { AppShell, Div, HStack, Stack, Typography } from '@apx-ui/ds';
 
 export default function SidebarEnd() {
   return (
-    <div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
       <AppShell
         header={
           <HStack gap={3} className="w-full">
             <strong>Right-aligned sidebar</strong>
-            <span className="text-sm text-(--sds-color-text-muted)">
+            <Typography as="span" variant="bodySmall" color="fg.muted">
               For comments / inspector / chat surfaces
-            </span>
+            </Typography>
           </HStack>
         }
         sidebar={
@@ -21,11 +21,13 @@ export default function SidebarEnd() {
         }
         sidebarPosition="end"
       >
-        <h2 className="text-lg font-semibold">Main content first</h2>
-        <p className="mt-2 text-sm text-(--sds-color-text-muted)">
+        <Typography as="h2" variant="titleSmall" weight="semibold">
+          Main content first
+        </Typography>
+        <Typography variant="bodySmall" color="fg.muted" sx={{ mt: 2 }}>
           The sidebar lives on the logical-end side (right in LTR, left in RTL).
-        </p>
+        </Typography>
       </AppShell>
-    </div>
+    </Div>
   );
 }

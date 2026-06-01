@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, CommandPalette } from '@apx-ui/ds';
+import { Button, CommandPalette, Div } from '@apx-ui/ds';
 import type { CommandPaletteVariant } from '@apx-ui/ds';
 
 const COMMANDS = [
@@ -13,7 +13,7 @@ const VARIANTS: CommandPaletteVariant[] = ['solid', 'soft', 'minimal'];
 export default function Variants() {
   const [open, setOpen] = useState<CommandPaletteVariant | null>(null);
   return (
-    <div className="flex gap-2">
+    <Div display="flex" gap="2">
       {VARIANTS.map((v) => (
         <Button key={v} variant="outline" onClick={() => setOpen(v)}>
           {v}
@@ -25,6 +25,6 @@ export default function Variants() {
         commands={COMMANDS}
         variant={open ?? 'solid'}
       />
-    </div>
+    </Div>
   );
 }

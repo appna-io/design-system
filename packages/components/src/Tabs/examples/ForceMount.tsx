@@ -1,4 +1,4 @@
-import { Tabs } from '@apx-ui/ds';
+import { Tabs, Typography } from '@apx-ui/ds';
 
 /**
  * `forceMount` keeps each panel mounted even when inactive. Inactive panels are still hidden
@@ -15,13 +15,19 @@ export default function ForceMount() {
         <Tabs.Trigger value="report">Report</Tabs.Trigger>
       </Tabs.List>
       <Tabs.Panel value="player" forceMount>
-        <p>Video player keeps playing in the background even when this panel is hidden.</p>
+        <Typography variant="bodySmall" color="fg.default">
+          Video player keeps playing in the background even when this panel is hidden.
+        </Typography>
       </Tabs.Panel>
       <Tabs.Panel value="form" forceMount>
-        <p>Form draft preserved across tab switches.</p>
+        <Typography variant="bodySmall" color="fg.default">
+          Form draft preserved across tab switches.
+        </Typography>
       </Tabs.Panel>
       <Tabs.Panel value="report" forceMount>
-        <p>Pre-rendered report stays in the DOM, no re-fetch on tab switch.</p>
+        <Typography variant="bodySmall" color="fg.default">
+          Pre-rendered report stays in the DOM, no re-fetch on tab switch.
+        </Typography>
       </Tabs.Panel>
     </Tabs>
   );

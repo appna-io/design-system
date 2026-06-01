@@ -2,11 +2,13 @@
 
 `<CommandPalette />` is the canonical **⌘K command launcher** — a Modal-styled overlay with a search input, a filterable result list, optional sub-pages, and a global hotkey to toggle visibility. It composes existing primitives rather than introducing new architecture:
 
-- **Dialog shell** — `<Modal>` (Phase 19). Backdrop, focus trap, scroll lock, escape stack, portal.
-- **Filter logic** — `filterStrategies` + `fuzzyMatch` from Combobox (Phase 34). Substring / startsWith / fuzzy / custom.
-- **Keyboard navigation** — `_shared/useListKeyboard`. **Fourth consumer** (Menu → Select → Combobox → CommandPalette).
-- **Module-level imperative API** — mirrors Toast's `ToastStore` / `toast()` pattern (Phase 21). `commands.register()` and `palette.open()` work from any JS context.
-- **Inline keyboard glyphs** — new `<Kbd>` primitive, exported separately. Less than 0.5 KB gz.
+- **Dialog shell** — `<Modal>`. Backdrop, focus trap, scroll lock, escape stack, portal.
+- **Filter logic** — `filterStrategies` + `fuzzyMatch` from Combobox. Substring / startsWith / fuzzy / custom.
+- **Keyboard navigation** — `_shared/useListKeyboard` for arrow-key highlight and Enter-to-select.
+- **Module-level imperative API** — `commands.register()` and `palette.open()` work from any JS context.
+- **Inline keyboard glyphs** — `<Kbd>` primitive, exported separately for shortcut hints anywhere in the app.
+
+<ExampleBlock for="Overview" title="Overview — search, categories, and keyboard shortcuts" />
 
 ## When to use
 
@@ -118,21 +120,3 @@ Axe: 0 violations across the variant × size × color matrix, including the sub-
 ## I18n
 
 Inline `translations` prop merges over `DEFAULT_COMMAND_PALETTE_TRANSLATIONS`. No `<I18nProvider>` integration yet (the provider hasn't shipped); the prop is the temporary surface and will dovetail with the provider when it lands.
-
-## Bundle
-
-| Export             | Size (gz) | Notes                                                           |
-| ------------------ | --------- | --------------------------------------------------------------- |
-| `<CommandPalette>` | ~5 KB     | Modal + filter + keyboard + store fusion.                       |
-| `<Kbd>`            | < 0.5 KB  | Single recipe + the `macKey` glyph table.                       |
-| Headless utilities | < 1 KB    | `parseHotkey`, `useGlobalHotkey`, `filterCommands`, `platformKey`. |
-
-## DRY notes
-
-- Reuses `<Modal>` for the overlay shell — no bespoke dialog code.
-- Reuses Combobox's `filterStrategies` + `fuzzyMatch` (imported, not copied).
-- `_shared/useListKeyboard` is now validated for the fourth time — the abstraction is mature.
-- `commandStore` mirrors `ToastStore` line-for-line. Two consumers (Toast, CommandPalette) is the threshold where lifting into a generic `createStore()` becomes attractive; future Phase candidate.
-- `<Kbd>` is a single tiny recipe — no bespoke shadows / borders outside the token system.
-- `parseHotkey` is pure and reusable for shortcut-help / binding UIs.
-- No `clsx`.

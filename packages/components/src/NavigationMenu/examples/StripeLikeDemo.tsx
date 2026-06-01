@@ -1,4 +1,4 @@
-import { NavigationMenu, Card, Button } from '@apx-ui/ds';
+import { Button, Card, Div, NavigationMenu, Typography } from '@apx-ui/ds';
 
 import {
   BookIcon,
@@ -20,14 +20,21 @@ import {
  */
 export default function StripeLikeDemo() {
   return (
-    <div className="rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default)">
+    <Div className="rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default)">
       <header className="flex items-center justify-between gap-6 px-4 py-3">
-        <div className="flex items-center gap-2">
-          <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-(--sds-color-text-default) text-xs font-bold text-(--sds-color-surface-default)">
+        <Div display="flex" alignItems="center" gap="2">
+          <Typography
+            as="span"
+            variant="caption"
+            weight="bold"
+            className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-(--sds-color-text-default) text-(--sds-color-surface-default)"
+          >
             S
-          </span>
-          <span className="text-sm font-semibold">AppNA-SaaS</span>
-        </div>
+          </Typography>
+          <Typography as="span" variant="bodySmall" weight="semibold">
+            AppNA-SaaS
+          </Typography>
+        </Div>
 
         <NavigationMenu indicator activeHref="/pricing">
           <NavigationMenu.Item>
@@ -76,10 +83,12 @@ export default function StripeLikeDemo() {
               <NavigationMenu.Featured>
                 <Card variant="elevated" size="sm">
                   <Card.Body>
-                    <p className="mb-1 text-sm font-semibold">New: AI-assisted setup</p>
-                    <p className="mb-3 text-xs text-(--sds-color-text-muted)">
+                    <Typography variant="bodySmall" weight="semibold" className="mb-1">
+                      New: AI-assisted setup
+                    </Typography>
+                    <Typography variant="caption" className="mb-3 text-(--sds-color-text-muted)">
                       Scaffold a typed app in 30 seconds with our generator.
-                    </p>
+                    </Typography>
                     <Button size="sm" variant="solid">
                       Try the generator
                     </Button>
@@ -132,15 +141,15 @@ export default function StripeLikeDemo() {
           </NavigationMenu.Item>
         </NavigationMenu>
 
-        <div className="flex items-center gap-2">
+        <Div display="flex" alignItems="center" gap="2">
           <Button variant="ghost" size="sm">
             Sign in
           </Button>
           <Button variant="solid" size="sm">
             Sign up
           </Button>
-        </div>
+        </Div>
       </header>
-    </div>
+    </Div>
   );
 }

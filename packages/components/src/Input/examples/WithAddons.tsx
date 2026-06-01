@@ -1,8 +1,8 @@
-import { Input } from '@apx-ui/ds';
+import { Div, Input } from '@apx-ui/ds';
 
 export default function WithAddons() {
   return (
-    <div className="flex w-full max-w-md flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3" className="w-full max-w-md">
       <Input
         leftAddon="https://"
         rightAddon=".com"
@@ -17,6 +17,6 @@ export default function WithAddons() {
         aria-label="Username"
         variant="solid"
       />
-    </div>
+    </Div>
   );
 }

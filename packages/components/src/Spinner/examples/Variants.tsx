@@ -1,11 +1,11 @@
-import { Spinner } from '@apx-ui/ds';
+import { Div, Spinner } from '@apx-ui/ds';
 
 export default function Variants() {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+    <Div display="flex" alignItems="center" gap="6">
       <Spinner variant="ring" />
       <Spinner variant="dots" />
       <Spinner variant="pulse" />
-    </div>
+    </Div>
   );
 }

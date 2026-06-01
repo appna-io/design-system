@@ -1,4 +1,4 @@
-import { Sidebar } from '@apx-ui/ds';
+import { Div, Sidebar } from '@apx-ui/ds';
 
 import { CogIcon, FolderIcon, HomeIcon, PlusIcon } from './_icons';
 
@@ -9,7 +9,10 @@ import { CogIcon, FolderIcon, HomeIcon, PlusIcon } from './_icons';
  */
 export default function WithSpacer() {
   return (
-    <div className="h-[460px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div
+      height={460}
+      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+    >
       <Sidebar ariaLabel="Spacer example" variant="bordered" width={240}>
         <Sidebar.Item href="/" icon={<HomeIcon />}>
           Home
@@ -25,6 +28,6 @@ export default function WithSpacer() {
           New project
         </Sidebar.Item>
       </Sidebar>
-    </div>
+    </Div>
   );
 }

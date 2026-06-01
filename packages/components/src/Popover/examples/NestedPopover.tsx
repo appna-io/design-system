@@ -1,4 +1,4 @@
-import { Button, Popover } from '@apx-ui/ds';
+import { Button, Div, Popover, Typography } from '@apx-ui/ds';
 
 /**
  * Stress-tests `useEscapeStack`: an inner Popover opens from inside an outer Popover. Pressing
@@ -15,11 +15,13 @@ export default function NestedPopover() {
         <Button>Outer popover</Button>
       </Popover.Trigger>
       <Popover.Content size="md">
-        <p className="text-sm font-medium">Outer</p>
-        <p className="mt-1 text-xs text-fg-muted">
+        <Typography variant="bodySmall" weight="medium">
+          Outer
+        </Typography>
+        <Typography variant="caption" color="fg.muted" className="mt-1">
           The inner popover sits on top of this one. Esc closes only the topmost.
-        </p>
-        <div className="mt-3">
+        </Typography>
+        <Div mt="3">
           <Popover>
             <Popover.Trigger>
               <Button variant="outline" size="sm">
@@ -27,10 +29,10 @@ export default function NestedPopover() {
               </Button>
             </Popover.Trigger>
             <Popover.Content size="sm" variant="outline" color="primary">
-              <p className="text-sm">I am the inner popover.</p>
+              <Typography variant="bodySmall">I am the inner popover.</Typography>
             </Popover.Content>
           </Popover>
-        </div>
+        </Div>
       </Popover.Content>
     </Popover>
   );

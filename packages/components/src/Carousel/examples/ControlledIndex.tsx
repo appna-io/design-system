@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Button, Carousel } from '@apx-ui/ds';
+import { Button, Carousel, Div, Typography } from '@apx-ui/ds';
 
 export default function ControlledIndex() {
   const [index, setIndex] = useState(0);
   const slides = ['Intro', 'Setup', 'Build', 'Ship'];
 
   return (
-    <div className="flex flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3">
       <Carousel
         ariaLabel="Controlled carousel"
         index={index}
@@ -14,13 +14,13 @@ export default function ControlledIndex() {
       >
         {slides.map((label) => (
           <Carousel.Slide key={label}>
-            <div className="flex h-40 items-center justify-center rounded-md bg-bg-subtle text-2xl font-semibold">
+            <Div display="flex" alignItems="center" justifyContent="center" className="h-40 rounded-md bg-bg-subtle text-2xl font-semibold">
               {label}
-            </div>
+            </Div>
           </Carousel.Slide>
         ))}
       </Carousel>
-      <div className="flex flex-wrap items-center gap-2">
+      <Div display="flex" className="flex-wrap items-center gap-2">
         {slides.map((label, i) => (
           <Button
             key={label}
@@ -31,8 +31,10 @@ export default function ControlledIndex() {
             {label}
           </Button>
         ))}
-        <span className="text-xs text-fg-muted">External state: index = {index}</span>
-      </div>
-    </div>
+        <Typography as="span" variant="caption" color="fg.muted">
+          External state: index = {index}
+        </Typography>
+      </Div>
+    </Div>
   );
 }

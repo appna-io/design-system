@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { AppShell, Button, HStack, Stack } from '@apx-ui/ds';
+import { AppShell, Button, Div, HStack, Stack, Typography } from '@apx-ui/ds';
 
 export default function WithAside() {
   const [asideOpen, setAsideOpen] = useState(true);
   return (
-    <div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
       <AppShell
         header={
           <HStack gap={3} className="w-full">
@@ -24,24 +24,28 @@ export default function WithAside() {
           </Stack>
         }
         aside={
-          <div className="p-4">
-            <h3 className="font-semibold">Quarterly review</h3>
-            <p className="mt-2 text-sm text-(--sds-color-text-muted)">
+          <Div className="p-4">
+            <Typography as="h3" variant="body" weight="semibold">
+              Quarterly review
+            </Typography>
+            <Typography variant="bodySmall" color="fg.muted" sx={{ mt: 2 }}>
               From Alex • 2 min ago
-            </p>
-            <p className="mt-3 text-sm">Hi team, please find the deck attached…</p>
-          </div>
+            </Typography>
+            <Typography variant="bodySmall" sx={{ mt: 3 }}>
+              Hi team, please find the deck attached…
+            </Typography>
+          </Div>
         }
         asideOpen={asideOpen}
         onAsideOpenChange={setAsideOpen}
         asideWidth={300}
       >
         <Stack gap={2}>
-          <div className="p-3 rounded bg-(--sds-color-surface-subtle)">Message 1</div>
-          <div className="p-3 rounded bg-(--sds-color-surface-subtle)">Message 2</div>
-          <div className="p-3 rounded bg-(--sds-color-surface-subtle)">Message 3</div>
+          <Div className="p-3 rounded bg-(--sds-color-surface-subtle)">Message 1</Div>
+          <Div className="p-3 rounded bg-(--sds-color-surface-subtle)">Message 2</Div>
+          <Div className="p-3 rounded bg-(--sds-color-surface-subtle)">Message 3</Div>
         </Stack>
       </AppShell>
-    </div>
+    </Div>
   );
 }

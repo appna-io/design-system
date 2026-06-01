@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Button, Stepper } from '@apx-ui/ds';
+import { Button, Div, Stepper } from '@apx-ui/ds';
 
 export default function WithErrorStep() {
   const [hasError, setHasError] = useState(true);
 
   return (
-    <div className="flex flex-col gap-4">
+    <Div display="flex" flexDirection="column" gap="4">
       <Stepper
         active={2}
         steps={[
@@ -23,6 +23,6 @@ export default function WithErrorStep() {
       <Button variant="ghost" onClick={() => setHasError((v) => !v)}>
         {hasError ? 'Resolve error' : 'Re-introduce error'}
       </Button>
-    </div>
+    </Div>
   );
 }

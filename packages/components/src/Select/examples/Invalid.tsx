@@ -1,8 +1,8 @@
-import { Select } from '@apx-ui/ds';
+import { Div, Select, Typography } from '@apx-ui/ds';
 
 export default function Invalid() {
   return (
-    <div className="flex flex-col gap-1 max-w-sm">
+    <Div display="flex" flexDirection="column" gap="1" className="max-w-sm">
       <label htmlFor="country" className="text-sm font-medium">
         Country
       </label>
@@ -13,9 +13,9 @@ export default function Invalid() {
           <Select.Item value="de">Germany</Select.Item>
         </Select.Content>
       </Select>
-      <p id="country-error" className="text-xs text-danger">
+      <Typography id="country-error" variant="caption" color="danger">
         Country is required.
-      </p>
-    </div>
+      </Typography>
+    </Div>
   );
 }

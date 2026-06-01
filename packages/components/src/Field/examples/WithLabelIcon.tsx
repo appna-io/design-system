@@ -1,8 +1,8 @@
-import { Field, Input } from '@apx-ui/ds';
+import { Div, Field, Input } from '@apx-ui/ds';
 
 export default function WithLabelIcon() {
   return (
-    <div className="flex flex-col gap-4 max-w-sm">
+    <Div display="flex" flexDirection="column" gap="4" className="max-w-sm">
       <Field
         label={
           <>
@@ -23,7 +23,7 @@ export default function WithLabelIcon() {
       >
         <Input type="password" name="password" />
       </Field>
-    </div>
+    </Div>
   );
 }
 

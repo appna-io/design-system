@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, HStack, Sidebar } from '@apx-ui/ds';
+import { Button, Div, HStack, Sidebar, Typography } from '@apx-ui/ds';
 
 import { CogIcon, FolderIcon, HomeIcon } from './_icons';
 
@@ -12,8 +12,11 @@ import { CogIcon, FolderIcon, HomeIcon } from './_icons';
 export default function Disabled() {
   const [locked, setLocked] = useState(true);
   return (
-    <div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
-      <div className="flex h-full">
+    <Div
+      height={420}
+      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+    >
+      <Div display="flex" className="h-full">
         <Sidebar ariaLabel="Disabled-state example" variant="bordered" width={240}>
           <Sidebar.Item href="/" icon={<HomeIcon />}>
             Home
@@ -25,7 +28,7 @@ export default function Disabled() {
             Settings (paid)
           </Sidebar.Item>
         </Sidebar>
-        <div className="flex-1 p-6">
+        <Div className="flex-1 p-6">
           <HStack gap={2}>
             <Button onClick={() => setLocked(false)} variant="solid" size="sm" disabled={!locked}>
               Unlock
@@ -34,11 +37,11 @@ export default function Disabled() {
               Lock
             </Button>
           </HStack>
-          <p className="mt-4 text-sm text-(--sds-color-text-muted)">
+          <Typography variant="bodySmall" color="fg.muted" className="mt-4">
             Disabled items refuse click, focus, and keyboard activation.
-          </p>
-        </div>
-      </div>
-    </div>
+          </Typography>
+        </Div>
+      </Div>
+    </Div>
   );
 }

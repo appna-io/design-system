@@ -1,4 +1,4 @@
-import { Carousel } from '@apx-ui/ds';
+import { Carousel, Div, Typography } from '@apx-ui/ds';
 
 const products = [
   { name: 'Linen Tee', price: '$34', color: 'bg-sky-100' },
@@ -14,11 +14,15 @@ export default function ProductLane() {
     <Carousel ariaLabel="Featured products" slidesPerView={3} gap={3}>
       {products.map((p) => (
         <Carousel.Slide key={p.name}>
-          <div className="flex flex-col gap-2">
-            <div className={`h-32 rounded-md ${p.color}`} aria-hidden="true" />
-            <div className="text-sm font-medium">{p.name}</div>
-            <div className="text-sm text-fg-muted">{p.price}</div>
-          </div>
+          <Div display="flex" flexDirection="column" gap="2">
+            <Div className={`h-32 rounded-md ${p.color}`} aria-hidden="true" />
+            <Typography variant="bodySmall" weight="medium">
+              {p.name}
+            </Typography>
+            <Typography variant="bodySmall" color="fg.muted">
+              {p.price}
+            </Typography>
+          </Div>
         </Carousel.Slide>
       ))}
     </Carousel>

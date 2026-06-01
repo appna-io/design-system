@@ -36,6 +36,8 @@ export type {
   CardDividerProps,
   CardFooterAlign,
   CardFooterProps,
+  CardHeaderIconColor,
+  CardHeaderIconVariant,
   CardHeaderProps,
   CardMediaProps,
   CardOrientation,

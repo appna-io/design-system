@@ -1,8 +1,8 @@
-import { CircularProgress, Progress } from '@apx-ui/ds';
+import { CircularProgress, Div, Progress } from '@apx-ui/ds';
 
 export default function WithLabel() {
   return (
-    <div className="flex w-full max-w-sm flex-col gap-6">
+    <Div display="flex" flexDirection="column" gap="6" className="w-full max-w-sm">
       <Progress value={42} size="lg" showLabel aria-label="Upload progress" />
       <Progress
         value={88}
@@ -12,7 +12,7 @@ export default function WithLabel() {
         showLabel
         aria-label="Sync progress"
       />
-      <div className="flex items-center gap-6">
+      <Div display="flex" alignItems="center" gap="6">
         <CircularProgress value={42} size="lg" showLabel aria-label="Upload" />
         <CircularProgress
           value={88}
@@ -21,7 +21,7 @@ export default function WithLabel() {
           showLabel
           aria-label="Sync"
         />
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

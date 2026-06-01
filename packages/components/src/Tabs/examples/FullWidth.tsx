@@ -1,8 +1,8 @@
-import { Tabs } from '@apx-ui/ds';
+import { Div, Tabs } from '@apx-ui/ds';
 
 export default function FullWidth() {
   return (
-    <div className="w-full max-w-xl rounded-md border border-border p-4">
+    <Div className="w-full max-w-xl rounded-md border border-border p-4">
       <Tabs
         variant="solid"
         alignment="stretch"
@@ -21,6 +21,6 @@ export default function FullWidth() {
         <Tabs.Panel value="month">Month view metrics.</Tabs.Panel>
         <Tabs.Panel value="year">Year view metrics.</Tabs.Panel>
       </Tabs>
-    </div>
+    </Div>
   );
 }

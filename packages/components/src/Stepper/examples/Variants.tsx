@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Stepper, type StepperVariant } from '@apx-ui/ds';
+import { Button, Div, Stepper, Typography, type StepperVariant } from '@apx-ui/ds';
 
 const STEPS = [
   { id: 'a', label: 'Account' },
@@ -14,19 +14,21 @@ export default function Variants() {
   const [active, setActive] = useState(2);
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex gap-2">
+    <Div display="flex" flexDirection="column" gap="6">
+      <Div display="flex" gap="2">
         <Button onClick={() => setActive((i) => (i + 1) % STEPS.length)}>Advance</Button>
         <Button variant="ghost" onClick={() => setActive(0)}>
           Reset
         </Button>
-      </div>
+      </Div>
       {VARIANTS.map((variant) => (
-        <div key={variant} className="flex flex-col gap-2">
-          <span className="text-xs uppercase tracking-wide text-fg-muted">{variant}</span>
+        <Div key={variant} display="flex" flexDirection="column" gap="2">
+          <Typography variant="caption" color="fg.muted" className="uppercase tracking-wide">
+            {variant}
+          </Typography>
           <Stepper active={active} steps={STEPS} variant={variant} />
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

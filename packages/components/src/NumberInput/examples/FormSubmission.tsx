@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, NumberInput } from '@apx-ui/ds';
+import { Button, Div, NumberInput, Typography } from '@apx-ui/ds';
 
 export default function FormSubmission() {
   const [submitted, setSubmitted] = useState<string | null>(null);
@@ -13,7 +13,7 @@ export default function FormSubmission() {
         setSubmitted(String(data.get('quantity')));
       }}
     >
-      <div className="flex flex-col gap-1.5 text-sm">
+      <Div display="flex" flexDirection="column" gap="1.5" className="text-sm">
         <label htmlFor="form-submission-quantity" className="font-medium">
           Quantity (USD)
         </label>
@@ -27,17 +27,17 @@ export default function FormSubmission() {
           locale="en-US"
           format={{ style: 'currency', currency: 'USD' }}
         />
-        <span className="text-xs text-fg-muted">
+        <Typography variant="caption" color="fg.muted">
           The hidden input submits a canonical number (no thousand separators, no currency glyph).
-        </span>
-      </div>
+        </Typography>
+      </Div>
       <Button type="submit" size="sm">
         Submit
       </Button>
       {submitted !== null ? (
-        <p className="text-xs text-fg-muted">
+        <Typography variant="caption" color="fg.muted">
           FormData received: <code>{submitted}</code>
-        </p>
+        </Typography>
       ) : null}
     </form>
   );

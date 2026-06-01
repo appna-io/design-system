@@ -1,4 +1,4 @@
-import { DataGrid } from '@apx-ui/ds';
+import { DataGrid, Div, Typography } from '@apx-ui/ds';
 import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Row {
@@ -88,19 +88,19 @@ const columns: DataGridColumnDef<Row>[] = [
 
 export default function Responsive() {
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Each column declares a <code>responsive.hideBelow</code> breakpoint. The grid
         subscribes to the matching media queries and hides columns whose breakpoint is no
         longer matched — try shrinking the browser window or opening DevTools&apos; device
         mode. Identity columns (<code>Name</code>, <code>Email</code>) opt out and stay
         visible at every width.
-      </p>
-      <p className="text-fg-muted text-xs">
+      </Typography>
+      <Typography variant="caption" color="fg.muted">
         Breakpoints follow Tailwind&apos;s defaults (<code>sm</code> 640px, <code>md</code>{' '}
         768px, <code>lg</code> 1024px, <code>xl</code> 1280px).
-      </p>
+      </Typography>
       <DataGrid<Row> data={data} columns={columns} getRowId={(r) => r.id} />
-    </div>
+    </Div>
   );
 }

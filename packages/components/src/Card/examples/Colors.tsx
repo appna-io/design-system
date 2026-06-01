@@ -1,8 +1,8 @@
-import { Card } from '@apx-ui/ds';
+import { Card, Div } from '@apx-ui/ds';
 
 export default function Colors() {
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+    <Div className="grid grid-cols-1 gap-4 md:grid-cols-3">
       {(['neutral', 'primary', 'success', 'warning', 'danger', 'info'] as const).map((color) => (
         <Card key={color} color={color} hoverable selected>
           <Card.Header
@@ -15,6 +15,6 @@ export default function Colors() {
           </Card.Body>
         </Card>
       ))}
-    </div>
+    </Div>
   );
 }

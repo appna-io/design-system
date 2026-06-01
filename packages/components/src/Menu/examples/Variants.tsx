@@ -1,8 +1,8 @@
-import { Button, Menu } from '@apx-ui/ds';
+import { Button, Div, Menu } from '@apx-ui/ds';
 
 export default function Variants() {
   return (
-    <div className="flex flex-wrap gap-3">
+    <Div display="flex" flexWrap="wrap" gap="3">
       <Menu>
         <Menu.Trigger asChild>
           <Button>Solid</Button>
@@ -35,6 +35,6 @@ export default function Variants() {
           <Menu.Item>Cherry</Menu.Item>
         </Menu.Content>
       </Menu>
-    </div>
+    </Div>
   );
 }

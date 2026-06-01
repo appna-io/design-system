@@ -1,4 +1,4 @@
-import { Button, type ButtonColor, type ButtonVariant } from '@apx-ui/ds';
+import { Button, Div, Typography, type ButtonColor, type ButtonVariant } from '@apx-ui/ds';
 
 const VARIANTS: ButtonVariant[] = ['solid', 'outline', 'ghost'];
 const COLORS: ButtonColor[] = [
@@ -18,19 +18,24 @@ const COLORS: ButtonColor[] = [
  */
 export default function VariantMatrix() {
   return (
-    <div className="space-y-3">
+    <Div className="space-y-3">
       {VARIANTS.map((variant) => (
-        <div key={variant} className="flex flex-wrap items-center gap-2">
-          <span className="w-20 text-xs font-mono uppercase tracking-wide text-fg-muted">
+        <Div key={variant} display="flex" flexWrap="wrap" alignItems="center" gap="2">
+          <Typography
+            as="span"
+            variant="caption"
+            color="fg.muted"
+            className="w-20 font-mono uppercase tracking-wide"
+          >
             {variant}
-          </span>
+          </Typography>
           {COLORS.map((color) => (
             <Button key={color} variant={variant} color={color} size="sm">
               {color}
             </Button>
           ))}
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

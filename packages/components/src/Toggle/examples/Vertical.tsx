@@ -1,10 +1,12 @@
-import { ToggleGroup } from '@apx-ui/ds';
+import { Div, ToggleGroup, Typography } from '@apx-ui/ds';
 
 export default function Vertical() {
   return (
-    <div className="flex gap-8">
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium text-fg-muted">Stacked</span>
+    <Div display="flex" gap="8">
+      <Div display="flex" flexDirection="column" gap="2">
+        <Typography variant="caption" weight="medium" color="fg.muted">
+          Stacked
+        </Typography>
         <ToggleGroup
           type="single"
           aria-label="Density"
@@ -15,10 +17,12 @@ export default function Vertical() {
           <ToggleGroup.Item value="comfortable" aria-label="Comfortable">Comfortable</ToggleGroup.Item>
           <ToggleGroup.Item value="spacious" aria-label="Spacious">Spacious</ToggleGroup.Item>
         </ToggleGroup>
-      </div>
+      </Div>
 
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium text-fg-muted">Stacked + attached</span>
+      <Div display="flex" flexDirection="column" gap="2">
+        <Typography variant="caption" weight="medium" color="fg.muted">
+          Stacked + attached
+        </Typography>
         <ToggleGroup
           type="single"
           aria-label="Density attached"
@@ -31,7 +35,7 @@ export default function Vertical() {
           <ToggleGroup.Item value="comfortable" aria-label="Comfortable">Comfortable</ToggleGroup.Item>
           <ToggleGroup.Item value="spacious" aria-label="Spacious">Spacious</ToggleGroup.Item>
         </ToggleGroup>
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

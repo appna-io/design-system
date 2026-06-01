@@ -342,4 +342,3 @@ export function useThemeOverrides(): UseThemeOverridesReturn;
 
 Phase 6 (Button variants — `outline`, `ghost`) — the variant system can now be exercised
 against a living theme that the operator can re-paint in real time.
-

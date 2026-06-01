@@ -1,8 +1,8 @@
-import { Switch } from '@apx-ui/ds';
+import { Div, Switch } from '@apx-ui/ds';
 
 export default function Sizes() {
   return (
-    <div className="flex flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3">
       <Switch size="sm" defaultChecked>
         Small
       </Switch>
@@ -12,6 +12,6 @@ export default function Sizes() {
       <Switch size="lg" defaultChecked>
         Large
       </Switch>
-    </div>
+    </Div>
   );
 }

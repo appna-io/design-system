@@ -1,10 +1,10 @@
-import { Badge, Icon } from '@apx-ui/ds';
+import { Badge, Div, Icon } from '@apx-ui/ds';
 
 import { Check, Info, X } from './_glyphs';
 
 export default function InBadge() {
   return (
-    <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+    <Div display="flex" gap="3" alignItems="center">
       <Badge color="success">
         <Icon as={Check} size="xs" /> Approved
       </Badge>
@@ -14,6 +14,6 @@ export default function InBadge() {
       <Badge color="info">
         <Icon as={Info} size="xs" /> Pending
       </Badge>
-    </div>
+    </Div>
   );
 }

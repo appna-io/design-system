@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Table } from '@apx-ui/ds';
+import { Div, Table, Typography } from '@apx-ui/ds';
 import type { TableColumn } from '@apx-ui/ds';
 interface User {
   id: string;
@@ -23,9 +23,9 @@ const columns: TableColumn<User>[] = [
     header: 'Status',
     align: 'end',
     cell: (u) => (
-      <span className={u.active ? 'text-success' : 'text-fg-muted'}>
+      <Typography as="span" variant="bodySmall" className={u.active ? 'text-success' : 'text-fg-muted'}>
         {u.active ? 'Active' : 'Inactive'}
-      </span>
+      </Typography>
     ),
   },
 ];
@@ -33,10 +33,10 @@ const columns: TableColumn<User>[] = [
 export default function MultiSelect() {
   const [selected, setSelected] = useState<string[]>(['1']);
   return (
-    <div className="flex flex-col gap-2">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="2">
+      <Typography variant="bodySmall" color="fg.muted">
         Inactive rows can&apos;t be selected. Selected ids: <code>{selected.join(', ') || 'none'}</code>
-      </p>
+      </Typography>
       <Table
         ariaLabel="Multi-select users"
         columns={columns}
@@ -47,6 +47,6 @@ export default function MultiSelect() {
         onSelectedChange={(next) => setSelected(next as string[])}
         isRowSelectable={(u) => u.active}
       />
-    </div>
+    </Div>
   );
 }

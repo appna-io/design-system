@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, TreeView } from '@apx-ui/ds';
+import { Button, Div, TreeView, Typography } from '@apx-ui/ds';
 import type { TreeNodeData } from '@apx-ui/ds';
 
 const data: TreeNodeData[] = [
@@ -26,8 +26,8 @@ export default function CategoryPicker() {
   const [selected, setSelected] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState<string>('');
   return (
-    <div className="flex flex-col gap-2">
-      <div className="max-w-sm border border-border-subtle rounded-md p-2">
+    <Div display="flex" flexDirection="column" gap="2">
+      <Div className="max-w-sm rounded-md border border-border-subtle p-2">
         <TreeView
           ariaLabel="Tag picker"
           data={data}
@@ -37,15 +37,15 @@ export default function CategoryPicker() {
           selected={selected}
           onSelectedChange={(next) => setSelected(next as string[])}
         />
-      </div>
-      <div className="flex items-center gap-2">
+      </Div>
+      <Div display="flex" alignItems="center" gap="2">
         <Button size="sm" onClick={() => setSubmitted(selected.join(', '))}>
           Apply tags
         </Button>
-        <span className="text-fg-muted text-sm">
+        <Typography variant="bodySmall" color="fg.muted">
           Applied: <code>{submitted || 'none'}</code>
-        </span>
-      </div>
-    </div>
+        </Typography>
+      </Div>
+    </Div>
   );
 }

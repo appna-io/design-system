@@ -1,8 +1,8 @@
-import { Button } from '@apx-ui/ds';
+import { Button, Div } from '@apx-ui/ds';
 
 export default function OutlineColors() {
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <Div display="flex" flexWrap="wrap" alignItems="center" gap="3">
       <Button variant="outline" color="primary">
         Primary
       </Button>
@@ -24,6 +24,6 @@ export default function OutlineColors() {
       <Button variant="outline" color="neutral">
         Neutral
       </Button>
-    </div>
+    </Div>
   );
 }

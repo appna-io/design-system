@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TreeView } from '@apx-ui/ds';
+import { Div, TreeView, Typography } from '@apx-ui/ds';
 import type { TreeNodeData } from '@apx-ui/ds';
 
 const data: TreeNodeData[] = [
@@ -25,11 +25,11 @@ const data: TreeNodeData[] = [
 export default function SingleSelect() {
   const [selected, setSelected] = useState<string>('inbox/today');
   return (
-    <div className="flex flex-col gap-2">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="2">
+      <Typography variant="bodySmall" color="fg.muted">
         Active folder: <code>{selected || 'none'}</code>
-      </p>
-      <div className="max-w-sm border border-border-subtle rounded-md p-2">
+      </Typography>
+      <Div className="max-w-sm rounded-md border border-border-subtle p-2">
         <TreeView
           ariaLabel="Mailbox"
           data={data}
@@ -37,7 +37,7 @@ export default function SingleSelect() {
           selected={selected}
           onSelect={setSelected}
         />
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

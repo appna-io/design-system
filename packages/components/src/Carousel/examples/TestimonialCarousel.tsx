@@ -1,4 +1,4 @@
-import { Avatar, Carousel } from '@apx-ui/ds';
+import { Avatar, Carousel, Typography } from '@apx-ui/ds';
 
 const testimonials = [
   {
@@ -27,9 +27,12 @@ export default function TestimonialCarousel() {
             <blockquote className="text-base text-fg-default">{t.body}</blockquote>
             <figcaption className="flex items-center gap-2 text-xs text-fg-muted">
               <Avatar name={t.name} size="sm" />
-              <span>
-                <span className="font-medium text-fg-default">{t.name}</span> · {t.role}
-              </span>
+              <Typography as="span">
+                <Typography as="span" weight="medium" color="fg.default">
+                  {t.name}
+                </Typography>{' '}
+                · {t.role}
+              </Typography>
             </figcaption>
           </figure>
         </Carousel.Slide>

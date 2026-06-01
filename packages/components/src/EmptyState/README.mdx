@@ -9,18 +9,7 @@ compound form (`<EmptyState.Icon>` / `.Illustration` / `.Title` / `.Description`
 for full control. When any compound child is detected, the prop-driven shortcuts are silently
 ignored — the two modes never compete.
 
-## Why this exists
-
-Every product surface ends up reinventing the empty state — usually inconsistently, often
-without proper ARIA semantics, sometimes without any "next step" CTA. Phase 42 ships **one**
-primitive with built-in:
-
-- Variant-driven ARIA roles (`region` / `alert` / `status` — picked automatically per variant).
-- A loading variant that auto-injects `<Spinner />` (Phase 39).
-- Consistent rhythm (icon container → title → description → CTAs) so empty states across the
-  app feel like the same product.
-- A `bordered` axis specifically for DataGrid / Combobox / FileUpload empty slots that need to
-  fill an existing rectangle.
+<ExampleBlock for="Overview" title="Overview — icon, copy, and a clear next step" />
 
 ## Anatomy
 
@@ -175,16 +164,5 @@ is themable independently. `defaultProps` applies under both the prop-driven and
 | Suspense fallback | `<EmptyState variant="loading" title="Loading workspace" />`                                  |
 | First-run   | `<EmptyState size="lg" illustration={…} title="Welcome!" primaryAction={{ label: 'Get started' }} />` |
 
-DataGrid (Phase 27), FileUpload (Phase 36), and Combobox (Phase 34) can consume EmptyState as
-their default empty / no-results slot content once those phases ship.
-
-## Out of scope (future phases)
-
-- **`<EmptyState.Footer>`** — empty states should make the "next step" obvious via Actions;
-  a separate footer slot is feature creep.
-- **Built-in illustrations** — illustration assets are a brand decision; the DS ships the
-  container, the consumer ships the artwork.
-- **`<NoResults>` / `<ErrorState>` aliases** — `variant="error"` and the search-results
-  pattern cover both cases without separate exports.
-- **Auto-i18n** — the DS doesn't currently ship i18n strings; consumer-supplied `title` /
-  `description` are the only translatable text.
+DataGrid, FileUpload, and Combobox can consume EmptyState as their default empty / no-results
+slot content.

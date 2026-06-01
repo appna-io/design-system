@@ -1,4 +1,4 @@
-import { HoverCard } from '@apx-ui/ds';
+import { Div, HoverCard, Typography } from '@apx-ui/ds';
 
 /**
  * Stripe-style link preview: hover an inline URL to see a small card with the page's title +
@@ -7,7 +7,7 @@ import { HoverCard } from '@apx-ui/ds';
  */
 export default function LinkPreview() {
   return (
-    <p className="max-w-prose text-sm">
+    <Typography variant="bodySmall" as="p" className="max-w-prose">
       Read the{' '}
       <HoverCard>
         <HoverCard.Trigger>
@@ -16,17 +16,19 @@ export default function LinkPreview() {
           </a>
         </HoverCard.Trigger>
         <HoverCard.Content size="lg">
-          <div className="flex flex-col gap-2">
+          <Div display="flex" flexDirection="column" gap="2">
             <strong className="text-sm">apx-dsesign System</strong>
-            <p className="text-xs text-fg-muted">
+            <Typography variant="caption" color="fg.muted">
               A modern, themed React design system built around a typed token engine and
               composable primitives. 50+ components, accessibility-first.
-            </p>
-            <span className="text-xs text-primary underline">apx-ds →</span>
-          </div>
+            </Typography>
+            <Typography as="span" variant="caption" color="primary" className="underline">
+              apx-ds →
+            </Typography>
+          </Div>
         </HoverCard.Content>
       </HoverCard>{' '}
       to see what&rsquo;s covered.
-    </p>
+    </Typography>
   );
 }

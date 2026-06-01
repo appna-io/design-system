@@ -1,4 +1,4 @@
-import { Spinner } from '@apx-ui/ds';
+import { Div, Spinner, Typography } from '@apx-ui/ds';
 
 const COLORS = [
   'primary',
@@ -12,13 +12,15 @@ const COLORS = [
 
 export default function Colors() {
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 24 }}>
+    <Div display="flex" flexWrap="wrap" alignItems="center" gap="6">
       {COLORS.map((color) => (
-        <div key={color} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+        <Div key={color} display="flex" flexDirection="column" alignItems="center" gap="1.5">
           <Spinner color={color} size="lg" />
-          <span style={{ fontSize: 12, opacity: 0.7 }}>{color}</span>
-        </div>
+          <Typography variant="caption" color="fg.muted">
+            {color}
+          </Typography>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

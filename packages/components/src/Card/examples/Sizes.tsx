@@ -1,8 +1,8 @@
-import { Card } from '@apx-ui/ds';
+import { Card, Div } from '@apx-ui/ds';
 
 export default function Sizes() {
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+    <Div className="grid grid-cols-1 gap-4 md:grid-cols-3">
       <Card size="sm">
         <Card.Header title="Small" subtitle="Compact density" />
         <Card.Body>p-3 across the board. Good for sidebars + grids.</Card.Body>
@@ -15,6 +15,6 @@ export default function Sizes() {
         <Card.Header title="Large" subtitle="Roomy" />
         <Card.Body>p-6 across the board. Hero sections + marketing.</Card.Body>
       </Card>
-    </div>
+    </Div>
   );
 }

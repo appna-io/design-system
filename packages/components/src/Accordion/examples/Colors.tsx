@@ -1,4 +1,4 @@
-import { Accordion } from '@apx-ui/ds';
+import { Accordion, Div, Typography } from '@apx-ui/ds';
 import type { AccordionColor } from '@apx-ui/ds';
 
 const COLORS: readonly AccordionColor[] = [
@@ -13,12 +13,12 @@ const COLORS: readonly AccordionColor[] = [
 
 export default function Colors() {
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+    <Div className="grid grid-cols-1 gap-6 md:grid-cols-2">
       {COLORS.map((color) => (
-        <div key={color}>
-          <p className="mb-2 text-sm font-medium text-fg-muted">
+        <Div key={color}>
+          <Typography variant="bodySmall" weight="medium" color="fg.muted" sx={{ mb: 2 }}>
             color=<code>{color}</code> (variant=<code>soft</code>)
-          </p>
+          </Typography>
           <Accordion type="single" variant="soft" color={color} defaultValue="one">
             <Accordion.Item value="one">
               <Accordion.Trigger>Tinted with {color}</Accordion.Trigger>
@@ -29,8 +29,8 @@ export default function Colors() {
               <Accordion.Content>Same tint, separated by the variant spacing.</Accordion.Content>
             </Accordion.Item>
           </Accordion>
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

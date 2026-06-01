@@ -1,4 +1,4 @@
-import { Button, Drawer } from '@apx-ui/ds';
+import { Button, Div, Drawer } from '@apx-ui/ds';
 
 export default function BottomSheet() {
   return (
@@ -10,7 +10,7 @@ export default function BottomSheet() {
         <Drawer.Close />
         <Drawer.Header title="Share with..." />
         <Drawer.Body>
-          <div className="grid grid-cols-3 gap-3">
+          <Div className="grid grid-cols-3 gap-3">
             {['Mail', 'Slack', 'Copy link', 'Twitter', 'LinkedIn', 'More'].map(
               (option) => (
                 <Button key={option} variant="outline" size="sm">
@@ -18,7 +18,7 @@ export default function BottomSheet() {
                 </Button>
               ),
             )}
-          </div>
+          </Div>
         </Drawer.Body>
         <Drawer.Footer align="between">
           <Drawer.Close asChild>

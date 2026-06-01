@@ -1,4 +1,4 @@
-import { NavigationMenu, Card, Button } from '@apx-ui/ds';
+import { Button, Card, Div, NavigationMenu, Typography } from '@apx-ui/ds';
 
 import { CodeIcon, PaintIcon, RocketIcon, ZapIcon } from './_icons';
 
@@ -9,7 +9,7 @@ import { CodeIcon, PaintIcon, RocketIcon, ZapIcon } from './_icons';
  */
 export default function MegaMenuWithFeatured() {
   return (
-    <div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+    <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
       <NavigationMenu>
         <NavigationMenu.Item>
           <NavigationMenu.Trigger>Product</NavigationMenu.Trigger>
@@ -35,10 +35,12 @@ export default function MegaMenuWithFeatured() {
             <NavigationMenu.Featured>
               <Card variant="elevated" size="sm">
                 <Card.Body>
-                  <p className="mb-2 text-sm font-semibold">New: AI-assisted setup</p>
-                  <p className="mb-3 text-xs text-(--sds-color-text-muted)">
+                  <Typography variant="bodySmall" weight="semibold" className="mb-2">
+                    New: AI-assisted setup
+                  </Typography>
+                  <Typography variant="caption" className="mb-3 text-(--sds-color-text-muted)">
                     Scaffold a fully-typed app in 30 seconds with our generator.
-                  </p>
+                  </Typography>
                   <Button size="sm" variant="solid">
                     Try the generator
                   </Button>
@@ -55,6 +57,6 @@ export default function MegaMenuWithFeatured() {
           <NavigationMenu.Link href="/docs">Docs</NavigationMenu.Link>
         </NavigationMenu.Item>
       </NavigationMenu>
-    </div>
+    </Div>
   );
 }

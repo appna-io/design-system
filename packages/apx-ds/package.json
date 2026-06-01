@@ -1,6 +1,6 @@
 {
   "name": "@apx-ui/ds",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Themable, RTL-ready, fully overridable React component library",
   "license": "MIT",
   "type": "module",
@@ -51,7 +51,6 @@
   "dependencies": {
     "@apx-ui/components": "workspace:*",
     "@apx-ui/engine": "workspace:*",
-    "@apx-ui/icons": "workspace:*",
     "@apx-ui/theme": "workspace:*",
     "@apx-ui/tokens": "workspace:*"
   },

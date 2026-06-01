@@ -8,3 +8,10 @@ export {
   mixRgb,
   shiftLightness,
 } from './deriveColorRole';
+
+export { buildPaletteGradient, PALETTE_GRADIENTS } from './buildGradient';
+export type {
+  BuildPaletteGradientOptions,
+  PaletteGradientKind,
+  PaletteRoleStop,
+} from './buildGradient';

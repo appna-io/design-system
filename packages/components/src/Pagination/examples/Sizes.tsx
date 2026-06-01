@@ -1,16 +1,22 @@
-import { Pagination } from '@apx-ui/ds';
+import { Div, Pagination, Typography } from '@apx-ui/ds';
 import type { PaginationSize } from '@apx-ui/ds';
 
 const SIZES: PaginationSize[] = ['sm', 'md', 'lg'];
 
 export default function Sizes() {
   return (
-    <div className="flex flex-col gap-4">
+    <Div display="flex" flexDirection="column" gap="4">
       {SIZES.map((size) => (
-        <div key={size} className="flex flex-col gap-1">
-          <span className="text-xs font-medium uppercase tracking-wide text-fg-muted">
+        <Div key={size} display="flex" flexDirection="column" gap="1">
+          <Typography
+            as="span"
+            variant="caption"
+            weight="medium"
+            color="fg.muted"
+            className="uppercase tracking-wide"
+          >
             {size}
-          </span>
+          </Typography>
           <Pagination
             totalCount={100}
             pageSize={10}
@@ -20,8 +26,8 @@ export default function Sizes() {
             showRangeLabel={false}
             responsive={false}
           />
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

@@ -1,4 +1,4 @@
-import { Breadcrumbs, type BreadcrumbsColor } from '@apx-ui/ds';
+import { Breadcrumbs, Div, Typography, type BreadcrumbsColor } from '@apx-ui/ds';
 
 const colors: BreadcrumbsColor[] = ['primary', 'secondary', 'success', 'warning', 'danger', 'info', 'neutral'];
 
@@ -10,13 +10,15 @@ const items = [
 
 export default function Colors() {
   return (
-    <div className="flex flex-col gap-4">
+    <Div display="flex" flexDirection="column" gap="4">
       {colors.map((color) => (
-        <div key={color} className="flex flex-col gap-1">
-          <span className="text-xs uppercase tracking-wide text-fg-muted">{color}</span>
+        <Div key={color} display="flex" flexDirection="column" gap="1">
+          <Typography as="span" variant="caption" color="fg.muted" className="uppercase tracking-wide">
+            {color}
+          </Typography>
           <Breadcrumbs items={items} variant="soft" color={color} />
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

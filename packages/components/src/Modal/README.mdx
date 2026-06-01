@@ -13,6 +13,8 @@ Modal is also the **first consumer of `useScrollLock`**, closing the Phase 17 Co
 primitive audit (`usePosition` / `<Portal>` / `useEscapeStack` / `useFocusTrap` / `useOutsideClick`
 / `useScrollLock` are now all consumer-validated).
 
+<ExampleBlock for="Overview" title="Overview — confirmation dialog with header, body, and footer" />
+
 ## When to use
 
 - A blocking confirmation: "Delete account?".
@@ -122,6 +124,8 @@ Two variants of the Content surface — Modal is a structural primitive, not a s
 
 ## Examples
 
+<ExampleBlock for="Overview" />
+
 <ExampleBlock for="Basic" />
 
 <ExampleBlock for="Sizes" />
@@ -168,39 +172,3 @@ Per-instance overrides via `<Modal.Content className sx style />` (and the equiv
 subpart) merge on top of the theme overrides, which merge on top of the recipe — the same
 precedence the rest of the DS uses, re-validated for compound components by Core 18's
 `defaultProps` wiring.
-
-## Engine consumption (Phase 17 Core full sweep — closed)
-
-Modal is the **first consumer of `useScrollLock`**, completing the Phase 17 Core consumer audit:
-
-| Primitive | First consumer | Modal's role |
-|---|---|---|
-| `usePosition` | Tooltip (P17) | Not used — Modal is centered, not anchored. |
-| `<Portal>` | Tooltip (P17) | Re-validated with focus-trapped + scroll-locked content. |
-| `useEscapeStack` | Tooltip (P17) | Re-validated for nested-Modal unwind ordering. |
-| `useFocusTrap` | Popover (P18) | Re-validated on a non-positioned (centered) overlay. |
-| `useOutsideClick` | Popover (P18) | Not used — Modal handles backdrop clicks inline via the `e.target === e.currentTarget` sentinel. |
-| `useScrollLock` | **Modal (P19)** | Reference-counted lock + iOS pin + scrollbar-gutter compensation, all validated end-to-end. |
-
-### Engine-API feedback
-
-Two new things surfaced and are documented inline:
-
-- **`mergeRefs`** is now duplicated in **three** components (Tooltip trigger, Popover trigger +
-  content, Modal trigger + content). Threshold for engine promotion crossed; the next overlay
-  (Drawer, Phase 20) should consume it from `@apx-ds/engine` instead of re-declaring it.
-- **`useScrollLock(active: boolean)` shape is correct** — the boolean-driven shape (vs. an
-  imperative lock/unlock) made the wiring into Modal's `open && preventScroll` trivial. No
-  changes requested.
-
-No breaking changes were forced on the engine.
-
-## DRY notes
-
-- No `clsx`/`cn` imports — every class composition flows through `useThemedClasses`.
-- `ModalPlacement` is its own enum (`center` / `top`) — Modal does not share Tooltip's 12-axis
-  vocabulary because it is not anchored.
-- Six recipes (one per slot) — chosen over a single god-recipe so theme overrides stay 1:1 with
-  the structural compound. The cost is some repetition across the 4 size-padded slots; lifting
-  to a shared `padBySize()` helper is the next consumer's call (Drawer).
-- Compound assembly (`Object.assign`) follows Card's pattern verbatim.

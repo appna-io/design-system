@@ -5,6 +5,8 @@ input that filters its option list as the user types. `<MultiCombobox />` is the
 with multi-select semantics: selected values render as removable `<Badge>` chips before the
 input, Backspace on an empty query removes the last chip.
 
+<ExampleBlock for="Overview" title="Overview — searchable select with filtered options" />
+
 Combobox sits at the intersection of three component families:
 
 - **Form-control** — same `controlBase` + `variantColorMatrix` shell as `<Input />` /
@@ -58,11 +60,8 @@ Combobox sits at the intersection of three component families:
 />
 ```
 
-- **Single root element** — Combobox is **not** a compound component. The plan called for a
-  props-driven API (`options`, `renderOption`, `filterOption`, `renderEmpty`, …) over a
-  `Combobox.Trigger` / `Combobox.Option` subpart shape. Reason: every subpart would be tightly
-  coupled to the others (the option list is filtered by the query in the input — they have to
-  share state synchronously) and consumers gain nothing from being allowed to re-order them.
+- **Single root element** — Combobox is **not** a compound component; it uses a props-driven API
+  (`options`, `renderOption`, `filterOption`, `renderEmpty`, …).
 - **Two exports for type safety** — `<Combobox>` pins `value: string | null`; `<MultiCombobox>`
   pins `value: string[]`. Both render the same internal implementation; the only behavior delta
   is "close on select?" and "render tag chips?".
@@ -248,33 +247,6 @@ defineTheme({
 Per-instance overrides via `<Combobox className sx style />` merge on top of theme overrides,
 which merge on top of the recipe — same precedence chain Input / Select use.
 
-## Engine consumption
-
-No new engine primitives requested. Combobox is the **third consumer** of
-`_shared/useListKeyboard.ts` and the **fourth consumer** of `_shared/variantColorMatrix.ts`,
-both extracted in earlier phases for exactly this reuse.
-
-| Primitive | Used for |
-|---|---|
-| `usePosition` | Position listbox against the wrapper; `matchTriggerWidth: true` ships the second DS consumer (Select was the first). |
-| `<Portal>` | Render listbox outside the DOM tree so overflow clip-paths can't trap it. |
-| `useEscapeStack` | Esc closes the listbox. |
-| `useOutsideClick` | Pointer-down outside wrapper + content closes. |
-| `useControllableState` | `value`, `inputValue`, `open` — three independent controlled/uncontrolled axes. |
-| `useId` | Listbox + option ids for `aria-controls` / `aria-activedescendant`. |
-| `mergeRefs` | Compose Floating UI + local ref + forwarded ref. |
-| `_shared/controlBase` | Form-control shell base. |
-| `_shared/variantColorMatrix` | 4 × 7 focus matrix — **fourth consumer**. |
-| `_shared/useFormFieldA11y` | `id` / `aria-invalid` / `aria-required` / `aria-describedby` bridging. |
-| `_shared/useListKeyboard` | Arrow / Home / End / Enter / Space / Esc / Tab — **third consumer**. |
-
-Reuses from sibling components (no copies):
-
-- `<Badge removable>` — multi-mode tag chips.
-- `Select.recipe.ts` (`selectContentRecipe`, `selectItemRecipe`) — listbox surface + item rows
-  share the visual identity of Select dropdowns.
-- `Select.motion.ts` (`selectMotion`) — entry/exit animation matches Menu / Select.
-
 ## Headless layer
 
 Three pure helpers + one hook are exported alongside the components:
@@ -288,35 +260,4 @@ Three pure helpers + one hook are exported alongside the components:
 | `useDeferredFilter({ loadOptions, query, debounceMs, enabled })` | Async lifecycle hook.        |
 
 These are deliberately framework-light (no DOM, no React-only dependencies beyond
-`useDeferredFilter`) so they can be reused outside Combobox — CommandPalette and DataGrid's
-filter primitives are the planned next consumers.
-
-## DRY notes
-
-- No `clsx` / `cn` — every class composition flows through `useThemedClasses`.
-- `controlBase`, `variantColorMatrix`, `useFormFieldA11y`, `useListKeyboard`,
-  `selectContentRecipe`, `selectItemRecipe`, `selectMotion`, `Badge` — every visual + behavioral
-  primitive is sourced. The only new recipes are the Combobox-specific affordances (tag list,
-  group label, empty / loading / error / create row, highlight mark).
-- `ComboboxPlacement = PopoverPlacement` — alias for the 12-placement vocab.
-- Three filter strategies in 8 lines (`filterStrategies.ts`) — no dependency on a fuzzy library.
-- Async fetcher behind `useDeferredFilter` — exportable + reusable for CommandPalette without
-  re-deriving the abort/debounce logic.
-
-## Out of scope (V1)
-
-- **Virtualization** — the plan calls for it at `virtualizeAfter > 500` options via
-  `@tanstack/react-virtual`. Deferred until a real consumer hits the threshold. Render-all is
-  fine up to ~500 entries; past that the listbox is the wrong UX anyway (consumers should pre-
-  filter server-side via `loadOptions`).
-- **`<I18nProvider>` integration** — the provider doesn't exist yet in the DS. Combobox accepts
-  inline `translations={…}` overrides with bundled English defaults
-  (`DEFAULT_COMBOBOX_TRANSLATIONS`). When the provider lands, Combobox will pick it up via
-  `defaultProps` without an API break.
-- **Standalone `useCombobox()` headless hook** — the plan listed it for power users who want
-  Combobox state without the rendering. Deferred to V2; the four bundled helpers
-  (`flattenOptions`, `filterStrategies`, `highlightMatch`, `useDeferredFilter`) cover the
-  ~90% case without the maintenance burden of a second public state machine.
-- **`Combobox.Trigger` / `.Option` subparts** — the plan acknowledged the props-driven API as
-  the canonical shape; subparts would add 8+ exports with no per-subpart customization value.
-- **`allowSelectAll` for multi** — Ctrl/Cmd+A select-all; defer until a consumer asks.
+`useDeferredFilter`) so they can be reused outside Combobox.

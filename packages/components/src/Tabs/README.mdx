@@ -5,8 +5,10 @@
 roving tabindex, arrow-key navigation, manual vs automatic activation, panel
 association — across four visual variants and two orientations.
 
-The compound shape mirrors `<Card>` (Phase 14): a root state owner with three
-dot-namespaced subparts that read everything they need from a single context.
+The compound shape mirrors `<Card>`: a root state owner with three dot-namespaced subparts
+that read everything they need from a single context.
+
+<ExampleBlock for="Overview" title="Overview — three tabs with realistic panel content" />
 
 ```tsx
 import { Tabs } from 'apx-ds';
@@ -184,11 +186,3 @@ the logical `border-e` divider, which automatically flips visually.
   + section if the content always matters.
 - **Don't** auto-select on mount in shared rendering contexts (e.g. SSR-only);
   rely on `defaultValue` from your data.
-
-## Out of scope (future)
-
-- A literally-sliding indicator powered by JS measurements (the CSS-crossfade
-  approach in this phase covers ~95% of consumer needs).
-- Overflow handling (scroll shadows when the trigger row exceeds its container) —
-  a focused follow-up.
-- Closable tabs — a separate `<TabBar>` is the right home for that UX.

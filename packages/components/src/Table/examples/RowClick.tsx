@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Table } from '@apx-ui/ds';
+import { Div, Table, Typography } from '@apx-ui/ds';
 import type { TableColumn } from '@apx-ui/ds';
 interface Doc {
   id: string;
@@ -21,10 +21,10 @@ const columns: TableColumn<Doc>[] = [
 export default function RowClick() {
   const [opened, setOpened] = useState<string>('none');
   return (
-    <div className="flex flex-col gap-2">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="2">
+      <Typography variant="bodySmall" color="fg.muted">
         Click a row to &ldquo;open&rdquo; it. Opened: <code>{opened}</code>
-      </p>
+      </Typography>
       <Table
         ariaLabel="Documents"
         columns={columns}
@@ -33,6 +33,6 @@ export default function RowClick() {
         onRowClick={(d) => setOpened(d.title)}
         hoverable
       />
-    </div>
+    </Div>
   );
 }

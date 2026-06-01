@@ -322,4 +322,3 @@ no architectural changes required because the slot was already generic.
   two-value form as an elliptical radius. Components are expected to use shorthand by default.
 - Tests added: variant registration, radius shape, and CSS-var emission (`--sds-radius-md: 8px 0px`
   inside `:root[data-variant='katana'] { … }`).
-

@@ -1,4 +1,4 @@
-import { Sidebar } from '@apx-ui/ds';
+import { Div, Sidebar } from '@apx-ui/ds';
 
 import { CalendarIcon, FolderIcon, HomeIcon, InboxIcon, StarIcon } from './_icons';
 
@@ -8,7 +8,10 @@ import { CalendarIcon, FolderIcon, HomeIcon, InboxIcon, StarIcon } from './_icon
  */
 export default function WithBadges() {
   return (
-    <div className="h-[460px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div
+      height={460}
+      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+    >
       <Sidebar ariaLabel="Badge showcase" variant="bordered" width={240}>
         <Sidebar.Item href="/" icon={<HomeIcon />} badge="New" badgeColor="info">
           Home
@@ -29,6 +32,6 @@ export default function WithBadges() {
           Alerts
         </Sidebar.Item>
       </Sidebar>
-    </div>
+    </Div>
   );
 }

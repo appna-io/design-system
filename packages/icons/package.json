@@ -1,7 +1,7 @@
 {
   "name": "@apx-ui/icons",
-  "version": "0.0.0",
-  "description": "Icon set for apx-dsaceholder, populated in a future phase)",
+  "version": "0.0.1",
+  "description": "Optional, tree-shakable SVG icon set for apx-ds. Install separately when you want icons.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -28,6 +28,14 @@
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist .turbo"
   },
+  "keywords": [
+    "react",
+    "icons",
+    "svg",
+    "design-system",
+    "apx-ds",
+    "tree-shakable"
+  ],
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"

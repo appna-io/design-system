@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Stepper } from '@apx-ui/ds';
+import { Div, Stepper, Typography } from '@apx-ui/ds';
 
 const STEPS = [
   { id: 'account', label: 'Account' },
@@ -12,17 +12,17 @@ export default function Clickable() {
   const [active, setActive] = useState(1);
 
   return (
-    <div className="flex flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3">
       <Stepper
         active={active}
         steps={STEPS}
         clickable
         onStepClick={({ index }) => setActive(index)}
       />
-      <p className="text-xs text-fg-muted">
+      <Typography variant="caption" color="fg.muted">
         Every indicator is a button — click any step to jump there. <strong>Active step:</strong>{' '}
         {STEPS[active]?.label}.
-      </p>
-    </div>
+      </Typography>
+    </Div>
   );
 }

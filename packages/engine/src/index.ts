@@ -17,6 +17,13 @@ export {
   relativeLuminance,
   mixRgb,
   shiftLightness,
+  buildPaletteGradient,
+  PALETTE_GRADIENTS,
+} from './color';
+export type {
+  BuildPaletteGradientOptions,
+  PaletteGradientKind,
+  PaletteRoleStop,
 } from './color';
 
 // polymorphism

@@ -1,4 +1,4 @@
-import { Select } from '@apx-ui/ds';
+import { Div, Select } from '@apx-ui/ds';
 import type { SelectColor } from '@apx-ui/ds';
 const colors: SelectColor[] = [
   'primary',
@@ -12,7 +12,7 @@ const colors: SelectColor[] = [
 
 export default function Colors() {
   return (
-    <div className="grid grid-cols-2 gap-3 max-w-2xl">
+    <Div className="grid grid-cols-2 gap-3 max-w-2xl">
       {colors.map((color) => (
         <Select
           key={color}
@@ -27,6 +27,6 @@ export default function Colors() {
           </Select.Content>
         </Select>
       ))}
-    </div>
+    </Div>
   );
 }

@@ -1,4 +1,4 @@
-import { Accordion } from '@apx-ui/ds';
+import { Accordion, Typography } from '@apx-ui/ds';
 
 export default function Nested() {
   return (
@@ -6,9 +6,9 @@ export default function Nested() {
       <Accordion.Item value="outer-one">
         <Accordion.Trigger>Outer section one (has a nested accordion)</Accordion.Trigger>
         <Accordion.Content>
-          <p className="mb-3 text-sm text-fg-muted">
+          <Typography variant="bodySmall" color="fg.muted" sx={{ mb: 3 }}>
             Each accordion owns its own state — inner clicks do not affect the outer.
-          </p>
+          </Typography>
           <Accordion type="multiple" variant="soft" size="sm">
             <Accordion.Item value="inner-a">
               <Accordion.Trigger>Inner A</Accordion.Trigger>

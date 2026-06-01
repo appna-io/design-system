@@ -1,4 +1,4 @@
-import { Button, Form, Input } from '@apx-ui/ds';
+import { Button, Div, Form, Input } from '@apx-ui/ds';
 
 export default function RenderProp() {
   return (
@@ -7,7 +7,7 @@ export default function RenderProp() {
       onSubmit={async (values) => alert(JSON.stringify(values))}
     >
       {(form) => (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <Div display="flex" flexDirection="column" gap="3">
           <Input
             name="email"
             value={String(form.values.email ?? '')}
@@ -21,7 +21,7 @@ export default function RenderProp() {
           <pre style={{ fontSize: 11, opacity: 0.7 }}>
             {JSON.stringify({ values: form.values, touched: form.touched, dirty: form.dirty }, null, 2)}
           </pre>
-        </div>
+        </Div>
       )}
     </Form>
   );

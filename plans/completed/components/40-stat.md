@@ -509,4 +509,3 @@ Internal breakdown:
 - **Promote `formatValue` to `@apx-dsine/intl`** when DataGrid (Phase 27) lands — same wiring will be needed there. Today it ships from `apx-apx-dsngine promotion is a no-op rename for consumers (umbrella re-export stays).
 - **Responsive divider orientation** — a CSS-only `<Divider>` variant that flips via media-queries would let `<StatGroup direction={{ base: 'column', md: 'row' }}>` emit a divider that's horizontal on mobile and vertical on desktop. Tracked for Divider v2.
 - **`Stat.Label as="dt"` polymorphism** — useful when wrapping a `StatGroup` in a `<dl>`. Low priority (consumers can write `<dt>` themselves today); ship if pattern emerges.
-

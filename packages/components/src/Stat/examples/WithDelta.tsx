@@ -1,8 +1,8 @@
-import { Stat } from '@apx-ui/ds';
+import { Div, Stat } from '@apx-ui/ds';
 
 export default function WithDelta() {
   return (
-    <div className="flex flex-col gap-6">
+    <Div display="flex" flexDirection="column" gap="6">
       <Stat
         label="Active users"
         value={1240}
@@ -21,6 +21,6 @@ export default function WithDelta() {
         delta={{ value: 0, direction: 'neutral' }}
         caption="No change today"
       />
-    </div>
+    </Div>
   );
 }

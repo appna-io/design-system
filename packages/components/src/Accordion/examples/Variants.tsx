@@ -1,13 +1,13 @@
-import { Accordion } from '@apx-ui/ds';
+import { Accordion, Div, Typography } from '@apx-ui/ds';
 
 export default function Variants() {
   return (
-    <div className="flex flex-col gap-6">
+    <Div display="flex" flexDirection="column" gap="6">
       {(['solid', 'outline', 'soft', 'ghost'] as const).map((variant) => (
-        <div key={variant}>
-          <p className="mb-2 text-sm font-medium text-fg-muted">
+        <Div key={variant}>
+          <Typography variant="bodySmall" weight="medium" color="fg.muted" sx={{ mb: 2 }}>
             variant=<code>{variant}</code>
-          </p>
+          </Typography>
           <Accordion type="single" variant={variant} defaultValue="one">
             <Accordion.Item value="one">
               <Accordion.Trigger>First item</Accordion.Trigger>
@@ -18,8 +18,8 @@ export default function Variants() {
               <Accordion.Content>Stacked under the first.</Accordion.Content>
             </Accordion.Item>
           </Accordion>
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

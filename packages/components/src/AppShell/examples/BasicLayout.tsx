@@ -1,13 +1,15 @@
-import { AppShell, HStack, Stack } from '@apx-ui/ds';
+import { AppShell, Div, HStack, Stack, Typography } from '@apx-ui/ds';
 
 export default function BasicLayout() {
   return (
-    <div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
       <AppShell
         header={
           <HStack gap={3} className="w-full">
             <strong>Acme</strong>
-            <span className="text-sm text-(--sds-color-text-muted)">Dashboard</span>
+            <Typography as="span" variant="bodySmall" color="fg.muted">
+              Dashboard
+            </Typography>
           </HStack>
         }
         sidebar={
@@ -18,13 +20,19 @@ export default function BasicLayout() {
             <a href="#settings" className="px-2 py-1 rounded hover:bg-(--sds-color-surface-subtle)">Settings</a>
           </Stack>
         }
-        footer={<span>© 2026 Acme, Inc.</span>}
+        footer={
+          <Typography as="span" variant="bodySmall" color="fg.muted">
+            © 2026 Acme, Inc.
+          </Typography>
+        }
       >
-        <h2 className="text-lg font-semibold">Welcome back</h2>
-        <p className="mt-2 text-sm text-(--sds-color-text-muted)">
+        <Typography as="h2" variant="titleSmall" weight="semibold">
+          Welcome back
+        </Typography>
+        <Typography variant="bodySmall" color="fg.muted" sx={{ mt: 2 }}>
           Pick a section from the sidebar to begin.
-        </p>
+        </Typography>
       </AppShell>
-    </div>
+    </Div>
   );
 }

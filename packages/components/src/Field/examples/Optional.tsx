@@ -1,14 +1,14 @@
-import { Field, Input } from '@apx-ui/ds';
+import { Div, Field, Input } from '@apx-ui/ds';
 
 export default function Optional() {
   return (
-    <div className="flex flex-col gap-4 max-w-sm">
+    <Div display="flex" flexDirection="column" gap="4" className="max-w-sm">
       <Field label="Full name" required>
         <Input name="name" />
       </Field>
       <Field label="Phone" optional helperText="We'll only call about urgent account issues.">
         <Input name="phone" type="tel" />
       </Field>
-    </div>
+    </Div>
   );
 }

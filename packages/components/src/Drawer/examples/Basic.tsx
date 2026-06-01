@@ -1,4 +1,4 @@
-import { Button, Drawer } from '@apx-ui/ds';
+import { Button, Drawer, Typography } from '@apx-ui/ds';
 
 export default function Basic() {
   return (
@@ -13,11 +13,11 @@ export default function Basic() {
           description="Recent activity from your team."
         />
         <Drawer.Body>
-          <p className="text-sm">
+          <Typography variant="bodySmall">
             Drawers are edge-anchored panels. They lock the page scroll, trap
             focus inside the content, and dismiss on Escape, backdrop click, or
             the Close button.
-          </p>
+          </Typography>
         </Drawer.Body>
         <Drawer.Footer>
           <Drawer.Close asChild>

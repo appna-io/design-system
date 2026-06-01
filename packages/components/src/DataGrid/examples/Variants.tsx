@@ -1,4 +1,4 @@
-import { DataGrid } from '@apx-ui/ds';
+import { DataGrid, Div, Typography } from '@apx-ui/ds';
 import type { DataGridColumnDef, DataGridVariant } from '@apx-ui/ds';
 
 interface Row {
@@ -29,10 +29,12 @@ const VARIANTS: DataGridVariant[] = ['solid', 'outline', 'striped', 'minimal'];
  */
 export default function Variants() {
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <Div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       {VARIANTS.map((variant) => (
-        <div key={variant} className="flex flex-col gap-2">
-          <h3 className="text-fg-default text-sm font-semibold capitalize">{variant}</h3>
+        <Div key={variant} display="flex" flexDirection="column" gap="2">
+          <Typography as="h3" variant="bodySmall" weight="semibold" color="fg.default" transform="capitalize">
+            {variant}
+          </Typography>
           <DataGrid<Row>
             data={data}
             columns={columns}
@@ -44,8 +46,8 @@ export default function Variants() {
             globalSearch={false}
             defaultPagination={{ pageIndex: 0, pageSize: 0 }}
           />
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

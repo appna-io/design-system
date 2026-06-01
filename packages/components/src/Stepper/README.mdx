@@ -14,6 +14,8 @@ Status auto-derives from `active`: indexes `< active` paint as `complete`, `=== 
 paints as `active`, `> active` stays `pending`. Override per step with `status: 'error'` or
 `status: 'loading'` (the latter auto-injects `<Spinner />`).
 
+<ExampleBlock for="Overview" title="Overview — four-step horizontal stepper" />
+
 ## Anatomy
 
 | Subpart                  | Element                              | Role                                                  |
@@ -122,7 +124,7 @@ The default `aria-label="Progress"` and the embedded status strings (`"complete"
 ## RTL
 
 - The `<ol>` flows right-to-left automatically inside `dir="rtl"` — the first step appears on the right in both horizontal and vertical layouts.
-- Connectors use `border-inline-start` for the vertical variant — they always sit on the logical-start edge.
+- Connectors use `margin-inline-start` to position the vertical track — it always sits on the logical-start edge.
 - Step number digits stay LTR (consistent with `tabular-nums` and standard form indicators).
 
 ## Theming
@@ -136,8 +138,8 @@ Six override slots: `root`, `item`, `interactive`, `indicator`, `label`, `descri
       Stepper: {
         defaultProps: { variant: 'dots', size: 'sm' },
         styleOverrides: {
-          indicator: 'data-[status=active]:bg-primary data-[status=active]:ring-primary/40',
-          connector: 'data-[status=complete]:border-primary',
+          indicator: 'data-[status=active]:bg-primary data-[status=active]:ring-primary-subtle',
+          connector: 'data-[status=complete]:bg-primary',
         },
       },
     },
@@ -182,9 +184,3 @@ The `Wizard` example above demonstrates this pattern end-to-end.
 - **Do** combine `clickable` + `linear` for wizard navigation that lets the user backtrack but not skip ahead.
 - **Don't** put next / prev / submit buttons inside Stepper — they belong in your form, not the indicator.
 - **Don't** auto-advance on mount in a renderer example — Ahmad's ship-gate rule: every interactive component must wait for a user action.
-
-## Out of scope (future)
-
-- Vertical mode "expanded form" panel that lives outside the `<li>` (today it lives inside; some consumers may want a sibling panel that animates in).
-- Per-step `onComplete` / `onError` lifecycle hooks — currently consumers wire these into their own state machine.
-- Step branching (decision-tree wizards) — keep linear for now; branching requires a different mental model.

@@ -1,4 +1,4 @@
-import { Select } from '@apx-ui/ds';
+import { Div, Select, Typography } from '@apx-ui/ds';
 
 /**
  * Composing Select with manual `<label htmlFor>` + helper text + error text — the same pattern a
@@ -8,7 +8,7 @@ import { Select } from '@apx-ui/ds';
  */
 export default function InsideField() {
   return (
-    <div className="flex flex-col gap-1 max-w-sm">
+    <Div display="flex" flexDirection="column" gap="1" className="max-w-sm">
       <label htmlFor="lang" className="text-sm font-medium">
         Language
       </label>
@@ -21,9 +21,9 @@ export default function InsideField() {
           <Select.Item value="ja">日本語</Select.Item>
         </Select.Content>
       </Select>
-      <p id="lang-helper" className="text-xs text-fg-muted">
+      <Typography id="lang-helper" variant="caption" color="fg.muted">
         We&apos;ll translate the UI based on your choice.
-      </p>
-    </div>
+      </Typography>
+    </Div>
   );
 }

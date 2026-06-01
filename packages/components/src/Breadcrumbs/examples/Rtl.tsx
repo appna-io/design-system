@@ -1,8 +1,8 @@
-import { Breadcrumbs } from '@apx-ui/ds';
+import { Breadcrumbs, Div } from '@apx-ui/ds';
 
 export default function Rtl() {
   return (
-    <div dir="rtl" className="border border-border rounded-md p-3">
+    <Div dir="rtl" className="border border-border rounded-md p-3">
       <Breadcrumbs
         aria-label="\u05e0\u05ea\u05d9\u05d1"
         items={[
@@ -11,6 +11,6 @@ export default function Rtl() {
           { label: '\u05d9\u05d5\u05d7\u05e0\u05df \u05e7\u05d4\u05df' },
         ]}
       />
-    </div>
+    </Div>
   );
 }

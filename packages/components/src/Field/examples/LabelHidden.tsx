@@ -1,8 +1,8 @@
-import { Field, Input } from '@apx-ui/ds';
+import { Div, Field, Input, Typography } from '@apx-ui/ds';
 
 export default function LabelHidden() {
   return (
-    <div className="flex flex-col gap-4 max-w-sm">
+    <Div display="flex" flexDirection="column" gap="4" className="max-w-sm">
       <Field label="Search" labelPosition="hidden">
         <Input
           type="search"
@@ -11,11 +11,11 @@ export default function LabelHidden() {
           leftIcon={<SearchGlyph />}
         />
       </Field>
-      <p className="text-xs text-fg-muted">
+      <Typography variant="caption" color="fg.muted">
         Inspect the DOM — the &lt;label&gt; element is still present (visually hidden via `sr-only`),
         so screen-reader users hear &quot;Search&quot; before the input.
-      </p>
-    </div>
+      </Typography>
+    </Div>
   );
 }
 

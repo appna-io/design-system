@@ -1,16 +1,22 @@
-import { Pagination } from '@apx-ui/ds';
+import { Div, Pagination, Typography } from '@apx-ui/ds';
 import type { PaginationShape } from '@apx-ui/ds';
 
 const SHAPES: PaginationShape[] = ['square', 'rounded', 'pill'];
 
 export default function Shapes() {
   return (
-    <div className="flex flex-col gap-4">
+    <Div display="flex" flexDirection="column" gap="4">
       {SHAPES.map((shape) => (
-        <div key={shape} className="flex flex-col gap-1">
-          <span className="text-xs font-medium uppercase tracking-wide text-fg-muted">
+        <Div key={shape} display="flex" flexDirection="column" gap="1">
+          <Typography
+            as="span"
+            variant="caption"
+            weight="medium"
+            color="fg.muted"
+            className="uppercase tracking-wide"
+          >
             {shape}
-          </span>
+          </Typography>
           <Pagination
             totalCount={100}
             pageSize={10}
@@ -21,8 +27,8 @@ export default function Shapes() {
             showRangeLabel={false}
             responsive={false}
           />
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

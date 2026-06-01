@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Div,
   Scheduler,
   type SchedulerCalendarSource,
   type SchedulerEvent,
@@ -33,7 +34,7 @@ export default function FullChrome() {
   ]);
 
   return (
-    <div style={{ height: 720 }}>
+    <Div height={720}>
       <Scheduler
         events={events}
         calendars={calendars}
@@ -52,7 +53,7 @@ export default function FullChrome() {
           return created;
         }}
       />
-    </div>
+    </Div>
   );
 }
 

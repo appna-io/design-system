@@ -1,8 +1,8 @@
-import { Button, Tooltip } from '@apx-ui/ds';
+import { Button, Div, Tooltip } from '@apx-ui/ds';
 
 export default function Delay() {
   return (
-    <div className="flex flex-wrap items-center gap-4">
+    <Div display="flex" flexWrap="wrap" alignItems="center" gap="4">
       <Tooltip content="Instant" openDelay={0} closeDelay={0}>
         <Button variant="soft">0ms / 0ms</Button>
       </Tooltip>
@@ -12,6 +12,6 @@ export default function Delay() {
       <Tooltip content="Patient" openDelay={1000} closeDelay={300}>
         <Button variant="soft">1000ms / 300ms</Button>
       </Tooltip>
-    </div>
+    </Div>
   );
 }

@@ -1,4 +1,4 @@
-import { Button, Drawer } from '@apx-ui/ds';
+import { Button, Div, Drawer, Typography } from '@apx-ui/ds';
 
 export default function ScrollableBody() {
   const sections = Array.from({ length: 30 }, (_, i) => i + 1);
@@ -14,16 +14,16 @@ export default function ScrollableBody() {
           description="All recent events for this account."
         />
         <Drawer.Body>
-          <div className="space-y-3 text-sm">
+          <Div className="space-y-3">
             {sections.map((n) => (
-              <p key={n}>
+              <Typography key={n} variant="bodySmall">
                 Event {n}. Body scrolls inside the panel while Header and
                 Footer stay pinned at the top and bottom edges. The
                 drawer&apos;s `h-full` keeps it inside the viewport regardless
                 of content length.
-              </p>
+              </Typography>
             ))}
-          </div>
+          </Div>
         </Drawer.Body>
         <Drawer.Footer>
           <Drawer.Close asChild>

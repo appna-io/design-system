@@ -21,9 +21,27 @@ export const treeRootRecipe = cv({
  * Row chrome for a single treeitem. The dot-attribute pattern (`data-selected`,
  * `data-focused`, `data-disabled`) lets us layer states independently rather than
  * exploding the recipe variants into N×M×K compound rules.
+ *
+ * Selected rows pick up a thin leading accent bar (drawn via `::before`) plus a
+ * slightly stronger tinted background and primary text — the "small touch of
+ * highlight" cue that makes the active node visible at a glance without dominating
+ * the row. The accent is logical (`start-0`), so it lands on the correct side in RTL.
  */
 export const treeItemRecipe = cv({
-  base: 'relative flex w-full items-center gap-1.5 rounded-sm transition-colors focus-visible:outline-none data-[focused=true]:bg-bg-subtle data-[selected=true]:bg-primary-subtle/60 data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-50 hover:bg-bg-subtle/60 data-[disabled=true]:hover:bg-transparent',
+  base: [
+    'relative flex w-full items-center gap-1.5 rounded-sm transition-colors',
+    'focus-visible:outline-none',
+    'before:pointer-events-none before:absolute before:inset-y-1 before:start-0',
+    'before:w-[3px] before:rounded-full before:bg-primary before:opacity-0',
+    'before:transition-opacity motion-reduce:before:transition-none',
+    'hover:bg-bg-subtle/70',
+    'data-[focused=true]:bg-bg-subtle',
+    'data-[selected=true]:bg-primary-subtle/80 data-[selected=true]:text-primary',
+    'data-[selected=true]:hover:bg-primary-subtle',
+    'data-[selected=true]:before:opacity-100',
+    'data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-50',
+    'data-[disabled=true]:hover:bg-transparent',
+  ].join(' '),
   variants: {
     size: {
       sm: 'min-h-7 px-1.5 py-0.5',
@@ -41,6 +59,11 @@ export const treeItemRecipe = cv({
 /**
  * Chevron — rotates on expansion. We give it a fixed size and color it via the row's
  * text color so it inherits hover / disabled states automatically.
+ *
+ * The underlying glyph is `ChevronRight`, which physically points right. Under
+ * `dir="rtl"` we flip the collapsed state to `rotate-180` so the chevron points toward
+ * the logical-start edge (visually ←) — matching the row indentation, which is also
+ * logical. The expanded state stays at `rotate-90` (pointing ↓) in both directions.
  */
 export const treeChevronRecipe = cv({
   base: 'inline-flex shrink-0 items-center justify-center text-fg-muted transition-transform motion-reduce:transition-none',
@@ -52,7 +75,7 @@ export const treeChevronRecipe = cv({
     },
     expanded: {
       true: 'rotate-90',
-      false: 'rotate-0',
+      false: 'rotate-0 rtl:rotate-180',
     },
     hidden: {
       true: 'opacity-0',

@@ -89,6 +89,8 @@ export type {
   CardDividerProps,
   CardFooterAlign,
   CardFooterProps,
+  CardHeaderIconColor,
+  CardHeaderIconVariant,
   CardHeaderProps,
   CardMediaProps,
   CardOrientation,
@@ -212,6 +214,33 @@ export type {
   RenderCommandContext,
   UseGlobalHotkeyOptions,
 } from './CommandPalette';
+
+/* Confirm — singleton imperative confirm dialog. Mount `<ConfirmProvider />` once at the app
+ * root next to `<ThemeProvider>` and call `confirm.display({ ... })` from anywhere; the
+ * returned promise resolves with `true` (confirm) or `false` (cancel / Escape / backdrop).
+ * Mirrors the `SplashProvider` + `splash(...)` and `Toaster` + `toast(...)` patterns. */
+export {
+  ConfirmProvider,
+  ConfirmStore,
+  ConfirmSurface,
+  confirm,
+  confirmBackdropRecipe,
+  confirmContentRecipe,
+  confirmDescriptionRecipe,
+  confirmFooterRecipe,
+  confirmIconWrapRecipe,
+  confirmTitleRecipe,
+  useConfirmState,
+} from './Confirm';
+export type {
+  ConfirmApi,
+  ConfirmDisplayOptions,
+  ConfirmItem,
+  ConfirmProviderProps,
+  ConfirmState,
+  ConfirmSurfaceProps,
+  ConfirmVariant,
+} from './Confirm';
 
 export {
   ColorPicker,
@@ -751,6 +780,9 @@ export type {
   PopoverVariant,
 } from './Popover';
 
+export { PricingCard } from './PricingCard';
+export type { PricingCardFeatureColor, PricingCardProps } from './PricingCard';
+
 /* Phase 31 — `<Pagination />`. Headless layer + pure window helper shipped in
  * PR 1; the full DOM component, slot recipes, i18n bundles (en/he/ar), and
  * translation hook ship in PR 2; `<DataGrid.Pagination />` is delegated to
@@ -1082,6 +1114,45 @@ export type {
   SpinnerThickness,
   SpinnerVariant,
 } from './Spinner/Spinner.types';
+
+/* SplashScreen — full-screen first-paint surface with five animated visual variants
+ * (fade / pulse / gradient / particles / wave), opt-in Spinner or Progress indicator,
+ * and auto-dismiss timeout. The canonical API is **imperative** (`splash.show(…)`),
+ * powered by a singleton `<SplashProvider>` host mounted once at the app root next to
+ * `<ThemeProvider>` — mirrors the `Toaster` + `toast()` pattern. Pure CSS animations,
+ * Portal-mounted, `prefers-reduced-motion` aware. */
+export {
+  SplashProvider,
+  SplashScreen,
+  SplashStore,
+  SplashSurface,
+  splash,
+  splashScreenRecipes,
+  SPLASH_GRADIENT_BY_COLOR,
+  SPLASH_PARTICLE_BREATHE_DELAYS_MS,
+  SPLASH_PARTICLE_INNER_ANGLES,
+  SPLASH_PARTICLE_OUTER_ANGLES,
+  SPLASH_PULSE_RING_DELAYS_MS,
+  SPLASH_WAVE_COLOR_CLASS,
+  useSplashState,
+} from './SplashScreen';
+export type {
+  SplashApi,
+  SplashGradient,
+  SplashProviderProps,
+  SplashScreenBackdrop,
+  SplashScreenColor,
+  SplashScreenContextValue,
+  SplashScreenIndicator,
+  SplashScreenItem,
+  SplashScreenPlacement,
+  SplashScreenProps,
+  SplashScreenVariant,
+  SplashScreenVisualProps,
+  SplashShowOptions,
+  SplashState,
+  SplashSurfaceProps,
+} from './SplashScreen';
 
 export { Stack, HStack, VStack, Spacer } from './Stack';
 export type {

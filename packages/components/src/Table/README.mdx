@@ -1,15 +1,10 @@
----
-title: Table
-status: Stable
-phase: 55
----
-
 # Table
 
 `<Table />` is the lightweight, semantic HTML-`<table>` primitive for the 80 % case — render an
-array as rows and columns, get sorting and a checkbox-driven selection mode for free, target
-under 4 KB gzipped. The heavy lifting (virtualization, multi-column sort, column resize/pin,
-cell editing) lives in **DataGrid** (Phase 27).
+array as rows and columns, get sorting and a checkbox-driven selection mode for free. The heavy
+lifting (virtualization, multi-column sort, column resize/pin, cell editing) lives in **DataGrid**.
+
+<ExampleBlock for="Overview" title="Overview — sortable columns with status badges" />
 
 > **Mental model**
 >
@@ -161,7 +156,7 @@ filtered or sorted.
 | `empty`        | Rendered in a full-width body cell when `data.length === 0`               |
 | `error`        | Rendered in a full-width body cell when supplied (wins over `empty`)      |
 
-`empty` accepts any node — for the rich variant, drop in `<EmptyState>` (Phase 42).
+`empty` accepts any node — for the rich variant, drop in `<EmptyState>`.
 
 ---
 
@@ -207,8 +202,7 @@ the logical end. No per-direction code lives in the component.
 
 ## Internationalization
 
-V1 ships English defaults inline. When `<I18nProvider>` lands (Phase 27 establishes the
-primitive), the keys we'll consume are:
+V1 ships English defaults inline. When `<I18nProvider>` lands, the keys we'll consume are:
 
 | Key                       | Default              |
 | ------------------------- | -------------------- |

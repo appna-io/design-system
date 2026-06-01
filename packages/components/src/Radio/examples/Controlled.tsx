@@ -1,22 +1,24 @@
 import { useState } from 'react';
-import { Radio, RadioGroup } from '@apx-ui/ds';
+import { Div, Radio, RadioGroup, Typography } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [controlled, setControlled] = useState('medium');
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <div className="text-sm font-medium mb-2">Uncontrolled (defaultValue)</div>
+    <Div display="flex" flexDirection="column" gap="6">
+      <Div>
+        <Typography variant="bodySmall" weight="medium" className="mb-2">
+          Uncontrolled (defaultValue)
+        </Typography>
         <RadioGroup name="uncontrolled" defaultValue="medium" aria-label="Uncontrolled size">
           <Radio value="small">Small</Radio>
           <Radio value="medium">Medium</Radio>
           <Radio value="large">Large</Radio>
         </RadioGroup>
-      </div>
-      <div>
-        <div className="text-sm font-medium mb-2">
+      </Div>
+      <Div>
+        <Typography variant="bodySmall" weight="medium" className="mb-2">
           Controlled (value = <code>{controlled}</code>)
-        </div>
+        </Typography>
         <RadioGroup
           name="controlled"
           value={controlled}
@@ -27,7 +29,7 @@ export default function Controlled() {
           <Radio value="medium">Medium</Radio>
           <Radio value="large">Large</Radio>
         </RadioGroup>
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

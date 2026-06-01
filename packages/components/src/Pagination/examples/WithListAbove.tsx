@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Pagination } from '@apx-ui/ds';
+import { Div, Pagination, Typography } from '@apx-ui/ds';
 
 /**
  * The realistic shape: a card list paired with `<Pagination>` underneath.
@@ -22,18 +22,23 @@ export default function WithListAbove() {
   );
 
   return (
-    <div className="flex flex-col gap-4">
-      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <Div display="flex" flexDirection="column" gap="4">
+      <Div as="ul" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {visible.map((item) => (
-          <li
+          <Div
+            as="li"
             key={item.id}
             className="rounded-lg border border-border bg-bg-paper p-3"
           >
-            <h3 className="text-sm font-semibold text-fg-default">{item.title}</h3>
-            <p className="mt-1 text-xs text-fg-muted">{item.description}</p>
-          </li>
+            <Typography as="h3" variant="bodySmall" weight="semibold" color="fg.default">
+              {item.title}
+            </Typography>
+            <Typography variant="caption" color="fg.muted" className="mt-1">
+              {item.description}
+            </Typography>
+          </Div>
         ))}
-      </ul>
+      </Div>
       <Pagination
         totalCount={ALL_ITEMS.length}
         pageIndex={pageIndex}
@@ -46,6 +51,6 @@ export default function WithListAbove() {
         variant="ghost"
         color="primary"
       />
-    </div>
+    </Div>
   );
 }

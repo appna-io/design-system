@@ -1,8 +1,8 @@
-import { ToggleGroup } from '@apx-ui/ds';
+import { Div, ToggleGroup } from '@apx-ui/ds';
 
 export default function Attached() {
   return (
-    <div className="flex flex-col gap-4">
+    <Div display="flex" flexDirection="column" gap="4">
       <ToggleGroup
         type="single"
         aria-label="Text alignment"
@@ -27,6 +27,6 @@ export default function Attached() {
         <ToggleGroup.Item value="monthly" aria-label="Monthly">Monthly</ToggleGroup.Item>
         <ToggleGroup.Item value="yearly" aria-label="Yearly">Yearly</ToggleGroup.Item>
       </ToggleGroup>
-    </div>
+    </Div>
   );
 }

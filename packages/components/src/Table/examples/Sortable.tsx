@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Table } from '@apx-ui/ds';
+import { Div, Table, Typography } from '@apx-ui/ds';
 import type { TableColumn, TableSortState } from '@apx-ui/ds';
 
 interface Row {
@@ -25,11 +25,11 @@ const columns: TableColumn<Row>[] = [
 export default function Sortable() {
   const [sort, setSort] = useState<TableSortState | undefined>({ id: 'name', direction: 'asc' });
   return (
-    <div className="flex flex-col gap-2">
-      <p className="text-fg-muted text-sm">
-        Click any header to cycle sort: <code>asc</code> \u2192 <code>desc</code> \u2192 unsorted. Current:{' '}
+    <Div display="flex" flexDirection="column" gap="2">
+      <Typography variant="bodySmall" color="fg.muted">
+        Click any header to cycle sort: <code>asc</code> → <code>desc</code> → unsorted. Current:{' '}
         <code>{sort ? `${sort.id} (${sort.direction})` : 'none'}</code>
-      </p>
+      </Typography>
       <Table
         ariaLabel="Sortable users"
         columns={columns}
@@ -38,6 +38,6 @@ export default function Sortable() {
         sort={sort}
         onSortChange={setSort}
       />
-    </div>
+    </Div>
   );
 }

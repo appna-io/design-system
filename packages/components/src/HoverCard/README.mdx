@@ -4,6 +4,8 @@
 the Stripe-style link preview, the inline glossary popup. It's Tooltip's interactive cousin and
 Popover's hover-driven sibling, sitting deliberately between them in the overlay family.
 
+<ExampleBlock for="Overview" title="Overview — @mention profile preview on hover" />
+
 | Overlay        | Trigger        | Interactive content?       | Focus trap? | Default delay |
 | -------------- | -------------- | --------------------------- | ----------- | ------------- |
 | `<Tooltip />`  | hover / focus  | No (text-only)              | No          | 400 / 150     |
@@ -12,9 +14,7 @@ Popover's hover-driven sibling, sitting deliberately between them in the overlay
 | `<Modal />`    | click          | Yes                         | **Yes**     | n/a           |
 
 HoverCard reuses Popover's positioning engine (`usePosition`, `<Portal>`, `useEscapeStack`) and
-Tooltip's hover-delay state machine (`useTooltipDelay`). It's the **second consumer of
-`useTooltipDelay`** — when NavigationMenu (Phase 52) ships as the third consumer, the hook
-becomes engine-promotion-ready as `useHoverDelay`.
+Tooltip's hover-delay state machine (`useTooltipDelay`).
 
 ## When to use
 
@@ -85,19 +85,42 @@ Three visual variants × seven colors. `solid` is color-neutral (paper bg + neut
 the `color` prop is ignored; `outline` paints the border; `soft` paints the tinted background +
 low-opacity border + colored text.
 
+## Examples
+
+<ExampleBlock for="Basic" title="Basic — @mention user card" />
+
+<ExampleBlock for="LinkPreview" title="Link preview — inline URL hover card" />
+
+<ExampleBlock for="DefinitionPopup" title="Definition popup — glossary term" />
+
+<ExampleBlock for="AsyncContent" title="Async content — lazy-load on open" />
+
+<ExampleBlock for="Variants" title="Variants — solid / outline / soft" />
+
+<ExampleBlock for="Sizes" title="Sizes — sm / md / lg" />
+
+<ExampleBlock for="Colors" title="Colors — soft variant palette" />
+
+<ExampleBlock for="Placements" title="Placements — anchor sides" />
+
+<ExampleBlock for="Delays" title="Delays — open / close timing" />
+
+<ExampleBlock for="NoArrow" title="No arrow — showArrow={false}" />
+
+<ExampleBlock for="KeyboardFocus" title="Keyboard focus — hover-focus vs hover-only" />
+
+<ExampleBlock for="Controlled" title="Controlled — programmatic open / close" />
+
 ## Accessibility
 
 - Trigger always carries its own role + accessible name (the consumer's element).
 - Trigger gets `aria-describedby={contentId}` while the card is open, pairing it with the
   Content element.
-- Content carries `role="tooltip"` per the W3C HoverCard guidance — it's a *description* of the
-  trigger, not a button-disclosed panel. (The plan's draft `role="dialog"` was reconsidered:
-  `dialog` requires an accessible name + implies modal semantics; `tooltip` is the accurate
-  W3C-blessed role for additive hover content.)
+- Content carries `role="tooltip"` per W3C HoverCard guidance — it's a *description* of the
+  trigger, not a button-disclosed panel.
 - No `aria-haspopup` / `aria-expanded` — these are disclosure-widget attributes; HoverCard is
   not a disclosure.
 - Esc closes the topmost card via `useEscapeStack`.
-- axe-clean across all variants × representative colors. See `HoverCard.a11y.test.tsx`.
 
 ## Composition recipes
 

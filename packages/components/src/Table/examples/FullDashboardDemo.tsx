@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Avatar, Badge, Button, Table } from '@apx-ui/ds';
+import { Avatar, Badge, Button, Div, Table, Typography } from '@apx-ui/ds';
 import type { TableColumn, TableSortState } from '@apx-ui/ds';
 
 interface Member {
@@ -27,13 +27,17 @@ const columns: TableColumn<Member>[] = [
     accessor: (m) => m.name,
     sortable: true,
     cell: (m) => (
-      <div className="flex items-center gap-2">
+      <Div display="flex" alignItems="center" gap="2">
         <Avatar size="sm" name={m.name} />
-        <div className="flex flex-col">
-          <span className="font-medium">{m.name}</span>
-          <span className="text-fg-muted text-xs">{m.email}</span>
-        </div>
-      </div>
+        <Div display="flex" flexDirection="column">
+          <Typography as="span" variant="bodySmall" weight="medium">
+            {m.name}
+          </Typography>
+          <Typography as="span" variant="caption" color="fg.muted">
+            {m.email}
+          </Typography>
+        </Div>
+      </Div>
     ),
   },
   { id: 'role', header: 'Role', accessor: (m) => m.role, sortable: true },
@@ -54,15 +58,15 @@ export default function FullDashboardDemo() {
   const [lastAction, setLastAction] = useState<string>('none');
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="text-fg-muted flex items-center justify-between text-sm">
-        <span>
+    <Div display="flex" flexDirection="column" gap="3">
+      <Div display="flex" alignItems="center" justifyContent="space-between" className="text-sm text-fg-muted">
+        <Typography as="span" variant="bodySmall" color="fg.muted">
           Selected: <code>{selected.length}</code>
-        </span>
-        <span>
+        </Typography>
+        <Typography as="span" variant="bodySmall" color="fg.muted">
           Last action: <code>{lastAction}</code>
-        </span>
-      </div>
+        </Typography>
+      </Div>
       <Table
         ariaLabel="Team members dashboard"
         variant="card"
@@ -76,7 +80,7 @@ export default function FullDashboardDemo() {
         onSelectedChange={(next) => setSelected(next as string[])}
         isRowSelectable={(m) => m.active}
         rowActions={(m) => (
-          <div className="flex gap-1">
+          <Div display="flex" gap="1">
             <Button size="sm" variant="ghost" onClick={() => setLastAction(`Edit ${m.name}`)}>
               Edit
             </Button>
@@ -91,9 +95,9 @@ export default function FullDashboardDemo() {
             >
               Remove
             </Button>
-          </div>
+          </Div>
         )}
       />
-    </div>
+    </Div>
   );
 }

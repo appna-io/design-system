@@ -1,4 +1,4 @@
-import { TreeView } from '@apx-ui/ds';
+import { Div, TreeView, Typography } from '@apx-ui/ds';
 import type { TreeNodeData } from '@apx-ui/ds';
 
 const data: TreeNodeData[] = [
@@ -15,20 +15,22 @@ const data: TreeNodeData[] = [
 
 export default function Sizes() {
   return (
-    <div className="flex flex-col gap-4">
+    <Div display="flex" flexDirection="column" gap="4">
       {(['sm', 'md', 'lg'] as const).map((size) => (
-        <div key={size} className="flex flex-col gap-1">
-          <span className="text-fg-muted text-xs uppercase tracking-wide">{size}</span>
-          <div className="max-w-sm border border-border-subtle rounded-md p-2">
+        <Div key={size} display="flex" flexDirection="column" gap="1">
+          <Typography variant="caption" color="fg.muted" className="uppercase tracking-wide">
+            {size}
+          </Typography>
+          <Div className="max-w-sm rounded-md border border-border-subtle p-2">
             <TreeView
               ariaLabel={`${size} tree`}
               data={data}
               defaultExpanded={['a', 'b']}
               size={size}
             />
-          </div>
-        </div>
+          </Div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

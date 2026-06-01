@@ -1,8 +1,8 @@
-import { Checkbox } from '@apx-ui/ds';
+import { Checkbox, Div } from '@apx-ui/ds';
 
 export default function Disabled() {
   return (
-    <div className="flex flex-col gap-2">
+    <Div display="flex" flexDirection="column" gap="2">
       <Checkbox disabled>Disabled, unchecked</Checkbox>
       <Checkbox disabled defaultChecked>
         Disabled, checked
@@ -10,6 +10,6 @@ export default function Disabled() {
       <Checkbox disabled indeterminate>
         Disabled, indeterminate
       </Checkbox>
-    </div>
+    </Div>
   );
 }

@@ -1,11 +1,11 @@
 import { Sparkles } from 'lucide-react';
 
-import { Button, Toaster, toast } from '@apx-ui/ds';
+import { Button, Div, Toaster, toast } from '@apx-ui/ds';
 
 export default function CustomIcon() {
   return (
-    <div className="space-y-3">
-      <div className="flex flex-wrap gap-2">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Div display="flex" flexWrap="wrap" gap="2">
         <Button
           onClick={() =>
             toast('Magic happened', {
@@ -25,8 +25,8 @@ export default function CustomIcon() {
         >
           No icon
         </Button>
-      </div>
+      </Div>
       <Toaster />
-    </div>
+    </Div>
   );
 }

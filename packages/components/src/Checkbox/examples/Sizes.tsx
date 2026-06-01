@@ -1,8 +1,8 @@
-import { Checkbox } from '@apx-ui/ds';
+import { Checkbox, Div } from '@apx-ui/ds';
 
 export default function Sizes() {
   return (
-    <div className="flex flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3">
       <Checkbox size="sm" defaultChecked>
         Small
       </Checkbox>
@@ -12,6 +12,6 @@ export default function Sizes() {
       <Checkbox size="lg" defaultChecked>
         Large
       </Checkbox>
-    </div>
+    </Div>
   );
 }

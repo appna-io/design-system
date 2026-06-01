@@ -1,11 +1,11 @@
-import { Button, Drawer } from '@apx-ui/ds';
+import { Button, Div, Drawer, Typography } from '@apx-ui/ds';
 import type { DrawerSide } from '@apx-ui/ds';
 
 const sides: DrawerSide[] = ['left', 'right', 'top', 'bottom'];
 
 export default function Sides() {
   return (
-    <div className="flex flex-wrap gap-3">
+    <Div display="flex" className="flex-wrap gap-3">
       {sides.map((side) => (
         <Drawer key={side}>
           <Drawer.Trigger>
@@ -15,11 +15,11 @@ export default function Sides() {
             <Drawer.Close />
             <Drawer.Header title={`Side: ${side}`} />
             <Drawer.Body>
-              <p className="text-sm">
+              <Typography variant="bodySmall">
                 {side === 'left' || side === 'right'
                   ? 'Horizontal drawers control width via the size axis.'
                   : 'Vertical drawers control height via the size axis. Useful for bottom sheets and announcement banners.'}
-              </p>
+              </Typography>
             </Drawer.Body>
             <Drawer.Footer>
               <Drawer.Close asChild>
@@ -29,6 +29,6 @@ export default function Sides() {
           </Drawer.Content>
         </Drawer>
       ))}
-    </div>
+    </Div>
   );
 }

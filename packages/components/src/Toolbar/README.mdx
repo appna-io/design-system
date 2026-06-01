@@ -12,6 +12,8 @@ accessible action rail with the W3C Toolbar pattern out of the box.
 - **Optional overflow → popover** reflow with `ResizeObserver` measurement.
 - **Optional auto-tooltips** for iconic children.
 
+<ExampleBlock for="Overview" title="Overview — formatting groups, actions, and publish" />
+
 ## Anatomy
 
 ```tsx
@@ -172,12 +174,6 @@ convention.
 Toolbar reads from `theme.components.Toolbar.styleOverrides.{root, group, separator}`. The
 three slots share the same component key so a single theme override targets the whole family.
 Consumer `className` always wins via `tailwind-merge`.
-
-## Bundle
-
-Target: **< 4 KB gz** (excluding `<Menu>` / `<Tooltip>` / `<Popover>` / `<Button>` peers, which
-are externalized). Roving-tabindex logic is component-local; `ResizeObserver` overflow only
-activates when `overflow="menu"` is set.
 
 ## Do / Don't
 

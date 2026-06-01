@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Stepper } from '@apx-ui/ds';
+import { Button, Div, Stepper } from '@apx-ui/ds';
 
 export default function WithLoadingStep() {
   const [loading, setLoading] = useState(false);
@@ -10,7 +10,7 @@ export default function WithLoadingStep() {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <Div display="flex" flexDirection="column" gap="4">
       <Stepper
         active={2}
         steps={[
@@ -28,6 +28,6 @@ export default function WithLoadingStep() {
       <Button onClick={trigger} disabled={loading}>
         {loading ? 'Verifying...' : 'Start verification'}
       </Button>
-    </div>
+    </Div>
   );
 }

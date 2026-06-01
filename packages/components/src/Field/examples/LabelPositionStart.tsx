@@ -1,8 +1,8 @@
-import { Field, Input, Select } from '@apx-ui/ds';
+import { Div, Field, Input, Select } from '@apx-ui/ds';
 
 export default function LabelPositionStart() {
   return (
-    <div className="flex flex-col gap-4 max-w-lg">
+    <Div display="flex" flexDirection="column" gap="4" className="max-w-lg">
       <Field labelPosition="start" labelWidth="140px" label="Full name" required>
         <Input name="name" />
       </Field>
@@ -20,6 +20,6 @@ export default function LabelPositionStart() {
           </Select.Content>
         </Select>
       </Field>
-    </div>
+    </Div>
   );
 }

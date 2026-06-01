@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Popover } from '@apx-ui/ds';
+import { Button, Div, Popover, Typography } from '@apx-ui/ds';
 
 /**
  * The "Are you sure?" pattern. The destructive trigger opens a Popover that focuses the
@@ -11,7 +11,7 @@ export default function ConfirmAction() {
   const [deleted, setDeleted] = useState(false);
 
   return (
-    <div className="flex items-center gap-3">
+    <Div display="flex" alignItems="center" gap="3">
       <Popover open={open} onOpenChange={setOpen}>
         <Popover.Trigger>
           <Button variant="solid" color="danger" disabled={deleted}>
@@ -19,11 +19,13 @@ export default function ConfirmAction() {
           </Button>
         </Popover.Trigger>
         <Popover.Content variant="outline" color="danger" size="md">
-          <p className="text-sm font-medium">Delete this account?</p>
-          <p className="mt-1 text-xs text-fg-muted">
+          <Typography variant="bodySmall" weight="medium">
+            Delete this account?
+          </Typography>
+          <Typography variant="caption" color="fg.muted" className="mt-1">
             This action cannot be undone.
-          </p>
-          <div className="mt-3 flex justify-end gap-2">
+          </Typography>
+          <Div display="flex" className="mt-3 justify-end gap-2">
             <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>
               Cancel
             </Button>
@@ -38,7 +40,7 @@ export default function ConfirmAction() {
             >
               Delete
             </Button>
-          </div>
+          </Div>
         </Popover.Content>
       </Popover>
       {deleted ? (
@@ -50,6 +52,6 @@ export default function ConfirmAction() {
           (reset)
         </button>
       ) : null}
-    </div>
+    </Div>
   );
 }

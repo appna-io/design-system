@@ -8,15 +8,15 @@ import {
   Underline,
 } from 'lucide-react';
 import { useState } from 'react';
-import { ToggleGroup } from '@apx-ui/ds';
+import { Div, ToggleGroup, Typography } from '@apx-ui/ds';
 
 export default function Toolbar() {
   const [marks, setMarks] = useState<string[]>([]);
   const [align, setAlign] = useState('left');
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-2 rounded-md border border-border bg-bg p-2">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Div display="flex" alignItems="center" gap="2" className="rounded-md border border-border bg-bg p-2">
         <ToggleGroup
           type="multiple"
           aria-label="Text marks"
@@ -39,7 +39,7 @@ export default function Toolbar() {
           </ToggleGroup.Item>
         </ToggleGroup>
 
-        <span className="mx-1 h-6 w-px bg-border" aria-hidden="true" />
+        <Div className="mx-1 h-6 w-px bg-border" aria-hidden="true" />
 
         <ToggleGroup
           type="single"
@@ -59,10 +59,11 @@ export default function Toolbar() {
             <AlignRight />
           </ToggleGroup.Item>
         </ToggleGroup>
-      </div>
+      </Div>
 
-      <p
-        className="rounded-md border border-border bg-bg-subtle p-3 text-sm"
+      <Typography
+        variant="bodySmall"
+        className="rounded-md border border-border bg-bg-subtle p-3"
         style={{
           fontWeight: marks.includes('bold') ? 600 : 400,
           fontStyle: marks.includes('italic') ? 'italic' : 'normal',
@@ -76,7 +77,7 @@ export default function Toolbar() {
         }}
       >
         Composed toolbar of two ToggleGroups — multi-select marks plus single-select alignment.
-      </p>
-    </div>
+      </Typography>
+    </Div>
   );
 }

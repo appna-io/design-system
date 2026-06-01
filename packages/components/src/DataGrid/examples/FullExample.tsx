@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 
-import { Badge, Button, DataGrid } from '@apx-ui/ds';
+import { Badge, Button, DataGrid, Div, Typography } from '@apx-ui/ds';
 import type {
   DataGridColumnDef,
   DataGridRowAction,
@@ -183,11 +183,11 @@ export default function FullExample() {
   ];
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center gap-3">
-        <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Div display="flex" flexWrap="wrap" alignItems="center" gap="3">
+        <Typography variant="bodySmall" color="fg.muted">
           Kitchen-sink demo. Every DataGrid feature is on. State persists across reloads.
-        </p>
+        </Typography>
         <Button
           variant="outline"
           size="sm"
@@ -201,7 +201,7 @@ export default function FullExample() {
         <Button variant="ghost" size="sm" onClick={() => setSelected(new Set())}>
           Clear selection
         </Button>
-      </div>
+      </Div>
 
       <DataGrid<Account>
         data={accounts}
@@ -220,17 +220,28 @@ export default function FullExample() {
         onSelectionChange={setSelected}
         rowActions={rowActions}
         renderExpandedRow={(row) => (
-          <div className="text-fg-muted bg-surface-muted/40 flex flex-col gap-1 p-3 text-sm">
-            <div>
+          <Div
+            display="flex"
+            flexDirection="column"
+            gap="1"
+            p="3"
+            color="fg.muted"
+            className="bg-surface-muted/40"
+          >
+            <Typography as="div" variant="bodySmall" color="fg.muted">
               <strong>{row.company}</strong> · {row.tier} · {row.status} · ARR $
               {row.arr.toLocaleString()}
-            </div>
-            <div>
+            </Typography>
+            <Typography as="div" variant="bodySmall" color="fg.muted">
               CSM <strong>{row.csm}</strong> · renews{' '}
               <strong>{row.renewsAt}</strong>
-            </div>
-            {row.notes ? <div>Notes: {row.notes}</div> : null}
-          </div>
+            </Typography>
+            {row.notes ? (
+              <Typography as="div" variant="bodySmall" color="fg.muted">
+                Notes: {row.notes}
+              </Typography>
+            ) : null}
+          </Div>
         )}
         defaultSort={[{ id: 'arr', direction: 'desc' }]}
         defaultPagination={{ pageIndex: 0, pageSize: 25 }}
@@ -245,6 +256,6 @@ export default function FullExample() {
         </Button>
         <Button size="sm">Bulk email</Button>
       </DataGrid>
-    </div>
+    </Div>
   );
 }

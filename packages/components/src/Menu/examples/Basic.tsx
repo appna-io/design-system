@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
-import { Button, Menu } from '@apx-ui/ds';
+import { Button, Div, Menu, Typography } from '@apx-ui/ds';
 
 export default function Basic() {
   const [lastAction, setLastAction] = useState<string | null>(null);
 
   return (
-    <div className="flex flex-col items-center gap-3">
+    <Div display="flex" flexDirection="column" alignItems="center" gap="3">
       <Menu>
         <Menu.Trigger asChild>
           <Button>Options</Button>
@@ -20,15 +20,23 @@ export default function Basic() {
           </Menu.Item>
         </Menu.Content>
       </Menu>
-      <p aria-live="polite" className="min-h-[1.25rem] text-sm text-fg-muted">
+      <Typography
+        as="p"
+        aria-live="polite"
+        variant="bodySmall"
+        color="fg.muted"
+        className="min-h-[1.25rem]"
+      >
         {lastAction ? (
           <>
             Last action: <strong className="text-fg">{lastAction}</strong>
           </>
         ) : (
-          <span className="opacity-60">Pick an item to see it here.</span>
+          <Typography as="span" variant="bodySmall" className="opacity-60">
+            Pick an item to see it here.
+          </Typography>
         )}
-      </p>
-    </div>
+      </Typography>
+    </Div>
   );
 }

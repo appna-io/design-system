@@ -1,13 +1,13 @@
-import { Accordion } from '@apx-ui/ds';
+import { Accordion, Div, Typography } from '@apx-ui/ds';
 
 export default function Sizes() {
   return (
-    <div className="flex flex-col gap-6">
+    <Div display="flex" flexDirection="column" gap="6">
       {(['sm', 'md', 'lg'] as const).map((size) => (
-        <div key={size}>
-          <p className="mb-2 text-sm font-medium text-fg-muted">
+        <Div key={size}>
+          <Typography variant="bodySmall" weight="medium" color="fg.muted" sx={{ mb: 2 }}>
             size=<code>{size}</code>
-          </p>
+          </Typography>
           <Accordion type="single" size={size} defaultValue="one">
             <Accordion.Item value="one">
               <Accordion.Trigger>{`Size ${size} — trigger`}</Accordion.Trigger>
@@ -18,8 +18,8 @@ export default function Sizes() {
               <Accordion.Content>Same size, same rhythm.</Accordion.Content>
             </Accordion.Item>
           </Accordion>
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

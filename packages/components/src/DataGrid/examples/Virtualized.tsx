@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { DataGrid } from '@apx-ui/ds';
+import { DataGrid, Div, Typography } from '@apx-ui/ds';
 import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Row {
@@ -48,14 +48,14 @@ export default function Virtualized() {
   const rows = useMemo(() => buildRows(50_000), []);
 
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         50,000 rows windowed by <code>@tanstack/react-virtual</code>. Only the rows in
         the current scroll window live in the DOM — sort, search, and the column menu
         still operate on the full dataset. Pagination is hidden under virtualization
         because the whole filtered set is windowed directly.
-      </p>
-      <div style={{ height: 480 }}>
+      </Typography>
+      <Div height={480}>
         <DataGrid<Row>
           data={rows}
           columns={columns}
@@ -65,7 +65,7 @@ export default function Virtualized() {
           scrollerStyle={{ maxHeight: 480 }}
           stickyHeader
         />
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

@@ -1,4 +1,4 @@
-import { DataGrid } from '@apx-ui/ds';
+import { DataGrid, Div, Typography } from '@apx-ui/ds';
 import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Row {
@@ -37,18 +37,18 @@ const columns: DataGridColumnDef<Row>[] = [
 
 export default function Sorting() {
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Click a header to cycle <code>asc</code> → <code>desc</code> → unsorted. Hold{' '}
         <kbd>Shift</kbd> while clicking another header to add it to a multi-column sort
         stack — small numbered pills appear so you can read the order at a glance.
-      </p>
+      </Typography>
       <DataGrid<Row>
         data={data}
         columns={columns}
         getRowId={(r) => r.id}
         defaultSort={[{ id: 'joined', direction: 'desc' }]}
       />
-    </div>
+    </Div>
   );
 }

@@ -1,4 +1,4 @@
-import { TreeView } from '@apx-ui/ds';
+import { Div, TreeView, Typography } from '@apx-ui/ds';
 import type { TreeNodeData } from '@apx-ui/ds';
 
 const seed: TreeNodeData[] = [
@@ -27,13 +27,13 @@ const loadChildren = (node: TreeNodeData) =>
 
 export default function AsyncLoad() {
   return (
-    <div className="flex flex-col gap-2">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="2">
+      <Typography variant="bodySmall" color="fg.muted">
         Click a folder once to lazy-load its children with a simulated 600ms latency.
-      </p>
-      <div className="max-w-sm border border-border-subtle rounded-md p-2">
+      </Typography>
+      <Div className="max-w-sm rounded-md border border-border-subtle p-2">
         <TreeView ariaLabel="Cloud drive" data={seed} loadChildren={loadChildren} />
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

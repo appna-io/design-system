@@ -30,10 +30,13 @@ export const drawerBackdropRecipe = cv({
   base: 'fixed inset-0 z-modal flex transition-opacity duration-fast',
   variants: {
     overlay: {
-      // `/60` matches Modal's bumped opacity — the page behind a Drawer should clearly read as
-      // de-emphasized. Same reasoning as Modal: `/40` was too subtle on bg-paper.
-      dimmed: 'bg-fg-default/60',
-      blur: 'bg-fg-default/50 backdrop-blur-sm',
+      // Uses `bg-overlay` (the `--sds-overlay` token) instead of `bg-fg-default/N`. The Tailwind
+      // `/N` opacity modifier can't decompose CSS variables that hold hex strings, so the old
+      // class compiled to invalid CSS and rendered transparent — the page behind a Drawer didn't
+      // read as blocked at all. The overlay token resolves to `rgba(0,0,0,.5)` light /
+      // `rgba(0,0,0,.7)` dark and is always a real dim.
+      dimmed: 'bg-overlay',
+      blur: 'bg-overlay backdrop-blur-sm',
       transparent: 'bg-transparent',
     },
     side: {

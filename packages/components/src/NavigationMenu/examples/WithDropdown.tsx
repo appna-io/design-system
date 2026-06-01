@@ -1,4 +1,4 @@
-import { NavigationMenu } from '@apx-ui/ds';
+import { Div, NavigationMenu } from '@apx-ui/ds';
 
 /**
  * Dropdown navigation — one Item has a `<NavigationMenu.Trigger>` + a sibling
@@ -7,7 +7,7 @@ import { NavigationMenu } from '@apx-ui/ds';
  */
 export default function WithDropdown() {
   return (
-    <div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+    <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
       <NavigationMenu>
         <NavigationMenu.Item>
           <NavigationMenu.Trigger>Product</NavigationMenu.Trigger>
@@ -33,6 +33,6 @@ export default function WithDropdown() {
           <NavigationMenu.Link href="/contact">Contact</NavigationMenu.Link>
         </NavigationMenu.Item>
       </NavigationMenu>
-    </div>
+    </Div>
   );
 }

@@ -116,4 +116,3 @@ export const BreadcrumbsItem = forwardRef<HTMLLIElement, BreadcrumbsItemProps>(
   },
   'Breadcrumbs.Item',
 );
-

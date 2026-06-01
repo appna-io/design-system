@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Div,
   Scheduler,
   type SchedulerCalendarSource,
   type SchedulerEvent,
@@ -23,7 +24,7 @@ export default function MultipleCalendars() {
   ]);
 
   return (
-    <div style={{ height: 680 }}>
+    <Div height={680}>
       <Scheduler
         events={events}
         calendars={calendars}
@@ -39,7 +40,7 @@ export default function MultipleCalendars() {
           return created;
         }}
       />
-    </div>
+    </Div>
   );
 }
 

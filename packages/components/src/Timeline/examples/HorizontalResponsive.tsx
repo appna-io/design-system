@@ -1,12 +1,12 @@
-import { Timeline } from '@apx-ui/ds';
+import { Div, Timeline, Typography } from '@apx-ui/ds';
 
 export default function HorizontalResponsive() {
   return (
-    <div className="flex flex-col gap-2">
-      <p className="text-fg-muted text-sm">
-        Resize the viewport \u2014 below <code>md</code> the horizontal timeline collapses to a vertical
+    <Div display="flex" flexDirection="column" gap="2">
+      <Typography variant="bodySmall" color="fg.muted">
+        Resize the viewport — below <code>md</code> the horizontal timeline collapses to a vertical
         list, swapping the indicator column from top to leading-edge.
-      </p>
+      </Typography>
       <Timeline orientation="horizontal" responsive aria-label="Release roadmap">
         <Timeline.Item tone="success" timestamp="Q1 2026">
           <Timeline.Title>v1.0</Timeline.Title>
@@ -25,6 +25,6 @@ export default function HorizontalResponsive() {
           <Timeline.Description>Plugin SDK.</Timeline.Description>
         </Timeline.Item>
       </Timeline>
-    </div>
+    </Div>
   );
 }

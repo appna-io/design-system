@@ -1,12 +1,14 @@
-import { Menu } from '@apx-ui/ds';
+import { Div, Menu, Typography } from '@apx-ui/ds';
 
 export default function ContextMenu() {
   return (
     <Menu trigger="context">
       <Menu.Trigger asChild>
-        <div className="rounded-md border border-dashed border-border-default p-8 text-center text-sm text-fg-muted">
-          Right-click anywhere in this area
-        </div>
+        <Div className="rounded-md border border-dashed border-border-default p-8 text-center">
+          <Typography variant="bodySmall" color="fg.muted">
+            Right-click anywhere in this area
+          </Typography>
+        </Div>
       </Menu.Trigger>
       <Menu.Content>
         <Menu.Item>Cut</Menu.Item>

@@ -1,8 +1,8 @@
-import { Button, Card } from '@apx-ui/ds';
+import { Button, Card, Div } from '@apx-ui/ds';
 
 export default function FooterAlignment() {
   return (
-    <div className="flex flex-col gap-4">
+    <Div display="flex" flexDirection="column" gap="4">
       {(['start', 'center', 'end', 'between'] as const).map((align) => (
         <Card key={align} variant="outline">
           <Card.Header title={`align="${align}"`} subtitle="Footer alignment" />
@@ -15,6 +15,6 @@ export default function FooterAlignment() {
           </Card.Footer>
         </Card>
       ))}
-    </div>
+    </Div>
   );
 }

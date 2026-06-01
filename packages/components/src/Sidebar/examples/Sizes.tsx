@@ -1,4 +1,4 @@
-import { Sidebar } from '@apx-ui/ds';
+import { Div, Sidebar, Typography } from '@apx-ui/ds';
 
 import { CogIcon, HomeIcon, InboxIcon } from './_icons';
 
@@ -22,20 +22,25 @@ export default function Sizes() {
     </>
   );
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+    <Div className="grid grid-cols-1 gap-4 md:grid-cols-3">
       {(['sm', 'md', 'lg'] as const).map((size) => (
-        <div
+        <Div
           key={size}
-          className="h-[260px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+          height={260}
+          className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
         >
-          <div className="border-b border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) px-3 py-1.5 text-xs font-mono text-(--sds-color-text-muted)">
+          <Typography
+            variant="caption"
+            color="fg.muted"
+            className="border-b border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) px-3 py-1.5 font-mono"
+          >
             size=&quot;{size}&quot;
-          </div>
+          </Typography>
           <Sidebar ariaLabel={`Size ${size}`} variant="default" size={size}>
             {items}
           </Sidebar>
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

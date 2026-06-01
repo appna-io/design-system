@@ -1,4 +1,4 @@
-import { Button, Popover, type PopoverPlacement } from '@apx-ui/ds';
+import { Button, Div, Popover, Typography, type PopoverPlacement } from '@apx-ui/ds';
 
 const PLACEMENTS: readonly PopoverPlacement[] = [
   'top-start',
@@ -17,7 +17,7 @@ const PLACEMENTS: readonly PopoverPlacement[] = [
 
 export default function Placements() {
   return (
-    <div className="grid grid-cols-3 gap-3">
+    <Div className="grid grid-cols-3 gap-3">
       {PLACEMENTS.map((placement) => (
         <Popover key={placement}>
           <Popover.Trigger>
@@ -26,13 +26,15 @@ export default function Placements() {
             </Button>
           </Popover.Trigger>
           <Popover.Content placement={placement} showArrow>
-            <p className="text-sm font-medium">{placement}</p>
-            <p className="mt-1 text-xs opacity-80">
+            <Typography variant="bodySmall" weight="medium">
+              {placement}
+            </Typography>
+            <Typography variant="caption" className="mt-1 opacity-80">
               Floating UI flips to the opposite side at viewport edges.
-            </p>
+            </Typography>
           </Popover.Content>
         </Popover>
       ))}
-    </div>
+    </Div>
   );
 }

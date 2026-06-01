@@ -1,12 +1,12 @@
 import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
-import { Input } from '@apx-ui/ds';
+import { Div, Input } from '@apx-ui/ds';
 
 export default function Password() {
   const [show, setShow] = useState(false);
 
   return (
-    <div className="flex w-full max-w-sm flex-col gap-1.5 text-sm text-fg">
+    <Div display="flex" flexDirection="column" gap="1.5" className="w-full max-w-sm text-sm text-fg">
       <label htmlFor="password-field">Password</label>
       <Input
         id="password-field"
@@ -23,6 +23,6 @@ export default function Password() {
           </button>
         }
       />
-    </div>
+    </Div>
   );
 }

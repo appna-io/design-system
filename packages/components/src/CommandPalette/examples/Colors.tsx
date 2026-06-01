@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, CommandPalette } from '@apx-ui/ds';
+import { Button, CommandPalette, Div } from '@apx-ui/ds';
 import type { CommandPaletteColor } from '@apx-ui/ds';
 
 const COMMANDS = [
@@ -13,7 +13,7 @@ const COLORS: CommandPaletteColor[] = ['primary', 'success', 'warning', 'danger'
 export default function Colors() {
   const [open, setOpen] = useState<CommandPaletteColor | null>(null);
   return (
-    <div className="flex gap-2 flex-wrap">
+    <Div display="flex" gap="2" className="flex-wrap">
       {COLORS.map((c) => (
         <Button key={c} variant="outline" color={c} onClick={() => setOpen(c)}>
           {c}
@@ -25,6 +25,6 @@ export default function Colors() {
         commands={COMMANDS}
         color={open ?? 'primary'}
       />
-    </div>
+    </Div>
   );
 }

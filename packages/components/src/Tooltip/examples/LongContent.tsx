@@ -1,8 +1,8 @@
-import { Button, Tooltip } from '@apx-ui/ds';
+import { Button, Div, Tooltip } from '@apx-ui/ds';
 
 export default function LongContent() {
   return (
-    <div className="flex flex-wrap items-center gap-4">
+    <Div display="flex" flexWrap="wrap" alignItems="center" gap="4">
       <Tooltip
         content="This tooltip wraps over multiple lines once the content exceeds the size's max-width clamp. The clamp is `max-w-sm` for the default `md` size."
         size="md"
@@ -15,6 +15,6 @@ export default function LongContent() {
       >
         <Button variant="soft">Short hint</Button>
       </Tooltip>
-    </div>
+    </Div>
   );
 }

@@ -1,10 +1,10 @@
-import { CircularProgress, Progress } from '@apx-ui/ds';
+import { CircularProgress, Div, Progress } from '@apx-ui/ds';
 
 const GIB = 1024 * 1024 * 1024;
 
 export default function CustomFormat() {
   return (
-    <div className="flex w-full max-w-sm flex-col gap-6">
+    <Div display="flex" flexDirection="column" gap="6" className="w-full max-w-sm">
       <Progress
         value={2.4 * GIB}
         max={4 * GIB}
@@ -23,6 +23,6 @@ export default function CustomFormat() {
         labelFormat={(value, max) => `${value}/${max}`}
         aria-label="Step 3 of 5"
       />
-    </div>
+    </Div>
   );
 }

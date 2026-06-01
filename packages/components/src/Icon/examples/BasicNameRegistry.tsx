@@ -1,4 +1,4 @@
-import { Icon, IconProvider, createIconRegistry } from '@apx-ui/ds';
+import { Div, Icon, IconProvider, createIconRegistry } from '@apx-ui/ds';
 
 import * as Glyphs from './_glyphs';
 
@@ -11,11 +11,11 @@ const icons = createIconRegistry({
 export default function BasicNameRegistry() {
   return (
     <IconProvider value={icons}>
-      <div style={{ display: 'flex', gap: 12 }}>
+      <Div display="flex" gap="3">
         <Icon name="mail" />
         <Icon name="user" />
         <Icon name="settings" />
-      </div>
+      </Div>
     </IconProvider>
   );
 }

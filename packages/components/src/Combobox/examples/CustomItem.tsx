@@ -1,4 +1,4 @@
-import { Avatar, Combobox } from '@apx-ui/ds';
+import { Avatar, Combobox, Div, Typography } from '@apx-ui/ds';
 
 type User = {
   value: string;
@@ -36,7 +36,7 @@ const USERS: User[] = [
 
 export default function CustomItem() {
   return (
-    <div className="max-w-md">
+    <Div className="max-w-md">
       <Combobox<User>
         aria-label="Assignee"
         placeholder="Find a teammate…"
@@ -46,15 +46,17 @@ export default function CustomItem() {
           user.email.toLowerCase().includes(query.toLowerCase())
         }
         renderOption={({ option }) => (
-          <div className="flex items-center gap-2">
+          <Div display="flex" alignItems="center" gap="2">
             <Avatar src={option.avatarUrl} size="sm" name={option.label} />
-            <div className="flex flex-col">
-              <span className="font-medium">{option.label}</span>
-              <span className="text-xs text-fg-muted">{option.email}</span>
-            </div>
-          </div>
+            <Div display="flex" flexDirection="column">
+              <Typography weight="medium">{option.label}</Typography>
+              <Typography variant="caption" color="fg.muted">
+                {option.email}
+              </Typography>
+            </Div>
+          </Div>
         )}
       />
-    </div>
+    </Div>
   );
 }

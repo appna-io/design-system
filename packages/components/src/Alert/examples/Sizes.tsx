@@ -1,8 +1,8 @@
-import { Alert } from '@apx-ui/ds';
+import { Alert, Div } from '@apx-ui/ds';
 
 export default function Sizes() {
   return (
-    <div className="flex flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3">
       <Alert size="sm" color="info">
         Small — compact padding, smaller icon, tighter type.
       </Alert>
@@ -12,6 +12,6 @@ export default function Sizes() {
       <Alert size="lg" color="info">
         Large — generous padding, larger icon, more breathing room.
       </Alert>
-    </div>
+    </Div>
   );
 }

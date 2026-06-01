@@ -1,10 +1,12 @@
-import { Stat, StatGroup } from '@apx-ui/ds';
+import { Div, Stat, StatGroup, Typography } from '@apx-ui/ds';
 import { DollarSign, ShoppingCart, TrendingDown, Users } from 'lucide-react';
 
 export default function Dashboard() {
   return (
-    <div className="flex flex-col gap-4">
-      <h3 className="text-fg-default text-lg font-semibold">Q3 dashboard — at a glance</h3>
+    <Div display="flex" flexDirection="column" gap="4">
+      <Typography as="h3" variant="h5" color="fg.default">
+        Q3 dashboard — at a glance
+      </Typography>
       <StatGroup
         direction={{ base: 'column', md: 'row' }}
         gap={4}
@@ -50,6 +52,6 @@ export default function Dashboard() {
           className="flex-1"
         />
       </StatGroup>
-    </div>
+    </Div>
   );
 }

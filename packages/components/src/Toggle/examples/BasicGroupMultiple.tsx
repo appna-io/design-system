@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { ToggleGroup } from '@apx-ui/ds';
+import { Div, ToggleGroup, Typography } from '@apx-ui/ds';
 
 export default function BasicGroupMultiple() {
   const [formatting, setFormatting] = useState<string[]>(['bold']);
   return (
-    <div className="flex flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3">
       <ToggleGroup
         type="multiple"
         aria-label="Text formatting"
@@ -12,21 +12,21 @@ export default function BasicGroupMultiple() {
         onValueChange={setFormatting}
       >
         <ToggleGroup.Item value="bold" aria-label="Bold">
-          <span className="font-bold">B</span>
+          <strong>B</strong>
         </ToggleGroup.Item>
         <ToggleGroup.Item value="italic" aria-label="Italic">
-          <span className="italic">I</span>
+          <em>I</em>
         </ToggleGroup.Item>
         <ToggleGroup.Item value="underline" aria-label="Underline">
-          <span className="underline">U</span>
+          <u>U</u>
         </ToggleGroup.Item>
         <ToggleGroup.Item value="strike" aria-label="Strikethrough">
-          <span className="line-through">S</span>
+          <s>S</s>
         </ToggleGroup.Item>
       </ToggleGroup>
-      <span className="text-sm text-fg-muted">
+      <Typography variant="bodySmall" color="fg.muted">
         Active: {formatting.length === 0 ? '(none)' : formatting.join(', ')}
-      </span>
-    </div>
+      </Typography>
+    </Div>
   );
 }

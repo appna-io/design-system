@@ -1,18 +1,24 @@
 import { useState } from 'react';
-import { Switch } from '@apx-ui/ds';
+import { Div, Switch, Typography } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [controlled, setControlled] = useState(false);
 
   return (
-    <div className="grid grid-cols-2 gap-6">
-      <div className="flex flex-col gap-2">
-        <h4 className="text-sm font-medium">Uncontrolled</h4>
+    <Div className="grid grid-cols-2 gap-6">
+      <Div display="flex" flexDirection="column" gap="2">
+        <Typography as="h4" variant="bodySmall" weight="medium" color="fg.default">
+          Uncontrolled
+        </Typography>
         <Switch defaultChecked>Has its own state</Switch>
-        <p className="text-xs text-fg-muted">React owns it via the DOM.</p>
-      </div>
-      <div className="flex flex-col gap-2">
-        <h4 className="text-sm font-medium">Controlled</h4>
+        <Typography variant="caption" color="fg.muted">
+          React owns it via the DOM.
+        </Typography>
+      </Div>
+      <Div display="flex" flexDirection="column" gap="2">
+        <Typography as="h4" variant="bodySmall" weight="medium" color="fg.default">
+          Controlled
+        </Typography>
         <Switch checked={controlled} onCheckedChange={setControlled}>
           Driven by parent state
         </Switch>
@@ -23,7 +29,7 @@ export default function Controlled() {
         >
           Toggle externally ({String(controlled)})
         </button>
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

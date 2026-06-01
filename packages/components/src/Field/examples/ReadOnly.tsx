@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Button, Field, Input } from '@apx-ui/ds';
+import { Button, Div, Field, Input } from '@apx-ui/ds';
 
 export default function ReadOnly() {
   const [readOnly, setReadOnly] = useState(true);
 
   return (
-    <div className="flex flex-col gap-4 max-w-sm">
+    <Div display="flex" flexDirection="column" gap="4" className="max-w-sm">
       <Field
         label="Account ID"
         readOnly={readOnly}
@@ -16,6 +16,6 @@ export default function ReadOnly() {
       <Button variant="ghost" onClick={() => setReadOnly((value) => !value)}>
         {readOnly ? 'Allow editing' : 'Lock as read-only'}
       </Button>
-    </div>
+    </Div>
   );
 }

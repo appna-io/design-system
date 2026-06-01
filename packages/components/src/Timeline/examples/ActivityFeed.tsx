@@ -1,4 +1,4 @@
-import { Avatar, Timeline } from '@apx-ui/ds';
+import { Avatar, Div, Timeline, Typography } from '@apx-ui/ds';
 
 const hour = 3_600_000;
 const now = Date.now();
@@ -42,7 +42,10 @@ export default function ActivityFeed() {
           timestamp={e.at}
         >
           <Timeline.Title>
-            <strong>{e.actor.name}</strong> {e.verb} <span className="text-fg-muted">{e.target}</span>
+            <strong>{e.actor.name}</strong> {e.verb}{' '}
+            <Typography as="span" variant="bodySmall" color="fg.muted">
+              {e.target}
+            </Typography>
           </Timeline.Title>
         </Timeline.Item>
       ))}

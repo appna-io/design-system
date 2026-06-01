@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import { Pagination } from '@apx-ui/ds';
+import { Div, Pagination, Typography } from '@apx-ui/ds';
 
 export default function PageSize() {
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-sm text-fg-muted">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         The page-size picker is a real <code>{`<Select>`}</code> from the DS.
         Changing the size resets to page 1 — the same convention DataGrid uses.
-      </p>
+      </Typography>
       <Pagination
         totalCount={325}
         pageIndex={pageIndex}
@@ -21,6 +21,6 @@ export default function PageSize() {
         }}
         pageSizeOptions={[5, 10, 25, 50, 100]}
       />
-    </div>
+    </Div>
   );
 }

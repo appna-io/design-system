@@ -1,4 +1,4 @@
-import { Button, Modal } from '@apx-ui/ds';
+import { Button, Modal, Typography } from '@apx-ui/ds';
 
 export default function ConfirmDelete() {
   return (
@@ -12,11 +12,11 @@ export default function ConfirmDelete() {
           description="This action is permanent and cannot be undone."
         />
         <Modal.Body>
-          <p className="text-sm text-fg-default">
+          <Typography variant="bodySmall" color="fg.default">
             Your projects, settings, and history will be removed from our
             servers within 24 hours. We&apos;ll send you a final invoice if
             you&apos;re on a paid plan.
-          </p>
+          </Typography>
         </Modal.Body>
         <Modal.Footer align="between">
           <Modal.Close asChild>

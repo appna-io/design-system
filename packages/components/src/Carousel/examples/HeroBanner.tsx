@@ -1,4 +1,4 @@
-import { Carousel } from '@apx-ui/ds';
+import { Carousel, Div, Typography } from '@apx-ui/ds';
 
 const banners = [
   { title: 'Summer Collection', subtitle: 'Bright colors, breezy fabrics.', bg: 'from-amber-400 to-orange-500' },
@@ -11,12 +11,16 @@ export default function HeroBanner() {
     <Carousel ariaLabel="Hero banner" snap="center" size="lg">
       {banners.map((b) => (
         <Carousel.Slide key={b.title}>
-          <div
+          <Div
             className={`flex h-56 flex-col items-start justify-end gap-1 rounded-md bg-gradient-to-br ${b.bg} p-6 text-white`}
           >
-            <h3 className="text-2xl font-bold">{b.title}</h3>
-            <p className="text-sm opacity-90">{b.subtitle}</p>
-          </div>
+            <Typography as="h3" className="text-2xl font-bold">
+              {b.title}
+            </Typography>
+            <Typography variant="bodySmall" className="opacity-90">
+              {b.subtitle}
+            </Typography>
+          </Div>
         </Carousel.Slide>
       ))}
     </Carousel>

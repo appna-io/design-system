@@ -1,8 +1,8 @@
-import { Switch } from '@apx-ui/ds';
+import { Div, Switch } from '@apx-ui/ds';
 
 export default function Variants() {
   return (
-    <div className="flex flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3">
       <Switch variant="solid" defaultChecked>
         Solid (default)
       </Switch>
@@ -12,6 +12,6 @@ export default function Variants() {
       <Switch variant="soft" defaultChecked>
         Soft
       </Switch>
-    </div>
+    </Div>
   );
 }

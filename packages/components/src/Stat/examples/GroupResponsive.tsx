@@ -1,11 +1,12 @@
-import { Stat, StatGroup } from '@apx-ui/ds';
+import { Div, Stat, StatGroup, Typography } from '@apx-ui/ds';
 
 export default function GroupResponsive() {
   return (
-    <div className="flex flex-col gap-4">
-      <p className="text-fg-muted text-sm">
-        Resize the viewport — the group collapses to a column on mobile and expands to a row at <code>md</code> and up.
-      </p>
+    <Div display="flex" flexDirection="column" gap="4">
+      <Typography variant="bodySmall" color="fg.muted">
+        Resize the viewport — the group collapses to a column on mobile and expands to a row at{' '}
+        <code>md</code> and up.
+      </Typography>
       <StatGroup
         direction={{ base: 'column', md: 'row' }}
         gap={{ base: 4, md: 8 }}
@@ -16,6 +17,6 @@ export default function GroupResponsive() {
         <Stat label="Churn" value={0.042} format="percent" fractionDigits={1} delta={{ value: 1.1, direction: 'down', inverse: true }} />
         <Stat label="NPS" value={42} delta={{ value: 3, direction: 'up' }} />
       </StatGroup>
-    </div>
+    </Div>
   );
 }

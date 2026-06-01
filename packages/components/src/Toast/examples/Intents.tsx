@@ -1,9 +1,9 @@
-import { Button, Toaster, toast } from '@apx-ui/ds';
+import { Button, Div, Toaster, toast } from '@apx-ui/ds';
 
 export default function Intents() {
   return (
-    <div className="space-y-3">
-      <div className="flex flex-wrap gap-2">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Div display="flex" flexWrap="wrap" gap="2">
         <Button onClick={() => toast('A new comment was posted.')}>Neutral</Button>
         <Button color="success" onClick={() => toast.success('Profile updated.')}>
           Success
@@ -19,12 +19,12 @@ export default function Intents() {
         </Button>
         <Button
           variant="outline"
-          onClick={() => toast.loading('Saving\u2026', { duration: 2500 })}
+          onClick={() => toast.loading('Saving…', { duration: 2500 })}
         >
           Loading
         </Button>
-      </div>
+      </Div>
       <Toaster />
-    </div>
+    </Div>
   );
 }

@@ -1,4 +1,4 @@
-import { Button, Toaster, toast } from '@apx-ui/ds';
+import { Button, Div, Toaster, Typography, toast } from '@apx-ui/ds';
 
 function fakeSave(): Promise<{ title: string }> {
   return new Promise((resolve, reject) => {
@@ -14,11 +14,11 @@ function fakeSave(): Promise<{ title: string }> {
 
 export default function Promise() {
   return (
-    <div className="space-y-3">
+    <Div display="flex" flexDirection="column" gap="3">
       <Button
         onClick={() =>
           toast.promise(fakeSave(), {
-            loading: 'Saving post\u2026',
+            loading: 'Saving post…',
             success: (data) => `Posted as "${data.title}"`,
             error: (err) => `Failed: ${(err as Error).message}`,
           })
@@ -26,11 +26,11 @@ export default function Promise() {
       >
         Save post (70% success)
       </Button>
-      <p className="text-sm text-fg-muted">
+      <Typography variant="bodySmall" color="fg.muted">
         A single toast tracks the entire async lifecycle. The same id is reused so the loading
         toast updates in place to success or error.
-      </p>
+      </Typography>
       <Toaster />
-    </div>
+    </Div>
   );
 }

@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 
-import { DatePicker, DateRangePicker, type DateRange } from '@apx-ui/ds';
+import { DatePicker, DateRangePicker, Typography, type DateRange } from '@apx-ui/ds';
 
 /**
  * Both pickers ride a hidden `<input type="hidden">` with the ISO-8601 (`YYYY-MM-DD`)
@@ -20,12 +20,16 @@ export default function FormSubmission() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-sm">
       <label className="flex flex-col gap-1">
-        <span className="text-sm font-medium">Date of birth</span>
+        <Typography as="span" variant="bodySmall" weight="medium">
+          Date of birth
+        </Typography>
         <DatePicker name="dob" required onChange={setDob} />
       </label>
 
       <label className="flex flex-col gap-1">
-        <span className="text-sm font-medium">Holiday range</span>
+        <Typography as="span" variant="bodySmall" weight="medium">
+          Holiday range
+        </Typography>
         <DateRangePicker name="holiday" onChange={setRange} />
       </label>
 

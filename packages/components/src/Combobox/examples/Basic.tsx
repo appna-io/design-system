@@ -1,4 +1,4 @@
-import { Combobox } from '@apx-ui/ds';
+import { Combobox, Div } from '@apx-ui/ds';
 
 const COUNTRIES = [
   { value: 'us', label: 'United States' },
@@ -12,8 +12,8 @@ const COUNTRIES = [
 
 export default function Basic() {
   return (
-    <div className="max-w-sm">
+    <Div className="max-w-sm">
       <Combobox options={COUNTRIES} placeholder="Pick a country" aria-label="Country" />
-    </div>
+    </Div>
   );
 }

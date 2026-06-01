@@ -1,4 +1,4 @@
-import { ColorSwatch } from '@apx-ui/ds';
+import { ColorSwatch, Div } from '@apx-ui/ds';
 
 const SWATCHES = [
   { value: '#6c5ce7', label: 'Indigo' },
@@ -9,10 +9,10 @@ const SWATCHES = [
 
 export default function ColorSwatchGroup() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+    <Div display="flex" flexDirection="column" gap="2">
       {SWATCHES.map((s) => (
         <ColorSwatch key={s.value} value={s.value} showLabel={s.label} />
       ))}
-    </div>
+    </Div>
   );
 }

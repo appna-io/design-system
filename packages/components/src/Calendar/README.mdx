@@ -1,0 +1,71 @@
+## Overview
+
+`<Calendar />` is the canonical date primitive in apx-ds — a headless + DOM root for date
+selection that powers `<DatePicker>`, `<DateRangePicker>`, and scheduler mini-month widgets.
+It supports single, multiple, and range modes, locale-aware weekday and month labels, keyboard
+navigation, and constraint props (`min`, `max`, `isDateDisabled`).
+
+<ExampleBlock for="Overview" title="Overview — single-date selection with min/max bounds" />
+
+## Selection modes
+
+- **`single`** — one date at a time. The default for date pickers and booking flows.
+- **`multiple`** — toggle individual dates on and off. Useful for availability or tag-style
+  date lists.
+- **`range`** — pick a start and end date. Pass `numberOfMonths={2}` for a side-by-side range
+  picker.
+
+Every mode is fully controllable (`value` + `month`) or uncontrolled (`defaultValue` +
+`defaultMonth`).
+
+## Variants
+
+Four surface styles for embedding in popovers, sidebars, or inline layouts:
+
+- **`solid`** — filled background. **Default.**
+- **`outline`** — bordered frame. Pairs well with popover shells.
+- **`soft`** — subtle tint without a hard edge.
+- **`minimal`** — chromeless grid. For dense inline calendars.
+
+## Examples
+
+<ExampleBlock for="Basic" title="Basic — single-date selection" />
+
+<ExampleBlock for="Range" title="Range — two-month range picker" />
+
+<ExampleBlock for="Multiple" title="Multiple — toggle many dates" />
+
+<ExampleBlock for="MinMax" title="Min / max — bounded selection window" />
+
+<ExampleBlock for="DisableWeekends" title="Disable weekends — custom isDateDisabled" />
+
+<ExampleBlock for="Variants" title="Variants — solid / outline / soft / minimal" />
+
+<ExampleBlock for="Sizes" title="Sizes — sm / md / lg" />
+
+<ExampleBlock for="WeekNumbers" title="Week numbers — ISO week gutter" />
+
+<ExampleBlock for="Locales" title="Locales — en-US / de-DE / ja-JP" />
+
+<ExampleBlock for="CustomDayRender" title="Custom day render — event dots via renderDay" />
+
+## Props
+
+<PropsTable />
+
+## Accessibility
+
+- Renders an ARIA `grid` with `gridcell` day buttons — arrow keys, Home/End, PageUp/Down, and
+  Enter/Space follow the W3C Date Picker Dialog keyboard pattern.
+- Disabled and out-of-range dates are not focusable and expose `aria-disabled`.
+- Navigation buttons in the header have accessible labels derived from locale-aware month titles.
+- Week-number gutters are decorative when shown; day cells carry the selectable semantics.
+
+## Do / Don't
+
+- **Do** pair `min` / `max` with visible helper text so users know why dates are disabled.
+- **Do** use `locale` to drive weekday order and month names — no locale data ships with the DS.
+- **Don't** rebuild keyboard navigation in `renderDay` — the headless layer owns selection and
+  focus; the slot only swaps visuals.
+- **Don't** use Calendar for time-of-day picking — it is date-only; reach for a time input or
+  datetime picker instead.

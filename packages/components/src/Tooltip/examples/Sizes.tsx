@@ -1,10 +1,10 @@
-import { Button, Tooltip, type TooltipSize } from '@apx-ui/ds';
+import { Button, Div, Tooltip, type TooltipSize } from '@apx-ui/ds';
 
 const SIZES: readonly TooltipSize[] = ['sm', 'md', 'lg'];
 
 export default function Sizes() {
   return (
-    <div className="flex flex-wrap gap-4">
+    <Div display="flex" flexWrap="wrap" gap="4">
       {SIZES.map((size) => (
         <Tooltip
           key={size}
@@ -17,6 +17,6 @@ export default function Sizes() {
           </Button>
         </Tooltip>
       ))}
-    </div>
+    </Div>
   );
 }

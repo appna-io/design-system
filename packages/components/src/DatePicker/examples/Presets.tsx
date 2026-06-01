@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { DateRangePicker, type DateRange } from '@apx-ui/ds';
+import { DateRangePicker, Div, Typography, type DateRange } from '@apx-ui/ds';
 
 function daysAgo(n: number): Date {
   const d = new Date();
@@ -41,13 +41,13 @@ export default function Presets() {
   const [value, setValue] = useState<DateRange>({ start: daysAgo(6), end: daysAgo(0) });
 
   return (
-    <div className="flex flex-col items-start gap-3">
+    <Div display="flex" flexDirection="column" alignItems="flex-start" gap="3">
       <DateRangePicker value={value} onChange={setValue} presets={PRESETS} />
-      <p className="text-sm text-fg-muted">
+      <Typography variant="bodySmall" color="fg.muted">
         {value.start && value.end
           ? `${value.start.toLocaleDateString()} – ${value.end.toLocaleDateString()}`
           : 'No range selected'}
-      </p>
-    </div>
+      </Typography>
+    </Div>
   );
 }

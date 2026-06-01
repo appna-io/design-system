@@ -1,20 +1,26 @@
-import { Skeleton } from '@apx-ui/ds';
+import { Div, Skeleton, Typography } from '@apx-ui/ds';
 
 export default function Animations() {
   return (
-    <div className="flex flex-col gap-4" style={{ maxWidth: 360 }}>
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium text-fg-muted">shimmer (default)</span>
+    <Div display="flex" flexDirection="column" gap="4" className="max-w-[360px]">
+      <Div display="flex" flexDirection="column" gap="2">
+        <Typography variant="caption" weight="medium" color="fg.muted">
+          shimmer (default)
+        </Typography>
         <Skeleton animation="shimmer" width="100%" height={24} />
-      </div>
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium text-fg-muted">pulse</span>
+      </Div>
+      <Div display="flex" flexDirection="column" gap="2">
+        <Typography variant="caption" weight="medium" color="fg.muted">
+          pulse
+        </Typography>
         <Skeleton animation="pulse" width="100%" height={24} />
-      </div>
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium text-fg-muted">none</span>
+      </Div>
+      <Div display="flex" flexDirection="column" gap="2">
+        <Typography variant="caption" weight="medium" color="fg.muted">
+          none
+        </Typography>
         <Skeleton animation="none" width="100%" height={24} />
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

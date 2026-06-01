@@ -1,4 +1,4 @@
-import { Button, Input, Modal } from '@apx-ui/ds';
+import { Button, Div, Input, Modal, Typography } from '@apx-ui/ds';
 import { useState, type FormEvent } from 'react';
 
 export default function FormInside() {
@@ -22,31 +22,35 @@ export default function FormInside() {
         />
         <form onSubmit={handleSubmit}>
           <Modal.Body>
-            <div className="space-y-3">
-              <div className="block text-sm">
-                <span className="mb-1 block font-medium">Display name</span>
+            <Div display="flex" flexDirection="column" gap="3">
+              <Div className="block text-sm">
+                <Typography as="span" variant="bodySmall" weight="medium" className="mb-1 block">
+                  Display name
+                </Typography>
                 <Input
                   name="name"
                   placeholder="Sam Pullman"
                   aria-label="Display name"
                   required
                 />
-              </div>
-              <div className="block text-sm">
-                <span className="mb-1 block font-medium">Email</span>
+              </Div>
+              <Div className="block text-sm">
+                <Typography as="span" variant="bodySmall" weight="medium" className="mb-1 block">
+                  Email
+                </Typography>
                 <Input
                   name="email"
                   type="email"
                   placeholder="sam@example.com"
                   aria-label="Email"
                 />
-              </div>
+              </Div>
               {submitted ? (
-                <p className="text-sm text-fg-success">
+                <Typography variant="bodySmall" color="fg.success">
                   Saved: {submitted}
-                </p>
+                </Typography>
               ) : null}
-            </div>
+            </Div>
           </Modal.Body>
           <Modal.Footer>
             <Modal.Close asChild>

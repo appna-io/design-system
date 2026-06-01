@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { DataGrid, useDataGrid } from '@apx-ui/ds';
+import { DataGrid, Div, Typography, useDataGrid } from '@apx-ui/ds';
 import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Row {
@@ -42,12 +42,12 @@ export default function Headless() {
   });
 
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Composed form using <code>useDataGrid()</code> + the subparts directly. Mount
         any subset / re-order chrome / inject custom toolbars. Hook state stays in
         sync with the DOM.
-      </p>
+      </Typography>
       <DataGrid.Root grid={grid}>
         <DataGrid.Toolbar>
           <DataGrid.GlobalSearch />
@@ -57,10 +57,10 @@ export default function Headless() {
           <DataGrid.Body />
         </DataGrid.Table>
       </DataGrid.Root>
-      <div className="text-fg-muted text-xs">
+      <Typography variant="caption" color="fg.muted">
         Sort state: {JSON.stringify(grid.state.sort)} · total visible:{' '}
         <strong>{grid.rows.length}</strong> rows
-      </div>
-    </div>
+      </Typography>
+    </Div>
   );
 }

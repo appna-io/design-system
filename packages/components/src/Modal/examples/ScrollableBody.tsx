@@ -1,4 +1,4 @@
-import { Button, Modal } from '@apx-ui/ds';
+import { Button, Div, Modal, Typography } from '@apx-ui/ds';
 
 export default function ScrollableBody() {
   const paragraphs = Array.from({ length: 30 }, (_, i) => i + 1);
@@ -14,15 +14,15 @@ export default function ScrollableBody() {
           description="Read carefully before continuing."
         />
         <Modal.Body>
-          <div className="space-y-3 text-sm">
+          <Div display="flex" flexDirection="column" gap="3">
             {paragraphs.map((n) => (
-              <p key={n}>
+              <Typography key={n} variant="bodySmall">
                 Section {n}. Content scrolls inside the Body region while the
                 Header and Footer stay pinned. The dialog&apos;s `max-h-[calc(100vh-4rem)]`
                 keeps it inside the viewport regardless of content height.
-              </p>
+              </Typography>
             ))}
-          </div>
+          </Div>
         </Modal.Body>
         <Modal.Footer>
           <Modal.Close asChild>

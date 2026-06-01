@@ -1,11 +1,11 @@
-import { Button, Drawer } from '@apx-ui/ds';
+import { Button, Div, Drawer, Typography } from '@apx-ui/ds';
 import type { DrawerSize } from '@apx-ui/ds';
 
 const sizes: DrawerSize[] = ['sm', 'md', 'lg', 'xl', 'full'];
 
 export default function Sizes() {
   return (
-    <div className="flex flex-wrap gap-3">
+    <Div display="flex" className="flex-wrap gap-3">
       {sizes.map((size) => (
         <Drawer key={size}>
           <Drawer.Trigger>
@@ -18,11 +18,11 @@ export default function Sizes() {
               description={`Width follows the \`${size}\` token.`}
             />
             <Drawer.Body>
-              <p className="text-sm">
+              <Typography variant="bodySmall">
                 Sizes drive the dimension perpendicular to the anchored edge.
                 For a right drawer that means width; for a top drawer that
                 means height.
-              </p>
+              </Typography>
             </Drawer.Body>
             <Drawer.Footer>
               <Drawer.Close asChild>
@@ -32,6 +32,6 @@ export default function Sizes() {
           </Drawer.Content>
         </Drawer>
       ))}
-    </div>
+    </Div>
   );
 }

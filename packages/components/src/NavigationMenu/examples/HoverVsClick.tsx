@@ -1,4 +1,4 @@
-import { NavigationMenu } from '@apx-ui/ds';
+import { Div, NavigationMenu, Typography } from '@apx-ui/ds';
 
 /**
  * Trigger interaction modes — hover, click, and both (the default).
@@ -13,12 +13,16 @@ import { NavigationMenu } from '@apx-ui/ds';
  */
 export default function HoverVsClick() {
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-(--sds-color-text-muted)">
+    <Div display="flex" flexDirection="column" gap="6">
+      <Div>
+        <Typography
+          variant="caption"
+          weight="semibold"
+          className="mb-2 uppercase tracking-wide text-(--sds-color-text-muted)"
+        >
           hover only
-        </p>
-        <div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+        </Typography>
+        <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
           <NavigationMenu trigger="hover">
             <NavigationMenu.Item>
               <NavigationMenu.Trigger>Product</NavigationMenu.Trigger>
@@ -28,14 +32,18 @@ export default function HoverVsClick() {
               </NavigationMenu.Content>
             </NavigationMenu.Item>
           </NavigationMenu>
-        </div>
-      </div>
+        </Div>
+      </Div>
 
-      <div>
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-(--sds-color-text-muted)">
+      <Div>
+        <Typography
+          variant="caption"
+          weight="semibold"
+          className="mb-2 uppercase tracking-wide text-(--sds-color-text-muted)"
+        >
           click only
-        </p>
-        <div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+        </Typography>
+        <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
           <NavigationMenu trigger="click">
             <NavigationMenu.Item>
               <NavigationMenu.Trigger>Product</NavigationMenu.Trigger>
@@ -45,14 +53,18 @@ export default function HoverVsClick() {
               </NavigationMenu.Content>
             </NavigationMenu.Item>
           </NavigationMenu>
-        </div>
-      </div>
+        </Div>
+      </Div>
 
-      <div>
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-(--sds-color-text-muted)">
+      <Div>
+        <Typography
+          variant="caption"
+          weight="semibold"
+          className="mb-2 uppercase tracking-wide text-(--sds-color-text-muted)"
+        >
           both (default)
-        </p>
-        <div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+        </Typography>
+        <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
           <NavigationMenu>
             <NavigationMenu.Item>
               <NavigationMenu.Trigger>Product</NavigationMenu.Trigger>
@@ -62,8 +74,8 @@ export default function HoverVsClick() {
               </NavigationMenu.Content>
             </NavigationMenu.Item>
           </NavigationMenu>
-        </div>
-      </div>
-    </div>
+        </Div>
+      </Div>
+    </Div>
   );
 }

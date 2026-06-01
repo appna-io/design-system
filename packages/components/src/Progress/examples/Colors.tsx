@@ -1,4 +1,4 @@
-import { CircularProgress, Progress, type ProgressColor } from '@apx-ui/ds';
+import { CircularProgress, Div, Progress, Typography, type ProgressColor } from '@apx-ui/ds';
 
 const COLORS: readonly ProgressColor[] = [
   'primary',
@@ -12,12 +12,22 @@ const COLORS: readonly ProgressColor[] = [
 
 export default function Colors() {
   return (
-    <div className="flex w-full max-w-md flex-col gap-6">
-      <div className="flex flex-col gap-3">
-        <span className="text-xs font-medium uppercase tracking-wide text-fg-muted">Linear</span>
+    <Div display="flex" flexDirection="column" gap="6" className="w-full max-w-md">
+      <Div display="flex" flexDirection="column" gap="3">
+        <Typography
+          as="span"
+          variant="caption"
+          weight="medium"
+          color="fg.muted"
+          className="uppercase tracking-wide"
+        >
+          Linear
+        </Typography>
         {COLORS.map((color) => (
-          <div key={color} className="flex items-center gap-3">
-            <span className="w-20 text-xs text-fg-muted">{color}</span>
+          <Div key={color} display="flex" alignItems="center" gap="3">
+            <Typography as="span" variant="caption" color="fg.muted" className="w-20">
+              {color}
+            </Typography>
             <Progress
               variant="soft"
               color={color}
@@ -25,12 +35,20 @@ export default function Colors() {
               className="flex-1"
               aria-label={`${color} progress`}
             />
-          </div>
+          </Div>
         ))}
-      </div>
-      <div className="flex flex-col gap-3">
-        <span className="text-xs font-medium uppercase tracking-wide text-fg-muted">Circular</span>
-        <div className="flex flex-wrap items-center gap-4">
+      </Div>
+      <Div display="flex" flexDirection="column" gap="3">
+        <Typography
+          as="span"
+          variant="caption"
+          weight="medium"
+          color="fg.muted"
+          className="uppercase tracking-wide"
+        >
+          Circular
+        </Typography>
+        <Div display="flex" alignItems="center" className="flex-wrap gap-4">
           {COLORS.map((color) => (
             <CircularProgress
               key={color}
@@ -40,8 +58,8 @@ export default function Colors() {
               aria-label={`${color} circular progress`}
             />
           ))}
-        </div>
-      </div>
-    </div>
+        </Div>
+      </Div>
+    </Div>
   );
 }

@@ -1,4 +1,4 @@
-import { DS_ICON_NAMES, Icon, IconProvider, createIconRegistry } from '@apx-ui/ds';
+import { DS_ICON_NAMES, Div, Icon, IconProvider, createIconRegistry } from '@apx-ui/ds';
 
 import * as G from './_glyphs';
 
@@ -19,14 +19,17 @@ const icons = createIconRegistry({
 export default function DSIconCatalog() {
   return (
     <IconProvider value={icons} onMissing={() => undefined}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 16 }}>
+      <Div
+        className="grid gap-4"
+        sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))' }}
+      >
         {DS_ICON_NAMES.map((n) => (
-          <div key={n} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Div key={n} display="flex" alignItems="center" gap="2">
             <Icon name={n} size="md" />
             <code style={{ fontSize: 12 }}>{n}</code>
-          </div>
+          </Div>
         ))}
-      </div>
+      </Div>
     </IconProvider>
   );
 }

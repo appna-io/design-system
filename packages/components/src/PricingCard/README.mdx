@@ -1,0 +1,126 @@
+# PricingCard
+
+`<PricingCard />` is a higher-level **composition** primitive for SaaS pricing tiers. It
+wraps `<Card>` + its subparts, then exposes the recurring decisions (name, price,
+cadence, blurb, features, CTA, "most popular" highlight) as typed props — so a tier
+collapses from ~60 LoC of structural JSX into one declarative element.
+
+```tsx
+import { Button, PricingCard } from 'apx-ds';
+
+<PricingCard
+  highlighted
+  name="Team"
+  price="$12"
+  cadence="per seat / month, billed yearly"
+  blurb="For growing teams that need richer collaboration & analytics."
+  features={[
+    'Everything in Starter',
+    'Unlimited collaborators',
+    'Advanced analytics dashboards',
+    '90-day audit log + SSO',
+    'Priority email support',
+  ]}
+  cta={<Button fullWidth>Start 14-day trial</Button>}
+/>
+```
+
+The component renders a regular `<Card>` underneath — every Card prop you'd reach for
+(`variant`, `size`, `color`, `sx`, `className`, `style`, `data-*`, ...) flows through
+unchanged. There is **no** new visual primitive to learn; only a typed shorthand.
+
+## Why a separate primitive (and not `<Card variant="pricing">`)?
+
+`Card.variant` already means **edge / background** treatment (`'outline' | 'solid' |
+'elevated' | 'ghost'`). Overloading it with a content-layout meaning (`'pricing'`)
+would conflate two orthogonal concerns and force the type to drift. Following the same
+pattern as `<Stat>`, `<EmptyState>`, `<Toolbar>`, this DS prefers a dedicated
+component that **wraps** Card — you keep every Card escape hatch, and the pricing
+shape is reusable in its own right.
+
+## Anatomy
+
+| Region          | Source                                     |
+| --------------- | ------------------------------------------ |
+| Header          | `name` + (when highlighted) the `<Badge>`  |
+| Price block     | `price` + optional `cadence` caption        |
+| Blurb           | `blurb` paragraph                          |
+| Feature list    | `features[]` rendered with `featureIcon`   |
+| Footer          | `cta` (any ReactNode, typically `<Button>`)|
+
+Every region renders only when its prop is supplied — pass `cadence={undefined}` /
+`features={undefined}` to omit a section.
+
+## Prop surface
+
+### Content
+
+| Prop         | Type                       | Notes                                                                                         |
+| ------------ | -------------------------- | --------------------------------------------------------------------------------------------- |
+| `name`       | `ReactNode` *(required)*   | Tier label. Bolded next to the optional highlight badge.                                       |
+| `price`      | `ReactNode` *(required)*   | Headline price (e.g. `'$0'`, `'$12'`, `'Custom'`). Rendered display-size.                       |
+| `cadence`    | `ReactNode`                | Caption below the price (`'per seat / month'`).                                               |
+| `blurb`      | `ReactNode`                | Description paragraph between price and features.                                              |
+| `features`   | `readonly ReactNode[]`     | Feature list; each item rendered as a row with a bullet icon. Strings are auto-wrapped in `<Typography>` — pass any node for richer rows. |
+| `cta`        | `ReactNode`                | Action element (typically a `<Button>`). Sits in `<Card.Footer>`.                              |
+
+### Highlight
+
+| Prop             | Type        | Default            | Notes                                                                          |
+| ---------------- | ----------- | ------------------ | ------------------------------------------------------------------------------ |
+| `highlighted`    | `boolean`   | `false`            | Switches the canonical recommended-tier visual: `variant='elevated'`, `selected={true}`, badge next to the name. |
+| `highlightLabel` | `ReactNode` | `'Most popular'`   | Badge text. Pass `null` to keep the elevated/selected ring without the badge.   |
+| `color`          | `CardColor` | `'primary'`        | Palette role used for the badge tint + selection ring.                          |
+
+### Feature bullets
+
+| Prop                | Type            | Default        | Notes                                                                |
+| ------------------- | --------------- | -------------- | -------------------------------------------------------------------- |
+| `featureIcon`       | `ReactNode`     | `<Check />`    | Lucide checkmark by default. Pass any icon to swap.                  |
+| `featureIconColor`  | `CardColor`     | `'success'`    | Palette role used to tint the bullet icon.                           |
+
+### Pass-through to `<Card>`
+
+| Prop      | Type           | Default                                  | Notes                                                                |
+| --------- | -------------- | ---------------------------------------- | -------------------------------------------------------------------- |
+| `variant` | `CardVariant`  | `'elevated'` when highlighted, else `'outline'` | Override the underlying Card's edge/background treatment.            |
+| `size`    | `CardSize`     | `'lg'`                                   | Padding density propagated via `CardContext` to every subpart.       |
+| `sx`      | `Sx`           | —                                        | Theme-aware inline style on the Card root.                           |
+| `className` / `style` / `data-*` / `aria-*` | — | — | Forwarded to the underlying `<Card>` root. |
+
+## Examples
+
+<ExampleBlock for="Basic" title="Basic — single tier" />
+<ExampleBlock for="Highlighted" title="Highlighted — recommended-tier visual" />
+<ExampleBlock for="TierGrid" title="TierGrid — three tiers in a responsive grid" />
+
+## Accessibility
+
+- The badge next to the highlighted tier is purely visual; the tier `name` is the
+  semantic label, so screen reader users hear `"Team"` (not `"Team Most popular"`).
+  Pair with an `aria-describedby` to announce the highlight if needed.
+- `featureIcon` is wrapped with `aria-hidden="true"` — the bullet decoration must
+  not be read aloud, the feature text is the accessible content.
+- The component never traps focus or claims a role; the `<Card>` underneath stays
+  a passive container. If you need the entire card to be a single clickable target,
+  forward `clickable` via the underlying Card's prop surface (PR follow-up).
+
+## Theming
+
+- All visual styling is owned by `<Card>` + `<Badge>` + `<Typography>` + `<Button>`
+  recipes — there's no `<PricingCard>` recipe of its own. Theme overrides on those
+  three components automatically apply.
+- `featureIcon` color uses the standard palette tokens (`text-primary`, `text-success`,
+  ...) so it tracks the active variant.
+
+## Do / Don't
+
+- **Do** reach for `<PricingCard>` whenever you'd otherwise wire `<Card>` + `<Card.Header>`
+  + price block + feature list + `<Card.Footer>` by hand for a marketing page.
+- **Do** keep tier data in a typed array and `.map()` over it; the prop surface is
+  designed for that pattern (see the `TierGrid` example).
+- **Don't** force `<PricingCard>` into roles outside pricing (status cards, summary
+  panels, etc.) — fall back to `<Card>` directly. The shape is opinionated on purpose.
+- **Don't** override every prop with `className` arbitrary utility classes. If the
+  component doesn't fit, drop down to `<Card>` directly — that path is supported and
+  documented.

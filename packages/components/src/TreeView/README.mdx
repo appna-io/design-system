@@ -1,15 +1,11 @@
----
-title: TreeView
-status: Stable
-phase: 46
----
-
 # TreeView
 
 `<TreeView />` is the canonical hierarchical-data primitive — file explorers, category
 pickers, JSON inspectors, taxonomy navigation. It ships the **full W3C ARIA TreeView
 keyboard pattern**, a roving tabindex, type-to-search, controlled / uncontrolled expansion
 and selection, and an async `loadChildren` slot for lazy file systems.
+
+<ExampleBlock for="Overview" title="Overview — file explorer with three expanded levels" />
 
 > **Mental model**
 >
@@ -78,6 +74,11 @@ but never select.
 ---
 
 ## Expansion
+
+Clicking anywhere on a branch row — the chevron **or** the label — toggles expansion,
+mirroring the affordance you'd expect from VS Code's explorer or Finder's sidebar. In
+selectable modes the same click also updates `selected`, so a single tap both opens a
+folder and marks it as the active node.
 
 Uncontrolled:
 
@@ -214,14 +215,6 @@ acting as an override.
 - Selection / expansion lookups are `O(1)` (`Set`).
 - Type-to-search is `O(visible)` per keystroke — no precomputed index needed at typical
   tree sizes.
-
-### Out of scope (deferred)
-
-- **Virtualization** — TreeView V1 renders every visible row. Trees with 10k+ nodes
-  should wait for the post-V1 virtualized variant (which will reuse `flattenTree` as the
-  source row list).
-- **Drag-and-drop** — HTML5 DnD + keyboard pick-up/drop pattern documented in the plan;
-  follow-up lane.
 
 ---
 

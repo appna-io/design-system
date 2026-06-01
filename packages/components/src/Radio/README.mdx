@@ -2,8 +2,8 @@
 
 `<Radio />` is the single-of-many selection control. It ships **with its parent** —
 `<RadioGroup />` — because a lone radio button is rarely useful: the value of a radio is in
-the comparison with its siblings. The two components are designed together, documented here
-together, and tested as one phase.
+the comparison with its siblings. The two components are designed together, documented here together, and share the same
+accessibility and theming contracts.
 
 The visible affordance is a circular outer ring with an inner filled dot. Under the hood,
 each `<Radio>` renders a real `<input type="radio">` (visually hidden but keyboard-reachable
@@ -11,9 +11,11 @@ and form-participating) inside a `<label>`. Clicking the label toggles the box n
 synthetic handlers required. The inner dot is the control's `::before` pseudo-element, kept
 out of the DOM for the cleanest possible markup.
 
-Radio reuses the three-slot recipe pattern Checkbox (Phase 9) and Switch (Phase 10) established:
-`root`, `control`, `label`. Same hidden-input + custom-indicator trick, same `useThemedClasses`
-slot wiring, same dev-mode warning hook.
+Radio reuses the three-slot recipe pattern Checkbox and Switch established: `root`, `control`,
+`label`. Same hidden-input + custom-indicator trick, same `useThemedClasses` slot wiring, same
+dev-mode warning hook.
+
+<ExampleBlock for="Overview" title="Overview — shipping speed with three options" />
 
 ## When to use which
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { Scheduler, type SchedulerEvent } from '@apx-ui/ds';
+import { Div, Scheduler, type SchedulerEvent } from '@apx-ui/ds';
 import { useState } from 'react';
 
 export default function Day() {
@@ -14,7 +14,7 @@ export default function Day() {
   ]);
 
   return (
-    <div style={{ height: 640 }}>
+    <Div height={640}>
       <Scheduler
         events={events}
         defaultView="day"
@@ -29,7 +29,7 @@ export default function Day() {
           return created;
         }}
       />
-    </div>
+    </Div>
   );
 }
 

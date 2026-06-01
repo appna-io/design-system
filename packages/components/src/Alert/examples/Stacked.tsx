@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, Button } from '@apx-ui/ds';
+import { Alert, Button, Div } from '@apx-ui/ds';
 
 interface Item {
   id: number;
@@ -17,8 +17,8 @@ export default function Stacked() {
   const [items, setItems] = useState<readonly Item[]>(SEED);
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex flex-col gap-2">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Div display="flex" flexDirection="column" gap="2">
         {items.map((item) => (
           <Alert
             key={item.id}
@@ -29,12 +29,12 @@ export default function Stacked() {
             {item.text}
           </Alert>
         ))}
-      </div>
+      </Div>
       {items.length === 0 ? (
         <Button size="sm" variant="outline" onClick={() => setItems(SEED)}>
           Restore alerts
         </Button>
       ) : null}
-    </div>
+    </Div>
   );
 }

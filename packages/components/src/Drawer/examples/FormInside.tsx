@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { Button, Drawer, Input } from '@apx-ui/ds';
+import { Button, Div, Drawer, Input, Typography } from '@apx-ui/ds';
 
 export default function FormInside() {
   const [submitted, setSubmitted] = useState<string | null>(null);
@@ -23,31 +23,35 @@ export default function FormInside() {
         />
         <form onSubmit={handleSubmit}>
           <Drawer.Body>
-            <div className="space-y-3">
-              <div className="block text-sm">
-                <span className="mb-1 block font-medium">Project title</span>
+            <Div className="space-y-3">
+              <Div className="block text-sm">
+                <Typography as="span" variant="bodySmall" weight="medium" className="mb-1 block">
+                  Project title
+                </Typography>
                 <Input
                   name="title"
                   placeholder="Helios platform redesign"
                   aria-label="Project title"
                   required
                 />
-              </div>
-              <div className="block text-sm">
-                <span className="mb-1 block font-medium">Owner email</span>
+              </Div>
+              <Div className="block text-sm">
+                <Typography as="span" variant="bodySmall" weight="medium" className="mb-1 block">
+                  Owner email
+                </Typography>
                 <Input
                   name="owner"
                   type="email"
                   placeholder="owner@example.com"
                   aria-label="Owner email"
                 />
-              </div>
+              </Div>
               {submitted ? (
-                <p className="text-sm text-fg-success">
+                <Typography variant="bodySmall" color="fg.success">
                   Created: {submitted}
-                </p>
+                </Typography>
               ) : null}
-            </div>
+            </Div>
           </Drawer.Body>
           <Drawer.Footer>
             <Drawer.Close asChild>

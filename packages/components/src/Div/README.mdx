@@ -79,9 +79,19 @@ a trigger element (`<Button>`) instead.
 
 ### Shortcuts
 
-| Prop        | Behavior                                                                                                                       |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `centered`  | Injects `display: flex; align-items: center; justify-content: center;` at the **lowest** style priority, so any explicit value wins. |
+| Prop          | Behavior                                                                                                                                                                                                                              |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `centered`    | Injects `display: flex; align-items: center; justify-content: center;` at the **lowest** style priority, so any explicit value wins.                                                                                                  |
+| `decorative`  | Injects `position: absolute; inset: 0; pointer-events: none;` and adds `aria-hidden="true"` so screen readers skip the purely visual layer. Pair with `gradient` for the soft-backdrop pattern, or use it standalone with a custom `backgroundImage` / `className`. |
+| `gradient`    | Resolves to a `background-image` value. Accepts `true` (default theme-aware radial primary.subtle → transparent), a `DivGradientConfig` (`type`, `from`, `to`, `position`, `size`, `fromStop`, `toStop`), or a raw CSS string (`radial-gradient(...)`, `linear-gradient(...)`, `url(...)`). Palette token paths in `from` / `to` resolve to `var(--sds-palette-…)` so the gradient tracks the active theme variant. |
+
+```tsx
+// the verbose className recipe…
+<Div className="absolute inset-0 pointer-events-none bg-[radial-gradient(80%_80%_at_0%_50%,var(--sds-palette-primary-subtle)_0%,transparent_70%)]" aria-hidden />
+
+// …becomes a single composed shortcut.
+<Div decorative gradient={{ position: 'left' }} />
+```
 
 ### Polymorphism
 
@@ -127,9 +137,11 @@ swap the element type and the matching attributes "just work":
 Lowest → highest priority:
 
 1. `centered` defaults (`display: flex; align-items: center; justify-content: center;`)
-2. `sx` (theme-aware object)
-3. Curated style shorthand props (`p={4}`, `bg="primary.50"`, `display="grid"`, …)
-4. Consumer `style` prop (escape hatch)
+2. `decorative` defaults (`position: absolute; inset: 0; pointer-events: none;`)
+3. `gradient` (`background-image: …`)
+4. `sx` (theme-aware object)
+5. Curated style shorthand props (`p={4}`, `bg="primary.50"`, `display="grid"`, …)
+6. Consumer `style` prop (escape hatch)
 
 Classes layer the same way:
 
@@ -148,6 +160,7 @@ Classes layer the same way:
 <ExampleBlock for="HideOn" title="HideOn — hide from breakpoint upward" />
 <ExampleBlock for="DisplayOn" title="DisplayOn — reveal from breakpoint upward" />
 <ExampleBlock for="Animation" title="Animation — opt-in motion presets" />
+<ExampleBlock for="Gradient" title="Gradient — theme-aware backdrop via the `decorative` + `gradient` shortcuts" />
 <ExampleBlock for="ActLikeButton" title="ActLike button — real <button> with onClick + pseudo hooks" />
 <ExampleBlock for="ActLikeAnchor" title="ActLike anchor — real <a> with href" />
 <ExampleBlock for="OnHover" title="OnHover — hover-state Tailwind classes" />

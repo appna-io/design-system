@@ -1,8 +1,8 @@
-import { Alert } from '@apx-ui/ds';
+import { Alert, Div } from '@apx-ui/ds';
 
 export default function Variants() {
   return (
-    <div className="flex flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3">
       <Alert variant="solid" color="info">
         Solid variant — loud, contrast-text on colored background.
       </Alert>
@@ -15,6 +15,6 @@ export default function Variants() {
       <Alert variant="inline" color="info">
         Inline variant — left bar only, no chrome.
       </Alert>
-    </div>
+    </Div>
   );
 }

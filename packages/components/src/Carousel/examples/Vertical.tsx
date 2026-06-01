@@ -1,4 +1,4 @@
-import { Carousel } from '@apx-ui/ds';
+import { Carousel, Div, Typography } from '@apx-ui/ds';
 
 const updates = [
   { title: 'Build #482', body: 'All checks passing on main.' },
@@ -12,10 +12,14 @@ export default function Vertical() {
     <Carousel ariaLabel="Recent builds" orientation="vertical" gap={2} showIndicators="never">
       {updates.map((u) => (
         <Carousel.Slide key={u.title}>
-          <div className="flex h-24 flex-col justify-center rounded-md border border-border bg-bg-default px-4">
-            <div className="text-sm font-semibold">{u.title}</div>
-            <div className="text-xs text-fg-muted">{u.body}</div>
-          </div>
+          <Div display="flex" flexDirection="column" justifyContent="center" className="h-24 rounded-md border border-border bg-bg-default px-4">
+            <Typography variant="bodySmall" weight="semibold">
+              {u.title}
+            </Typography>
+            <Typography variant="caption" color="fg.muted">
+              {u.body}
+            </Typography>
+          </Div>
         </Carousel.Slide>
       ))}
     </Carousel>

@@ -1,10 +1,10 @@
-import { Button, Icon } from '@apx-ui/ds';
+import { Button, Div, Icon } from '@apx-ui/ds';
 
 import { Check, Mail } from './_glyphs';
 
 export default function InButton() {
   return (
-    <div style={{ display: 'flex', gap: 12 }}>
+    <Div display="flex" gap="3">
       <Button leadingIcon={<Icon as={Mail} />}>Send</Button>
       <Button color="success" leadingIcon={<Icon as={Check} />}>
         Confirm
@@ -12,6 +12,6 @@ export default function InButton() {
       <Button variant="outline" size="sm" trailingIcon={<Icon as={Mail} />}>
         Inbox
       </Button>
-    </div>
+    </Div>
   );
 }

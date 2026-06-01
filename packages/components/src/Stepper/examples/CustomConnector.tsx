@@ -12,7 +12,7 @@ export default function CustomConnector() {
       connector={
         <span
           aria-hidden="true"
-          className="flex-1 self-start mt-[15px] border-t-2 border-dashed border-fg-muted mx-1 block"
+          className="flex-1 self-start mt-[15px] border-t-2 border-dashed border-fg-muted block"
         />
       }
     />

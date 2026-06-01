@@ -1,4 +1,4 @@
-import { Switch } from '@apx-ui/ds';
+import { Div, Switch } from '@apx-ui/ds';
 
 const SunIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -15,7 +15,7 @@ const MoonIcon = () => (
 
 export default function WithThumbIcons() {
   return (
-    <div className="flex flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3">
       <Switch
         size="lg"
         color="warning"
@@ -31,6 +31,6 @@ export default function WithThumbIcons() {
       >
         Dark mode
       </Switch>
-    </div>
+    </Div>
   );
 }

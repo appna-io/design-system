@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Button, DataGrid } from '@apx-ui/ds';
+import { Button, DataGrid, Div, Typography } from '@apx-ui/ds';
 import type { DataGridColumnDef } from '@apx-ui/ds';
 
 interface Row {
@@ -42,15 +42,15 @@ export default function Persistence() {
   const [nonce, setNonce] = useState(0);
 
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-fg-muted text-sm">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Sort a column, hide one via the column-visibility menu, change the density, or
         re-arrange page size. Then click <strong>Remount grid</strong> — the persisted slices
         rehydrate from <code>localStorage</code> as if you had refreshed the page. Selection
         and the active page index are deliberately <em>not</em> persisted (selection should
         not survive a refresh; pageIndex is ephemeral).
-      </p>
-      <div className="flex gap-2">
+      </Typography>
+      <Div display="flex" gap="2">
         <Button size="sm" variant="outline" onClick={() => setNonce((n) => n + 1)}>
           Remount grid
         </Button>
@@ -64,7 +64,7 @@ export default function Persistence() {
         >
           Reset persisted state
         </Button>
-      </div>
+      </Div>
       <DataGrid<Row>
         key={nonce}
         data={data}
@@ -75,6 +75,6 @@ export default function Persistence() {
         selectionMode="multiple"
         defaultPagination={{ pageIndex: 0, pageSize: 10 }}
       />
-    </div>
+    </Div>
   );
 }

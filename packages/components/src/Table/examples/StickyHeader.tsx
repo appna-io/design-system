@@ -1,4 +1,4 @@
-import { Table } from '@apx-ui/ds';
+import { Div, Table } from '@apx-ui/ds';
 import type { TableColumn } from '@apx-ui/ds';
 
 interface Row {
@@ -23,10 +23,7 @@ const columns: TableColumn<Row>[] = [
 
 export default function StickyHeader() {
   return (
-    <div
-      className="border-border-subtle rounded-md border"
-      style={{ maxHeight: 280, overflow: 'auto' }}
-    >
+    <Div className="rounded-md border border-border-subtle" maxHeight={280} overflow="auto">
       <Table
         ariaLabel="Sticky header table"
         columns={columns}
@@ -35,6 +32,6 @@ export default function StickyHeader() {
         stickyHeader
         striped
       />
-    </div>
+    </Div>
   );
 }

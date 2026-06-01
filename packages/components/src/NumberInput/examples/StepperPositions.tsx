@@ -1,11 +1,11 @@
-import { NumberInput } from '@apx-ui/ds';
+import { Div, NumberInput } from '@apx-ui/ds';
 
 export default function StepperPositions() {
   return (
-    <div className="space-y-3">
+    <Div display="flex" flexDirection="column" gap="3">
       <NumberInput aria-label="Stepper position end (default)" defaultValue={5} stepperPosition="end" />
       <NumberInput aria-label="Stepper position start" defaultValue={5} stepperPosition="start" />
       <NumberInput aria-label="Stepper position split" defaultValue={5} stepperPosition="split" />
-    </div>
+    </Div>
   );
 }

@@ -1,33 +1,37 @@
-import { Button, Stack, Toolbar } from '@apx-ui/ds';
+import { Button, Div, Stack, Toolbar, Typography } from '@apx-ui/ds';
 
 export default function KeyboardDemo() {
   return (
     <Stack gap={3}>
-      <div className="rounded-md border border-border bg-bg-subtle p-3 text-sm text-fg-muted">
-        <p className="mb-2 font-medium text-fg-default">Keyboard pattern</p>
-        <ul className="ml-4 list-disc space-y-1">
-          <li>
+      <Div className="rounded-md border border-border bg-bg-subtle p-3 text-sm text-fg-muted">
+        <Typography variant="bodySmall" weight="medium" color="fg.default" className="mb-2">
+          Keyboard pattern
+        </Typography>
+        <Div as="ul" className="ml-4 list-disc space-y-1">
+          <Typography as="li" variant="bodySmall" color="fg.muted">
             <kbd className="rounded border border-border bg-bg-paper px-1.5 text-xs">Tab</kbd>
             {' '}
             enters the toolbar. Only the first focusable item is in the tab order.
-          </li>
-          <li>
+          </Typography>
+          <Typography as="li" variant="bodySmall" color="fg.muted">
             <kbd className="rounded border border-border bg-bg-paper px-1.5 text-xs">←</kbd>
             {' / '}
             <kbd className="rounded border border-border bg-bg-paper px-1.5 text-xs">→</kbd>
             {' '}
             move focus between items.
-          </li>
-          <li>
+          </Typography>
+          <Typography as="li" variant="bodySmall" color="fg.muted">
             <kbd className="rounded border border-border bg-bg-paper px-1.5 text-xs">Home</kbd>
             {' / '}
             <kbd className="rounded border border-border bg-bg-paper px-1.5 text-xs">End</kbd>
             {' '}
             jump to the first / last item.
-          </li>
-          <li>Disabled items are skipped during arrow navigation.</li>
-        </ul>
-      </div>
+          </Typography>
+          <Typography as="li" variant="bodySmall" color="fg.muted">
+            Disabled items are skipped during arrow navigation.
+          </Typography>
+        </Div>
+      </Div>
 
       <Toolbar variant="bordered" aria-label="Keyboard demo">
         <Button variant="ghost">Alpha</Button>

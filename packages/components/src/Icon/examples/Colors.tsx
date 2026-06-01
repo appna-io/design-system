@@ -1,4 +1,4 @@
-import { Icon } from '@apx-ui/ds';
+import { Div, Icon } from '@apx-ui/ds';
 
 import { Heart } from './_glyphs';
 
@@ -16,17 +16,17 @@ const COLORS = [
 
 export default function Colors() {
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
+    <Div display="flex" gap="4" className="flex-wrap">
       {COLORS.map((c) => (
-        <div key={c} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+        <Div key={c} display="flex" flexDirection="column" alignItems="center" gap="1">
           <Icon as={Heart} size="lg" color={c} />
           <small>{c}</small>
-        </div>
+        </Div>
       ))}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+      <Div display="flex" flexDirection="column" alignItems="center" gap="1">
         <Icon as={Heart} size="lg" color="#ec4899" />
         <small>#ec4899</small>
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

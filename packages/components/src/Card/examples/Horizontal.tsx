@@ -1,4 +1,4 @@
-import { Card } from '@apx-ui/ds';
+import { Card, Div } from '@apx-ui/ds';
 
 export default function Horizontal() {
   return (
@@ -7,14 +7,14 @@ export default function Horizontal() {
         src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=480&q=80"
         alt="Electronics on a workbench"
       />
-      <div className="flex flex-1 flex-col">
+      <Div display="flex" className="flex-1" flexDirection="column">
         <Card.Header title="Workbench" subtitle="Hardware notes" />
         <Card.Body>
           In `horizontal` orientation the Media slot sits at the logical start (LTR: left,
           RTL: right) and the body fills the remaining width.
         </Card.Body>
         <Card.Footer>Cataloged 2025-12-01</Card.Footer>
-      </div>
+      </Div>
     </Card>
   );
 }

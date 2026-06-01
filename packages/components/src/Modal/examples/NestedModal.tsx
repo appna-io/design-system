@@ -1,4 +1,4 @@
-import { Button, Modal } from '@apx-ui/ds';
+import { Button, Div, Modal, Typography } from '@apx-ui/ds';
 
 export default function NestedModal() {
   return (
@@ -13,12 +13,12 @@ export default function NestedModal() {
           description="Open the inner modal to test the escape stack."
         />
         <Modal.Body>
-          <p className="text-sm">
+          <Typography variant="bodySmall">
             Pressing <kbd>Escape</kbd> closes the topmost modal first. The
             engine&apos;s escape-stack ordering ensures only one layer unwinds per
             press, even when modals are stacked.
-          </p>
-          <div className="mt-4">
+          </Typography>
+          <Div className="mt-4">
             <Modal>
               <Modal.Trigger>
                 <Button variant="outline">Open inner</Button>
@@ -27,10 +27,10 @@ export default function NestedModal() {
                 <Modal.Close />
                 <Modal.Header title="Inner modal" />
                 <Modal.Body>
-                  <p className="text-sm">
+                  <Typography variant="bodySmall">
                     This is the inner modal. Pressing Escape closes only this
                     one — the outer modal stays open.
-                  </p>
+                  </Typography>
                 </Modal.Body>
                 <Modal.Footer>
                   <Modal.Close asChild>
@@ -39,7 +39,7 @@ export default function NestedModal() {
                 </Modal.Footer>
               </Modal.Content>
             </Modal>
-          </div>
+          </Div>
         </Modal.Body>
         <Modal.Footer>
           <Modal.Close asChild>

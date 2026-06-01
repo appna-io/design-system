@@ -1,16 +1,16 @@
 import { useState } from 'react';
 
-import { DatePicker } from '@apx-ui/ds';
+import { DatePicker, Div, Typography } from '@apx-ui/ds';
 
 export default function Basic() {
   const [value, setValue] = useState<Date | null>(null);
 
   return (
-    <div className="flex flex-col items-start gap-3">
+    <Div display="flex" flexDirection="column" alignItems="flex-start" gap="3">
       <DatePicker value={value} onChange={setValue} />
-      <p className="text-sm text-fg-muted">
+      <Typography variant="bodySmall" color="fg.muted">
         Value: {value ? value.toISOString().slice(0, 10) : 'null'}
-      </p>
-    </div>
+      </Typography>
+    </Div>
   );
 }

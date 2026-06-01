@@ -1,5 +1,5 @@
 import { forwardRef, type AnchorHTMLAttributes } from 'react';
-import { NavigationMenu } from '@apx-ui/ds';
+import { Div, NavigationMenu } from '@apx-ui/ds';
 
 /**
  * Stand-in for a framework router Link (Next.js / React Router / TanStack
@@ -30,7 +30,7 @@ const RouterLink = forwardRef<
 
 export default function RouterLinkIntegration() {
   return (
-    <div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+    <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
       <NavigationMenu activeHref="/pricing" indicator>
         <NavigationMenu.Item>
           <NavigationMenu.Link asChild>
@@ -48,6 +48,6 @@ export default function RouterLinkIntegration() {
           </NavigationMenu.Link>
         </NavigationMenu.Item>
       </NavigationMenu>
-    </div>
+    </Div>
   );
 }

@@ -1,16 +1,18 @@
-import { Slider } from '@apx-ui/ds';
+import { Div, Slider, Typography } from '@apx-ui/ds';
 
 const COLORS = ['primary', 'secondary', 'success', 'warning', 'danger', 'info', 'neutral'] as const;
 
 export default function Colors() {
   return (
-    <div className="w-72 flex flex-col gap-5">
+    <Div display="flex" flexDirection="column" gap="5" className="w-72">
       {COLORS.map((color) => (
-        <div key={color}>
-          <div className="text-xs text-fg-muted mb-2">{color}</div>
+        <Div key={color}>
+          <Typography variant="caption" color="fg.muted" className="mb-2">
+            {color}
+          </Typography>
           <Slider aria-label={color} color={color} defaultValue={60} />
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

@@ -612,4 +612,3 @@ render through the standard `Basic.tsx` … `Stacked.tsx` slots.
 
 Phase 16 — Tabs is next per the plan ordering. Alert depends on nothing in Tabs; the
 inverse is also true.
-

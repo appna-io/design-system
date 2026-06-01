@@ -1,4 +1,4 @@
-import { Carousel } from '@apx-ui/ds';
+import { Carousel, Div } from '@apx-ui/ds';
 
 const tags = [
   'Design systems',
@@ -16,9 +16,9 @@ export default function WithFadeShadows() {
     <Carousel ariaLabel="Topic chips" slidesPerView={4} gap={2} showShadows>
       {tags.map((t) => (
         <Carousel.Slide key={t}>
-          <div className="flex h-16 items-center justify-center rounded-full border border-border bg-bg-default px-4 text-sm font-medium">
+          <Div display="flex" alignItems="center" justifyContent="center" className="h-16 rounded-full border border-border bg-bg-default px-4 text-sm font-medium">
             {t}
-          </div>
+          </Div>
         </Carousel.Slide>
       ))}
     </Carousel>

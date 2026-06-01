@@ -1,20 +1,22 @@
-import { Spinner } from '@apx-ui/ds';
+import { Div, Spinner, Typography } from '@apx-ui/ds';
 
 const SIZES = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
 
 export default function AllVariants() {
   return (
-    <div style={{ display: 'grid', gap: 24 }}>
+    <Div display="flex" flexDirection="column" gap="6">
       {(['ring', 'dots', 'pulse'] as const).map((variant) => (
-        <div key={variant} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <strong style={{ fontSize: 13, opacity: 0.7 }}>{variant}</strong>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+        <Div key={variant} display="flex" flexDirection="column" gap="2">
+          <Typography variant="caption" color="fg.muted" weight="semibold">
+            {variant}
+          </Typography>
+          <Div display="flex" alignItems="center" gap="6">
             {SIZES.map((size) => (
               <Spinner key={size} variant={variant} size={size} color="primary" />
             ))}
-          </div>
-        </div>
+          </Div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

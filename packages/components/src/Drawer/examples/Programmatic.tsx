@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Button, Drawer } from '@apx-ui/ds';
+import { Button, Div, Drawer, Typography } from '@apx-ui/ds';
 
 /**
  * Same controller-object pattern Modal uses. No dedicated `useDrawer()` hook — `useState` +
@@ -17,22 +17,22 @@ export default function Programmatic() {
   const d = useDrawerController();
 
   return (
-    <div className="flex flex-col items-start gap-3">
+    <Div display="flex" flexDirection="column" alignItems="flex-start" gap="3">
       <Button onClick={d.openDrawer}>Open programmatically</Button>
-      <p className="text-sm text-fg-muted">
+      <Typography variant="bodySmall" color="fg.muted">
         No `Drawer.Trigger` involved — the parent component opens the drawer
         imperatively via a tiny controller object.
-      </p>
+      </Typography>
       <Drawer open={d.open} onOpenChange={d.setOpen}>
         <Drawer.Content side="right" size="sm">
           <Drawer.Close />
           <Drawer.Header title="Programmatic drawer" />
           <Drawer.Body>
-            <p className="text-sm">
+            <Typography variant="bodySmall">
               Useful for &quot;Apply filters&quot; flows triggered from a
               toolbar far from the drawer&apos;s location, or from an
               effect-driven background event.
-            </p>
+            </Typography>
           </Drawer.Body>
           <Drawer.Footer>
             <Button variant="ghost" onClick={d.closeDrawer}>
@@ -42,6 +42,6 @@ export default function Programmatic() {
           </Drawer.Footer>
         </Drawer.Content>
       </Drawer>
-    </div>
+    </Div>
   );
 }

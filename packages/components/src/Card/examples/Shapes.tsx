@@ -1,8 +1,8 @@
-import { Card } from '@apx-ui/ds';
+import { Card, Div } from '@apx-ui/ds';
 
 export default function Shapes() {
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+    <Div className="grid grid-cols-1 gap-4 md:grid-cols-3">
       <Card shape="square">
         <Card.Header title="Square" subtitle="rounded-none" />
         <Card.Body>Architectural, brutalist surfaces. No corner rounding.</Card.Body>
@@ -15,6 +15,6 @@ export default function Shapes() {
         <Card.Header title="Pill" subtitle="rounded-2xl" />
         <Card.Body>Generous radius for marketing cards and feature spotlights.</Card.Body>
       </Card>
-    </div>
+    </Div>
   );
 }

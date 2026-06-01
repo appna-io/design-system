@@ -1,8 +1,8 @@
-import { Field, Input } from '@apx-ui/ds';
+import { Div, Field, Input } from '@apx-ui/ds';
 
 export default function LabelPositionFloating() {
   return (
-    <div className="flex flex-col gap-4 max-w-sm">
+    <Div display="flex" flexDirection="column" gap="4" className="max-w-sm">
       <Field label="Email" labelPosition="floating">
         <Input type="email" name="email" placeholder=" " />
       </Field>
@@ -12,6 +12,6 @@ export default function LabelPositionFloating() {
       <Field label="Project name" labelPosition="floating" helperText="Used in URLs and reports.">
         <Input name="project" placeholder=" " />
       </Field>
-    </div>
+    </Div>
   );
 }

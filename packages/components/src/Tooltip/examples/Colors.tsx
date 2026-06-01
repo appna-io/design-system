@@ -1,4 +1,4 @@
-import { Button, Tooltip, type TooltipColor, type TooltipVariant } from '@apx-ui/ds';
+import { Button, Div, Tooltip, Typography, type TooltipColor, type TooltipVariant } from '@apx-ui/ds';
 
 const COLORS: readonly TooltipColor[] = [
   'primary',
@@ -14,12 +14,12 @@ const VARIANTS: readonly TooltipVariant[] = ['solid', 'outline', 'soft'];
 
 export default function Colors() {
   return (
-    <div className="flex flex-col gap-3">
+    <Div display="flex" flexDirection="column" gap="3">
       {VARIANTS.map((variant) => (
-        <div key={variant} className="flex flex-wrap items-center gap-3">
-          <span className="w-16 text-xs font-medium uppercase tracking-wide text-fg-muted">
+        <Div key={variant} display="flex" flexWrap="wrap" alignItems="center" gap="3">
+          <Typography variant="caption" weight="medium" color="fg.muted" className="w-16 uppercase tracking-wide">
             {variant}
-          </span>
+          </Typography>
           {COLORS.map((color) => (
             <Tooltip
               key={color}
@@ -33,8 +33,8 @@ export default function Colors() {
               </Button>
             </Tooltip>
           ))}
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

@@ -1,4 +1,4 @@
-import { AppShell, Button, HStack, Stack, useAppShell } from '@apx-ui/ds';
+import { AppShell, Button, Div, HStack, Stack, Typography, useAppShell } from '@apx-ui/ds';
 
 function HeaderBar() {
   const { toggleSidebar, isSidebarCollapsed } = useAppShell();
@@ -8,16 +8,16 @@ function HeaderBar() {
         ☰
       </Button>
       <strong>Linear-style rail</strong>
-      <span className="text-sm text-(--sds-color-text-muted)">
+      <Typography as="span" variant="bodySmall" color="fg.muted">
         ({isSidebarCollapsed ? 'collapsed' : 'expanded'})
-      </span>
+      </Typography>
     </HStack>
   );
 }
 
 export default function CollapsibleSidebar() {
   return (
-    <div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
       <AppShell
         header={<HeaderBar />}
         sidebar={
@@ -30,11 +30,13 @@ export default function CollapsibleSidebar() {
         sidebarWidth={220}
         sidebarCollapsedWidth={56}
       >
-        <h2 className="text-lg font-semibold">Click ☰ to collapse</h2>
-        <p className="mt-2 text-sm text-(--sds-color-text-muted)">
+        <Typography as="h2" variant="titleSmall" weight="semibold">
+          Click ☰ to collapse
+        </Typography>
+        <Typography variant="bodySmall" color="fg.muted" sx={{ mt: 2 }}>
           The sidebar smoothly transitions between full and rail widths.
-        </p>
+        </Typography>
       </AppShell>
-    </div>
+    </Div>
   );
 }

@@ -1,4 +1,4 @@
-import { HoverCard } from '@apx-ui/ds';
+import { Div, HoverCard, Typography } from '@apx-ui/ds';
 import type { HoverCardSize } from '@apx-ui/ds';
 
 /**
@@ -10,9 +10,11 @@ const sizes: HoverCardSize[] = ['sm', 'md', 'lg'];
 
 export default function Sizes() {
   return (
-    <div className="flex flex-col items-start gap-3">
-      <p className="text-sm text-fg-muted">Hover each link to compare the size scale.</p>
-      <div className="flex flex-wrap items-center gap-6 text-sm">
+    <Div display="flex" flexDirection="column" alignItems="flex-start" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
+        Hover each link to compare the size scale.
+      </Typography>
+      <Div display="flex" alignItems="center" gap="6" className="flex-wrap text-sm">
         {sizes.map((size) => (
           <HoverCard key={size} openDelay={200} closeDelay={200}>
             <HoverCard.Trigger>
@@ -22,13 +24,13 @@ export default function Sizes() {
             </HoverCard.Trigger>
             <HoverCard.Content size={size}>
               <strong className="text-sm">size = {size}</strong>
-              <p className="mt-1 text-xs">
+              <Typography variant="caption" className="mt-1">
                 Drives padding, font-size, and min/max width of the floating surface.
-              </p>
+              </Typography>
             </HoverCard.Content>
           </HoverCard>
         ))}
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

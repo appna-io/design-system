@@ -1,4 +1,4 @@
-import { Breadcrumbs } from '@apx-ui/ds';
+import { Breadcrumbs, Div, Typography } from '@apx-ui/ds';
 
 const items = [
   { label: 'Home', href: '#home' },
@@ -8,13 +8,15 @@ const items = [
 
 export default function Sizes() {
   return (
-    <div className="flex flex-col gap-4">
+    <Div display="flex" flexDirection="column" gap="4">
       {(['sm', 'md', 'lg'] as const).map((size) => (
-        <div key={size} className="flex flex-col gap-1">
-          <span className="text-xs uppercase tracking-wide text-fg-muted">{size}</span>
+        <Div key={size} display="flex" flexDirection="column" gap="1">
+          <Typography as="span" variant="caption" color="fg.muted" className="uppercase tracking-wide">
+            {size}
+          </Typography>
           <Breadcrumbs items={items} size={size} />
-        </div>
+        </Div>
       ))}
-    </div>
+    </Div>
   );
 }

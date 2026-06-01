@@ -1,4 +1,4 @@
-import { Button, Menu } from '@apx-ui/ds';
+import { Button, Div, Menu } from '@apx-ui/ds';
 import type { MenuColor } from '@apx-ui/ds';
 
 const colors: MenuColor[] = [
@@ -13,7 +13,7 @@ const colors: MenuColor[] = [
 
 export default function Colors() {
   return (
-    <div className="flex flex-wrap gap-3">
+    <Div display="flex" flexWrap="wrap" gap="3">
       {colors.map((color) => (
         <Menu key={color}>
           <Menu.Trigger asChild>
@@ -28,6 +28,6 @@ export default function Colors() {
           </Menu.Content>
         </Menu>
       ))}
-    </div>
+    </Div>
   );
 }

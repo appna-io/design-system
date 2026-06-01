@@ -181,7 +181,14 @@ export const popoverCloseRecipe = cv({
  * Backdrop rendered when `<Popover modal>` is set. Captures pointer events so descendant clicks
  * stay within the Popover; closes on click via `useOutsideClick` (the same handler the
  * non-modal case uses).
+ *
+ * Uses `bg-black/30` (a Tailwind built-in color that natively supports the `/N` opacity
+ * modifier) rather than `bg-fg-default/30`. Our palette CSS vars hold hex strings, which
+ * Tailwind's `/N` modifier can't decompose into RGB triplets, so the old class compiled to
+ * invalid CSS (`rgb(#fafafa / .3)`) and rendered transparent. For Popover we want a *subtle*
+ * dim, lighter than Modal/Drawer's full `bg-overlay`, so a hard-coded `bg-black/30` matches
+ * the original visual intent.
  */
 export const popoverBackdropRecipe = cv({
-  base: 'fixed inset-0 z-overlay bg-fg-default/30 backdrop-blur-[1px]',
+  base: 'fixed inset-0 z-overlay bg-black/30 backdrop-blur-[1px]',
 });

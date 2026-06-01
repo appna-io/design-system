@@ -1,30 +1,30 @@
 import { useState } from 'react';
-import { Button, Modal } from '@apx-ui/ds';
+import { Button, Div, Modal, Typography } from '@apx-ui/ds';
 
 export default function Controlled() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex flex-col items-start gap-3">
-      <div className="flex gap-2">
+    <Div display="flex" flexDirection="column" alignItems="flex-start" gap="3">
+      <Div display="flex" gap="2">
         <Button onClick={() => setOpen(true)}>Open externally</Button>
         <Button variant="outline" onClick={() => setOpen(false)} disabled={!open}>
           Close externally
         </Button>
-      </div>
-      <p className="text-sm text-fg-muted">
+      </Div>
+      <Typography variant="bodySmall" color="fg.muted">
         State is owned by the parent. The Modal mirrors `open` and emits
         `onOpenChange` for every transition.
-      </p>
+      </Typography>
       <Modal open={open} onOpenChange={setOpen}>
         <Modal.Content size="sm">
           <Modal.Close />
           <Modal.Header title="Controlled modal" />
           <Modal.Body>
-            <p className="text-sm">
+            <Typography variant="bodySmall">
               The parent is the source of truth. Tip: this is the right shape
               when a modal needs to react to async work (e.g. close after save).
-            </p>
+            </Typography>
           </Modal.Body>
           <Modal.Footer>
             <Modal.Close asChild>
@@ -33,6 +33,6 @@ export default function Controlled() {
           </Modal.Footer>
         </Modal.Content>
       </Modal>
-    </div>
+    </Div>
   );
 }

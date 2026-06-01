@@ -16,3 +16,8 @@ export function componentsSrcDir(): string {
 export function contentDir(): string {
   return path.join(process.cwd(), 'src/content');
 }
+
+/** Root of the renderer's per-template source folders. */
+export function templatesDir(): string {
+  return path.join(process.cwd(), 'src/templates');
+}

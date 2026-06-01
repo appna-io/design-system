@@ -1,13 +1,11 @@
 ## Overview
 
 `<Textarea />` is the canonical multi-line text-input primitive. It pairs with `<label>` for the
-accessible name and is the **DRY proof of the shared form-control layer** introduced in Phase 7:
-it consumes `controlBase`, `useFormFieldA11y`, and the 28-row `variantColorMatrix` directly from
-`_shared/` without copying a single line.
+accessible name and shares the same form-control surface as `<Input />` — variants, sizes, colors,
+focus ring, and invalid state — extended for multi-line use with auto-resize, character counts,
+and manual resize affordances.
 
-Where Input proves the variant system on a single-line bordered surface, Textarea proves the same
-system on a **height-changing, multi-line** surface — auto-resize, character counts, manual
-resize affordances, and the same four variants × seven colors matrix as Input.
+<ExampleBlock for="Overview" title="Overview — placeholder, content, and validation" />
 
 ## Variants
 

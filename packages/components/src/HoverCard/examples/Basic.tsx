@@ -1,4 +1,4 @@
-import { HoverCard } from '@apx-ui/ds';
+import { Div, HoverCard, Typography } from '@apx-ui/ds';
 
 /**
  * The canonical "@mention hover" pattern. The trigger is a real anchor (`<a href>`) so it
@@ -7,11 +7,11 @@ import { HoverCard } from '@apx-ui/ds';
  */
 export default function Basic() {
   return (
-    <div className="flex flex-col items-start gap-2">
-      <p className="text-sm text-fg-muted">
+    <Div display="flex" flexDirection="column" alignItems="flex-start" gap="2">
+      <Typography variant="bodySmall" color="fg.muted">
         Hover (or focus with Tab) the @mention to preview the user.
-      </p>
-      <p className="text-sm">
+      </Typography>
+      <Typography variant="bodySmall" as="p">
         Pinged{' '}
         <HoverCard>
           <HoverCard.Trigger>
@@ -20,23 +20,27 @@ export default function Basic() {
             </a>
           </HoverCard.Trigger>
           <HoverCard.Content>
-            <div className="flex gap-3">
-              <div
+            <Div display="flex" gap="3">
+              <Div
                 aria-hidden="true"
                 className="size-10 shrink-0 rounded-full bg-primary-subtle text-primary flex items-center justify-center font-semibold"
               >
                 AI
-              </div>
-              <div className="flex flex-col gap-1">
+              </Div>
+              <Div display="flex" flexDirection="column" gap="1">
                 <strong className="text-sm">Ahmad Igbaryya</strong>
-                <span className="text-xs text-fg-muted">@ahmad</span>
-                <p className="text-xs">Software engineer building design systems.</p>
-              </div>
-            </div>
+                <Typography as="span" variant="caption" color="fg.muted">
+                  @ahmad
+                </Typography>
+                <Typography variant="caption">
+                  Software engineer building design systems.
+                </Typography>
+              </Div>
+            </Div>
           </HoverCard.Content>
         </HoverCard>{' '}
         about the spec.
-      </p>
-    </div>
+      </Typography>
+    </Div>
   );
 }

@@ -1,9 +1,9 @@
 ## Overview
 
-`<Tooltip />` is the canonical hover/focus hint primitive — and the **first overlay consumer of
-the positioning engine** (`@apx-ds/engine`'s `usePosition` + `<Portal>` + `useEscapeStack`).
-Wrap any single trigger element to attach a small floating message that opens on hover and on
-keyboard focus.
+`<Tooltip />` is the canonical hover/focus hint primitive. Wrap any single trigger element to
+attach a small floating message that opens on hover and on keyboard focus.
+
+<ExampleBlock for="Overview" title="Overview — tooltips at top, right, bottom, and left" />
 
 Tooltip is intentionally **read-only** — its surface has `pointer-events: none` and never
 receives focus. For interactive overlays (rich content, links, buttons-inside-the-floater),
@@ -52,8 +52,7 @@ Pick by **how the tooltip should integrate with the surface beneath it**:
 - **`inverted`** — platform-default light-on-dark / dark-on-light. **Ignores `color`** — the
   inverted variant has a fixed dark/light contrast palette so it works on every brand.
 
-The 4 variants × 7 colors compound matrix mirrors Badge's shape exactly. Adding an 8th color =
-one palette entry in `@apx-dsens` + 3 compound rows in `Tooltip.recipe.ts`.
+The 4 variants × 7 colors compound matrix mirrors Badge's shape exactly.
 
 ## Sizes
 
@@ -144,34 +143,3 @@ defineTheme({
 
 Per-instance overrides via `className` / `sx` / `style` are merged on top of the theme overrides,
 which are merged on top of the recipe — same precedence as everywhere else in the DS.
-
-## Composing with other overlays
-
-Tooltip is intentionally minimal — it's the engine validation phase. The other overlay primitives
-will consume the same engine APIs:
-
-- **Popover** — `usePosition` + `useFocusTrap` + `useEscapeStack` + `useOutsideClick`. Reaches
-  Tooltip's surface but with `pointer-events: auto` and a focus trap so the inner content is
-  reachable.
-- **Modal / Drawer** — adds `useScrollLock` to Popover's stack and drops `usePosition` (centered
-  / side-anchored CSS).
-- **Menu / Select** — full set; Select also passes `matchTriggerWidth: true` to `usePosition`.
-
-See `packages/engine/README.md`'s "Overlay primitives" section for the canonical composition
-shapes.
-
-## Notes for consumers (engine-API feedback)
-
-Tooltip exercises every public surface of the positioning engine. The few things worth knowing
-when you build the next overlay:
-
-- `usePosition`'s `triggerRef` and `floatingRef` are stable RefCallbacks. When you clone a child
-  element to attach the trigger ref, **merge** with any existing ref the child carried — don't
-  blindly overwrite. Tooltip ships a small `mergeRefs` helper inline; promote to engine when a
-  second consumer needs it.
-- `<Portal>`'s `disabled` prop is honored at the runtime root level, so AnimatePresence inside it
-  still works the same whether portaled or inline.
-- `useEscapeStack` is mount-order topmost-fires-first. With `<AnimatePresence>` you must guard
-  the active flag against the exit phase: pass `active: open` (your declarative state), not
-  `active: mounted`, so the Escape handler unregisters the moment you set `open: false`, even
-  while the floating element is still animating out.

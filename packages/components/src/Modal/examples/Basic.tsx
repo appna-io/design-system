@@ -1,4 +1,4 @@
-import { Button, Modal } from '@apx-ui/ds';
+import { Button, Modal, Typography } from '@apx-ui/ds';
 
 export default function Basic() {
   return (
@@ -13,11 +13,11 @@ export default function Basic() {
           description="Update your display name and avatar."
         />
         <Modal.Body>
-          <p className="text-sm">
+          <Typography variant="bodySmall">
             Modals are blocking dialogs. They lock the page scroll, trap focus
             inside the content, and dismiss on Escape, backdrop click, or the
             Close button.
-          </p>
+          </Typography>
         </Modal.Body>
         <Modal.Footer>
           <Modal.Close asChild>

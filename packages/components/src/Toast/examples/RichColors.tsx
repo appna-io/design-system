@@ -1,9 +1,9 @@
-import { Button, Toaster, toast } from '@apx-ui/ds';
+import { Button, Div, Toaster, Typography, toast } from '@apx-ui/ds';
 
 export default function RichColors() {
   return (
-    <div className="space-y-3">
-      <div className="flex flex-wrap gap-2">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Div display="flex" flexWrap="wrap" gap="2">
         <Button onClick={() => toast.success('Profile updated.')}>Success</Button>
         <Button color="danger" onClick={() => toast.error('Could not save.')}>
           Error
@@ -14,13 +14,13 @@ export default function RichColors() {
         <Button color="info" onClick={() => toast.info('New version available.')}>
           Info
         </Button>
-      </div>
-      <p className="text-sm text-fg-muted">
+      </Div>
+      <Typography variant="bodySmall" color="fg.muted">
         With <code className="font-mono">richColors</code>, every toast adopts the
-        <code className="font-mono">soft</code> variant by default \u2014 intent-tinted
+        <code className="font-mono">soft</code> variant by default — intent-tinted
         backgrounds for at-a-glance status.
-      </p>
+      </Typography>
       <Toaster richColors />
-    </div>
+    </Div>
   );
 }

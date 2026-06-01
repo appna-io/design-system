@@ -1,4 +1,4 @@
-import { HoverCard } from '@apx-ui/ds';
+import { Div, HoverCard, Typography } from '@apx-ui/ds';
 import type { HoverCardColor } from '@apx-ui/ds';
 
 /**
@@ -18,11 +18,11 @@ const colors: HoverCardColor[] = [
 
 export default function Colors() {
   return (
-    <div className="flex flex-col items-start gap-3">
-      <p className="text-sm text-fg-muted">
+    <Div display="flex" flexDirection="column" alignItems="flex-start" gap="3">
+      <Typography variant="bodySmall" color="fg.muted">
         Hover each link to compare the soft-variant color cells.
-      </p>
-      <div className="flex flex-wrap items-center gap-6 text-sm">
+      </Typography>
+      <Div display="flex" alignItems="center" gap="6" className="flex-wrap text-sm">
         {colors.map((color) => (
           <HoverCard key={color} openDelay={200} closeDelay={200}>
             <HoverCard.Trigger>
@@ -32,13 +32,13 @@ export default function Colors() {
             </HoverCard.Trigger>
             <HoverCard.Content variant="soft" color={color} size="sm">
               <strong className="text-sm">soft / {color}</strong>
-              <p className="mt-1 text-xs">
+              <Typography variant="caption" className="mt-1">
                 Tinted background + colored text. Useful for status / context cues.
-              </p>
+              </Typography>
             </HoverCard.Content>
           </HoverCard>
         ))}
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

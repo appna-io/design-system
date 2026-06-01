@@ -1,4 +1,4 @@
-import { Sidebar } from '@apx-ui/ds';
+import { Div, Sidebar } from '@apx-ui/ds';
 
 import { DocIcon, FolderIcon, HomeIcon } from './_icons';
 
@@ -10,7 +10,10 @@ import { DocIcon, FolderIcon, HomeIcon } from './_icons';
  */
 export default function WithExpandableItem() {
   return (
-    <div className="h-[460px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div
+      height={460}
+      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+    >
       <Sidebar
         ariaLabel="Docs navigation"
         variant="bordered"
@@ -44,6 +47,6 @@ export default function WithExpandableItem() {
           Support
         </Sidebar.Item>
       </Sidebar>
-    </div>
+    </Div>
   );
 }

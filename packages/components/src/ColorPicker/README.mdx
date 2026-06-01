@@ -8,6 +8,8 @@ The canonical visual color form control. Three exports cover three jobs:
 
 All three share the same pure color math in `_shared/color.ts` (~120 LoC, no external library).
 
+<ExampleBlock for="Overview" title="Overview — brand color picker with default trigger" />
+
 ## Why this exists
 
 Visual color pickers are full of subtle mistakes when hand-rolled:
@@ -118,9 +120,3 @@ import { heColorPickerTranslations } from 'apx-ds';
   <ColorPicker defaultValue="#6c5ce7" />
 </I18nProvider>;
 ```
-
-## Performance
-
-- Color math is sub-microsecond per call.
-- Saturation square uses pointer capture so a single drag doesn't thrash `getBoundingClientRect`.
-- Bundle target: < 7 KB gz for the picker, < 0.5 KB for `<ColorSwatch />`, < 1 KB for `<ColorInput />`.

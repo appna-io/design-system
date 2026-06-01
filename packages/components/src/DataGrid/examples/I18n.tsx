@@ -4,7 +4,9 @@ import {
   Button,
   DataGrid,
   DirectionProvider,
+  Div,
   I18nProvider,
+  Typography,
   arDataGridTranslations,
   enDataGridTranslations,
   heDataGridTranslations,
@@ -70,8 +72,8 @@ export default function I18n() {
   ];
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex gap-2">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Div display="flex" gap="2">
         {LOCALES.map((l) => (
           <Button
             key={l.id}
@@ -82,29 +84,29 @@ export default function I18n() {
             {l.label}
           </Button>
         ))}
-      </div>
-      <p className="text-fg-muted text-sm">
+      </Div>
+      <Typography variant="bodySmall" color="fg.muted">
         The <code>I18nProvider</code> publishes the active <code>DataGrid</code> bundle to every
         descendant; <code>DirectionProvider</code> flips column pinning, sticky shadows, and
         sort indicators when switching to a right-to-left script. Selection + state survive a
         locale swap because <code>state.selection</code> is keyed by row id, not by index.
-      </p>
+      </Typography>
       <I18nProvider
         locale={active.id}
         direction={active.direction}
         messages={{ DataGrid: active.bundle }}
       >
         <DirectionProvider dir={active.direction}>
-          <div dir={active.direction}>
+          <Div dir={active.direction}>
             <DataGrid<Row>
               data={data}
               columns={columns}
               getRowId={(r) => r.id}
               selectionMode="multiple"
             />
-          </div>
+          </Div>
         </DirectionProvider>
       </I18nProvider>
-    </div>
+    </Div>
   );
 }

@@ -1,22 +1,22 @@
 import { useState } from 'react';
 
-import { Calendar } from '@apx-ui/ds';
+import { Calendar, Div, Typography } from '@apx-ui/ds';
 
 export default function Multiple() {
   const [value, setValue] = useState<Date[]>([]);
 
   return (
-    <div className="flex flex-col items-start gap-4">
+    <Div display="flex" flexDirection="column" alignItems="start" gap="4">
       <Calendar
         mode="multiple"
         value={value}
         onChange={(v) => setValue(v as Date[])}
       />
-      <p className="text-sm text-fg-muted">
+      <Typography variant="bodySmall" color="fg.muted">
         {value.length === 0
           ? 'No dates selected'
           : `${value.length} dates: ${value.map((d) => d.toLocaleDateString()).join(', ')}`}
-      </p>
-    </div>
+      </Typography>
+    </Div>
   );
 }

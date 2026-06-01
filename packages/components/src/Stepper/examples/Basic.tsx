@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Stepper } from '@apx-ui/ds';
+import { Button, Div, Stepper } from '@apx-ui/ds';
 
 export default function Basic() {
   const [active, setActive] = useState(1);
@@ -12,9 +12,9 @@ export default function Basic() {
   ];
 
   return (
-    <div className="flex flex-col gap-6">
+    <Div display="flex" flexDirection="column" gap="6">
       <Stepper active={active} steps={steps} />
-      <div className="flex gap-2">
+      <Div display="flex" gap="2">
         <Button
           variant="ghost"
           onClick={() => setActive((i) => Math.max(0, i - 1))}
@@ -31,7 +31,7 @@ export default function Basic() {
         <Button variant="ghost" onClick={() => setActive(0)}>
           Reset
         </Button>
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 }

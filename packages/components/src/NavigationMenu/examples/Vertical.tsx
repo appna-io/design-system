@@ -1,4 +1,4 @@
-import { NavigationMenu } from '@apx-ui/ds';
+import { Div, NavigationMenu } from '@apx-ui/ds';
 
 /**
  * Vertical orientation — items stack instead of laying out in a row, and
@@ -7,7 +7,7 @@ import { NavigationMenu } from '@apx-ui/ds';
  */
 export default function Vertical() {
   return (
-    <div className="flex justify-start rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+    <Div className="flex justify-start rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
       <NavigationMenu orientation="vertical" indicator activeHref="/docs/components">
         <NavigationMenu.Item>
           <NavigationMenu.Link href="/docs/getting-started">Getting started</NavigationMenu.Link>
@@ -22,6 +22,6 @@ export default function Vertical() {
           <NavigationMenu.Link href="/docs/recipes">Recipes</NavigationMenu.Link>
         </NavigationMenu.Item>
       </NavigationMenu>
-    </div>
+    </Div>
   );
 }

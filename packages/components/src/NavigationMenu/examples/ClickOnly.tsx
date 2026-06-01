@@ -1,4 +1,4 @@
-import { NavigationMenu } from '@apx-ui/ds';
+import { Div, NavigationMenu } from '@apx-ui/ds';
 
 /**
  * `trigger="click"` — dropdowns open ONLY on click. Used when the menu doubles
@@ -8,7 +8,7 @@ import { NavigationMenu } from '@apx-ui/ds';
  */
 export default function ClickOnly() {
   return (
-    <div className="rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+    <Div className="rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
       <NavigationMenu trigger="click">
         <NavigationMenu.Item>
           <NavigationMenu.Trigger>Workspaces</NavigationMenu.Trigger>
@@ -28,6 +28,6 @@ export default function ClickOnly() {
           </NavigationMenu.Content>
         </NavigationMenu.Item>
       </NavigationMenu>
-    </div>
+    </Div>
   );
 }

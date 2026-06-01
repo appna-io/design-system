@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Slider } from '@apx-ui/ds';
+
+import { Div, Slider, Typography } from '@apx-ui/ds';
 
 export default function Continuous() {
   const [value, setValue] = useState(0.5);
   return (
-    <div className="w-72 flex flex-col gap-3 pt-10">
+    <Div display="flex" flexDirection="column" gap="3" className="w-72 pt-10">
       <Slider
         aria-label="Continuous"
         value={value}
@@ -15,9 +16,9 @@ export default function Continuous() {
         showValueLabel="always"
         formatValue={(v) => v.toFixed(3)}
       />
-      <p className="text-xs text-fg-muted">
+      <Typography variant="caption" color="fg.muted">
         step=null → continuous (no snapping). Useful for smooth scrub bars and analog feels.
-      </p>
-    </div>
+      </Typography>
+    </Div>
   );
 }

@@ -1,4 +1,4 @@
-import { Sidebar } from '@apx-ui/ds';
+import { Div, Sidebar, Typography } from '@apx-ui/ds';
 
 import { CogIcon, FolderIcon, HomeIcon, InboxIcon, UserIcon } from './_icons';
 
@@ -9,7 +9,10 @@ import { CogIcon, FolderIcon, HomeIcon, InboxIcon, UserIcon } from './_icons';
  */
 export default function WithHeaderFooter() {
   return (
-    <div className="h-[460px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div
+      height={460}
+      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+    >
       <Sidebar
         ariaLabel="Full-chrome navigation"
         variant="bordered"
@@ -17,10 +20,17 @@ export default function WithHeaderFooter() {
         activeHref="/inbox"
       >
         <Sidebar.Header>
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-(--sds-color-surface-subtle) text-sm font-bold">
+          <Div
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            className="h-7 w-7 rounded-md bg-(--sds-color-surface-subtle) text-sm font-bold"
+          >
             A
-          </div>
-          <span className="font-semibold">Acme</span>
+          </Div>
+          <Typography as="span" weight="semibold">
+            Acme
+          </Typography>
         </Sidebar.Header>
         <Sidebar.Section label="Workspace">
           <Sidebar.Item href="/" icon={<HomeIcon />}>
@@ -38,17 +48,24 @@ export default function WithHeaderFooter() {
         </Sidebar.Section>
         <Sidebar.Spacer />
         <Sidebar.Footer>
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-(--sds-color-surface-subtle)">
+          <Div
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            className="h-7 w-7 rounded-full bg-(--sds-color-surface-subtle)"
+          >
             <UserIcon />
-          </div>
-          <div className="flex min-w-0 flex-col">
-            <span className="truncate text-sm font-medium">Ada Lovelace</span>
-            <span className="truncate text-xs text-(--sds-color-text-muted)">
+          </Div>
+          <Div display="flex" flexDirection="column" className="min-w-0">
+            <Typography as="span" variant="bodySmall" weight="medium" className="truncate">
+              Ada Lovelace
+            </Typography>
+            <Typography as="span" variant="caption" color="fg.muted" className="truncate">
               ada@example.com
-            </span>
-          </div>
+            </Typography>
+          </Div>
         </Sidebar.Footer>
       </Sidebar>
-    </div>
+    </Div>
   );
 }

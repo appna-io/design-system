@@ -1,4 +1,4 @@
-import { Switch } from '@apx-ui/ds';
+import { Div, Switch, Typography } from '@apx-ui/ds';
 
 const BellIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-5 text-fg-muted">
@@ -16,22 +16,32 @@ interface RowProps {
 
 function SettingsRow({ icon, title, description, defaultChecked }: RowProps) {
   return (
-    <div className="flex items-center justify-between gap-4 py-3 border-b border-border last:border-b-0">
-      <div className="flex items-start gap-3 min-w-0">
-        <div className="shrink-0 mt-0.5">{icon}</div>
-        <div className="flex flex-col min-w-0">
-          <span className="text-sm font-medium truncate">{title}</span>
-          <span className="text-xs text-fg-muted">{description}</span>
-        </div>
-      </div>
+    <Div
+      display="flex"
+      alignItems="center"
+      justifyContent="space-between"
+      gap="4"
+      className="border-b border-border py-3 last:border-b-0"
+    >
+      <Div display="flex" alignItems="flex-start" gap="3" className="min-w-0">
+        <Div className="mt-0.5 shrink-0">{icon}</Div>
+        <Div display="flex" flexDirection="column" className="min-w-0">
+          <Typography as="span" variant="bodySmall" weight="medium" className="truncate">
+            {title}
+          </Typography>
+          <Typography as="span" variant="caption" color="fg.muted">
+            {description}
+          </Typography>
+        </Div>
+      </Div>
       <Switch aria-label={title} defaultChecked={defaultChecked} />
-    </div>
+    </Div>
   );
 }
 
 export default function SettingsRowExample() {
   return (
-    <div className="rounded-lg border border-border bg-bg-paper px-4 max-w-md">
+    <Div className="max-w-md rounded-lg border border-border bg-bg-paper px-4">
       <SettingsRow
         icon={<BellIcon />}
         title="Push notifications"
@@ -49,6 +59,6 @@ export default function SettingsRowExample() {
         description="Receive a weekly summary every Monday."
         defaultChecked
       />
-    </div>
+    </Div>
   );
 }

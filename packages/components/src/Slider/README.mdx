@@ -12,6 +12,8 @@ nearest thumb. Vertical orientation reads **top-as-max** in both LTR and RTL.
 The thumb scale-up on drag and the fill width transitions are **pure CSS** — no Motion-library
 import. `prefers-reduced-motion` collapses them via Tailwind's `motion-reduce:` variant.
 
+<ExampleBlock for="Overview" title="Overview — range with marks and a continuous slider" />
+
 ## Anatomy
 
 ```text
@@ -156,8 +158,8 @@ already speaks form-encoded numbers reads these correctly without a schema chang
 - **Do** pair `onChange` with `onChangeEnd` when the commit is expensive: render a preview
   during drag, persist on release.
 - **Do** use `step={null}` for analog-feel scrubbers (audio playhead, color picker).
-- **Don't** use Slider for **unbounded numeric input** — that's `<NumberInput />` (Phase 29).
-- **Don't** use Slider for **categorical selection** — that's `<RadioGroup />` (Phase 11) or
-  `<ToggleGroup />` (Phase 30). Slider implies a continuous scale, even at low step counts.
+- **Don't** use Slider for **unbounded numeric input** — that's `<NumberInput />`.
+- **Don't** use Slider for **categorical selection** — that's `<RadioGroup />` or
+  `<ToggleGroup />`. Slider implies a continuous scale, even at low step counts.
 - **Don't** rely on the visible value label as the only way to read the value — assistive tech
   reads `aria-valuetext`. If your formatted text matters, set `getAriaValueText`.

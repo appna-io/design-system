@@ -1,10 +1,10 @@
-import { Button, Popover, type PopoverSize } from '@apx-ui/ds';
+import { Button, Div, Popover, Typography, type PopoverSize } from '@apx-ui/ds';
 
 const SIZES: readonly PopoverSize[] = ['sm', 'md', 'lg'];
 
 export default function Sizes() {
   return (
-    <div className="flex flex-wrap gap-3">
+    <Div display="flex" className="flex-wrap gap-3">
       {SIZES.map((size) => (
         <Popover key={size}>
           <Popover.Trigger>
@@ -13,12 +13,12 @@ export default function Sizes() {
             </Button>
           </Popover.Trigger>
           <Popover.Content size={size}>
-            <p className="text-sm">
+            <Typography variant="bodySmall">
               Size <code className="font-mono">{size}</code> drives padding + min/max width.
-            </p>
+            </Typography>
           </Popover.Content>
         </Popover>
       ))}
-    </div>
+    </Div>
   );
 }

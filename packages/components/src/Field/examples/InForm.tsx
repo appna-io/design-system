@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Field, Input, Stack } from '@apx-ui/ds';
+import { Button, Div, Field, Input, Stack, Typography } from '@apx-ui/ds';
 
 /**
  * Placeholder for the eventual `<Form>` (Phase 50) integration. Today Field reads its values
@@ -47,7 +47,7 @@ export default function InForm() {
             onChange={(event) => setValues((v) => ({ ...v, password: event.target.value }))}
           />
         </Field>
-        <div className="flex gap-2">
+        <Div display="flex" gap="2">
           <Button type="submit">Sign in</Button>
           <Button
             type="button"
@@ -60,8 +60,12 @@ export default function InForm() {
           >
             Reset
           </Button>
-        </div>
-        {submitted ? <p className="text-sm text-success">{submitted}</p> : null}
+        </Div>
+        {submitted ? (
+          <Typography variant="bodySmall" color="success">
+            {submitted}
+          </Typography>
+        ) : null}
       </Stack>
     </form>
   );

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AppShell, Button, HStack, Sidebar, Stack, useAppShell } from '@apx-ui/ds';
+import { AppShell, Button, Div, HStack, Sidebar, Stack, Typography, useAppShell } from '@apx-ui/ds';
 
 import {
   CalendarIcon,
@@ -24,8 +24,12 @@ function ShellHeader() {
   return (
     <HStack gap={3} align="center" className="w-full">
       <ShellCollapseButton />
-      <strong className="text-base">Acme</strong>
-      <span className="text-xs text-(--sds-color-text-muted)">Dashboard</span>
+      <Typography as="strong" variant="body">
+        Acme
+      </Typography>
+      <Typography as="span" variant="caption" color="fg.muted">
+        Dashboard
+      </Typography>
     </HStack>
   );
 }
@@ -87,14 +91,23 @@ function ShellSidebar({ activePath }: { activePath: string }) {
       </Sidebar.Section>
       <Sidebar.Spacer />
       <Sidebar.Footer>
-        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-(--sds-color-surface-subtle)">
+        <Div
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          className="h-7 w-7 rounded-full bg-(--sds-color-surface-subtle)"
+        >
           <UserIcon />
-        </div>
+        </Div>
         {!isSidebarCollapsed && (
-          <div className="flex min-w-0 flex-col">
-            <span className="truncate text-sm font-medium">Ada Lovelace</span>
-            <span className="truncate text-xs text-(--sds-color-text-muted)">Admin</span>
-          </div>
+          <Div display="flex" flexDirection="column" className="min-w-0">
+            <Typography as="span" variant="bodySmall" weight="medium" className="truncate">
+              Ada Lovelace
+            </Typography>
+            <Typography as="span" variant="caption" color="fg.muted" className="truncate">
+              Admin
+            </Typography>
+          </Div>
         )}
       </Sidebar.Footer>
     </Sidebar>
@@ -104,21 +117,26 @@ function ShellSidebar({ activePath }: { activePath: string }) {
 export default function DashboardDemo() {
   const [activePath] = useState('/inbox');
   return (
-    <div className="h-[560px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div
+      height={560}
+      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+    >
       <AppShell
         header={<ShellHeader />}
         sidebar={<ShellSidebar activePath={activePath} />}
         sidebarWidth={260}
         sidebarCollapsedWidth={64}
-        footer={<span>© 2026 Acme, Inc.</span>}
+        footer={<Typography as="span">© 2026 Acme, Inc.</Typography>}
       >
         <Stack gap={4}>
-          <h2 className="text-xl font-semibold">Inbox · 3 unread</h2>
-          <p className="text-sm text-(--sds-color-text-muted)">
+          <Typography as="h2" variant="h2" weight="semibold">
+            Inbox · 3 unread
+          </Typography>
+          <Typography variant="bodySmall" color="fg.muted">
             Click the ☰ button in the header to collapse the sidebar into rail mode. Hover any
             icon in the rail to see its label in a Tooltip. The active item ({activePath}) stays
             highlighted in both modes.
-          </p>
+          </Typography>
           <HStack gap={3}>
             <Button size="sm">Compose</Button>
             <Button size="sm" variant="outline">
@@ -129,15 +147,17 @@ export default function DashboardDemo() {
             </Button>
           </HStack>
           <Stack gap={2} className="rounded-md border border-(--sds-color-border-subtle) p-4">
-            <h3 className="text-sm font-semibold">Welcome</h3>
-            <p className="text-sm text-(--sds-color-text-muted)">
+            <Typography as="h3" variant="h3" weight="semibold">
+              Welcome
+            </Typography>
+            <Typography variant="bodySmall" color="fg.muted">
               This is a working slot composition. The Sidebar reads
               <code className="ms-1 font-mono">useAppShell().isSidebarCollapsed</code> directly
               so consumers don&apos;t have to thread the prop manually.
-            </p>
+            </Typography>
           </Stack>
         </Stack>
       </AppShell>
-    </div>
+    </Div>
   );
 }

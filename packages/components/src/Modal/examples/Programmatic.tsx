@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Button, Modal } from '@apx-ui/ds';
+import { Button, Div, Modal, Typography } from '@apx-ui/ds';
 
 /**
  * The DS does not ship a `useModal()` hook. Same effect with `useState` + `useCallback`: a tiny
@@ -17,21 +17,21 @@ export default function Programmatic() {
   const m = useModalController();
 
   return (
-    <div className="flex flex-col items-start gap-3">
+    <Div display="flex" flexDirection="column" alignItems="flex-start" gap="3">
       <Button onClick={m.openModal}>Open programmatically</Button>
-      <p className="text-sm text-fg-muted">
+      <Typography variant="bodySmall" color="fg.muted">
         No `Modal.Trigger` involved — the parent component opens the modal
         imperatively via a tiny controller object.
-      </p>
+      </Typography>
       <Modal open={m.open} onOpenChange={m.setOpen}>
         <Modal.Content size="sm">
           <Modal.Close />
           <Modal.Header title="Programmatic modal" />
           <Modal.Body>
-            <p className="text-sm">
+            <Typography variant="bodySmall">
               Useful for `confirm()`-style flows: open the modal in response to
               user actions far from the trigger (toast undo, bulk action, etc.).
-            </p>
+            </Typography>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="ghost" onClick={m.closeModal}>
@@ -41,6 +41,6 @@ export default function Programmatic() {
           </Modal.Footer>
         </Modal.Content>
       </Modal>
-    </div>
+    </Div>
   );
 }

@@ -1,0 +1,298 @@
+# SplashScreen
+
+The canonical first-paint surface — but you don't render it as JSX. Instead, mount the
+singleton `<SplashProvider />` once at your app root (next to `<ThemeProvider />`) and call
+the imperative `splash.show({ ... })` facade from anywhere — a click handler, a fetch
+interceptor, a service worker, an async action. This mirrors the `Toaster` + `toast()`
+pattern used elsewhere in the design system: the provider owns the portal and the
+lifecycle; consumers reach for a stateless function.
+
+```tsx
+// app/layout.tsx — mount once
+import { ThemeProvider, SplashProvider } from '@apx-ui/ds';
+
+export default function RootLayout({ children }) {
+  return (
+    <ThemeProvider>
+      <SplashProvider /> {/* portal-owned, picks up theme via the surrounding provider */}
+      {children}
+    </ThemeProvider>
+  );
+}
+```
+
+```tsx
+// anywhere else — just call `splash`
+import { splash } from '@apx-ui/ds';
+
+splash.show({
+  variant: 'pulse',
+  logo: <MyLogo />,
+  title: 'Syncing…',
+  showSpinner: true,
+  timeout: 3000,
+});
+
+// or the variant shortcuts
+splash.gradient({ logo: <MyLogo />, title: 'Welcome' });
+splash.pulse({ title: 'Connecting' });
+splash.particles({ color: 'info' });
+
+// driving a progress bar from async work
+const id = splash.show({ showProgress: true, progress: 0 });
+for await (const c of upload()) splash.update(id, { progress: c.percent });
+splash.hide(id);
+```
+
+<ExampleBlock for="Overview" title="Five variants — one click each" />
+
+## Why imperative
+
+The splash is a **page-level overlay**, conceptually outside the component tree that
+triggered it. A button in a settings page that wants to show a "Saving…" splash shouldn't
+have to hoist state to the app shell, render a `<SplashScreen />` somewhere, and thread
+`open` through props or context. The same is true for non-React code paths (fetch
+middlewares, error handlers, route loaders).
+
+Instead, the provider lives at the root, owns the portal + lifecycle once, and any caller
+gets a one-liner:
+
+```ts
+splash.show({ /* … */ });   // open
+splash.update(id, patch);   // patch in place (drive a progress bar)
+splash.hide(id);            // close
+```
+
+If you really need a declarative form (inline embeds, Storybook examples), the underlying
+`<SplashScreen />` primitive is still exported — see [Declarative form](#declarative-form).
+
+## The imperative API
+
+| Call                                       | Purpose                                                                 |
+| ------------------------------------------ | ----------------------------------------------------------------------- |
+| `splash(options)`                          | Show a splash. Equivalent to `splash.show(options)`.                    |
+| `splash.show(options)`                     | Show / replace the active splash. Returns the resolved id.              |
+| `splash.fade(options)`                     | Variant shortcut for `{ variant: 'fade', ... }`.                        |
+| `splash.pulse(options)`                    | Variant shortcut for `{ variant: 'pulse', ... }`.                       |
+| `splash.gradient(options)`                 | Variant shortcut for `{ variant: 'gradient', ... }`.                    |
+| `splash.particles(options)`                | Variant shortcut for `{ variant: 'particles', ... }`.                   |
+| `splash.wave(options)`                     | Variant shortcut for `{ variant: 'wave', ... }`.                        |
+| `splash.update(id, patch)`                 | Patch the active splash in place. No-op if the id isn't active.         |
+| `splash.hide(id?)`                         | Dismiss the splash. Pass an id to scope; omit to dismiss whatever's up. |
+| `splash.isActive(id?)`                     | `true` if any (or a specific) splash is currently visible.              |
+
+Calling `splash.show({ id })` with the same id updates the existing record in place — the
+splash stays mounted and its entrance animation does not restart. That's how you drive a
+progress bar without flicker.
+
+<ExampleBlock for="ImperativeApi" title="Four-step async workflow with splash.update()" />
+
+## Variants
+
+| Variant       | Look & feel                                         | When to reach for it                                |
+| ------------- | --------------------------------------------------- | --------------------------------------------------- |
+| `fade`        | Clean solid backdrop, logo scales + fades in        | **Default.** Minimal first-paint for utility apps.  |
+| `pulse`       | Three concentric "radar" rings expanding from logo  | Connection / sync flows, IoT apps, anything "live". |
+| `gradient`    | Flowing animated multi-stop gradient backdrop       | Marketing-grade brand-immersive splashes.           |
+| `particles`   | Logo with eight orbiting + breathing particles      | Playful / consumer apps, onboarding intros.         |
+| `wave`        | Two parallaxing wave bands at the bottom            | Travel / hospitality / nature-leaning brands.       |
+
+Every variant uses pure CSS animations registered in the DS Tailwind preset
+(`splash-fade-in`, `splash-ring-pulse`, `splash-gradient-shift`, `splash-orbit`,
+`splash-particle-breathe`, `splash-wave`, `splash-wave-back`).
+
+<ExampleBlock for="FadeVariant" title="fade — clean entrance" />
+<ExampleBlock for="PulseVariant" title="pulse — concentric radar rings" />
+<ExampleBlock for="GradientVariant" title="gradient — flowing brand surface" />
+<ExampleBlock for="ParticlesVariant" title="particles — orbiting accents" />
+<ExampleBlock for="WaveVariant" title="wave — bottom parallax bands" />
+
+### Custom gradient colors
+
+By default `splash.gradient({ color: 'primary' })` paints a **theme-derived** gradient — the
+engine's `buildPaletteGradient(role)` composes a `linear-gradient(...)` from
+`--sds-palette-{role}-{slot}` CSS variables, so the gradient automatically re-tints when
+the theme switches mode (light / dark), variant (Katana / Tetsu / Origami / runtime
+override), or per-tenant palette swap.
+
+If you need brand colors outside the theme — a marketing launch, a seasonal hero, a
+customer-specific subdomain — pass the `gradient` option to override the default. Five
+input shapes, pick whichever matches how you carry the colors:
+
+```ts
+// 1. Stop array → equally-spaced 135° linear gradient.
+splash.gradient({ gradient: ['#ff5722', '#ffeb3b', '#4caf50'] });
+
+// 2. Structured object → explicit from / via / to with optional angle.
+splash.gradient({
+  gradient: { from: '#0ea5e9', via: '#8b5cf6', to: '#ec4899', angle: 120 },
+});
+
+// 3. Full CSS string → escape hatch for radial / conic / multi-stop fades.
+splash.gradient({ gradient: 'radial-gradient(circle, #fb923c, #1e293b 70%)' });
+
+// 4. Theme-token references → re-tint automatically with light / dark mode.
+splash.gradient({
+  gradient: {
+    from: 'var(--sds-palette-primary-main)',
+    to:   'var(--sds-palette-info-main)',
+  },
+});
+
+// 5. Reshape the default — `BuildPaletteGradientOptions` from `@apx-ui/engine`.
+//    Keeps the engine doing the theme derivation; you only override its shape.
+splash.gradient({
+  color: 'warning',
+  gradient: { kind: 'radial', angle: 90, stops: ['active', 'hover', 'active'] },
+});
+```
+
+The animated `splash-gradient-shift` keyframe still applies to whatever the result is, so
+any custom gradient drifts across the viewport like the default. Animation halts under
+`prefers-reduced-motion`.
+
+> **Power user.** The engine generator is exported as `buildPaletteGradient(role, options?)`
+> from `@apx-ui/engine` and reused by any DS component that wants a theme-derived gradient
+> surface. The pre-built per-role map is exported as `PALETTE_GRADIENTS`.
+
+<ExampleBlock for="CustomGradient" title="Theme-derived default, custom colors, reshape options" />
+
+## Loading indicator
+
+Pair any variant with either a Spinner or a Progress bar via `showSpinner` / `showProgress`
+shortcuts (or the explicit `indicator` option). `progress` (0–100) drives the bar
+determinately; omit it for the indeterminate sweep.
+
+<ExampleBlock for="WithSpinner" title="Spinner — indeterminate, brand-tinted" />
+<ExampleBlock for="WithProgress" title="Progress — live splash.update() at 180 ms intervals" />
+
+## Timeout & lifecycle
+
+Pass `timeout: ms` and the splash auto-dismisses after the delay. `onTimeout` fires once
+when the timer elapses; `onHide` fires on **every** dismiss path (timeout, click, Escape,
+manual `splash.hide()`, replaced by another `splash.show()`) — that's the place for cleanup
+that must run regardless of how the splash closed.
+
+By default the imperative API enables:
+
+- `closeOnEscape: true` — pressing Escape dismisses (integrates with the engine's
+  escape stack so nested overlays unwind in the right order).
+- `closeOnClick: false` — set it to `true` for "tap to continue" intros.
+
+<ExampleBlock for="WithTimeout" title="Adjustable timeout slider + lifecycle callbacks" />
+<ExampleBlock for="Fullscreen" title="Real fullscreen + Escape / click-to-dismiss" />
+
+## Backdrops & colors
+
+Backdrop and color are independent axes:
+
+- `backdrop` chooses the wash behind the content (`solid` / `paper` / `tinted` /
+  `transparent`).
+- `color` chooses the role used for the accent (rings, particles, waves, gradient
+  stops, spinner / progress).
+
+<ExampleBlock for="Backdrops" title="solid / paper / tinted / transparent" />
+<ExampleBlock for="Colors" title="Every palette role on the pulse variant" />
+
+## `splash.show(options)` reference
+
+| Option            | Type                                                                                    | Default      | Notes                                                                          |
+| ----------------- | --------------------------------------------------------------------------------------- | ------------ | ------------------------------------------------------------------------------ |
+| `id`              | `string`                                                                                | _generated_  | Stable identifier. Re-calling with the same id patches in place.                |
+| `variant`         | `'fade' \| 'pulse' \| 'gradient' \| 'particles' \| 'wave'`                              | `'fade'`     | Visual style.                                                                  |
+| `color`           | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'info' \| 'neutral'` | `'primary'`  | Semantic palette role driving accents.                                         |
+| `backdrop`        | `'solid' \| 'paper' \| 'tinted' \| 'transparent'`                                       | `'solid'`    | Backdrop treatment. `tinted` picks up `color`.                                 |
+| `gradient`        | `string \| string[] \| { from, via?, to, angle? }`                                      | _from preset_ | Custom gradient stops for `variant='gradient'`. Overrides the per-role preset. |
+| `logo`            | `ReactNode`                                                                             | —            | Brand mark. Sized to a 96×96 slot.                                             |
+| `showLogo`        | `boolean`                                                                               | `true` if `logo` is set | Hide the logo wrapper entirely.                                                |
+| `title`           | `ReactNode`                                                                             | —            | Renders below the logo.                                                        |
+| `subtitle`        | `ReactNode`                                                                             | —            | Muted subheading below the title.                                              |
+| `footer`          | `ReactNode`                                                                             | —            | Tiny copy below the indicator (version / legal).                               |
+| `indicator`       | `'none' \| 'spinner' \| 'progress'`                                                     | `'none'`     | Loading indicator style.                                                       |
+| `showSpinner`     | `boolean`                                                                               | —            | Shortcut for `indicator='spinner'`.                                            |
+| `showProgress`    | `boolean`                                                                               | —            | Shortcut for `indicator='progress'`.                                           |
+| `progress`        | `number` (0..100)                                                                       | —            | Determinate value. Omit for an indeterminate sweep.                            |
+| `loadingLabel`    | `string`                                                                                | `'Loading'`  | Accessible label for the spinner / progress bar.                               |
+| `timeout`         | `number` (ms)                                                                           | —            | Auto-dismiss delay. Omit / set to `0` to disable.                              |
+| `onTimeout`       | `(id) => void`                                                                          | —            | Fires once when `timeout` elapses.                                             |
+| `onHide`          | `(id) => void`                                                                          | —            | Fires on every dismiss path.                                                   |
+| `closeOnClick`    | `boolean`                                                                               | `false`      | Dismiss on click anywhere on the surface.                                      |
+| `closeOnEscape`   | `boolean`                                                                               | `true`       | Dismiss on Escape (uses the engine's escape stack).                            |
+| `className`       | `string`                                                                                | —            | Merged via `tailwind-merge`. Last-wins.                                        |
+| `sx`              | `Sx`                                                                                    | —            | Theme-aware inline style.                                                      |
+
+## `<SplashProvider />` reference
+
+| Prop              | Type                              | Default         | Notes                                                                              |
+| ----------------- | --------------------------------- | --------------- | ---------------------------------------------------------------------------------- |
+| `defaultOptions`  | `SplashShowOptions`               | —               | Shallow-merged onto every `splash.show()` call. Pin brand color / variant once.    |
+| `portalContainer` | `HTMLElement \| null`             | `document.body` | Mount target. Scope to an Electron window root, etc.                               |
+
+## Declarative form
+
+For inline embeds and rare advanced use cases, `<SplashScreen />` is still available as a
+declarative React primitive:
+
+```tsx
+import { SplashScreen } from '@apx-ui/ds';
+
+<SplashScreen
+  placement="inline"     // skips the fullscreen positioning
+  variant="pulse"
+  logo={<MyLogo />}
+  title="Syncing"
+/>
+```
+
+Prefer this only when you genuinely need to embed the visual surface inside another
+container (e.g. a documentation tile). For fullscreen splashes always use the imperative
+`splash.show(...)` API.
+
+## Accessibility
+
+- **Status landmark.** The root carries `role="status"` + `aria-busy="true"` +
+  `aria-live="polite"`. Screen readers announce the loading state when the splash mounts.
+- **Title labels the landmark.** When `title` is set the title's id becomes the splash's
+  `aria-labelledby`. When only `subtitle` is set it becomes the `aria-describedby`. When
+  neither is set the splash falls back to `aria-label="Loading"` (or your `loadingLabel`).
+- **Decorations are hidden.** Gradient layer, wave bands, pulse rings, and particle orbits
+  are all `aria-hidden`.
+- **`prefers-reduced-motion`.** Every animation halts under reduced motion via Tailwind's
+  `motion-reduce:` variant.
+- **Escape stack integration.** Provider-driven splashes register with the engine's escape
+  stack when `closeOnEscape !== false`, so nested overlays (a modal opened from inside the
+  splash) unwind in the right order.
+
+## Theming
+
+```ts
+defineTheme({
+  components: {
+    SplashScreen: {
+      defaultProps: { variant: 'gradient', color: 'primary', timeout: 1500 },
+      styleOverrides: {
+        title: 'tracking-tight font-display',
+        subtitle: 'text-balance',
+        stack: 'gap-6',
+      },
+    },
+  },
+});
+```
+
+Every slot (`root`, `gradient`, `wave`, `stack`, `logoWrap`, `pulseRing`, `orbit`,
+`particle`, `title`, `subtitle`, `indicator`, `footer`) is themable independently.
+
+## Recipes & power-user exports
+
+- `splashScreenRecipes` — `{ root, gradient, wave, stack, logoWrap, pulseRing, orbit,
+  particle, title, subtitle, indicator, footer }`
+- `SplashStore` — the underlying singleton (`getState`, `subscribe`, `show`, `update`,
+  `hide`, `isActive`, `__reset`). Reach for it to build custom hosts / test harnesses.
+- `useSplashState()` — React hook that subscribes to the store. The state is
+  `{ current: SplashScreenItem | null }`.
+- `<SplashSurface />` — the stateless rendering primitive used by both the host and the
+  declarative `<SplashScreen />`. Useful for SSR snapshots or alternate host strategies.
+- `SPLASH_GRADIENT_BY_COLOR` / `SPLASH_WAVE_COLOR_CLASS` / `SPLASH_PULSE_RING_DELAYS_MS` /
+  `SPLASH_PARTICLE_INNER_ANGLES` / `SPLASH_PARTICLE_OUTER_ANGLES` /
+  `SPLASH_PARTICLE_BREATHE_DELAYS_MS` — animation / layout constants.

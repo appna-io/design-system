@@ -9,6 +9,8 @@ Reach for it whenever a screen needs a stacked, expandable list: FAQ pages, sett
 panels, sidebars of categorized navigation, or any disclosure UX where one section at a
 time (or several, at the user's choice) is open.
 
+<ExampleBlock for="Overview" title="Overview — settings panel with icons" />
+
 ## Why this exists
 
 Three jobs land in this primitive that other disclosure surfaces (Tabs, Navigation drawers,
@@ -190,12 +192,3 @@ defineTheme({
 ```
 
 Six slot keys: `root`, `item`, `trigger`, `content`, `contentInner`, `chevron`.
-
-## Out of scope (future phases)
-
-- **`Accordion.Header`** subpart — most consumers don't need a separate wrapper between
-  Item and Trigger. Add later if `<h2>` etc. nesting becomes a common pattern.
-- **Animation on auto-resizing content** (content that grows due to async data) — the
-  `grid-rows` trick already handles this for free in modern browsers.
-- **Tile / card-style accordion** (each item is a fully-styled card with shadow) —
-  composition via `variant="outline"` + theme overrides, not a new variant.

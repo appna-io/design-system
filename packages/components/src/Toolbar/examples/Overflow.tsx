@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Stack, Toolbar } from '@apx-ui/ds';
+import { Button, Div, Stack, Toolbar, Typography } from '@apx-ui/ds';
 
 const ALL_ACTIONS = [
   'Save',
@@ -17,9 +17,9 @@ export default function Overflow() {
 
   return (
     <Stack gap={3}>
-      <p className="text-sm text-fg-muted">
+      <Typography variant="bodySmall" color="fg.muted">
         Add or remove items to see the toolbar collapse trailing actions into a popover.
-      </p>
+      </Typography>
       <Stack direction="row" gap={2}>
         <Button
           size="sm"
@@ -41,7 +41,7 @@ export default function Overflow() {
         </Button>
       </Stack>
 
-      <div className="max-w-md">
+      <Div className="max-w-md">
         <Toolbar
           variant="bordered"
           overflow="menu"
@@ -54,7 +54,7 @@ export default function Overflow() {
             </Button>
           ))}
         </Toolbar>
-      </div>
+      </Div>
     </Stack>
   );
 }

@@ -706,14 +706,13 @@ function TreeNodeView({ node, level, posInSet, setSize }: TreeNodeViewProps): Re
     // click handler doesn't also fire — otherwise expansion/selection bubbles up.
     event.stopPropagation();
     ctx.setFocus(node.id);
-    if (isBranch && (event.target as HTMLElement).closest('[data-tree-chevron]')) {
-      ctx.toggleExpanded(node.id);
-      ctx.loadChildrenIfNeeded(node);
-      return;
-    }
     if (selectable && ctx.selectionMode !== 'none') {
       ctx.selectNode(node.id, event.ctrlKey || event.metaKey || event.shiftKey);
-    } else if (isBranch) {
+    }
+    // Clicking anywhere on a branch row — chevron OR label — toggles expansion. Matches
+    // the VS Code / Finder file-tree affordance consumers expect, and keeps parity with
+    // the `Enter` key on a branch in single-select mode.
+    if (isBranch) {
       ctx.toggleExpanded(node.id);
       ctx.loadChildrenIfNeeded(node);
     }

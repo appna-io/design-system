@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, CommandPalette, commands, palette } from '@apx-ui/ds';
+import { Button, CommandPalette, commands, Div, palette } from '@apx-ui/ds';
 
 /**
  * Imperative module-level API. Works from anywhere in the app — a Zustand action, a fetch
@@ -18,11 +18,11 @@ export default function ImperativeRegistration() {
   }, []);
 
   return (
-    <div className="flex gap-2">
+    <Div display="flex" gap="2">
       <Button onClick={() => setOpen(true)}>Open via state</Button>
       <Button variant="ghost" onClick={() => palette.open()}>palette.open()</Button>
       <Button variant="ghost" onClick={() => palette.toggle()}>palette.toggle()</Button>
       <CommandPalette open={open} onOpenChange={setOpen} />
-    </div>
+    </Div>
   );
 }

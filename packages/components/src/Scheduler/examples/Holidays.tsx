@@ -1,6 +1,6 @@
 'use client';
 
-import { Scheduler, type SchedulerEvent, type SchedulerHoliday } from '@apx-ui/ds';
+import { Div, Scheduler, type SchedulerEvent, type SchedulerHoliday } from '@apx-ui/ds';
 import { useState } from 'react';
 
 const customHolidays: SchedulerHoliday[] = [
@@ -15,14 +15,14 @@ export default function Holidays() {
   ]);
 
   return (
-    <div style={{ height: 680 }}>
+    <Div height={680}>
       <Scheduler
         events={events}
         defaultView="month"
         holidays={customHolidays}
         showHolidays
       />
-    </div>
+    </Div>
   );
 }
 

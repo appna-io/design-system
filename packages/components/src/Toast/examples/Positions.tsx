@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Button, Toaster, toast } from '@apx-ui/ds';
+import { Button, Div, Toaster, toast } from '@apx-ui/ds';
 import type { ToastPosition } from '@apx-ui/ds';
 
 const POSITIONS: ToastPosition[] = [
@@ -16,8 +16,8 @@ export default function Positions() {
   const [position, setPosition] = useState<ToastPosition>('bottom-right');
 
   return (
-    <div className="space-y-3">
-      <div className="flex flex-wrap gap-2">
+    <Div display="flex" flexDirection="column" gap="3">
+      <Div display="flex" flexWrap="wrap" gap="2">
         {POSITIONS.map((p) => (
           <Button
             key={p}
@@ -30,8 +30,8 @@ export default function Positions() {
             {p}
           </Button>
         ))}
-      </div>
+      </Div>
       <Toaster position={position} richColors />
-    </div>
+    </Div>
   );
 }
