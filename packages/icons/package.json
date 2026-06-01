@@ -1,6 +1,6 @@
 {
   "name": "@apx-ui/icons",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Optional, tree-shakable SVG icon set for apx-ds. Install separately when you want icons.",
   "license": "MIT",
   "type": "module",

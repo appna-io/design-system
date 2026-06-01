@@ -1,6 +1,6 @@
 {
   "name": "@apx-ui/components",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The apx-ds component library",
   "license": "MIT",
   "type": "module",
