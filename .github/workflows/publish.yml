@@ -4,17 +4,19 @@ on:
   push:
     branches: [main]
 
-# Prevent overlapping releases from racing on the same tags/versions.
+# Don't re-run on the version-bump commit this workflow pushes back to main.
 concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
 
 permissions:
-  contents: write # push the Version PR branch + create git tags
-  pull-requests: write # open/update the "Version Packages" PR
+  contents: write # commit the version bump + push git tags
 
 jobs:
-  release:
+  publish:
+    if: |
+      !contains(github.event.head_commit.message, '[skip ci]') &&
+      !contains(github.event.head_commit.message, '[skip publish]')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,17 +36,37 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # With pending changesets: opens/updates a "Version Packages" PR.
-      # With no changesets (i.e. that PR was merged): runs `pnpm release`,
-      # which builds and `changeset publish`es every package whose version
-      # is not yet on npm, then pushes git tags.
-      - name: Create Release PR or publish to npm
-        uses: changesets/action@v1
-        with:
-          version: pnpm changeset version
-          publish: pnpm release
-          commit: 'chore: version apx-ds packages'
-          title: 'chore: version apx-ds packages'
+      - name: Build packages
+        run: pnpm turbo build --filter='./packages/*'
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      # Lockstep patch bump across all publishable packages (apps/renderer is excluded).
+      - name: Bump patch version
+        run: pnpm --filter './packages/*' exec npm version patch --no-git-tag-version
+
+      - name: Read new version
+        id: version
+        run: echo "version=$(node -p "require('./packages/apx-ds/package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Commit version bump
+        run: |
+          git add -A
+          git commit -m "chore: release v${{ steps.version.outputs.version }} [skip ci]"
+          git push
+
+      - name: Publish to npm
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: pnpm --filter './packages/*' publish --access public --no-git-checks
+
+      - name: Create Git tag
+        run: |
+          git tag "v${{ steps.version.outputs.version }}"
+          git push origin "v${{ steps.version.outputs.version }}"
