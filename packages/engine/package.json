@@ -1,6 +1,6 @@
 {
   "name": "@apx-ui/engine",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Core engine primitives, utilities, and types for apx-ds",
   "license": "MIT",
   "publishConfig": {

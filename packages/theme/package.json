@@ -1,6 +1,6 @@
 {
   "name": "@apx-ui/theme",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "ThemeProvider, palette, mode, dir, variant for apx-ds",
   "license": "MIT",
   "publishConfig": {
