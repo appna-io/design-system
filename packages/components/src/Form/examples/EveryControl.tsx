@@ -54,13 +54,14 @@ export default function EveryControl() {
         <Switch>Push notifications</Switch>
       </FormField>
       <FormField name="language" label="Language" binding="value">
-        <Select
-          options={[
-            { value: 'en', label: 'English' },
-            { value: 'he', label: 'עברית' },
-            { value: 'ar', label: 'العربية' },
-          ]}
-        />
+        <Select aria-label="Language">
+          <Select.Trigger />
+          <Select.Content>
+            <Select.Item value="en">English</Select.Item>
+            <Select.Item value="he">עברית</Select.Item>
+            <Select.Item value="ar">العربية</Select.Item>
+          </Select.Content>
+        </Select>
       </FormField>
       <FormField name="rating" label="Rating" binding="value">
         <Rating />

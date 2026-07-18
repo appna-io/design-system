@@ -7,9 +7,9 @@ export default function InForm() {
   return (
     <Div
       as="form"
-      onSubmit={(event: FormEvent<HTMLFormElement>) => {
+      onSubmit={(event: FormEvent<HTMLElement>) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
+        const data = new FormData(event.currentTarget as HTMLFormElement);
         setSubmitted(String(data.get('quality') ?? ''));
       }}
       display="flex"

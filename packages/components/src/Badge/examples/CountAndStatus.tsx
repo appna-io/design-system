@@ -5,7 +5,7 @@ export default function CountAndStatus() {
     <Div display="flex" flexDirection="column" gap="4">
       <Div display="flex" alignItems="center" gap="4">
         <Div display="flex" alignItems="center" gap="2">
-          <Typography variant="body2" weight="medium">
+          <Typography variant="bodySmall" weight="medium">
             Inbox
           </Typography>
           <Badge variant="subtle" color="info">
@@ -13,7 +13,7 @@ export default function CountAndStatus() {
           </Badge>
         </Div>
         <Div display="flex" alignItems="center" gap="2">
-          <Typography variant="body2" weight="medium">
+          <Typography variant="bodySmall" weight="medium">
             Drafts
           </Typography>
           <Badge variant="subtle" color="neutral">
@@ -21,7 +21,7 @@ export default function CountAndStatus() {
           </Badge>
         </Div>
         <Div display="flex" alignItems="center" gap="2">
-          <Typography variant="body2" weight="medium">
+          <Typography variant="bodySmall" weight="medium">
             Archive
           </Typography>
           <Badge variant="subtle" color="neutral">
@@ -31,19 +31,19 @@ export default function CountAndStatus() {
       </Div>
       <Div display="flex" alignItems="center" gap="3">
         <Div display="flex" alignItems="center" gap="2">
-          <Typography variant="body2">Server</Typography>
+          <Typography variant="bodySmall">Server</Typography>
           <Badge variant="soft" color="success" withDot dotPulse>
             Online
           </Badge>
         </Div>
         <Div display="flex" alignItems="center" gap="2">
-          <Typography variant="body2">Cache</Typography>
+          <Typography variant="bodySmall">Cache</Typography>
           <Badge variant="soft" color="warning" withDot>
             Degraded
           </Badge>
         </Div>
         <Div display="flex" alignItems="center" gap="2">
-          <Typography variant="body2">Worker</Typography>
+          <Typography variant="bodySmall">Worker</Typography>
           <Badge variant="soft" color="danger" withDot>
             Offline
           </Badge>

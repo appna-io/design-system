@@ -12,7 +12,7 @@ function fakeSave(): Promise<{ title: string }> {
   });
 }
 
-export default function Promise() {
+export default function PromiseLifecycle() {
   return (
     <Div display="flex" flexDirection="column" gap="3">
       <Button

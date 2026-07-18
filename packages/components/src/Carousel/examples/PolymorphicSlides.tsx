@@ -1,4 +1,4 @@
-import { Carousel, Div, Typography } from '@apx-ui/ds';
+import { Carousel, Typography } from '@apx-ui/ds';
 
 const articles = [
   { href: '#a', title: 'Why scroll-snap is enough', tag: 'engineering' },

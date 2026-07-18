@@ -4,22 +4,23 @@ on:
   push:
     branches: [main]
 
+# Prevent overlapping releases from racing on the same tags/versions.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
-  contents: write
+  contents: write # push the Version PR branch + create git tags
+  pull-requests: write # open/update the "Version Packages" PR
 
 jobs:
-  publish:
-    # Skip if commit message contains [skip ci] or [skip publish]
-    if: |
-      !contains(github.event.head_commit.message, '[skip ci]') &&
-      !contains(github.event.head_commit.message, '[skip publish]')
+  release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -33,51 +34,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build packages
-        run: pnpm turbo build --filter='./packages/*'
-
-      - name: Run tests
-        run: pnpm test
-
-      - name: Configure Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Bump version (patch)
-        run: |
-          # Bump version in all publishable packages
-          pnpm --filter '@apx-ui/ds' exec npm version patch --no-git-tag-version
-          pnpm --filter '@apx-ui/components' exec npm version patch --no-git-tag-version
-          pnpm --filter '@apx-ui/engine' exec npm version patch --no-git-tag-version
-          pnpm --filter '@apx-ui/theme' exec npm version patch --no-git-tag-version
-          pnpm --filter '@apx-ui/tokens' exec npm version patch --no-git-tag-version
-          pnpm --filter '@apx-ui/icons' exec npm version patch --no-git-tag-version
-
-      - name: Get new version
-        id: version
-        run: |
-          VERSION=$(node -p "require('./packages/apx-ds/package.json').version")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Commit version bump
-        run: |
-          git add -A
-          git commit -m "chore: release v${{ steps.version.outputs.version }} [skip ci]"
-          git push
-
-      - name: Publish to npm
+      # With pending changesets: opens/updates a "Version Packages" PR.
+      # With no changesets (i.e. that PR was merged): runs `pnpm release`,
+      # which builds and `changeset publish`es every package whose version
+      # is not yet on npm, then pushes git tags.
+      - name: Create Release PR or publish to npm
+        uses: changesets/action@v1
+        with:
+          version: pnpm changeset version
+          publish: pnpm release
+          commit: 'chore: version apx-ds packages'
+          title: 'chore: version apx-ds packages'
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          pnpm --filter '@apx-ui/engine' publish --access public --no-git-checks
-          pnpm --filter '@apx-ui/tokens' publish --access public --no-git-checks
-          pnpm --filter '@apx-ui/theme' publish --access public --no-git-checks
-          pnpm --filter '@apx-ui/icons' publish --access public --no-git-checks
-          pnpm --filter '@apx-ui/components' publish --access public --no-git-checks
-          pnpm --filter '@apx-ui/ds' publish --access public --no-git-checks
-
-      - name: Create Git tag
-        run: |
-          git tag "v${{ steps.version.outputs.version }}"
-          git push origin "v${{ steps.version.outputs.version }}"

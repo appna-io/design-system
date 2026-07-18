@@ -323,12 +323,11 @@ function DatePickerImpl(
           className={popoverContentClass + ' p-0'}
         >
           {presets && presets.length > 0 ? (
-            <div className={presetListClass} role="list">
+            <div className={presetListClass}>
               {presets.map((preset) => (
                 <button
                   key={preset.id}
                   type="button"
-                  role="listitem"
                   className={presetItemClass}
                   onClick={() => handlePresetClick(preset)}
                 >

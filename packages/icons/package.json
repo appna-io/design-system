@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "Optional, tree-shakable SVG icon set for apx-ds. Install separately when you want icons.",
   "license": "MIT",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

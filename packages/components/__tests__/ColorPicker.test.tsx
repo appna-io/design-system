@@ -56,10 +56,14 @@ describe('ColorPicker — rendering', () => {
     expect(screen.getByText('Pick wisely')).toBeInTheDocument();
   });
 
-  it('renders error and sets aria-invalid', () => {
+  it('renders error, marks the trigger via data-invalid, and announces it through aria-describedby', () => {
+    // `aria-invalid` is not supported on `role=button` (ARIA spec / axe), so the error state is
+    // exposed as `data-invalid` for styling + the error text is wired via `aria-describedby`.
     render(<ColorPicker defaultValue="#000" label="x" error="Choose a color" />);
-    expect(screen.getByText('Choose a color')).toBeInTheDocument();
-    expect(getTrigger()).toHaveAttribute('aria-invalid', 'true');
+    const error = screen.getByText('Choose a color');
+    expect(error).toBeInTheDocument();
+    expect(getTrigger()).toHaveAttribute('data-invalid', 'true');
+    expect(getTrigger().getAttribute('aria-describedby')).toContain(error.id);
   });
 
   it('renders a hidden input for form submission when `name` is set', () => {

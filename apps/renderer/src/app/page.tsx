@@ -1,9 +1,10 @@
 import Link from 'next/link';
-import { ArrowUpRight, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Hammer, Sparkles } from 'lucide-react';
 import { Badge, Div, Typography } from '@apx-ui/ds';
 
 import { TopBar } from '../components/chrome/TopBar';
 import { ComponentCard } from '../components/docs/ComponentCard';
+import { SubscribeForm } from '../components/SubscribeForm';
 import { discoverComponents } from '../lib/discover';
 import { getTemplates } from '../templates';
 
@@ -16,6 +17,10 @@ export default async function HomePage() {
       <TopBar title="apx-ds — Renderer" />
       <Div as="main" className="mx-auto w-full max-w-5xl flex-1 px-8 py-10">
         <Div as="section">
+          <Badge variant="soft" color="warning" shape="pill" size="sm" className="mb-3">
+            <Hammer size={12} aria-hidden />
+            Under development
+          </Badge>
           <Typography
             variant="overline"
             weight="semibold"
@@ -63,6 +68,8 @@ export default async function HomePage() {
         </Div>
 
         <TemplatesPromo count={templates.length} />
+
+        <SubscribePromo />
 
         <Div as="section" className="mt-10">
           <Typography as="h2" variant="h4" weight="semibold">
@@ -157,6 +164,46 @@ function TemplatesPromo({ count }: { count: number }) {
           <Typography variant="caption" color="fg.muted">
             {count} template{count === 1 ? '' : 's'} available · easy to add more
           </Typography>
+        </Div>
+      </Div>
+    </Div>
+  );
+}
+
+/**
+ * Email capture band. The form itself is a client component (`SubscribeForm`)
+ * that writes to the Firebase Realtime Database; everything around it stays a
+ * server-rendered section so the page keeps its fast first paint.
+ */
+function SubscribePromo() {
+  return (
+    <Div
+      as="section"
+      className="mt-10 overflow-hidden rounded-2xl border border-border bg-bg-paper"
+    >
+      <Div className="relative grid gap-6 p-6 sm:p-8 md:grid-cols-[1.4fr_1fr] md:items-center">
+        <Div decorative gradient={{ position: 'right' }} />
+        <Div className="relative">
+          <Badge variant="soft" color="primary" shape="pill" size="sm">
+            <Sparkles size={12} aria-hidden />
+            Stay in the loop
+          </Badge>
+          <Typography
+            as="h2"
+            variant="h3"
+            weight="semibold"
+            letterSpacing="tight"
+            className="mt-3 text-2xl"
+          >
+            Get notified as apx-ds ships
+          </Typography>
+          <Typography variant="bodySmall" color="fg.muted" className="mt-2 max-w-xl">
+            We&rsquo;re building in the open. Leave your email and we&rsquo;ll let you know when new
+            components land and when the first stable release is ready — no spam.
+          </Typography>
+        </Div>
+        <Div className="relative">
+          <SubscribeForm />
         </Div>
       </Div>
     </Div>

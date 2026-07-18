@@ -310,9 +310,7 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
               className={triggerCls}
               disabled={disabled}
               aria-disabled={disabled || readOnly || undefined}
-              aria-readonly={readOnly || undefined}
-              aria-invalid={a11y['aria-invalid']}
-              aria-required={a11y['aria-required']}
+              data-readonly={readOnly || undefined}
               aria-describedby={describedByIds}
               aria-label={triggerAccessibleName}
               aria-labelledby={label != null ? labelId : undefined}

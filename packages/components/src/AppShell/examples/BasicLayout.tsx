@@ -26,7 +26,7 @@ export default function BasicLayout() {
           </Typography>
         }
       >
-        <Typography as="h2" variant="titleSmall" weight="semibold">
+        <Typography as="h2" variant="h6" weight="semibold">
           Welcome back
         </Typography>
         <Typography variant="bodySmall" color="fg.muted" sx={{ mt: 2 }}>

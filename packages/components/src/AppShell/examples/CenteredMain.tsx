@@ -21,7 +21,7 @@ export default function CenteredMain() {
         }
         main={{ maxWidth: '2xl', centered: true, padding: 8 }}
       >
-        <Typography as="h1" variant="titleMedium" weight="semibold">
+        <Typography as="h1" variant="h5" weight="semibold">
           Body content stays readable
         </Typography>
         <Typography variant="bodySmall" color="fg.muted" sx={{ mt: 3 }}>

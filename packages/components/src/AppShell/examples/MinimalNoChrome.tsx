@@ -6,7 +6,7 @@ export default function MinimalNoChrome() {
       <AppShell skipToContent={false}>
         <Div className="grid place-items-center h-full">
           <Div className="text-center">
-            <Typography as="h2" variant="titleSmall" weight="semibold">
+            <Typography as="h2" variant="h6" weight="semibold">
               No header, no sidebar, no footer
             </Typography>
             <Typography variant="bodySmall" color="fg.muted" sx={{ mt: 2 }}>

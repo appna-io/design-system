@@ -3,7 +3,7 @@ import { Accordion, Div, Typography } from '@apx-ui/ds';
 export default function FAQ() {
   return (
     <Div className="mx-auto max-w-2xl">
-      <Typography as="h2" variant="titleSmall" weight="semibold" sx={{ mb: 4 }}>
+      <Typography as="h2" variant="h6" weight="semibold" sx={{ mb: 4 }}>
         Frequently asked questions
       </Typography>
       <Accordion type="single" variant="solid">

@@ -21,7 +21,7 @@ export default function InsetLayout() {
           </Stack>
         }
       >
-        <Typography as="h2" variant="titleSmall" weight="semibold">
+        <Typography as="h2" variant="h6" weight="semibold">
           Inset variant
         </Typography>
         <Typography variant="bodySmall" color="fg.muted" sx={{ mt: 2 }}>

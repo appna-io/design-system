@@ -1,4 +1,4 @@
-import { Div, Tabs, Typography } from '@apx-ui/ds';
+import { Tabs, Typography } from '@apx-ui/ds';
 
 export default function Basic() {
   return (

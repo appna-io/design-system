@@ -5,11 +5,11 @@ import { stats } from '../data';
 
 export function MetricsBand() {
   return (
-    <Div as="section" id="solutions" className="border-b border-border bg-bg-subtle/40">
+    <Div as="section" className="border-b border-border bg-bg-subtle/40">
       <Div className="mx-auto grid w-full max-w-6xl gap-12 px-6 py-20 lg:grid-cols-[1fr_1.2fr]">
         <Div>
           <Typography variant="overline" color="primary" weight="semibold">
-            Outcomes
+            The roastery
           </Typography>
           <Typography
             variant="h2"
@@ -17,14 +17,14 @@ export function MetricsBand() {
             letterSpacing="tight"
             className="mt-3 text-3xl sm:text-4xl"
           >
-            Numbers from teams already on Aurora
+            A small bar that pours a lot of coffee
           </Typography>
           <Typography variant="body" color="fg.muted" className="mt-4 max-w-md">
-            A composable system pays for itself the moment your second product surface ships.
-            Here&apos;s what teams measure in their first ninety days.
+            We roast in small batches a few steps from the bar, so the gap between roast day and
+            your cup stays short. Here is what that looks like in numbers.
           </Typography>
           <Button className="mt-6" variant="outline" rightIcon={<ArrowRight size={14} />}>
-            Read the customer stories
+            Tour the roastery
           </Button>
         </Div>
         <Card variant="elevated" size="lg">

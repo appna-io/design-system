@@ -39,7 +39,7 @@ export interface IconProps extends IconDOMAttributes {
    *
    * Second-highest precedence: `as` wins over `name`, loses to `children`.
    */
-  as?: IconComponent | ComponentType<SVGProps<SVGSVGElement>>;
+  as?: IconComponent | ComponentType<SVGProps<SVGSVGElement>> | undefined;
 
   /**
    * Registry lookup. Resolves the component via the active `<IconProvider>`. Accepts any
@@ -53,14 +53,14 @@ export interface IconProps extends IconDOMAttributes {
    * Tokens drive recipe classes; numeric / arbitrary strings apply via inline width/height/font.
    * Default: `'md'` (1rem ≈ 16px, also sets fontSize so child SVGs scale via `[h|w]-full`).
    */
-  size?: IconSize;
+  size?: IconSize | undefined;
 
   /**
    * Color token (DS palette name), `'current'` to inherit `currentColor`, `'inherit'` for
    * `color: inherit`, or any CSS color string (`'#f00'`, `'var(--my-c)'`, …). Default:
    * `'current'`.
    */
-  color?: IconColor;
+  color?: IconColor | undefined;
 
   /**
    * Accessible label. When non-empty (and `decorative` is not explicitly `true`), the icon

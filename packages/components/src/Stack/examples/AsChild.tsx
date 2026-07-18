@@ -1,4 +1,4 @@
-import { Div, Stack, Typography } from '@apx-ui/ds';
+import { Stack, Typography } from '@apx-ui/ds';
 
 export default function AsChild() {
   return (

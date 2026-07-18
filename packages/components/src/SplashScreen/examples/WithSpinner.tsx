@@ -26,7 +26,7 @@ export default function WithSpinner() {
     <Div display="flex" flexDirection="column" gap="3" alignItems="flex-start">
       <Typography variant="body">
         Pass <code>showSpinner: true</code> for an indeterminate Spinner indicator tinted to
-        the splash's <code>color</code> role.
+        the splash&apos;s <code>color</code> role.
       </Typography>
       <Button
         onClick={() =>

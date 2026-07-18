@@ -30,7 +30,7 @@ export default function CollapsibleSidebar() {
         sidebarWidth={220}
         sidebarCollapsedWidth={56}
       >
-        <Typography as="h2" variant="titleSmall" weight="semibold">
+        <Typography as="h2" variant="h6" weight="semibold">
           Click ☰ to collapse
         </Typography>
         <Typography variant="bodySmall" color="fg.muted" sx={{ mt: 2 }}>

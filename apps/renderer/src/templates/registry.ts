@@ -1,5 +1,5 @@
 import type { TemplateEntry } from './types';
-import { auroraSaasTemplate } from './aurora-saas';
+import { emberRoasteryTemplate } from './ember-roastery';
 
 /**
  * The full set of preview templates. Order here drives gallery + sidebar ordering
@@ -12,7 +12,7 @@ import { auroraSaasTemplate } from './aurora-saas';
  *
  * That's it — no routes, no manual gallery wiring, no MDX.
  */
-const TEMPLATES: readonly TemplateEntry[] = [auroraSaasTemplate];
+const TEMPLATES: readonly TemplateEntry[] = [emberRoasteryTemplate];
 
 export function getTemplates(): readonly TemplateEntry[] {
   return TEMPLATES;

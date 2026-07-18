@@ -5,11 +5,11 @@ import { Check, Mail } from './_glyphs';
 export default function InButton() {
   return (
     <Div display="flex" gap="3">
-      <Button leadingIcon={<Icon as={Mail} />}>Send</Button>
-      <Button color="success" leadingIcon={<Icon as={Check} />}>
+      <Button leftIcon={<Icon as={Mail} />}>Send</Button>
+      <Button color="success" leftIcon={<Icon as={Check} />}>
         Confirm
       </Button>
-      <Button variant="outline" size="sm" trailingIcon={<Icon as={Mail} />}>
+      <Button variant="outline" size="sm" rightIcon={<Icon as={Mail} />}>
         Inbox
       </Button>
     </Div>

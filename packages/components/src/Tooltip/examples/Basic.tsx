@@ -7,7 +7,7 @@ export default function Basic() {
         Hover the button (or focus it with Tab) to see the tooltip.
       </Typography>
       <Tooltip content="Saved 3 minutes ago">
-        <Button variant="soft">Hover me — Saved</Button>
+        <Button variant="outline">Hover me — Saved</Button>
       </Tooltip>
     </Div>
   );

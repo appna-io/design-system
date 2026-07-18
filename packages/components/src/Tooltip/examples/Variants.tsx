@@ -13,7 +13,7 @@ export default function Variants() {
           color="primary"
           openDelay={150}
         >
-          <Button variant="soft">{variant}</Button>
+          <Button variant="outline">{variant}</Button>
         </Tooltip>
       ))}
     </Div>

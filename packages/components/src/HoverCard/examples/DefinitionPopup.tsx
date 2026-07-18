@@ -1,4 +1,4 @@
-import { Div, HoverCard, Typography } from '@apx-ui/ds';
+import { HoverCard, Typography } from '@apx-ui/ds';
 
 /**
  * Inline glossary / definition pattern. Hover a term in running text to see a short definition.

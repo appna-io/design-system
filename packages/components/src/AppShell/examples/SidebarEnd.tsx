@@ -21,7 +21,7 @@ export default function SidebarEnd() {
         }
         sidebarPosition="end"
       >
-        <Typography as="h2" variant="titleSmall" weight="semibold">
+        <Typography as="h2" variant="h6" weight="semibold">
           Main content first
         </Typography>
         <Typography variant="bodySmall" color="fg.muted" sx={{ mt: 2 }}>

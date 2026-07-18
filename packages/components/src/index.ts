@@ -675,6 +675,9 @@ export type {
   UseIconRegistryReturn,
 } from './Icon';
 
+export { Image } from './Image';
+export type { ImageFit, ImageProps, ImageRadius, ImageShadow } from './Image';
+
 export { Input } from './Input/Input';
 export type { InputProps, InputVariant, InputSize, InputColor } from './Input/Input.types';
 

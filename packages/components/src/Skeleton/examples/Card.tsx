@@ -1,4 +1,4 @@
-import { Div, Skeleton, SkeletonAvatar, SkeletonText } from '@apx-ui/ds';
+import { Div, Skeleton, SkeletonText } from '@apx-ui/ds';
 
 export default function Card() {
   return (

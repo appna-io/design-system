@@ -106,6 +106,7 @@ const FileUploadRow = memo(function FileUploadRow({
   const showProgress = hasUpload && (entry.status === 'uploading' || entry.progress > 0);
 
   return (
+    // eslint-disable-next-line jsx-a11y/no-redundant-roles -- Safari drops list semantics under `list-style: none`; the explicit role restores them for VoiceOver.
     <li className={rowCls} role="listitem" data-status={entry.status}>
       {entry.previewUrl ? (
         <img
@@ -456,6 +457,7 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(function F
       ) : null}
 
       {files.length > 0 ? (
+        // eslint-disable-next-line jsx-a11y/no-redundant-roles -- Safari drops list semantics under `list-style: none`; the explicit role restores them for VoiceOver.
         <ul className={listCls} role="list" aria-label={t.dropzoneLabel}>
           {files.map((entry) => (
             <FileUploadRow

@@ -1,42 +1,36 @@
 import { useState } from 'react';
 import { Div, TagsInput, Typography } from '@apx-ui/ds';
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
-
-const USERS: User[] = [
-  { id: '1', name: 'Ada Lovelace', email: 'ada@example.com' },
-  { id: '2', name: 'Grace Hopper', email: 'grace@example.com' },
-  { id: '3', name: 'Alan Turing', email: 'alan@example.com' },
-  { id: '4', name: 'Linus Torvalds', email: 'linus@example.com' },
+const USERS = [
+  { name: 'Ada Lovelace', email: 'ada@example.com' },
+  { name: 'Grace Hopper', email: 'grace@example.com' },
+  { name: 'Alan Turing', email: 'alan@example.com' },
+  { name: 'Linus Torvalds', email: 'linus@example.com' },
 ];
 
-async function searchUsers(query: string): Promise<User[]> {
+const NAME_BY_EMAIL = new Map(USERS.map((u) => [u.email, u.name]));
+
+/** Suggestions are the email strings; the display name comes from a lookup at render time. */
+async function searchUsers(query: string): Promise<string[]> {
   await new Promise((r) => setTimeout(r, 250));
+  const q = query.toLowerCase();
   return USERS.filter(
-    (u) =>
-      u.name.toLowerCase().includes(query.toLowerCase()) ||
-      u.email.toLowerCase().includes(query.toLowerCase()),
-  );
+    (u) => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q),
+  ).map((u) => u.email);
 }
 
 export default function AsyncSuggestions() {
   const [recipients, setRecipients] = useState<string[]>([]);
   return (
-    <TagsInput<User>
+    <TagsInput
       label="Recipients"
       description="Start typing a name or email."
       loadSuggestions={(query) => searchUsers(query)}
-      getSuggestionValue={(user) => user.email}
-      getSuggestionKey={(user) => user.id}
-      renderSuggestion={(user) => (
+      renderSuggestion={(email) => (
         <Div display="flex" flexDirection="column" sx={{ lineHeight: 1.2 }}>
-          <strong>{user.name}</strong>
+          <strong>{NAME_BY_EMAIL.get(email) ?? email}</strong>
           <Typography as="span" variant="caption" color="fg.muted">
-            {user.email}
+            {email}
           </Typography>
         </Div>
       )}

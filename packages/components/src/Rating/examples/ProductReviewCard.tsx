@@ -21,13 +21,16 @@ export default function ProductReviewCard() {
             size="lg"
             error={rating === 0 ? 'Pick at least one star' : undefined}
           />
-          <Textarea
-            label="Your review"
-            placeholder="What did you think?"
-            value={body}
-            onChange={(event) => setBody(event.currentTarget.value)}
-            rows={4}
-          />
+          <Div display="flex" flexDirection="column" gap="1.5" className="text-sm text-fg">
+            <label htmlFor="review-body">Your review</label>
+            <Textarea
+              id="review-body"
+              placeholder="What did you think?"
+              value={body}
+              onChange={(event) => setBody(event.currentTarget.value)}
+              rows={4}
+            />
+          </Div>
         </Div>
       </Card.Body>
       <Card.Footer>

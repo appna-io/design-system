@@ -83,12 +83,12 @@ export interface ColorPickerProps
   description?: ReactNode | undefined;
   /** Bottom helper text. Hidden when `error` is set. */
   helperText?: ReactNode | undefined;
-  /** Bottom error text. Sets `aria-invalid="true"` when present. */
+  /** Bottom error text. Announced via `aria-describedby`; sets `data-invalid` on the trigger. */
   error?: ReactNode | undefined;
   /** Visually hide the label (still sr-only for AT). @default false */
   hideLabel?: boolean | undefined;
 
-  /** Sets `aria-required="true"` on the trigger + `required` on the hidden input. */
+  /** Sets `required` on the hidden input (native validation carries the semantics). */
   required?: boolean | undefined;
   /** Block all interaction. */
   disabled?: boolean | undefined;
@@ -153,12 +153,12 @@ export interface ColorInputProps
   description?: ReactNode | undefined;
   /** Helper text. */
   helperText?: ReactNode | undefined;
-  /** Error text — sets `aria-invalid`. */
+  /** Error text — announced via `aria-describedby`; sets `data-invalid`. */
   error?: ReactNode | undefined;
   /** Visually hide the label. @default false */
   hideLabel?: boolean | undefined;
 
-  /** Sets `aria-required="true"` + `required` on the hidden input. */
+  /** Sets `required` on the hidden input (native validation carries the semantics). */
   required?: boolean | undefined;
   /** Block all interaction. */
   disabled?: boolean | undefined;

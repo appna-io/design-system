@@ -23,7 +23,7 @@ export default function Removable() {
         {tags.length === 0 ? (
           <Typography
             as="button"
-            variant="body3"
+            variant="bodySmall"
             color="muted"
             sx={{ textDecoration: 'underline' }}
             onClick={() => setTags(INITIAL_TAGS)}

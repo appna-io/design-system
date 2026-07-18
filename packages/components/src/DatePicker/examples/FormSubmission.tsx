@@ -19,19 +19,19 @@ export default function FormSubmission() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-sm">
-      <label className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1">
         <Typography as="span" variant="bodySmall" weight="medium">
           Date of birth
         </Typography>
-        <DatePicker name="dob" required onChange={setDob} />
-      </label>
+        <DatePicker name="dob" required onChange={setDob} aria-label="Date of birth" />
+      </div>
 
-      <label className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1">
         <Typography as="span" variant="bodySmall" weight="medium">
           Holiday range
         </Typography>
-        <DateRangePicker name="holiday" onChange={setRange} />
-      </label>
+        <DateRangePicker name="holiday" onChange={setRange} aria-label="Holiday range" />
+      </div>
 
       <button
         type="submit"

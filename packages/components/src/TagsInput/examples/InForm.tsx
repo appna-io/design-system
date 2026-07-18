@@ -13,7 +13,7 @@ export default function InForm() {
       alignItems="flex-start"
       onSubmit={(event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
+        const data = new FormData(event.currentTarget as HTMLFormElement);
         setSubmitted(data.getAll('tags').map(String));
       }}
     >

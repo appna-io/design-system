@@ -108,6 +108,8 @@ export function CalendarMonthGrid(props: CalendarMonthGridProps) {
         )}
       </div>
 
+      {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus -- ARIA grid with roving
+          tabindex: day cells hold focus; the container is never a tab stop by design. */}
       <div
         ref={gridRef}
         className={weeksGridClass}

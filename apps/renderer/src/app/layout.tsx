@@ -7,10 +7,18 @@ import './globals.css';
 import { Chrome } from '../components/chrome/Chrome';
 import { PortalSizeProvider } from '../components/chrome/portal-size-context';
 import { RouteProgress } from '../components/chrome/RouteProgress';
+import { FirebaseAnalytics } from '../components/FirebaseAnalytics';
+import { UnderDevelopmentBanner } from '../components/UnderDevelopmentBanner';
 
 export const metadata: Metadata = {
   title: 'APX DS · Renderer',
   description: 'Local development preview for the apx-ds component library',
+  // AppNA brand mark. Drop the matching files in `apps/renderer/public/`
+  // (see the note in `public/README.md`) and these references light up.
+  icons: {
+    icon: [{ url: '/appna-icon.svg', type: 'image/svg+xml' }, { url: '/favicon.ico' }],
+    apple: '/appna-icon.svg',
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -48,6 +56,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               top bar and the floating template-preview toolbar can both flip the simulated
               viewport width that `<ChromeShell>` / the template page apply to the content
               column further down the tree. */}
+          <FirebaseAnalytics />
+          <UnderDevelopmentBanner />
           <PortalSizeProvider>
             <Chrome>{children}</Chrome>
           </PortalSizeProvider>

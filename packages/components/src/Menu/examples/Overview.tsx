@@ -1,5 +1,5 @@
 import { Copy, FileEdit, Trash2, User } from 'lucide-react';
-import { Button, Div, Menu } from '@apx-ui/ds';
+import { Button, Menu } from '@apx-ui/ds';
 
 /**
  * Quick-review demo of `<Menu />` — trigger button opens a keyboard-navigable

@@ -29,7 +29,7 @@ export default function FadeVariant() {
     <Div display="flex" flexDirection="column" gap="3" alignItems="flex-start">
       <Typography variant="body">
         Calls <code>splash.fade(...)</code> — the shortcut for{' '}
-        <code>splash.show(&#123; variant: 'fade', ... &#125;)</code>.
+        <code>splash.show(&#123; variant: &apos;fade&apos;, ... &#125;)</code>.
       </Typography>
       <Button
         onClick={() =>

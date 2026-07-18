@@ -32,7 +32,7 @@ export interface TimelineItemData {
   timestamp?: Date | string | null;
   tone?: TimelineTone;
   /** Visual emphasis for the "current" event. Adds a ring + pulse (motion-reduce safe). */
-  active?: boolean;
+  active?: boolean | undefined;
   /** Slotted media (image / embed) rendered below the description. */
   media?: ReactNode;
 }
@@ -75,7 +75,7 @@ export interface TimelineItemProps {
   /** Semantic tone. @default 'neutral' */
   tone?: TimelineTone;
   /** Render with the active ring + pulse emphasis. Adds `aria-current="true"`. */
-  active?: boolean;
+  active?: boolean | undefined;
   /** Slotted timestamp. Pass `null` or omit to hide the timestamp slot. */
   timestamp?: Date | string | null;
   children?: ReactNode;

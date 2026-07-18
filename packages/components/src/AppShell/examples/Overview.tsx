@@ -38,7 +38,7 @@ export default function Overview() {
           </Typography>
         }
       >
-        <Typography as="h2" variant="titleSmall" weight="semibold">
+        <Typography as="h2" variant="h6" weight="semibold">
           Good morning, Alex
         </Typography>
         <Typography variant="bodySmall" color="fg.muted" sx={{ mt: 2 }}>

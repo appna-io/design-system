@@ -10,7 +10,7 @@ export default function Controlled() {
         open={open}
         onOpenChange={setOpen}
       >
-        <Button variant="soft">Trigger (controlled)</Button>
+        <Button variant="outline">Trigger (controlled)</Button>
       </Tooltip>
       <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
         Open

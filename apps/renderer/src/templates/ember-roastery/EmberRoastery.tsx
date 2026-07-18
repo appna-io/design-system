@@ -4,18 +4,18 @@ import { Div } from '@apx-ui/ds';
 
 import { Inspectable } from '../../components/templates/inspector';
 
-import { CtaBand } from './sections/CtaBand';
-import { FeatureGrid } from './sections/FeatureGrid';
+import { BeanOrigins } from './sections/BeanOrigins';
+import { BrewMethods } from './sections/BrewMethods';
 import { Hero } from './sections/Hero';
-import { LogoCloud } from './sections/LogoCloud';
+import { MenuShowcase } from './sections/MenuShowcase';
 import { MetricsBand } from './sections/MetricsBand';
-import { Pricing } from './sections/Pricing';
+import { Reviews } from './sections/Reviews';
 import { SiteFooter } from './sections/SiteFooter';
 import { SiteHeader } from './sections/SiteHeader';
-import { Testimonials } from './sections/Testimonials';
+import { VisitCta } from './sections/VisitCta';
 
 /**
- * Orchestrator for the Aurora landing page.
+ * Orchestrator for the Ember Roastery café page.
  *
  * Each section is a top-level file under `./sections/` — kept that way so the
  * inspector can read + highlight one section's source on click without having
@@ -24,7 +24,7 @@ import { Testimonials } from './sections/Testimonials';
  * adding an `<Inspectable>` row below + an entry in `meta.inspectable` in
  * `./index.ts`.
  */
-export function AuroraSaas() {
+export function EmberRoastery() {
   return (
     <Div className="min-h-screen bg-bg text-fg">
       <Inspectable id="site-header" label="Site header">
@@ -36,28 +36,28 @@ export function AuroraSaas() {
           <Hero />
         </Inspectable>
 
-        <Inspectable id="logo-cloud" label="Logo cloud">
-          <LogoCloud />
+        <Inspectable id="menu-showcase" label="Menu showcase">
+          <MenuShowcase />
         </Inspectable>
 
-        <Inspectable id="feature-grid" label="Feature grid">
-          <FeatureGrid />
+        <Inspectable id="bean-origins" label="Bean origins">
+          <BeanOrigins />
+        </Inspectable>
+
+        <Inspectable id="brew-methods" label="Brewing methods">
+          <BrewMethods />
         </Inspectable>
 
         <Inspectable id="metrics-band" label="Metrics band">
           <MetricsBand />
         </Inspectable>
 
-        <Inspectable id="pricing" label="Pricing">
-          <Pricing />
+        <Inspectable id="reviews" label="Reviews">
+          <Reviews />
         </Inspectable>
 
-        <Inspectable id="testimonials" label="Testimonials">
-          <Testimonials />
-        </Inspectable>
-
-        <Inspectable id="cta-band" label="Final CTA">
-          <CtaBand />
+        <Inspectable id="visit-cta" label="Visit the café">
+          <VisitCta />
         </Inspectable>
       </Div>
 

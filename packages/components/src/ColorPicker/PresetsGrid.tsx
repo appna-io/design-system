@@ -98,6 +98,7 @@ export function PresetsGrid({ presets, onPick }: PresetsGridProps) {
   );
 
   return (
+    // eslint-disable-next-line jsx-a11y/interactive-supports-focus -- composite listbox with roving tabindex: the option buttons hold focus; arrow-key nav bubbles to this container.
     <div
       ref={containerRef}
       role="listbox"

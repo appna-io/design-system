@@ -24,7 +24,7 @@ export default function MultiCreatable() {
 
   return (
     <Div className="max-w-sm">
-      <MultiCombobox<Tag>
+      <MultiCombobox
         aria-label="Tags"
         placeholder="Type a tag and press Enter…"
         options={options}

@@ -191,6 +191,9 @@ export const SplashSurface = forwardRef<HTMLDivElement, SplashSurfaceProps>(func
   }
 
   return (
+    /* eslint-disable jsx-a11y/no-static-element-interactions, jsx-a11y/no-noninteractive-tabindex --
+       dismiss-on-click overlay: click/Escape/Enter all dismiss (handleKeyDown); a button role would
+       misannounce a full-screen branding surface. */
     <div
       ref={ref}
       data-variant={variant}
@@ -203,6 +206,7 @@ export const SplashSurface = forwardRef<HTMLDivElement, SplashSurfaceProps>(func
       tabIndex={closeOnClick ? 0 : undefined}
       {...ariaAttrs}
     >
+      {/* eslint-enable jsx-a11y/no-static-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
       <VariantDecorations variant={variant} color={color} gradient={gradient} />
 
       <div className={stackClass}>

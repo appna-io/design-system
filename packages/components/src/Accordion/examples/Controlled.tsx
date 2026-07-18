@@ -11,13 +11,13 @@ export default function Controlled() {
         <Typography as="span" variant="bodySmall" color="fg.muted">
           Open from outside:
         </Typography>
-        <Button size="sm" variant="soft" onClick={() => setOpen('one')}>
+        <Button size="sm" variant="outline" onClick={() => setOpen('one')}>
           Open #1
         </Button>
-        <Button size="sm" variant="soft" onClick={() => setOpen('two')}>
+        <Button size="sm" variant="outline" onClick={() => setOpen('two')}>
           Open #2
         </Button>
-        <Button size="sm" variant="soft" onClick={() => setOpen('three')}>
+        <Button size="sm" variant="outline" onClick={() => setOpen('three')}>
           Open #3
         </Button>
         <Button size="sm" variant="outline" onClick={() => setOpen('')}>

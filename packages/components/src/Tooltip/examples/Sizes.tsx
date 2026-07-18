@@ -12,7 +12,7 @@ export default function Sizes() {
           size={size}
           openDelay={150}
         >
-          <Button variant="soft" size={size}>
+          <Button variant="outline" size={size}>
             {size}
           </Button>
         </Tooltip>

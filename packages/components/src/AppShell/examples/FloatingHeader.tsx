@@ -21,7 +21,7 @@ export default function FloatingHeader() {
           </Stack>
         }
       >
-        <Typography as="h2" variant="titleSmall" weight="semibold">
+        <Typography as="h2" variant="h6" weight="semibold">
           Marketing-style layout
         </Typography>
         <Typography variant="bodySmall" color="fg.muted" sx={{ mt: 2 }}>

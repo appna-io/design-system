@@ -4,7 +4,7 @@ export default function ServerErrors() {
   return (
     <Form
       initialValues={{ email: 'ada@example.com', code: '' }}
-      onSubmit={async (values, helpers) => {
+      onSubmit={async (_values, helpers) => {
         await new Promise((r) => setTimeout(r, 300));
         // Pretend the server rejected the code.
         helpers.setErrors({

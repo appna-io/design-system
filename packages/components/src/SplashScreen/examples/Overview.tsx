@@ -69,7 +69,7 @@ export default function Overview() {
 
       <Typography variant="caption" color="fg.muted">
         Tip: the variant shortcut <code>splash.pulse(&#123; ... &#125;)</code> is equivalent
-        to <code>splash.show(&#123; variant: 'pulse', ... &#125;)</code>.
+        to <code>splash.show(&#123; variant: &apos;pulse&apos;, ... &#125;)</code>.
       </Typography>
     </Div>
   );

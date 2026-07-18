@@ -9,11 +9,11 @@ export default function Controlled() {
   return (
     <Div display="flex" flexDirection="column" gap="2">
       <Div display="flex" alignItems="center" gap="3">
-        <Menu open={open} onOpenChange={setOpen}>
+        <Menu open={open} onOpenChange={setOpen} closeOnSelect={false}>
           <Menu.Trigger asChild>
             <Button>{open ? 'Close menu' : 'Open menu'}</Button>
           </Menu.Trigger>
-          <Menu.Content closeOnSelect={false}>
+          <Menu.Content>
             <Menu.Item onSelect={() => setCount((c) => c + 1)}>Increment (stays open)</Menu.Item>
             <Menu.Item onSelect={() => setCount(0)}>Reset</Menu.Item>
           </Menu.Content>

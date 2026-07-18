@@ -1,7 +1,7 @@
-import { Sparkles } from 'lucide-react';
+import { Coffee } from 'lucide-react';
 import { Div, Typography } from '@apx-ui/ds';
 
-import { footerLinks, productMeta } from '../data';
+import { cafeMeta, footerLinks } from '../data';
 
 export function SiteFooter() {
   return (
@@ -15,19 +15,15 @@ export function SiteFooter() {
                 aria-hidden
                 className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-contrast"
               >
-                <Sparkles size={16} />
+                <Coffee size={16} />
               </Div>
               <Typography as="span" variant="body" weight="semibold">
-                {productMeta.brand}
+                {cafeMeta.brand}
               </Typography>
             </Div>
-            <Typography
-              variant="bodySmall"
-              color="fg.muted"
-              className="mt-4 max-w-xs"
-            >
-              The composable workspace for software teams that care about how their product
-              feels.
+            <Typography variant="bodySmall" color="fg.muted" className="mt-4 max-w-xs">
+              A neighbourhood roastery for people who like to look at their coffee as much as they
+              like to drink it.
             </Typography>
           </Div>
 
@@ -48,7 +44,7 @@ export function SiteFooter() {
                   <Div as="li" key={link}>
                     <Typography
                       actLike="a"
-                      href={`#${link.toLowerCase()}`}
+                      href={`#${link.toLowerCase().replace(/\s+/g, '-')}`}
                       variant="bodySmall"
                       color="fg.muted"
                       className="transition hover:text-fg"
@@ -64,35 +60,29 @@ export function SiteFooter() {
 
         <Div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-border pt-6 sm:flex-row sm:items-center">
           <Typography variant="caption" color="fg.muted">
-            © 2026 {productMeta.brand}, Inc. All rights reserved.
+            © 2026 {cafeMeta.brand} Roastery. All rights reserved.
           </Typography>
           <Div className="flex items-center gap-3">
-            <Typography as="span" variant="caption" color="fg.muted">
-              v4.2.0
+            <Typography
+              actLike="a"
+              href="#visit"
+              variant="caption"
+              color="fg.muted"
+              className="hover:text-fg"
+            >
+              Visit us
             </Typography>
             <Typography as="span" variant="caption" color="fg.muted" aria-hidden>
               ·
             </Typography>
             <Typography
               actLike="a"
-              href="#status"
+              href="#menu"
               variant="caption"
               color="fg.muted"
               className="hover:text-fg"
             >
-              System status
-            </Typography>
-            <Typography as="span" variant="caption" color="fg.muted" aria-hidden>
-              ·
-            </Typography>
-            <Typography
-              actLike="a"
-              href="#changelog"
-              variant="caption"
-              color="fg.muted"
-              className="hover:text-fg"
-            >
-              Changelog
+              Menu
             </Typography>
           </Div>
         </Div>

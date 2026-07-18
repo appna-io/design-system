@@ -19,7 +19,7 @@ export default function PortalContainer() {
         className="relative isolate min-h-[80px] rounded-md border border-border-default p-4"
       >
         <Tooltip content="I'm portaled into the bordered host" portalContainer={containerRef.current}>
-          <Button variant="soft">Hover</Button>
+          <Button variant="outline">Hover</Button>
         </Tooltip>
       </Div>
     </Div>

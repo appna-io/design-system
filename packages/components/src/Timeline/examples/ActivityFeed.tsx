@@ -1,4 +1,4 @@
-import { Avatar, Div, Timeline, Typography } from '@apx-ui/ds';
+import { Avatar, Timeline, Typography } from '@apx-ui/ds';
 
 const hour = 3_600_000;
 const now = Date.now();

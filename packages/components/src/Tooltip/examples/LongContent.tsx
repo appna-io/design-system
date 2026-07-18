@@ -7,13 +7,13 @@ export default function LongContent() {
         content="This tooltip wraps over multiple lines once the content exceeds the size's max-width clamp. The clamp is `max-w-sm` for the default `md` size."
         size="md"
       >
-        <Button variant="soft">Hover for long hint</Button>
+        <Button variant="outline">Hover for long hint</Button>
       </Tooltip>
       <Tooltip
         content="Short tip"
         size="md"
       >
-        <Button variant="soft">Short hint</Button>
+        <Button variant="outline">Short hint</Button>
       </Tooltip>
     </Div>
   );

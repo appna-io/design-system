@@ -1,7 +1,7 @@
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Coffee } from 'lucide-react';
 import { Button, Div, Typography } from '@apx-ui/ds';
 
-import { navLinks, productMeta } from '../data';
+import { cafeMeta, navLinks } from '../data';
 
 export function SiteHeader() {
   return (
@@ -20,10 +20,10 @@ export function SiteHeader() {
             aria-hidden
             className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-contrast"
           >
-            <Sparkles size={16} />
+            <Coffee size={16} />
           </Div>
           <Typography as="span" variant="body" weight="semibold">
-            {productMeta.brand}
+            {cafeMeta.brand}
           </Typography>
         </Div>
 
@@ -45,10 +45,10 @@ export function SiteHeader() {
 
         <Div className="flex items-center gap-2">
           <Button variant="ghost" size="sm">
-            Sign in
+            Order ahead
           </Button>
           <Button size="sm" rightIcon={<ArrowRight size={14} />}>
-            Get started
+            See the menu
           </Button>
         </Div>
       </Div>

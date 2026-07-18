@@ -1,4 +1,4 @@
-import { Button, Div, Popover, Typography } from '@apx-ui/ds';
+import { Button, Popover, Typography } from '@apx-ui/ds';
 
 export default function Basic() {
   return (

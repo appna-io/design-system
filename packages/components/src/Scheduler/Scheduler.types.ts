@@ -157,20 +157,20 @@ export interface SchedulerEvent {
   title: string;
   start: Date;
   end: Date;
-  allDay?: boolean;
-  calendarId?: string;
-  resourceId?: string | null;
-  color?: SchedulerColor | string;
-  description?: string;
-  location?: string;
-  attendees?: Attendee[];
-  status?: 'confirmed' | 'tentative' | 'cancelled';
-  visibility?: 'default' | 'public' | 'private';
-  recurrence?: RecurrenceRule;
-  reminders?: Reminder[];
+  allDay?: boolean | undefined;
+  calendarId?: string | undefined;
+  resourceId?: string | null | undefined;
+  color?: SchedulerColor | string | undefined;
+  description?: string | undefined;
+  location?: string | undefined;
+  attendees?: Attendee[] | undefined;
+  status?: 'confirmed' | 'tentative' | 'cancelled' | undefined;
+  visibility?: 'default' | 'public' | 'private' | undefined;
+  recurrence?: RecurrenceRule | undefined;
+  reminders?: Reminder[] | undefined;
   /** Per-event override of the global `readOnly` / `editable` predicate. */
-  editable?: boolean;
-  meta?: Record<string, unknown>;
+  editable?: boolean | undefined;
+  meta?: Record<string, unknown> | undefined;
 }
 
 /**

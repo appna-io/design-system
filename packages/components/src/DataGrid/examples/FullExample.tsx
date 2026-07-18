@@ -68,6 +68,7 @@ const statusColor: Record<Account['status'], 'success' | 'warning' | 'danger'> =
 export default function FullExample() {
   const [accounts, setAccounts] = useState<Account[]>(() => build());
   const [selected, setSelected] = useState<DataGridSelectionIds>(new Set());
+  const selectedCount = selected instanceof Set ? selected.size : selected != null ? 1 : 0;
   const [loading, setLoading] = useState(false);
 
   const columns: DataGridColumnDef<Account>[] = useMemo(
@@ -248,11 +249,10 @@ export default function FullExample() {
         storage="local"
         storageKey="datagrid-full-example"
         exportable
-        exportFilename="accounts"
         scrollerStyle={{ maxHeight: 560 }}
       >
         <Button color="danger" size="sm">
-          Delete {selected.size}
+          Delete {selectedCount}
         </Button>
         <Button size="sm">Bulk email</Button>
       </DataGrid>

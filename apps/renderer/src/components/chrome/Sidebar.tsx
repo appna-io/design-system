@@ -187,7 +187,21 @@ export function Sidebar({ components }: SidebarProps) {
                 opacity: 0.55,
               }}
             />
-            <Sparkles size={16} className="relative text-primary-contrast mix-blend-difference" />
+            {/* AppNA brand mark. Drop `appna-icon.svg` in `apps/renderer/public/`
+                (see `public/README.md`); the `onError` falls back to the Sparkles
+                glyph so the chrome never shows a broken-image icon if it's absent. */}
+            <img
+              src="/appna-icon.svg"
+              alt=""
+              className="relative h-5 w-5 object-contain"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling?.removeAttribute('hidden');
+              }}
+            />
+            <span hidden className="relative grid place-items-center">
+              <Sparkles size={16} className="text-primary-contrast mix-blend-difference" />
+            </span>
           </span>
           <span className="min-w-0 flex-1">
             <span className="flex items-center gap-1.5">
