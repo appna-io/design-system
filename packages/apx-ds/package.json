@@ -1,6 +1,6 @@
 {
   "name": "@apx-ui/ds",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Themable, RTL-ready, fully overridable React component library",
   "license": "MIT",
   "publishConfig": {
