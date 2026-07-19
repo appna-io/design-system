@@ -65,7 +65,12 @@ jobs:
       # publishConfig.registry on each package routes the publish to npmjs, which
       # matches this host-scoped token line.
       - name: Authenticate to npm
-        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
+        run: |
+          if [ -z "${NPM_TOKEN}" ]; then
+            echo "::error::NPM_TOKEN is empty. Add it as a repository secret (Settings → Secrets and variables → Actions → Secrets tab), named NPM_TOKEN — not a Variable, not an Environment/Org secret."
+            exit 1
+          fi
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
