@@ -28,7 +28,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Enable Corepack
         run: corepack enable pnpm
@@ -61,9 +60,19 @@ jobs:
           git commit -m "chore: release v${{ steps.version.outputs.version }} [skip ci]"
           git push
 
-      - name: Publish to npm
+      # Write the token to the user-level .npmrc (~/.npmrc, outside the repo) and
+      # AFTER the version-bump commit, so `git add` can never capture the secret.
+      # publishConfig.registry on each package routes the publish to npmjs, which
+      # matches this host-scoped token line.
+      - name: Authenticate to npm
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Verify npm auth
+        run: npm whoami --registry=https://registry.npmjs.org/
+
+      - name: Publish to npm
         run: pnpm --filter './packages/*' publish --access public --no-git-checks
 
       - name: Create Git tag
