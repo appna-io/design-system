@@ -70,7 +70,7 @@ strings pass through untouched, so consumers always retain a per-prop CSS escape
 | `weight` / `fontWeight` | `normal` `medium` `semibold` `bold`                          | `--sds-font-weight-{key}`                    |
 | `lineHeight`    | `none` `tight` `snug` `normal` `relaxed`                              | `--sds-line-height-{key}`                    |
 | `letterSpacing` | `tight` `normal` `wide` `wider`                                       | `--sds-letter-spacing-{key}`                 |
-| `fontFamily`    | `sans` `mono`                                                         | `--sds-font-sans` / `--sds-font-mono`        |
+| `fontFamily`    | `sans` `mono` `display`                                               | `--sds-font-sans` / `--sds-font-mono` / `--sds-font-display` |
 
 `weight` and `fontWeight` are interchangeable; `weight` wins if both are supplied.
 
@@ -142,9 +142,34 @@ through `text-align` which respects the document direction. For directional padd
 ## Theming
 
 All five type-specific CSS vars (`--sds-font-size-*`, `--sds-font-weight-*`, `--sds-line-height-*`,
-`--sds-letter-spacing-*`, `--sds-font-sans` / `--sds-font-mono`) are emitted by `themeToCssVars`
-from the typography token shape. Override them per-variant or per-theme via the existing
-theme overrides — no Typography-side change is needed.
+`--sds-letter-spacing-*`, `--sds-font-sans` / `--sds-font-mono` / `--sds-font-display`) are emitted
+by `themeToCssVars` from the typography token shape. Override them per-variant or per-theme via the
+existing theme overrides — no Typography-side change is needed.
+
+### The display face
+
+`display` and `h1`–`h6` render in `--sds-font-display`; body and supporting variants render in
+`--sds-font-sans`; `code` renders in `--sds-font-mono`. So a brand that pairs a serif display face
+with a sans body face sets **one token** and the whole heading hierarchy follows:
+
+```ts
+defineTheme({
+  typography: {
+    fontFamily: {
+      display: '"Playfair Display", Georgia, serif',
+      sans: '"Source Sans 3", ui-sans-serif, system-ui, sans-serif',
+    },
+  },
+});
+```
+
+`typography.fontFamily.display` is **optional and unset by default**. Every reference to it carries
+a fallback — `var(--sds-font-display, var(--sds-font-sans))` — so a theme that never sets it renders
+headings in the body face, exactly as it did before the slot existed. Leaving it unset (rather than
+defaulting it to a copy of the sans stack) is deliberate: it means headings track `--sds-font-sans`
+wherever the cascade changes it, including the `default` variant's Apple platform overlay.
+
+Note the DS ships no webfonts — always pass a complete stack with real system fallbacks.
 
 ## Bundle
 
@@ -164,3 +189,5 @@ three shortcut maps (align / transform / decoration). Per-instance bundle cost i
   with `as="span"` to keep the outer document outline correct.
 - **Don't** override `fontFamily` per-instance unless you really need to — let the theme set
   the family globally and reach for the prop only at exceptional surfaces.
+- **Don't** hand-set `fontFamily="display"` on every heading. The heading variants already do it;
+  the prop is for the exceptions (a display face on a price, a stat, a step number).

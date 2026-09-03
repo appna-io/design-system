@@ -2,7 +2,7 @@ import { AppShell, Div, HStack, Stack, Typography } from '@apx-ui/ds';
 
 export default function BasicLayout() {
   return (
-    <Div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div className="h-[420px] overflow-hidden rounded-md border border-border-subtle">
       <AppShell
         header={
           <HStack gap={3} className="w-full">
@@ -14,10 +14,10 @@ export default function BasicLayout() {
         }
         sidebar={
           <Stack gap={1} className="p-3">
-            <a href="#home" className="px-2 py-1 rounded hover:bg-(--sds-color-surface-subtle)">Home</a>
-            <a href="#projects" className="px-2 py-1 rounded hover:bg-(--sds-color-surface-subtle)">Projects</a>
-            <a href="#reports" className="px-2 py-1 rounded hover:bg-(--sds-color-surface-subtle)">Reports</a>
-            <a href="#settings" className="px-2 py-1 rounded hover:bg-(--sds-color-surface-subtle)">Settings</a>
+            <a href="#home" className="px-2 py-1 rounded hover:bg-bg-subtle">Home</a>
+            <a href="#projects" className="px-2 py-1 rounded hover:bg-bg-subtle">Projects</a>
+            <a href="#reports" className="px-2 py-1 rounded hover:bg-bg-subtle">Reports</a>
+            <a href="#settings" className="px-2 py-1 rounded hover:bg-bg-subtle">Settings</a>
           </Stack>
         }
         footer={

@@ -1,6 +1,6 @@
 'use client';
 
-import { mergeRefs, Portal, useFocusTrap } from '@apx-ui/engine';
+import { mergeRefs, Portal, useDirection, useFocusTrap } from '@apx-ui/engine';
 import { useThemedClasses } from '@apx-ui/theme';
 import { AnimatePresence, motion } from 'motion/react';
 import {
@@ -21,10 +21,11 @@ import {
   drawerBackdropRecipe,
   drawerContentRecipe,
 } from './Drawer.recipe';
+import { resolveResponsiveDrawerSide } from './Drawer.side';
 import { useDrawerContext } from './DrawerContext';
 import type {
   DrawerContentProps,
-  DrawerSide,
+  DrawerPhysicalSide,
 } from './Drawer.types';
 
 /**
@@ -35,6 +36,10 @@ import type {
  *    Content anchors at the requested edge (left → flush left; right → flush right; etc.).
  *  - **Slide motion** — `drawerContentMotion(side)` translates Content fully off the anchored
  *    edge in the hidden state (`xPercent: -100` for left, `+100` for right, etc.).
+ *
+ * `side` may be logical (`start` / `end`). This is the one place that knows about it: the prop is
+ * resolved against the ambient direction here, and only the resulting physical edge reaches the
+ * recipes, the motion config, and `data-side`.
  *
  * Other engine wiring (Portal, AnimatePresence, FocusTrap, scroll-lock via root, escape-stack via
  * root, backdrop sentinel) is identical to Modal.
@@ -57,12 +62,17 @@ function DrawerContentImpl(
 
   const ctx = useDrawerContext('Drawer.Content');
 
-  // Resolve `side` to a primitive — `useThemedClasses` still resolves the responsive value for
+  // Resolve the logical sides (`start` / `end`) against the ambient direction FIRST, so
+  // everything downstream — recipes, motion, `data-side` — only ever sees a physical edge.
+  const dir = useDirection();
+  const physicalSideProp = resolveResponsiveDrawerSide(sideProp, dir);
+
+  // Then collapse to a primitive — `useThemedClasses` still resolves the responsive value for
   // the recipe, but motion + the backdrop click sentinel both need a single primitive value.
   // jsdom + responsive value composition gives us a string at this point in 99% of cases; the
   // fallback is `'left'` (the recipe's default).
-  const side: DrawerSide =
-    typeof sideProp === 'string' ? (sideProp as DrawerSide) : 'left';
+  const side: DrawerPhysicalSide =
+    typeof physicalSideProp === 'string' ? physicalSideProp : 'left';
 
   const localContentRef = useRef<HTMLDivElement | null>(null);
 
@@ -89,7 +99,7 @@ function DrawerContentImpl(
     slot: 'backdrop',
     props: {
       overlay,
-      side: sideProp,
+      side: physicalSideProp,
     },
   });
 
@@ -98,7 +108,7 @@ function DrawerContentImpl(
     componentName: 'Drawer',
     slot: 'content',
     props: {
-      side: sideProp,
+      side: physicalSideProp,
       size,
       className,
       sx,

@@ -31,7 +31,7 @@ export default function CustomRender() {
               </Badge>
             ) : null}
             {node.meta?.active ? (
-              <Typography as="span" variant="caption" color="success.emphasis" className="ml-auto">
+              <Typography as="span" variant="caption" color="success.main" className="ml-auto">
                 live
               </Typography>
             ) : null}

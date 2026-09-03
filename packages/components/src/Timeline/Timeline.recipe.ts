@@ -123,7 +123,7 @@ export const timelineDotRecipe = cv({
  * Connector line. Renders as a real `<span aria-hidden>` rather than a pseudo-element so the
  * Tailwind JIT scanner picks up every utility. Vertical orientation paints a 1px wide rail
  * between the dot bottom and the next item's dot top; horizontal paints a 1px tall rail.
- * The last item hides its connector via `[&:last-child_[data-timeline-connector]]:hidden` on
+ * The last item hides its connector via `[&>li:last-child>[data-timeline-connector]]:hidden` on
  * the parent's recipe pass.
  */
 export const timelineConnectorRecipe = cv({

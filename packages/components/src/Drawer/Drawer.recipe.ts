@@ -10,6 +10,10 @@ import { cv } from '@apx-ui/engine';
  *    axis flips between width (horizontal sides) and height (vertical sides). The plan called
  *    this out explicitly — it's the price of physical sides + a single `size` axis.
  *
+ * The `side` variant is deliberately physical-only. `DrawerContent` resolves the logical
+ * `start` / `end` against the ambient direction before calling `useThemedClasses`, so RTL costs
+ * nothing here — no extra variant keys, no doubling of the compound matrix.
+ *
  * Header / Body / Footer / Close are visually identical to Modal — same border story, same
  * size-driven padding. They could in principle share a `padBySize()` helper with Modal, but
  * we're at exactly two consumers and the helper would obscure the recipe's intent. The next

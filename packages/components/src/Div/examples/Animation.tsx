@@ -21,7 +21,7 @@ export default function Animation() {
           key={`fade-${tick}`}
           animation="fadeIn"
           p={4}
-          bg="primary.50"
+          bg="primary.subtle"
           radius="md"
           fg="primary.contrast"
         >
@@ -31,7 +31,7 @@ export default function Animation() {
           key={`scale-${tick}`}
           animation="scaleIn"
           p={4}
-          bg="success.50"
+          bg="success.subtle"
           radius="md"
           fg="success.contrast"
         >
@@ -41,7 +41,7 @@ export default function Animation() {
           key={`slide-bottom-${tick}`}
           animation="slideInFromBottom"
           p={4}
-          bg="info.50"
+          bg="info.subtle"
           radius="md"
           fg="info.contrast"
         >
@@ -51,7 +51,7 @@ export default function Animation() {
           key={`slide-top-${tick}`}
           animation="slideInFromTop"
           p={4}
-          bg="warning.50"
+          bg="warning.subtle"
           radius="md"
           fg="warning.contrast"
         >

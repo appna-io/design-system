@@ -11,7 +11,7 @@ export default function BasicFlat() {
   return (
     <Div
       height={420}
-      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+      className="overflow-hidden rounded-md border border-border-subtle"
     >
       <Sidebar ariaLabel="Basic flat navigation" variant="bordered" width={220} activeHref="/inbox">
         <Sidebar.Item href="/" icon={<HomeIcon />}>

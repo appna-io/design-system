@@ -18,7 +18,7 @@ import {
  */
 export default function MegaMenu() {
   return (
-    <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+    <Div className="flex justify-center rounded-md border border-border-subtle bg-bg-paper p-3">
       <NavigationMenu>
         <NavigationMenu.Item>
           <NavigationMenu.Trigger>Solutions</NavigationMenu.Trigger>

@@ -81,6 +81,15 @@ describe('resolveTypographyToken — known tokens resolve to var(--sds-...)', ()
   it('fontFamily="mono" resolves to var(--sds-font-mono)', () => {
     expect(resolveTypographyToken('fontFamily', 'mono')).toBe('var(--sds-font-mono)');
   });
+
+  it('fontFamily="display" resolves with a sans fallback baked in', () => {
+    // The display slot is optional on the theme, so a bare `var(--sds-font-display)` would be
+    // invalid-at-computed-value-time for any theme that never set it. The nested fallback makes
+    // "unset" mean "use the body face" rather than "undefined behavior".
+    expect(resolveTypographyToken('fontFamily', 'display')).toBe(
+      'var(--sds-font-display, var(--sds-font-sans))',
+    );
+  });
 });
 
 describe('resolveTypographyToken — unknown strings pass through (raw CSS escape hatch)', () => {
@@ -124,8 +133,9 @@ describe('Token table surface', () => {
     expect(TYPOGRAPHY_VAR_PREFIX.letterSpacing).toBe('--sds-letter-spacing');
   });
 
-  it('FONT_FAMILY_VARS exposes the 2 fontFamily token names', () => {
+  it('FONT_FAMILY_VARS exposes the 3 fontFamily token names', () => {
     expect(FONT_FAMILY_VARS.sans).toBe('--sds-font-sans');
     expect(FONT_FAMILY_VARS.mono).toBe('--sds-font-mono');
+    expect(FONT_FAMILY_VARS.display).toBe('--sds-font-display, var(--sds-font-sans)');
   });
 });

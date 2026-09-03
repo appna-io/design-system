@@ -7,15 +7,22 @@ import { cv } from '@apx-ui/engine';
  *
  * The `collapsed` axis triggers two structural changes: items center-align (icon-only rail) and
  * the root tightens its horizontal padding so the icons stay centered without ugly indentation.
+ *
+ * **Color tokens** use the shipped Tailwind preset utilities (`bg-bg-paper`, `bg-bg-subtle`,
+ * `text-fg`, `border-border-subtle`, …), which resolve to `--sds-palette-*` and so re-tint with
+ * the active theme. These were previously written as `bg-(--sds-color-surface-default)` — a
+ * pre-preset naming *and* Tailwind v4 syntax, which on Tailwind 3 compiled to nothing at all, so
+ * the component shipped with no surface or border colors. Same migration Rating / TagsInput /
+ * EmptyState already went through.
  */
 export const sidebarRecipe = cv({
-  base: 'flex flex-col gap-1 h-full min-h-0 w-full overflow-y-auto bg-(--sds-color-surface-default) text-(--sds-color-text-default)',
+  base: 'flex flex-col gap-1 h-full min-h-0 w-full overflow-y-auto bg-bg-paper text-fg',
   variants: {
     variant: {
       default: '',
-      bordered: 'border-(--sds-color-border-subtle)',
+      bordered: 'border-border-subtle',
       floating:
-        'm-3 rounded-xl border border-(--sds-color-border-subtle) bg-(--sds-color-surface-raised) shadow-md',
+        'm-3 rounded-xl border border-border-subtle bg-bg-paper shadow-md',
       ghost: 'bg-transparent',
     },
     position: {
@@ -56,12 +63,12 @@ export const sidebarRecipe = cv({
  *   - `collapsed` flips justification + tightens horizontal padding so icon stays centered.
  */
 export const sidebarItemRecipe = cv({
-  base: 'group/sidebar-item relative inline-flex items-center gap-2 w-full rounded-md text-(--sds-color-text-default) no-underline outline-none transition-colors focus-visible:ring-2 focus-visible:ring-(--sds-color-border-default) [&_svg]:shrink-0',
+  base: 'group/sidebar-item relative inline-flex items-center gap-2 w-full rounded-md text-fg no-underline outline-none transition-colors focus-visible:ring-2 focus-visible:ring-border [&_svg]:shrink-0',
   variants: {
     variant: {
-      default: 'hover:bg-(--sds-color-surface-subtle)',
-      ghost: 'hover:bg-(--sds-color-surface-subtle)/60',
-      primary: 'hover:bg-(--sds-color-surface-subtle)',
+      default: 'hover:bg-bg-subtle',
+      ghost: 'hover:bg-bg-subtle/60',
+      primary: 'hover:bg-bg-subtle',
     },
     size: {
       sm: 'px-2 py-1 text-xs [&_svg]:h-3.5 [&_svg]:w-3.5',
@@ -70,7 +77,7 @@ export const sidebarItemRecipe = cv({
     },
     state: {
       active:
-        'bg-(--sds-color-surface-subtle) text-(--sds-color-text-default) font-medium',
+        'bg-bg-subtle text-fg font-medium',
       inactive: '',
     },
     collapsed: {
@@ -97,14 +104,14 @@ export const sidebarItemRecipe = cv({
  * an accessible name but no visual real estate is wasted.
  */
 export const sidebarSectionLabelRecipe = cv({
-  base: 'inline-flex w-full items-center justify-between gap-1 px-2 py-1 text-xs font-semibold uppercase tracking-wide text-(--sds-color-text-muted)',
+  base: 'inline-flex w-full items-center justify-between gap-1 px-2 py-1 text-xs font-semibold uppercase tracking-wide text-fg-muted',
   variants: {
     collapsed: {
       true: 'sr-only',
       false: '',
     },
     collapsible: {
-      true: 'cursor-pointer select-none rounded-md hover:bg-(--sds-color-surface-subtle) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--sds-color-border-default)',
+      true: 'cursor-pointer select-none rounded-md hover:bg-bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border',
       false: '',
     },
   },
@@ -149,7 +156,7 @@ export const sidebarHeaderRecipe = cv({
 });
 
 export const sidebarFooterRecipe = cv({
-  base: 'flex w-full items-center gap-2 px-2 py-2 mt-auto border-t border-(--sds-color-border-subtle)/40',
+  base: 'flex w-full items-center gap-2 px-2 py-2 mt-auto border-t border-border-subtle/40',
   variants: {
     collapsed: {
       true: 'justify-center px-1',

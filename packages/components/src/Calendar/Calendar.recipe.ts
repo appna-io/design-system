@@ -134,7 +134,7 @@ export const calendarDayRecipe = cv({
       false: 'text-fg-default',
     },
     isSelected: {
-      true: 'bg-primary text-fg-onPrimary hover:bg-primary-emphasis',
+      true: 'bg-primary text-primary-contrast hover:bg-primary-hover',
       false: 'hover:bg-bg-subtle',
     },
     isToday: {

@@ -828,7 +828,7 @@ function TreeNodeView({ node, level, posInSet, setSize }: TreeNodeViewProps): Re
               <button
                 type="button"
                 data-tree-stop-row-click=""
-                className="rounded-sm bg-bg-subtle px-1.5 py-0.5 text-xs hover:bg-bg-emphasis/30"
+                className="rounded-sm bg-bg-subtle px-1.5 py-0.5 text-xs hover:bg-neutral-subtle/30"
                 onClick={(event) => {
                   event.stopPropagation();
                   ctx.loadChildrenIfNeeded(node);

@@ -5,6 +5,13 @@ import { cv } from '@apx-ui/engine';
  * default, vertical when consumers pass `orientation="vertical"`. We deliberately
  * keep the root's chrome minimal (no border / no background) because the menu
  * almost always lives inside an AppShell header that already paints the chrome.
+ *
+ * **Color tokens** use the shipped Tailwind preset utilities (`bg-bg-paper`, `bg-bg-subtle`,
+ * `text-fg`, `border-border-subtle`, …), which resolve to `--sds-palette-*` and so re-tint with
+ * the active theme. These were previously written as `bg-(--sds-color-surface-default)` — a
+ * pre-preset naming *and* Tailwind v4 syntax, which on Tailwind 3 compiled to nothing at all, so
+ * the component shipped with no surface or border colors. Same migration Rating / TagsInput /
+ * EmptyState already went through.
  */
 export const navMenuRootRecipe = cv({
   base: 'relative isolate flex outline-none',
@@ -55,15 +62,15 @@ export const navMenuItemRecipe = cv({
  *     override via `theme.components.NavigationMenu.styleOverrides.trigger`.
  */
 export const navMenuTriggerRecipe = cv({
-  base: 'group/nav-trigger relative inline-flex items-center gap-1.5 rounded-md font-medium text-(--sds-color-text-default) no-underline outline-none transition-colors focus-visible:ring-2 focus-visible:ring-(--sds-color-border-default) [&_svg]:shrink-0',
+  base: 'group/nav-trigger relative inline-flex items-center gap-1.5 rounded-md font-medium text-fg no-underline outline-none transition-colors focus-visible:ring-2 focus-visible:ring-border [&_svg]:shrink-0',
   variants: {
     variant: {
       default:
-        'hover:bg-(--sds-color-surface-subtle) data-[active=true]:text-(--sds-color-text-default) data-[state=open]:bg-(--sds-color-surface-subtle)',
+        'hover:bg-bg-subtle data-[active=true]:text-fg data-[state=open]:bg-bg-subtle',
       ghost:
-        'hover:bg-(--sds-color-surface-subtle)/60 data-[state=open]:bg-(--sds-color-surface-subtle)/60',
+        'hover:bg-bg-subtle/60 data-[state=open]:bg-bg-subtle/60',
       pill:
-        'hover:bg-(--sds-color-surface-subtle) data-[active=true]:bg-(--sds-color-surface-subtle) data-[state=open]:bg-(--sds-color-surface-subtle)',
+        'hover:bg-bg-subtle data-[active=true]:bg-bg-subtle data-[state=open]:bg-bg-subtle',
     },
     size: {
       sm: 'px-2 py-1 text-xs [&_svg]:h-3.5 [&_svg]:w-3.5',
@@ -71,7 +78,7 @@ export const navMenuTriggerRecipe = cv({
       lg: 'px-4 py-2 text-base [&_svg]:h-5 [&_svg]:w-5',
     },
     state: {
-      active: 'font-semibold text-(--sds-color-text-default)',
+      active: 'font-semibold text-fg',
       inactive: '',
     },
     disabled: {
@@ -112,7 +119,7 @@ export const navMenuChevronRecipe = cv({
  * collapses to a sliver around a single short label.
  */
 export const navMenuContentRecipe = cv({
-  base: 'z-50 rounded-lg border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) text-(--sds-color-text-default) shadow-lg outline-none',
+  base: 'z-50 rounded-lg border border-border-subtle bg-bg-paper text-fg shadow-lg outline-none',
   variants: {
     variant: {
       default: 'min-w-[14rem] p-2',
@@ -154,7 +161,7 @@ export const navMenuGroupRecipe = cv({
 
 /** Group label — small, uppercase, muted. Mirrors Sidebar.Section's label conventions. */
 export const navMenuGroupLabelRecipe = cv({
-  base: 'mb-1 px-2 text-xs font-semibold uppercase tracking-wide text-(--sds-color-text-muted)',
+  base: 'mb-1 px-2 text-xs font-semibold uppercase tracking-wide text-fg-muted',
 });
 
 /**
@@ -162,7 +169,7 @@ export const navMenuGroupLabelRecipe = cv({
  * image, a marketing snippet) — we just provide a soft container.
  */
 export const navMenuFeaturedRecipe = cv({
-  base: 'relative flex flex-col gap-2 rounded-md bg-(--sds-color-surface-subtle)/60 p-4',
+  base: 'relative flex flex-col gap-2 rounded-md bg-bg-subtle/60 p-4',
 });
 
 /**
@@ -171,7 +178,7 @@ export const navMenuFeaturedRecipe = cv({
  * full-width row).
  */
 export const navMenuPanelLinkRecipe = cv({
-  base: 'group/nav-link relative flex items-start gap-3 rounded-md px-2 py-2 text-(--sds-color-text-default) no-underline outline-none transition-colors focus-visible:ring-2 focus-visible:ring-(--sds-color-border-default) hover:bg-(--sds-color-surface-subtle) data-[active=true]:bg-(--sds-color-surface-subtle)',
+  base: 'group/nav-link relative flex items-start gap-3 rounded-md px-2 py-2 text-fg no-underline outline-none transition-colors focus-visible:ring-2 focus-visible:ring-border hover:bg-bg-subtle data-[active=true]:bg-bg-subtle',
   variants: {
     size: {
       sm: 'text-xs [&_svg]:h-3.5 [&_svg]:w-3.5',
@@ -202,11 +209,11 @@ export const navMenuIndicatorRecipe = cv({
   base: 'pointer-events-none absolute transition-[transform,width,height,opacity] duration-200 ease-out motion-reduce:transition-none',
   variants: {
     variant: {
-      underline: 'bottom-0 h-0.5 bg-(--sds-color-text-default)',
-      bar: 'bottom-0 h-1 rounded-t-md bg-(--sds-color-text-default)',
+      underline: 'bottom-0 h-0.5 bg-fg',
+      bar: 'bottom-0 h-1 rounded-t-md bg-fg',
       // The pill sits behind the trigger via a negative z-index + the root's
       // `isolate` rule so the trigger label still renders on top.
-      pill: 'top-0 h-full -z-10 rounded-md bg-(--sds-color-surface-subtle)',
+      pill: 'top-0 h-full -z-10 rounded-md bg-bg-subtle',
     },
     orientation: {
       horizontal: '',

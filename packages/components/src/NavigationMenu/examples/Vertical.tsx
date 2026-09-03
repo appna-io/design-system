@@ -7,7 +7,7 @@ import { Div, NavigationMenu } from '@apx-ui/ds';
  */
 export default function Vertical() {
   return (
-    <Div className="flex justify-start rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+    <Div className="flex justify-start rounded-md border border-border-subtle bg-bg-paper p-3">
       <NavigationMenu orientation="vertical" indicator activeHref="/docs/components">
         <NavigationMenu.Item>
           <NavigationMenu.Link href="/docs/getting-started">Getting started</NavigationMenu.Link>

@@ -12,11 +12,11 @@ export default function ActiveIndicator() {
         <Typography
           variant="caption"
           weight="semibold"
-          className="mb-2 uppercase tracking-wide text-(--sds-color-text-muted)"
+          className="mb-2 uppercase tracking-wide text-fg-muted"
         >
           underline (default)
         </Typography>
-        <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+        <Div className="flex justify-center rounded-md border border-border-subtle bg-bg-paper p-3">
           <NavigationMenu indicator activeHref="/pricing">
             <NavigationMenu.Item>
               <NavigationMenu.Link href="/features">Features</NavigationMenu.Link>
@@ -38,11 +38,11 @@ export default function ActiveIndicator() {
         <Typography
           variant="caption"
           weight="semibold"
-          className="mb-2 uppercase tracking-wide text-(--sds-color-text-muted)"
+          className="mb-2 uppercase tracking-wide text-fg-muted"
         >
           pill
         </Typography>
-        <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+        <Div className="flex justify-center rounded-md border border-border-subtle bg-bg-paper p-3">
           <NavigationMenu indicator indicatorVariant="pill" activeHref="/docs">
             <NavigationMenu.Item>
               <NavigationMenu.Link href="/features">Features</NavigationMenu.Link>
@@ -61,11 +61,11 @@ export default function ActiveIndicator() {
         <Typography
           variant="caption"
           weight="semibold"
-          className="mb-2 uppercase tracking-wide text-(--sds-color-text-muted)"
+          className="mb-2 uppercase tracking-wide text-fg-muted"
         >
           bar
         </Typography>
-        <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+        <Div className="flex justify-center rounded-md border border-border-subtle bg-bg-paper p-3">
           <NavigationMenu indicator indicatorVariant="bar" activeHref="/features">
             <NavigationMenu.Item>
               <NavigationMenu.Link href="/features">Features</NavigationMenu.Link>

@@ -2,7 +2,7 @@ import { AppShell, Div, Typography } from '@apx-ui/ds';
 
 export default function MinimalNoChrome() {
   return (
-    <Div className="h-[320px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div className="h-[320px] overflow-hidden rounded-md border border-border-subtle">
       <AppShell skipToContent={false}>
         <Div className="grid place-items-center h-full">
           <Div className="text-center">

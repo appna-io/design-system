@@ -9,13 +9,31 @@ import type {
 import type { ResponsiveValue, Sx } from '@apx-ui/engine';
 
 /**
- * Edge the Drawer slides in from. Physical (`left` / `right` / `top` / `bottom`) — not logical —
- * because the spatial intuition is what consumers reason about ("a left drawer" = "a panel that
- * slides in from the left edge", regardless of language direction). Border placement inside the
- * recipe still uses logical axes (`border-s` / `border-e`) so the inner edge lands correctly in
- * RTL.
+ * A fixed physical edge. Means the same thing in every direction: `left` is the left of the
+ * viewport whether the document reads LTR or RTL. Border placement inside the recipe still uses
+ * logical axes (`border-s` / `border-e`) so the inner edge lands correctly either way.
  */
-export type DrawerSide = 'left' | 'right' | 'top' | 'bottom';
+export type DrawerPhysicalSide = 'left' | 'right' | 'top' | 'bottom';
+
+/**
+ * A direction-relative edge. `start` is the inline-start edge (left in LTR, right in RTL) and
+ * `end` its opposite — the same grammar as CSS logical properties and as `border-s` / `border-e`
+ * in the recipes. There is no logical vertical pair: the block axis does not flip with `dir`, so
+ * `top` / `bottom` are already direction-correct as physical values.
+ */
+export type DrawerLogicalSide = 'start' | 'end';
+
+/**
+ * Edge the Drawer slides in from.
+ *
+ * Prefer the logical values: a cart pinned to `end` opens on the same side as the basket button
+ * that triggered it in both directions, which is almost always what a consumer means. Reach for a
+ * physical value only when you genuinely mean a fixed edge that must not flip with `dir`.
+ *
+ * `DrawerContent` resolves the logical values against the ambient direction before anything else
+ * sees them, so the recipes, the slide motion, and `data-side` all stay physical.
+ */
+export type DrawerSide = DrawerPhysicalSide | DrawerLogicalSide;
 
 /**
  * Drawer Content size. The axis the size controls depends on `side`:
@@ -87,7 +105,10 @@ export interface DrawerTriggerProps extends Omit<HTMLAttributes<HTMLButtonElemen
 }
 
 export interface DrawerContentProps extends Omit<HTMLAttributes<HTMLDivElement>, 'color'> {
-  /** Edge to anchor / slide from. Default: `'left'`. */
+  /**
+   * Edge to anchor / slide from. Accepts the logical `start` / `end` (resolved against the
+   * ambient direction) or a fixed physical edge. Default: `'left'`.
+   */
   side?: ResponsiveValue<DrawerSide>;
   /** Size scale (max-width on horizontal drawers, max-height on vertical). Default: `'md'`. */
   size?: ResponsiveValue<DrawerSize>;

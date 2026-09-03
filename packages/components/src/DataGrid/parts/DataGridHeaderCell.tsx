@@ -316,7 +316,7 @@ function SortIndicator({
       {stackIndex >= 0 ? (
         <span
           aria-hidden="true"
-          className="bg-bg-emphasis text-fg-default inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] leading-none font-semibold"
+          className="bg-neutral-subtle text-fg-default inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] leading-none font-semibold"
           data-datagrid-sort-index=""
         >
           {stackIndex + 1}

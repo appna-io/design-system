@@ -58,6 +58,7 @@ function partialThemeToVars(partial: Partial<ThemeShape> | ThemeVariantOverrides
     if (t.letterSpacing) flatten(`${TOKEN_PREFIX}-letter-spacing`, t.letterSpacing, out);
     if (t.fontFamily?.sans) out[`${TOKEN_PREFIX}-font-sans`] = t.fontFamily.sans;
     if (t.fontFamily?.mono) out[`${TOKEN_PREFIX}-font-mono`] = t.fontFamily.mono;
+    if (t.fontFamily?.display) out[`${TOKEN_PREFIX}-font-display`] = t.fontFamily.display;
   }
 
   if (p.motion) {
@@ -80,9 +81,19 @@ function varsToBlock(vars: FlatVars): string {
 }
 
 export interface ThemeToCssVarsOptions {
-  /** Selector used for `light` mode rules. Defaults to `:root`. */
+  /**
+   * Selector for the element that carries the theme's `data-mode` / `data-variant` /
+   * `data-platform` attributes. Defaults to `:root`.
+   *
+   * Every other selector in the output is derived from this one, so pointing it at a scope
+   * (`[data-apx-theme-scope='x']`) emits the whole theme — base, dark, variants, platform
+   * overlays — onto that subtree instead of the document. That is what `<ThemeProvider scope>`
+   * passes.
+   */
+  selector?: string;
+  /** Selector used for `light` mode rules. Defaults to `selector`. */
   rootSelector?: string;
-  /** Attribute selector used for dark mode. Defaults to `[data-mode='dark']`. */
+  /** Attribute selector used for dark mode. Defaults to `` `${selector}[data-mode='dark']` ``. */
   darkSelector?: string;
   /**
    * Whether to emit variant-specific overrides keyed on `[data-variant='…']`. Defaults to `true`.
@@ -92,7 +103,8 @@ export interface ThemeToCssVarsOptions {
 }
 
 /**
- * Serialize a `Theme` into a CSS string with up to four layers of rules:
+ * Serialize a `Theme` into a CSS string with up to four layers of rules (shown with the default
+ * `:root` selector; all four follow `options.selector`):
  *
  * 1. `:root { … }` — light palette + scales (radii, shadows, motion, typography, z-index).
  * 2. `:root[data-mode='dark'] { … }` — dark palette overrides.
@@ -100,12 +112,17 @@ export interface ThemeToCssVarsOptions {
  * 4. `:root[data-variant='<name>'][data-platform='<apple|other>'] { … }` — per-platform overlay
  *    (used by the adaptive `default` variant for the Cupertino sub-look on Safari).
  *
+ * All four are derived from a single `selector` so a scoped theme cannot half-escape: emitting
+ * layers 1–2 onto a subtree while 3–4 still targeted `:root` would leak a nested provider's
+ * variant tokens onto the whole document.
+ *
  * The output is deterministic (alphabetically sorted) for snapshot testing.
  */
 export function themeToCssVars(theme: ThemeShape, options: ThemeToCssVarsOptions = {}): string {
   const {
-    rootSelector = ':root',
-    darkSelector = ":root[data-mode='dark']",
+    selector = ':root',
+    rootSelector = selector,
+    darkSelector = `${selector}[data-mode='dark']`,
     emitVariants = true,
   } = options;
 
@@ -134,7 +151,7 @@ export function themeToCssVars(theme: ThemeShape, options: ThemeToCssVarsOptions
 
       const variantVars = partialThemeToVars(variant.tokens);
       if (Object.keys(variantVars).length > 0) {
-        blocks.push(`:root[data-variant='${variantName}'] {\n${varsToBlock(variantVars)}\n}`);
+        blocks.push(`${selector}[data-variant='${variantName}'] {\n${varsToBlock(variantVars)}\n}`);
       }
 
       const overrides = variant.platformOverrides;
@@ -145,7 +162,7 @@ export function themeToCssVars(theme: ThemeShape, options: ThemeToCssVarsOptions
         const platformVars = partialThemeToVars(platformOverride);
         if (Object.keys(platformVars).length === 0) continue;
         blocks.push(
-          `:root[data-variant='${variantName}'][data-platform='${platform}'] {\n${varsToBlock(platformVars)}\n}`,
+          `${selector}[data-variant='${variantName}'][data-platform='${platform}'] {\n${varsToBlock(platformVars)}\n}`,
         );
       }
     }

@@ -1,5 +1,6 @@
 'use client';
 
+import { useDirection } from '@apx-ui/engine';
 import { useCallback, type KeyboardEvent } from 'react';
 
 import { useCalendarContext } from '../CalendarContext';
@@ -37,17 +38,23 @@ export function useCalendarKeyboard() {
     selectDay,
     goToPrevMonth,
     goToNextMonth,
+    goToPrevYear,
+    goToNextYear,
     visibleMonths,
     weekStartsOn,
   } = ctx;
+
+  // Same source of truth every other RTL-aware component uses — honours a scoped
+  // `<DirectionProvider>` / `<ThemeProvider dir>` and falls back to `<html dir>`.
+  const dir = useDirection();
 
   return useCallback(
     (e: KeyboardEvent) => {
       let next: Date | null = null;
       let consumed = false;
+      let jumpedAYear = false;
 
-      const isRtl =
-        typeof document !== 'undefined' && document.documentElement.dir === 'rtl';
+      const isRtl = dir === 'rtl';
       const leftDelta = isRtl ? 1 : -1;
       const rightDelta = isRtl ? -1 : 1;
 
@@ -82,10 +89,12 @@ export function useCalendarKeyboard() {
           break;
         case 'PageUp':
           next = e.shiftKey ? addYears(focusedDay, -1) : addMonths(focusedDay, -1);
+          jumpedAYear = e.shiftKey;
           consumed = true;
           break;
         case 'PageDown':
           next = e.shiftKey ? addYears(focusedDay, 1) : addMonths(focusedDay, 1);
+          jumpedAYear = e.shiftKey;
           consumed = true;
           break;
         case 'Enter':
@@ -105,27 +114,35 @@ export function useCalendarKeyboard() {
 
       setFocusedDay(next);
 
-      /* Keep the focused day in view: if it left the visible window, scroll the month
-       * anchor by ±1 in the appropriate direction. With `numberOfMonths > 1` we need to
-       * check the entire visible range. */
+      /* Keep the focused day in view. The scroll must move by the same unit the key did:
+       * Shift+PageUp/Down jumps a whole year, and stepping the anchor by one month would
+       * leave the focused cell unrendered — the roving tabindex then points at a day that
+       * isn't in the DOM and focus is lost. Every other key moves at most one month. */
+      const [scrollBack, scrollForward] = jumpedAYear
+        ? [goToPrevYear, goToNextYear]
+        : [goToPrevMonth, goToNextMonth];
+
       const firstVisible = visibleMonths[0]!;
       const lastVisible = visibleMonths[visibleMonths.length - 1]!;
       if (next.getTime() < startOfMonth(firstVisible).getTime()) {
-        goToPrevMonth();
+        scrollBack();
       } else if (next.getTime() > endOfMonth(lastVisible).getTime()) {
-        goToNextMonth();
+        scrollForward();
       } else if (!isSameMonth(next, firstVisible) && visibleMonths.length === 1) {
         // Single-month view: shift to the month of `next`.
-        if (next.getTime() < firstVisible.getTime()) goToPrevMonth();
-        else goToNextMonth();
+        if (next.getTime() < firstVisible.getTime()) scrollBack();
+        else scrollForward();
       }
     },
     [
+      dir,
       focusedDay,
       setFocusedDay,
       selectDay,
       goToPrevMonth,
       goToNextMonth,
+      goToPrevYear,
+      goToNextYear,
       visibleMonths,
       weekStartsOn,
     ],

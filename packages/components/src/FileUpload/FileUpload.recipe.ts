@@ -4,13 +4,13 @@ const DROPZONE_FOCUS =
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
 
 const COLOR_DRAG: Record<string, string> = {
-  primary: 'border-primary-solid bg-primary-subtle/40',
-  secondary: 'border-secondary-solid bg-secondary-subtle/40',
-  success: 'border-success-solid bg-success-subtle/40',
-  warning: 'border-warning-solid bg-warning-subtle/40',
-  danger: 'border-danger-solid bg-danger-subtle/40',
-  info: 'border-info-solid bg-info-subtle/40',
-  neutral: 'border-neutral-solid bg-neutral-subtle/40',
+  primary: 'border-primary bg-primary-subtle/40',
+  secondary: 'border-secondary bg-secondary-subtle/40',
+  success: 'border-success bg-success-subtle/40',
+  warning: 'border-warning bg-warning-subtle/40',
+  danger: 'border-danger bg-danger-subtle/40',
+  info: 'border-info bg-info-subtle/40',
+  neutral: 'border-neutral bg-neutral-subtle/40',
 };
 
 const dragOverCompounds = Object.entries(COLOR_DRAG).map(([color, className]) => ({
@@ -85,7 +85,7 @@ export const fileUploadRecipes = {
       state: {
         idle: '',
         dragOver: '',
-        dragReject: 'border-danger-solid bg-danger-subtle/40',
+        dragReject: 'border-danger bg-danger-subtle/40',
         disabled: 'opacity-50 pointer-events-none cursor-not-allowed',
       },
     },
@@ -154,9 +154,9 @@ export const fileUploadRecipes = {
     variants: {
       status: {
         pending: 'text-fg-muted',
-        uploading: 'text-primary-solid',
-        success: 'text-success-solid',
-        error: 'text-danger-solid',
+        uploading: 'text-primary',
+        success: 'text-success',
+        error: 'text-danger',
         cancelled: 'text-fg-muted',
       },
     },

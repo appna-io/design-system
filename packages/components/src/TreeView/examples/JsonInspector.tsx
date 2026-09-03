@@ -30,7 +30,7 @@ function toNode(key: string, value: unknown, path: string): TreeNodeData {
           {key}
         </Typography>
         :{' '}
-        <Typography as="span" variant="bodySmall" color="primary.emphasis">
+        <Typography as="span" variant="bodySmall" color="primary.main">
           {JSON.stringify(value)}
         </Typography>
       </Typography>

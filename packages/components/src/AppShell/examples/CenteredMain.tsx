@@ -2,7 +2,7 @@ import { AppShell, Div, HStack, Stack, Typography } from '@apx-ui/ds';
 
 export default function CenteredMain() {
   return (
-    <Div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div className="h-[420px] overflow-hidden rounded-md border border-border-subtle">
       <AppShell
         header={
           <HStack gap={3} className="w-full">
@@ -14,9 +14,9 @@ export default function CenteredMain() {
         }
         sidebar={
           <Stack gap={1} className="p-3">
-            <a href="#getting-started" className="px-2 py-1 rounded hover:bg-(--sds-color-surface-subtle)">Getting started</a>
-            <a href="#components" className="px-2 py-1 rounded hover:bg-(--sds-color-surface-subtle)">Components</a>
-            <a href="#patterns" className="px-2 py-1 rounded hover:bg-(--sds-color-surface-subtle)">Patterns</a>
+            <a href="#getting-started" className="px-2 py-1 rounded hover:bg-bg-subtle">Getting started</a>
+            <a href="#components" className="px-2 py-1 rounded hover:bg-bg-subtle">Components</a>
+            <a href="#patterns" className="px-2 py-1 rounded hover:bg-bg-subtle">Patterns</a>
           </Stack>
         }
         main={{ maxWidth: '2xl', centered: true, padding: 8 }}

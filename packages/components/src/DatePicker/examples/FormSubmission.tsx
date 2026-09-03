@@ -35,7 +35,7 @@ export default function FormSubmission() {
 
       <button
         type="submit"
-        className="self-start rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-fg-onPrimary hover:bg-primary-emphasis"
+        className="self-start rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-contrast hover:bg-primary-hover"
       >
         Submit
       </button>

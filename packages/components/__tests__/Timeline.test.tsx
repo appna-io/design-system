@@ -250,3 +250,61 @@ describe('Timeline — onItemClick', () => {
     expect(btn).toHaveAttribute('aria-expanded', 'true');
   });
 });
+
+/**
+ * The connector rail (#15). This had no coverage, which is how it shipped broken: the root
+ * carried TWO hide rules, and the extra one was `[&:last-child>li>[data-timeline-connector]]`
+ * — "when the timeline ITSELF is the last child of its container, hide every item's connector".
+ * A timeline at the end of a card or section is the normal case, so the rail vanished; 63 of 63
+ * connectors were hidden in the DS's own docs.
+ *
+ * JSDOM applies no stylesheets, so visibility can't be computed here. What CAN be pinned is the
+ * invariant that broke: a rule on the root must never be conditioned on the root's own position
+ * among its siblings, because that says nothing about its children.
+ */
+describe('Timeline — connector rail', () => {
+  it('renders one connector per item', () => {
+    const { container } = render(<Timeline items={items} />);
+    expect(container.querySelectorAll('[data-timeline-connector]')).toHaveLength(items.length);
+  });
+
+  it('hides only the LAST item\'s connector', () => {
+    const { container } = render(<Timeline items={items} />);
+    const root = container.querySelector('[data-timeline]')!;
+    expect(root.className).toContain('[&>li:last-child>[data-timeline-connector]]:hidden');
+  });
+
+  it('carries no rule conditioned on the ROOT\'s own sibling position', () => {
+    // The regression guard. `&:last-child…` on the root means "depending on where the timeline
+    // sits in ITS parent" — which must never decide what its own children look like.
+    const { container } = render(<Timeline items={items} />);
+    const root = container.querySelector('[data-timeline]')!;
+    expect(root.className).not.toContain('[&:last-child');
+  });
+
+  it('is unaffected by being the last child of its container', () => {
+    // The exact shape that broke: a timeline at the end of a section. Every connector must still
+    // be there, and the root must carry the same single rule as when it has siblings.
+    const { container } = render(
+      <div>
+        <p>Some preceding copy</p>
+        <Timeline items={items} />
+      </div>,
+    );
+    const root = container.querySelector('[data-timeline]')!;
+    expect(root.parentElement!.lastElementChild).toBe(root);
+    expect(container.querySelectorAll('[data-timeline-connector]')).toHaveLength(items.length);
+    expect(root.className).not.toContain('[&:last-child');
+  });
+
+  it('keeps the connector a direct child of its item, which the rule depends on', () => {
+    // `&>li:last-child>[data-timeline-connector]` uses the child combinator; if the connector
+    // were ever nested inside the indicator wrapper the rule would silently stop matching and
+    // the last item would grow a dangling rail.
+    const { container } = render(<Timeline items={items} />);
+    for (const connector of container.querySelectorAll('[data-timeline-connector]')) {
+      expect(connector.parentElement!.tagName).toBe('LI');
+    }
+  });
+});
+

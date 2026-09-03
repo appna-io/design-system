@@ -18,11 +18,11 @@ export default function HoverVsClick() {
         <Typography
           variant="caption"
           weight="semibold"
-          className="mb-2 uppercase tracking-wide text-(--sds-color-text-muted)"
+          className="mb-2 uppercase tracking-wide text-fg-muted"
         >
           hover only
         </Typography>
-        <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+        <Div className="flex justify-center rounded-md border border-border-subtle bg-bg-paper p-3">
           <NavigationMenu trigger="hover">
             <NavigationMenu.Item>
               <NavigationMenu.Trigger>Product</NavigationMenu.Trigger>
@@ -39,11 +39,11 @@ export default function HoverVsClick() {
         <Typography
           variant="caption"
           weight="semibold"
-          className="mb-2 uppercase tracking-wide text-(--sds-color-text-muted)"
+          className="mb-2 uppercase tracking-wide text-fg-muted"
         >
           click only
         </Typography>
-        <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+        <Div className="flex justify-center rounded-md border border-border-subtle bg-bg-paper p-3">
           <NavigationMenu trigger="click">
             <NavigationMenu.Item>
               <NavigationMenu.Trigger>Product</NavigationMenu.Trigger>
@@ -60,11 +60,11 @@ export default function HoverVsClick() {
         <Typography
           variant="caption"
           weight="semibold"
-          className="mb-2 uppercase tracking-wide text-(--sds-color-text-muted)"
+          className="mb-2 uppercase tracking-wide text-fg-muted"
         >
           both (default)
         </Typography>
-        <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+        <Div className="flex justify-center rounded-md border border-border-subtle bg-bg-paper p-3">
           <NavigationMenu>
             <NavigationMenu.Item>
               <NavigationMenu.Trigger>Product</NavigationMenu.Trigger>

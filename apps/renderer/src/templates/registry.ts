@@ -1,5 +1,7 @@
 import type { TemplateEntry } from './types';
-import { emberRoasteryTemplate } from './ember-roastery';
+import { cadenceOpsTemplate } from './cadence-ops';
+import { fadeAndCoTemplate } from './fade-and-co';
+import { lyliCoffeeTemplate } from './lyli-coffee';
 
 /**
  * The full set of preview templates. Order here drives gallery + sidebar ordering
@@ -12,7 +14,11 @@ import { emberRoasteryTemplate } from './ember-roastery';
  *
  * That's it — no routes, no manual gallery wiring, no MDX.
  */
-const TEMPLATES: readonly TemplateEntry[] = [emberRoasteryTemplate];
+const TEMPLATES: readonly TemplateEntry[] = [
+  lyliCoffeeTemplate,
+  fadeAndCoTemplate,
+  cadenceOpsTemplate,
+];
 
 export function getTemplates(): readonly TemplateEntry[] {
   return TEMPLATES;

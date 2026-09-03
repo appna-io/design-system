@@ -8,7 +8,7 @@ import { Div, NavigationMenu } from '@apx-ui/ds';
  */
 export default function HoverOnly() {
   return (
-    <Div className="rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+    <Div className="rounded-md border border-border-subtle bg-bg-paper p-3">
       <NavigationMenu trigger="hover" hoverDelay={100} closeDelay={200}>
         <NavigationMenu.Item>
           <NavigationMenu.Trigger>Product</NavigationMenu.Trigger>

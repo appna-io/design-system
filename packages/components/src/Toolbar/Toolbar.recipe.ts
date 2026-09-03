@@ -14,6 +14,11 @@ import { cv } from '@apx-ui/engine';
  *
  * Roving tabindex, overflow detection, and per-child cloning all live in the component — none of
  * it surfaces in the recipe.
+ *
+ * **Color tokens** use the shipped Tailwind preset utilities (`bg-bg-paper`, `border-border`,
+ * `bg-border-subtle`, …), which resolve to `--sds-palette-*`. These were previously written as
+ * `bg-(--sds-color-surface-default)` — pre-preset naming *and* Tailwind v4 syntax, which on
+ * Tailwind 3 compiled to nothing, so the shell and separators had no color at all.
  */
 export const toolbarRecipe = cv({
   base: 'flex min-w-0 outline-none',
@@ -25,9 +30,9 @@ export const toolbarRecipe = cv({
     variant: {
       default: '',
       bordered:
-        'rounded-lg border border-(--sds-color-border-default) bg-(--sds-color-surface-default) p-1',
+        'rounded-lg border border-border bg-bg-paper p-1',
       floating:
-        'rounded-full border border-(--sds-color-border-subtle) bg-(--sds-color-surface-raised) shadow-md p-1',
+        'rounded-full border border-border-subtle bg-bg-paper shadow-md p-1',
     },
     size: {
       sm: 'gap-0.5',
@@ -96,9 +101,9 @@ export const toolbarSeparatorRecipe = cv({
       '2': '',
     },
     color: {
-      subtle: 'bg-(--sds-color-border-subtle)',
-      default: 'bg-(--sds-color-border-default)',
-      strong: 'bg-(--sds-color-border-strong)',
+      subtle: 'bg-border-subtle',
+      default: 'bg-border',
+      strong: 'bg-border-strong',
     },
   },
   compoundVariants: [

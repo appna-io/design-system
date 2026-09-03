@@ -9,7 +9,7 @@ import { CodeIcon, PaintIcon, RocketIcon, ZapIcon } from './_icons';
  */
 export default function MegaMenuWithFeatured() {
   return (
-    <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+    <Div className="flex justify-center rounded-md border border-border-subtle bg-bg-paper p-3">
       <NavigationMenu>
         <NavigationMenu.Item>
           <NavigationMenu.Trigger>Product</NavigationMenu.Trigger>
@@ -38,7 +38,7 @@ export default function MegaMenuWithFeatured() {
                   <Typography variant="bodySmall" weight="semibold" className="mb-2">
                     New: AI-assisted setup
                   </Typography>
-                  <Typography variant="caption" className="mb-3 text-(--sds-color-text-muted)">
+                  <Typography variant="caption" className="mb-3 text-fg-muted">
                     Scaffold a fully-typed app in 30 seconds with our generator.
                   </Typography>
                   <Button size="sm" variant="solid">

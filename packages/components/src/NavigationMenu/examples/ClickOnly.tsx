@@ -8,7 +8,7 @@ import { Div, NavigationMenu } from '@apx-ui/ds';
  */
 export default function ClickOnly() {
   return (
-    <Div className="rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+    <Div className="rounded-md border border-border-subtle bg-bg-paper p-3">
       <NavigationMenu trigger="click">
         <NavigationMenu.Item>
           <NavigationMenu.Trigger>Workspaces</NavigationMenu.Trigger>

@@ -45,9 +45,11 @@ When `title` is omitted, the icon is rendered with `aria-hidden="true"` and `foc
 
 ## Available icons
 
-The current set ships 12 icons covering the most common UI affordances. Browse them all (with search and copy-import) in the renderer at [`/icons`](../../apps/renderer/src/app/icons/page.tsx) — run `pnpm dev` and open `http://localhost:6008/icons`.
+The current set ships 38 icons covering the most common UI affordances. Browse them all (with search and copy-import) in the renderer at [`/icons`](../../apps/renderer/src/app/icons/page.tsx) — run `pnpm dev` and open `http://localhost:6008/icons`.
 
-`ArrowUpRight`, `Check`, `ChevronDown`, `ChevronRight`, `Close`, `ErrorCircle`, `ExternalLink`, `Info`, `Minus`, `Plus`, `Search`, `Warning`.
+`ArrowRight`, `ArrowUpRight`, `Award`, `BadgeCheck`, `Check`, `ChevronDown`, `ChevronRight`, `Clock`, `Close`, `Coffee`, `ErrorCircle`, `ExternalLink`, `Fingerprint`, `Flame`, `Globe`, `GraduationCap`, `Heart`, `Info`, `KeyRound`, `Leaf`, `Mail`, `MapPin`, `Menu`, `Minus`, `Phone`, `Plus`, `Repeat`, `Scissors`, `Search`, `ShieldCheck`, `ShoppingBag`, `Smartphone`, `Smile`, `Star`, `Trash`, `Truck`, `Warning`, `Zap`.
+
+`ICON_MANIFEST` is the single source of truth for this list — adding an icon means a file under `src/icons/`, an export in `src/index.ts`, and a manifest entry (kept alphabetical).
 
 > `ErrorCircle` is named to avoid shadowing JavaScript's built-in `Error` constructor.
 

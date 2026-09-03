@@ -149,7 +149,7 @@ export const carouselRecipes = {
     compoundVariants: [
       { variant: 'dots', active: true, class: 'bg-primary scale-125' },
       { variant: 'bars', active: true, class: 'bg-primary w-8' },
-      { variant: 'numbers', active: true, class: 'bg-primary text-primary-foreground border-primary' },
+      { variant: 'numbers', active: true, class: 'bg-primary text-primary-contrast border-primary' },
     ],
     defaultVariants: { variant: 'dots', active: false },
   }),

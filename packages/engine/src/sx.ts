@@ -74,7 +74,7 @@ const TOKEN_NAMESPACES: Partial<Record<keyof CSSProperties, string>> = {
   maxHeight: 'spacing',
 };
 
-const PALETTE_PREFIXES = [
+const PALETTE_ROLES = [
   'primary',
   'secondary',
   'success',
@@ -83,6 +83,57 @@ const PALETTE_PREFIXES = [
   'info',
   'neutral',
 ];
+
+/** The three non-role palette groups. Their default slot is `default`, not `main`. */
+const PALETTE_SURFACES = ['background', 'foreground', 'border'];
+
+/**
+ * Short prefixes accepted in palette *values*, mirroring the ones already accepted as `sx` **keys**
+ * (`fg`, `bg` in `ALIASES`) and the Tailwind preset's own vocabulary (`text-fg-muted`,
+ * `bg-bg-paper`).
+ *
+ * Leaving these out was a silent-failure bug: `<Typography color="fg.muted">` looked idiomatic —
+ * the DS teaches `fg` on one side of the wall — but `fg` was not a recognised value prefix, so the
+ * string passed through untouched and the browser dropped `color: fg.muted` as invalid. No error,
+ * no warning; the text just inherited its colour. 479 declarations across this repo were dead this
+ * way, including `PricingCard`'s cadence and blurb.
+ */
+const PALETTE_VALUE_ALIASES: Record<string, string> = {
+  fg: 'foreground',
+  bg: 'background',
+};
+
+/**
+ * Normalise a palette value to a full `group.slot` path.
+ *
+ * Two shorthands are expanded here, both of which previously produced a CSS variable that is
+ * never emitted (or no variable at all):
+ *
+ *  - `fg.muted` → `foreground.muted`, `bg.paper` → `background.paper`.
+ *  - A bare group → its default slot: `primary` → `primary.main`, `border` → `border.default`.
+ *    `themeToCssVars` flattens the palette one variable **per slot** and never emits a bare
+ *    `--sds-palette-primary`, so `color="primary"` used to resolve to a variable that does not
+ *    exist. This is the same defect that made the renderer's `<Inspectable>` outline invisible,
+ *    reachable from a prop.
+ *
+ * Returns the value unchanged when it is already a full path.
+ */
+function normalizePaletteValue(value: string): string {
+  const [head, ...rest] = value.split('.');
+  const group = PALETTE_VALUE_ALIASES[head ?? ''] ?? head ?? '';
+
+  if (rest.length > 0) return [group, ...rest].join('.');
+  if (PALETTE_ROLES.includes(group)) return `${group}.main`;
+  if (PALETTE_SURFACES.includes(group)) return `${group}.default`;
+  return value;
+}
+
+/** Whether a palette value names a group this resolver knows — in either spelling. */
+function isPaletteValue(value: string): boolean {
+  const head = value.split('.')[0] ?? '';
+  const group = PALETTE_VALUE_ALIASES[head] ?? head;
+  return PALETTE_ROLES.includes(group) || PALETTE_SURFACES.includes(group);
+}
 
 /** Tailwind-compatible spacing scale keys. Numeric strings (with optional `.5`) resolve as
  *  `var(--sds-spacing-N)`; also accepts the `px` keyword. Bare scale keys (e.g. `"6"`, `"1.5"`)
@@ -103,14 +154,7 @@ function shouldResolveAsToken(prop: keyof CSSProperties, value: string): boolean
   }
   // Physical-unit values are not tokens for non-spacing namespaces either.
   if (/^-?[0-9.]+(px|rem|em|%|vh|vw|fr)?$/.test(value)) return false;
-  if (ns === 'palette') {
-    return (
-      PALETTE_PREFIXES.includes(value.split('.')[0] ?? '') ||
-      value.startsWith('border.') ||
-      value.startsWith('background.') ||
-      value.startsWith('foreground.')
-    );
-  }
+  if (ns === 'palette') return isPaletteValue(value);
   return true;
 }
 
@@ -130,7 +174,10 @@ export function sxToStyle(sx?: Sx): CSSProperties {
     let value: string | number = rawValue as string | number;
     if (typeof value === 'string' && shouldResolveAsToken(cssKey, value)) {
       const ns = TOKEN_NAMESPACES[cssKey];
-      value = token(ns ? `${ns}.${value}` : value);
+      // Palette values go through normalisation first, so the short spellings the DS teaches
+      // elsewhere (`fg.muted`, `primary`) resolve to a variable that is actually emitted.
+      const path = ns === 'palette' ? normalizePaletteValue(value) : value;
+      value = token(ns ? `${ns}.${path}` : path);
     }
 
     (out as Record<string, unknown>)[cssKey as string] = value;

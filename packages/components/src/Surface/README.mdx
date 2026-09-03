@@ -1,0 +1,76 @@
+# Surface
+
+A region that establishes its own **ground** — the background/foreground/border tokens everything
+inside it resolves against.
+
+Every DS component reads `text-fg`, `bg-bg*`, `border-*`. Those all assume a light ground, so a
+dark section used to mean hand-written token values at each call site: body copy in near-black on
+a dark band, no readable `<Input>` variant, and no way to ask for a light button. `<Surface>`
+fixes that once at the token layer, instead of growing an `onDark` axis on every component that
+might one day sit on a dark band.
+
+<ExampleBlock for="Overview" title="Overview — an inverted band" />
+
+## When to use
+
+- A dark hero, feature band, newsletter capture, or footer inside an otherwise light page.
+- A light card sitting inside a dark band (nest a second `Surface` — two inversions cancel).
+- Any region that should own its background rather than inherit the page's.
+
+## When NOT to use
+
+- You want the **whole app** dark → that's `mode` on `<ThemeProvider>`, a user preference.
+- You want a **different brand palette** for a region → that's `<ThemeProvider scope>`.
+- You just want a coloured box → `<Div bg="…">` or a `<Card>`. Surface is about what its
+  *descendants* resolve to, not about painting one rectangle.
+
+## Anatomy
+
+```text
+<div style="display:contents; --sds-surface-ink; --sds-surface-paper">   ← capture (inverted only)
+  └── <div|section|footer class="bg-bg text-fg" style="--sds-palette-*"> ← the surface
+```
+
+The capture element exists for one reason. Swapping the tokens means writing
+`--sds-palette-background-default: var(--sds-palette-foreground-default)` *and* the reverse — on a
+single element that is a custom-property **cycle**, and CSS resolves a cycle by discarding every
+property in it. The surface would render completely unstyled, with no error. So the outer element
+freezes the inherited pair under private names and the inner one reads those; inheritance is
+resolved before a child's own declarations apply, so there is no cycle. It is `display: contents`,
+so it adds no box and cannot disturb a flex or grid parent.
+
+## Props
+
+| Prop | Default | Effect |
+|------|---------|--------|
+| `tone` | `'default'` | `'inverted'` swaps the ground. `'default'` still paints `bg-bg text-fg`. |
+| `as` | `'div'` | Render a semantic element — a dark band is usually a landmark. |
+| `sx` / `style` / `className` | — | Merged after the inversion, so a caller can override one token. |
+
+## What inverts
+
+| | inverts | why |
+|---|---|---|
+| `background-*`, `foreground-*`, `border-*` | ✅ | the surface tokens — this is the whole point |
+| `neutral` role | ✅ | neutral is the DS's greyscale/chrome role, not a brand colour. This is what makes `<Button color="neutral">` the light button with dark text a dark band wants. |
+| `primary` / `secondary` / `success` / `warning` / `danger` / `info` | ❌ | a brand or status colour has to stay recognisable. A danger button that goes pale on a dark band is a bug. Their `contrast` slots already sit on their own fill. |
+| `--sds-focus-ring` | ✅ | the default ring is tuned for a light ground and can vanish on a dark one — leaving it would be an accessibility regression handed out by a styling feature. |
+
+Every inverted value is a `color-mix()` of the **inherited** palette, never a literal colour. So a
+`Surface` inside a branded `<ThemeProvider scope>` inverts *that brand*, and inverting a dark theme
+gives you a light band on a dark page — which is why the prop is `tone="inverted"` and not
+`tone="dark"`.
+
+## Notes
+
+- `[color-scheme:dark]` rides along on the inverted tone. That one isn't a token: the caret,
+  `<select>` arrow, scrollbars and autofill are drawn by the browser, and without it a text input
+  in a dark band gets a black caret on a black field.
+- **Translucency works** — `bg-bg-paper/10` on an inverted surface is the "glass field" treatment,
+  and the `/opacity` modifier resolves correctly against DS tokens.
+- Surface needs a `<ThemeProvider>` above it, like every other DS component.
+
+## Examples
+
+<ExampleBlock for="Overview" />
+<ExampleBlock for="FormOnDark" />

@@ -201,7 +201,7 @@ export const kbdRecipe = cv({
     variant: {
       solid: 'bg-bg-subtle',
       outline: 'bg-transparent',
-      soft: 'bg-bg-emphasis text-fg-inverted border-bg-emphasis',
+      soft: 'bg-neutral text-neutral-contrast border-neutral',
     },
   },
   defaultVariants: { size: 'md', variant: 'solid' },

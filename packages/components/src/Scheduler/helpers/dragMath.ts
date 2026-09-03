@@ -136,7 +136,9 @@ export function applyMoveDelta(
   snapMinutes: number,
 ): { start: Date; end: Date } {
   const duration = end.getTime() - start.getTime();
-  const snappedMinutes = snapMinute(deltaMinutes, snapMinutes) * Math.sign(deltaMinutes || 1);
+  // Snap the magnitude, then re-apply the sign: `snapMinute` clamps to [0, MINUTES_PER_DAY],
+  // so snapping a negative delta directly would collapse every upward drag to zero.
+  const snappedMinutes = snapMinute(Math.abs(deltaMinutes), snapMinutes) * Math.sign(deltaMinutes || 1);
   // Compose: add days first (DST-safe), then shift minutes.
   const movedDay = addDays(start, deltaDays);
   const movedStart = addMinutes(

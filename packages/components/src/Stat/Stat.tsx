@@ -82,7 +82,11 @@ function StatValue({ children, className, style }: StatSubcomponentProps): React
     props: { size, tone: 'neutral', className },
   });
   return (
-    <span className={valueClass} style={style} data-stat-value>
+    // `dir="auto"` + the recipe's `unicode-bidi: isolate` are together what `<bdi>` means: the
+    // value's direction is decided by its own content, so `<30s` cannot be reordered into
+    // `30s>` by an RTL paragraph around it. `auto` rather than a fixed `ltr` so a genuinely
+    // RTL value (Arabic-Indic digits, an RTL unit) still reads correctly.
+    <span dir="auto" className={valueClass} style={style} data-stat-value>
       {children}
     </span>
   );
@@ -400,6 +404,7 @@ function StatImpl(props: StatProps, ref: React.ForwardedRef<HTMLElement>): React
     }
     return (
       <span
+        dir="auto"
         className={valueClass}
         data-stat-value=""
         data-tone={valueTone}

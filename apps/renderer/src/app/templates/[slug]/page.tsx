@@ -7,6 +7,7 @@ import {
   SourceModal,
 } from '../../../components/templates/inspector';
 import { PreviewToolbar } from '../../../components/templates/PreviewToolbar';
+import { TemplateSurface } from '../../../components/templates/TemplateSurface';
 import { loadInspectableSources } from '../../../lib/templateInspector';
 import { getTemplateBySlug, getTemplateSlugs } from '../../../templates';
 
@@ -50,7 +51,9 @@ export default async function TemplatePreviewPage({ params }: PreviewPageProps) 
 
   return (
     <InspectorProvider sources={sources}>
-      <Component />
+      <TemplateSurface theme={meta.theme}>
+        <Component />
+      </TemplateSurface>
       <InspectorBanner />
       <SourceModal />
       <PreviewToolbar meta={meta} />

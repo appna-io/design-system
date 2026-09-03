@@ -537,7 +537,7 @@ export const schedulerMiniMonthDayRecipe = cv({
   base: 'inline-flex h-6 items-center justify-center rounded-full text-[11px] tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
   variants: {
     isCurrentMonth: { true: 'text-fg-default', false: 'text-fg-muted/60' },
-    isSelected: { true: 'bg-primary text-fg-onPrimary', false: 'hover:bg-bg-subtle/60' },
+    isSelected: { true: 'bg-primary text-primary-contrast', false: 'hover:bg-bg-subtle/60' },
     isToday: { true: 'ring-1 ring-primary', false: '' },
   },
   defaultVariants: { isCurrentMonth: true, isSelected: false, isToday: false },
@@ -546,5 +546,5 @@ export const schedulerMiniMonthDayRecipe = cv({
 /* ---- Filter menu trigger badge ---- */
 
 export const schedulerFilterCountBadgeRecipe = cv({
-  base: 'ms-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-fg-onPrimary',
+  base: 'ms-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-contrast',
 });

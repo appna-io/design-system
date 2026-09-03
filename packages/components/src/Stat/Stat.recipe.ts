@@ -69,8 +69,17 @@ export const statLabelRecipe = cv({
  * Value text. `tabular-nums` ensures digit widths don't wobble between renders — critical
  * for live-updating dashboards. `leading-tight` keeps stacked value+caption rhythm clean.
  */
+/**
+ * `[unicode-bidi:isolate]` is load-bearing, not cosmetic. A stat value is frequently a number
+ * wrapped in *neutral* characters — `<30s`, `~2.4k`, `99.9%+`, `($1,200)` — and the Unicode bidi
+ * algorithm resolves neutrals from their surroundings. Inside an RTL paragraph the leading `<`
+ * gets reordered to the visual right, so `<30s` renders as `30s>`: not merely mirrored, but
+ * **stating the opposite of the truth**. Isolating the value (paired with `dir="auto"` on the
+ * element, which together are exactly what `<bdi>` means) settles its direction from its own
+ * content and stops it interacting with the surrounding text either way.
+ */
 export const statValueRecipe = cv({
-  base: 'block font-semibold leading-tight tracking-tight text-fg-default tabular-nums',
+  base: 'block font-semibold leading-tight tracking-tight text-fg-default tabular-nums [unicode-bidi:isolate]',
   variants: {
     size: {
       sm: 'text-lg',

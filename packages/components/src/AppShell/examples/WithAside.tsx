@@ -4,7 +4,7 @@ import { AppShell, Button, Div, HStack, Stack, Typography } from '@apx-ui/ds';
 export default function WithAside() {
   const [asideOpen, setAsideOpen] = useState(true);
   return (
-    <Div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div className="h-[420px] overflow-hidden rounded-md border border-border-subtle">
       <AppShell
         header={
           <HStack gap={3} className="w-full">
@@ -18,9 +18,9 @@ export default function WithAside() {
         }
         sidebar={
           <Stack gap={1} className="p-3">
-            <a href="#inbox" className="px-2 py-1 rounded hover:bg-(--sds-color-surface-subtle)">📥 Inbox</a>
-            <a href="#starred" className="px-2 py-1 rounded hover:bg-(--sds-color-surface-subtle)">⭐ Starred</a>
-            <a href="#sent" className="px-2 py-1 rounded hover:bg-(--sds-color-surface-subtle)">📤 Sent</a>
+            <a href="#inbox" className="px-2 py-1 rounded hover:bg-bg-subtle">📥 Inbox</a>
+            <a href="#starred" className="px-2 py-1 rounded hover:bg-bg-subtle">⭐ Starred</a>
+            <a href="#sent" className="px-2 py-1 rounded hover:bg-bg-subtle">📤 Sent</a>
           </Stack>
         }
         aside={
@@ -41,9 +41,9 @@ export default function WithAside() {
         asideWidth={300}
       >
         <Stack gap={2}>
-          <Div className="p-3 rounded bg-(--sds-color-surface-subtle)">Message 1</Div>
-          <Div className="p-3 rounded bg-(--sds-color-surface-subtle)">Message 2</Div>
-          <Div className="p-3 rounded bg-(--sds-color-surface-subtle)">Message 3</Div>
+          <Div className="p-3 rounded bg-bg-subtle">Message 1</Div>
+          <Div className="p-3 rounded bg-bg-subtle">Message 2</Div>
+          <Div className="p-3 rounded bg-bg-subtle">Message 3</Div>
         </Stack>
       </AppShell>
     </Div>

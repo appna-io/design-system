@@ -13,7 +13,28 @@ import type { IconComponent, IconProps } from './types';
  * that this package can be installed standalone, without dragging the rest of
  * the design system along for the ride.
  */
-export function createIcon(name: string, children: ReactNode): IconComponent {
+export interface CreateIconOptions {
+  /**
+   * Mark the glyph as **directional** — its meaning depends on reading order, so it must mirror
+   * under `dir="rtl"`. An arrow that means "next" points left in Arabic; leaving it pointing
+   * right doesn't just look wrong, it points at the previous item.
+   *
+   * This only stamps `data-apx-icon-directional` on the `<svg>`. The one CSS rule that acts on
+   * it lives in `@apx-ui/theme`'s `styles/reset.css`, so this package keeps its "installable on
+   * its own, no design-system dependency" property. Consumers who don't import the reset get
+   * un-mirrored icons and nothing else breaks.
+   *
+   * Only glyphs whose *semantics* are directional qualify. A `Search` magnifier and a `Repeat`
+   * loop have a handedness but mean the same thing either way — mirroring those is churn.
+   */
+  directional?: boolean;
+}
+
+export function createIcon(
+  name: string,
+  children: ReactNode,
+  options: CreateIconOptions = {},
+): IconComponent {
   const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon(
     { size = 24, title, ...rest },
     ref,
@@ -35,6 +56,7 @@ export function createIcon(name: string, children: ReactNode): IconComponent {
         strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"
+        {...(options.directional ? { 'data-apx-icon-directional': '' } : {})}
         {...a11yProps}
         {...rest}
       >

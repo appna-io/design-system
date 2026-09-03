@@ -12,15 +12,46 @@
 
 type TailwindColorScale = Record<string, string>;
 
+/**
+ * Every DS color goes through here so Tailwind's `/opacity` modifier works on it.
+ *
+ * A bare `var(--sds-palette-primary-main)` is opaque to Tailwind: the modifier rewrites a color
+ * into `<color> / <alpha>`, which needs a value carrying the `<alpha-value>` placeholder. Given a
+ * plain `var()` Tailwind emitted an invalid declaration and the browser dropped it — so
+ * `bg-primary/50` rendered **fully transparent**, silently. That is one of the most-used Tailwind
+ * idioms, and a vanished surface doesn't read as "slightly wrong", so it went unnoticed across
+ * two whole templates.
+ *
+ * `color-mix()` carries the placeholder while keeping the value a `var()` reference, so the color
+ * still tracks the active theme, the active variant, and any scoped brand palette layered over it.
+ * With no modifier Tailwind substitutes `1`, giving `calc(1 * 100%)` — the untouched color.
+ *
+ * Chosen over emitting parallel `--sds-palette-*-rgb` channel triplets (the other way to satisfy
+ * `<alpha-value>`) because that form only works if every palette value is a hex string.
+ * `defineTheme` accepts any CSS color, so a theme using `rgb()`, `hsl()`, or a named color would
+ * silently fail to convert — reintroducing exactly this bug's failure mode for those consumers.
+ * `color-mix` is format-agnostic. It needs Baseline-2023 browsers (Chrome 111, Safari 16.2,
+ * Firefox 113); if the DS ever has to support older ones, the channel-triplet form is the fallback
+ * and the change is confined to this file.
+ */
+function alphaAwareVar(varName: string): string {
+  return `color-mix(in srgb, var(${varName}) calc(<alpha-value> * 100%), transparent)`;
+}
+
+/** Shorthand for the common case — a path under the `--sds-palette-` prefix. */
+function alphaAware(token: string): string {
+  return alphaAwareVar(`--sds-palette-${token}`);
+}
+
 function colorRoleScale(role: string): TailwindColorScale {
   return {
-    DEFAULT: `var(--sds-palette-${role}-main)`,
-    main: `var(--sds-palette-${role}-main)`,
-    contrast: `var(--sds-palette-${role}-contrast)`,
-    hover: `var(--sds-palette-${role}-hover)`,
-    active: `var(--sds-palette-${role}-active)`,
-    subtle: `var(--sds-palette-${role}-subtle)`,
-    border: `var(--sds-palette-${role}-border)`,
+    DEFAULT: alphaAware(`${role}-main`),
+    main: alphaAware(`${role}-main`),
+    contrast: alphaAware(`${role}-contrast`),
+    hover: alphaAware(`${role}-hover`),
+    active: alphaAware(`${role}-active`),
+    subtle: alphaAware(`${role}-subtle`),
+    border: alphaAware(`${role}-border`),
   };
 }
 
@@ -32,24 +63,37 @@ export const apxTailwindPreset = {
       colors: {
         ...Object.fromEntries(ROLE_NAMES.map((r) => [r, colorRoleScale(r)])),
         bg: {
-          DEFAULT: 'var(--sds-palette-background-default)',
-          default: 'var(--sds-palette-background-default)',
-          paper: 'var(--sds-palette-background-paper)',
-          subtle: 'var(--sds-palette-background-subtle)',
+          DEFAULT: alphaAware('background-default'),
+          default: alphaAware('background-default'),
+          paper: alphaAware('background-paper'),
+          subtle: alphaAware('background-subtle'),
         },
         fg: {
-          DEFAULT: 'var(--sds-palette-foreground-default)',
-          default: 'var(--sds-palette-foreground-default)',
-          muted: 'var(--sds-palette-foreground-muted)',
-          subtle: 'var(--sds-palette-foreground-subtle)',
+          DEFAULT: alphaAware('foreground-default'),
+          default: alphaAware('foreground-default'),
+          muted: alphaAware('foreground-muted'),
+          subtle: alphaAware('foreground-subtle'),
         },
         border: {
-          DEFAULT: 'var(--sds-palette-border-default)',
-          default: 'var(--sds-palette-border-default)',
-          subtle: 'var(--sds-palette-border-subtle)',
-          strong: 'var(--sds-palette-border-strong)',
+          DEFAULT: alphaAware('border-default'),
+          default: alphaAware('border-default'),
+          subtle: alphaAware('border-subtle'),
+          strong: alphaAware('border-strong'),
         },
+        // `--sds-overlay` is a scalar token, not a palette path, and already carries its own
+        // alpha (`rgba(0,0,0,.5)`). Left as a bare var deliberately — `bg-overlay/50` would be
+        // compounding two opacities, which is never what a caller means.
         overlay: 'var(--sds-overlay)',
+      },
+      // Wires the three font utilities to the theme's stacks. Before this, `font-sans` /
+      // `font-mono` resolved to Tailwind's built-in stacks, so setting
+      // `typography.fontFamily.mono` on a theme had no effect on anything using `font-mono` —
+      // `<Typography variant="code">` included. `font-display` falls back to the sans stack, so
+      // a theme that never sets `display` renders exactly as it did before the slot existed.
+      fontFamily: {
+        sans: 'var(--sds-font-sans)',
+        mono: 'var(--sds-font-mono)',
+        display: 'var(--sds-font-display, var(--sds-font-sans))',
       },
       borderRadius: {
         none: 'var(--sds-radius-none)',
@@ -87,8 +131,11 @@ export const apxTailwindPreset = {
         accelerate: 'var(--sds-ease-accelerate)',
       },
       ringColor: {
-        DEFAULT: 'var(--sds-focus-ring)',
-        focus: 'var(--sds-focus-ring)',
+        // Alpha-aware like the rest: `ring-focus/40` for a softened focus ring is a reasonable
+        // thing to write, and leaving one color out would reinstate the silent-transparency trap
+        // in exactly one place.
+        DEFAULT: alphaAwareVar('--sds-focus-ring'),
+        focus: alphaAwareVar('--sds-focus-ring'),
       },
       zIndex: {
         hide: 'var(--sds-z-index-hide)',

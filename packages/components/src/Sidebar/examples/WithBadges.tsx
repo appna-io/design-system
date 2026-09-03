@@ -10,7 +10,7 @@ export default function WithBadges() {
   return (
     <Div
       height={460}
-      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+      className="overflow-hidden rounded-md border border-border-subtle"
     >
       <Sidebar ariaLabel="Badge showcase" variant="bordered" width={240}>
         <Sidebar.Item href="/" icon={<HomeIcon />} badge="New" badgeColor="info">

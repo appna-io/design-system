@@ -11,7 +11,7 @@ export default function WithHeaderFooter() {
   return (
     <Div
       height={460}
-      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+      className="overflow-hidden rounded-md border border-border-subtle"
     >
       <Sidebar
         ariaLabel="Full-chrome navigation"
@@ -24,7 +24,7 @@ export default function WithHeaderFooter() {
             display="flex"
             alignItems="center"
             justifyContent="center"
-            className="h-7 w-7 rounded-md bg-(--sds-color-surface-subtle) text-sm font-bold"
+            className="h-7 w-7 rounded-md bg-bg-subtle text-sm font-bold"
           >
             A
           </Div>
@@ -52,7 +52,7 @@ export default function WithHeaderFooter() {
             display="flex"
             alignItems="center"
             justifyContent="center"
-            className="h-7 w-7 rounded-full bg-(--sds-color-surface-subtle)"
+            className="h-7 w-7 rounded-full bg-bg-subtle"
           >
             <UserIcon />
           </Div>

@@ -28,12 +28,12 @@ export default function Variants() {
         <Div
           key={variant}
           height={280}
-          className="overflow-hidden rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-muted)"
+          className="overflow-hidden rounded-md border border-border-subtle bg-bg-subtle"
         >
           <Typography
             variant="caption"
             color="fg.muted"
-            className="border-b border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) px-3 py-1.5 font-mono"
+            className="border-b border-border-subtle bg-bg-paper px-3 py-1.5 font-mono"
           >
             variant=&quot;{variant}&quot;
           </Typography>

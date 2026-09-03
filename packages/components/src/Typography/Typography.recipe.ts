@@ -16,18 +16,24 @@ import { cv } from '@apx-ui/engine';
  * Color choices live inside the variant strings only where it's an intrinsic part of the style
  * (e.g. `caption` is muted by default; `code` carries a subtle background). For palette overrides
  * consumers pass `color="primary.main"` which flows through Div's `sxToStyle` resolver.
+ *
+ * **Faces**: the display + heading variants carry `font-display`, body / supporting variants
+ * inherit the body face, and `code` pins `font-mono`. `font-display` resolves to
+ * `var(--sds-font-display, var(--sds-font-sans))`, so a single-face theme renders identically to
+ * before the token existed, while a brand with a paired display face gets the whole heading
+ * hierarchy by setting one token instead of overriding seven variants.
  */
 export const typographyRecipe = cv({
   base: 'min-w-0',
   variants: {
     variant: {
-      display: 'text-5xl font-bold leading-tight tracking-tight',
-      h1: 'text-4xl font-semibold leading-tight tracking-tight',
-      h2: 'text-3xl font-semibold leading-tight tracking-tight',
-      h3: 'text-2xl font-semibold leading-snug',
-      h4: 'text-xl font-semibold leading-snug',
-      h5: 'text-lg font-semibold leading-snug',
-      h6: 'text-base font-semibold leading-normal',
+      display: 'font-display text-5xl font-bold leading-tight tracking-tight',
+      h1: 'font-display text-4xl font-semibold leading-tight tracking-tight',
+      h2: 'font-display text-3xl font-semibold leading-tight tracking-tight',
+      h3: 'font-display text-2xl font-semibold leading-snug',
+      h4: 'font-display text-xl font-semibold leading-snug',
+      h5: 'font-display text-lg font-semibold leading-snug',
+      h6: 'font-display text-base font-semibold leading-normal',
       body: 'text-base font-normal leading-normal',
       bodyLarge: 'text-lg font-normal leading-relaxed',
       bodySmall: 'text-sm font-normal leading-normal',

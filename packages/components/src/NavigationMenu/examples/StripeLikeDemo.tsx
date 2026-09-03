@@ -20,14 +20,14 @@ import {
  */
 export default function StripeLikeDemo() {
   return (
-    <Div className="rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default)">
+    <Div className="rounded-md border border-border-subtle bg-bg-paper">
       <header className="flex items-center justify-between gap-6 px-4 py-3">
         <Div display="flex" alignItems="center" gap="2">
           <Typography
             as="span"
             variant="caption"
             weight="bold"
-            className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-(--sds-color-text-default) text-(--sds-color-surface-default)"
+            className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-fg text-bg-paper"
           >
             S
           </Typography>
@@ -86,7 +86,7 @@ export default function StripeLikeDemo() {
                     <Typography variant="bodySmall" weight="semibold" className="mb-1">
                       New: AI-assisted setup
                     </Typography>
-                    <Typography variant="caption" className="mb-3 text-(--sds-color-text-muted)">
+                    <Typography variant="caption" className="mb-3 text-fg-muted">
                       Scaffold a typed app in 30 seconds with our generator.
                     </Typography>
                     <Button size="sm" variant="solid">

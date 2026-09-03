@@ -235,7 +235,7 @@ TimelineConnector.displayName = 'Timeline.Connector';
 /**
  * One event row. Owns the indicator (dot + connector), the optional auto-rendered timestamp,
  * and the content slot. The connector is hidden on the last item via the parent's
- * `[&:last-child_[data-timeline-connector]]:hidden` rule.
+ * `[&>li:last-child>[data-timeline-connector]]:hidden` rule.
  *
  * When the parent Timeline has `collapsible`, the item also owns expansion state — exposed via
  * `TimelineItemContext` so `Timeline.Title` can wire the toggle button and `Timeline.Description`
@@ -420,7 +420,13 @@ function TimelineImpl(
   return (
     <ol
       ref={ref}
-      className={`${rootClass} [&:last-child>li>[data-timeline-connector]]:hidden [&>li:last-child>[data-timeline-connector]]:hidden`}
+      // Exactly one rule: hide the connector of the LAST ITEM, because there is nothing below it
+      // to connect to. It used to be paired with `[&:last-child>li>[data-timeline-connector]]`,
+      // which reads as "when the *timeline itself* is the last child of its container, hide the
+      // connector of EVERY item" — so a timeline placed at the end of a card or section (i.e.
+      // most of them) rendered with no rail at all. It hid 63 of the 63 connectors in the DS's
+      // own docs. The root's position among its siblings must never affect its children.
+      className={`${rootClass} [&>li:last-child>[data-timeline-connector]]:hidden`}
       style={rootStyle ?? undefined}
       data-timeline=""
       data-orientation={orientation}

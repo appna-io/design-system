@@ -18,8 +18,8 @@ direction-aware `size` axis (width on horizontal sides, height on vertical sides
 
 ## When to use
 
-- Mobile navigation menus (`side="left"`, `size="sm"`).
-- Filter / inspector panels next to the main content (`side="right"`).
+- Mobile navigation menus (`side="start"`, `size="sm"`).
+- Filter / inspector panels next to the main content (`side="end"`).
 - Bottom sheets — share / select / sort actions on mobile (`side="bottom"`).
 - Announcement banners that warrant a dismissable overlay (`side="top"`).
 - Anywhere you'd reach for a Modal but the content is page-related, not page-blocking.
@@ -124,10 +124,13 @@ A bottom-sheet on mobile flips to a right-drawer on desktop without any conditio
 - **Backdrop click** uses an `e.target === e.currentTarget` sentinel — clicks inside Content
   (inputs, buttons) bubble up but never satisfy the sentinel, so they never close the Drawer.
 - **Close button** carries `aria-label="Close"` by default.
-- **Side semantics**: `side` is **physical** (`left` / `right` / `top` / `bottom`) — RTL does not
-  flip it, because the spatial intuition is what consumers reason about. The inner border uses
-  logical axes (`border-s` / `border-e`) so the visual border still lands on the correct edge in
-  RTL.
+- **Side semantics**: `side` takes either grammar. `start` / `end` are **logical** — resolved
+  against the ambient direction, so `end` is the right edge in LTR and the left edge in RTL.
+  `left` / `right` / `top` / `bottom` are **physical** and never flip. Prefer the logical pair for
+  anything anchored to a trigger (a cart at `end` opens on the same side as the basket button in
+  both directions); reach for a physical value only when you mean a fixed edge. There is no
+  logical vertical pair — the block axis does not flip with `dir`, so `top` / `bottom` are already
+  correct. The inner border uses logical axes (`border-s` / `border-e`) either way.
 - axe-core: zero violations across the side × size × open-state matrix.
 
 ## Examples

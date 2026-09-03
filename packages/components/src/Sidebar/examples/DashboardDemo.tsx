@@ -95,7 +95,7 @@ function ShellSidebar({ activePath }: { activePath: string }) {
           display="flex"
           alignItems="center"
           justifyContent="center"
-          className="h-7 w-7 rounded-full bg-(--sds-color-surface-subtle)"
+          className="h-7 w-7 rounded-full bg-bg-subtle"
         >
           <UserIcon />
         </Div>
@@ -119,7 +119,7 @@ export default function DashboardDemo() {
   return (
     <Div
       height={560}
-      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+      className="overflow-hidden rounded-md border border-border-subtle"
     >
       <AppShell
         header={<ShellHeader />}
@@ -146,7 +146,7 @@ export default function DashboardDemo() {
               Mark all read
             </Button>
           </HStack>
-          <Stack gap={2} className="rounded-md border border-(--sds-color-border-subtle) p-4">
+          <Stack gap={2} className="rounded-md border border-border-subtle p-4">
             <Typography as="h3" variant="h3" weight="semibold">
               Welcome
             </Typography>

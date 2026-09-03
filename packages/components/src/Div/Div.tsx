@@ -14,6 +14,25 @@ import { motion } from 'motion/react';
 import { createElement, type CSSProperties, type ElementType } from 'react';
 
 import { divRecipe } from './Div.recipe';
+
+/**
+ * Motion components, memoised per element type.
+ *
+ * `motion.create()` MUST NOT be called during render: it mints a brand-new component type on
+ * every pass, so React tears the subtree down and remounts it each time. The mount animation
+ * then restarts from `initial` forever — for `slideInFromBottom` that is `opacity: 0`, i.e. the
+ * content renders permanently invisible — and the remount churn costs a full subtree each
+ * render. Caching by element type keeps one stable identity per tag for the app's lifetime.
+ */
+const motionElementCache = new Map<ElementType, ElementType>();
+
+function motionElementFor(element: ElementType): ElementType {
+  const cached = motionElementCache.get(element);
+  if (cached) return cached;
+  const created = motion.create(element as Parameters<typeof motion.create>[0]) as ElementType;
+  motionElementCache.set(element, created);
+  return created;
+}
 import { buildGradientBackground } from './gradient';
 import { buildPseudoClassName, type PseudoPropMap } from './pseudoProps';
 import { extractStyleProps } from './styleProps';
@@ -33,7 +52,7 @@ import type { DivProps } from './Div.types';
  *      (`display`, `flex`, `p`, `bg`, ...) from HTML attributes. The matched bag is fed through
  *      the engine's `sxToStyle` so alias expansion and token resolution share one code path.
  *   2. **`sx` resolution** — the optional `sx` prop is resolved the same way, layered _under_
- *      the curated style props (so a later explicit `bg="primary.50"` wins over an `sx` entry).
+ *      the curated style props (so a later explicit `bg="primary.subtle"` wins over an `sx` entry).
  *   3. **`centered` shortcut** — when set, defaults `display: flex; align-items: center;
  *      justify-content: center;`. Inserted at the **bottom** of the style stack, so any
  *      explicit consumer override naturally wins.
@@ -52,7 +71,7 @@ import type { DivProps } from './Div.types';
  *      `useReducedMotion()` is true); otherwise `createElement(Element, ...)`.
  *
  * @example
- *   <Div display="flex" p={4} bg="primary.50" radius="md">Hello</Div>
+ *   <Div display="flex" p={4} bg="primary.subtle" radius="md">Hello</Div>
  *   <Div hideOn="md">Mobile only</Div>
  *   <Div centered h="100vh"><Spinner /></Div>
  *   <Div decorative gradient />
@@ -196,7 +215,7 @@ export const Div = forwardRef<HTMLElement, DivProps>(function Div(props, ref) {
   const ResolvedElement: ElementType = actLike ?? as ?? 'div';
 
   if (animation && !reduced) {
-    const MotionElement = motion.create(ResolvedElement);
+    const MotionElement = motionElementFor(ResolvedElement);
     const variant = motionPresets[animation];
     return createElement(
       MotionElement as ElementType,

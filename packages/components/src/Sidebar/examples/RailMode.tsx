@@ -17,7 +17,7 @@ export default function RailMode() {
   return (
     <Div
       height={460}
-      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+      className="overflow-hidden rounded-md border border-border-subtle"
     >
       <Div display="flex" className="h-full">
         <Sidebar

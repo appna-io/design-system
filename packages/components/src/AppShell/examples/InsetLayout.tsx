@@ -2,7 +2,7 @@ import { AppShell, Div, HStack, Stack, Typography } from '@apx-ui/ds';
 
 export default function InsetLayout() {
   return (
-    <Div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div className="h-[420px] overflow-hidden rounded-md border border-border-subtle">
       <AppShell
         layout="inset"
         header={
@@ -15,9 +15,9 @@ export default function InsetLayout() {
         }
         sidebar={
           <Stack gap={1} className="p-3">
-            <a href="#pulls" className="px-2 py-1 rounded hover:bg-(--sds-color-surface-subtle)">Pulls</a>
-            <a href="#issues" className="px-2 py-1 rounded hover:bg-(--sds-color-surface-subtle)">Issues</a>
-            <a href="#discussions" className="px-2 py-1 rounded hover:bg-(--sds-color-surface-subtle)">Discussions</a>
+            <a href="#pulls" className="px-2 py-1 rounded hover:bg-bg-subtle">Pulls</a>
+            <a href="#issues" className="px-2 py-1 rounded hover:bg-bg-subtle">Issues</a>
+            <a href="#discussions" className="px-2 py-1 rounded hover:bg-bg-subtle">Discussions</a>
           </Stack>
         }
       >

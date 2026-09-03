@@ -2,7 +2,7 @@
 
 import { mergeRefs, Portal, useFocusTrap, useScrollLock } from '@apx-ui/engine';
 import { useThemedClasses } from '@apx-ui/theme';
-import { AlertOctagon, AlertTriangle, CheckCircle2, Info, MessageCircle, type LucideIcon } from 'lucide-react';
+import { AlertOctagon, AlertTriangle, CheckCircle2, Info, MessageCircle } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
   createElement,
@@ -19,6 +19,7 @@ import {
 } from 'react';
 
 import { Button } from '../Button/Button';
+import type { IconComponent } from '../Icon/IconRegistry';
 import type { ButtonColor } from '../Button/Button.types';
 
 import { confirmBackdropMotion, confirmContentMotion } from './Confirm.motion';
@@ -38,7 +39,7 @@ import type { ConfirmDisplayOptions, ConfirmVariant } from './Confirm.types';
  * union — `default` slots in for `neutral` and `error` slots in for `danger`, both of which
  * deserve their own keying so the recipe + button-color mappings stay readable.
  */
-const ICON_BY_VARIANT: Record<ConfirmVariant, LucideIcon> = {
+const ICON_BY_VARIANT: Record<ConfirmVariant, IconComponent> = {
   default: MessageCircle,
   info: Info,
   success: CheckCircle2,

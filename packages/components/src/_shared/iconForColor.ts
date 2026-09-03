@@ -1,4 +1,3 @@
-import type { LucideIcon } from 'lucide-react';
 import {
   AlertOctagon,
   AlertTriangle,
@@ -6,6 +5,8 @@ import {
   Info,
   MessageCircle,
 } from 'lucide-react';
+
+import type { IconComponent } from '../Icon/IconRegistry';
 
 /**
  * Status color → leading-icon mapping for feedback surfaces. Extracted in Phase 15 (Alert) as the
@@ -22,7 +23,7 @@ import {
  */
 export type StatusColor = 'info' | 'success' | 'warning' | 'danger' | 'neutral';
 
-export const iconForColor: Record<StatusColor, LucideIcon> = {
+export const iconForColor: Record<StatusColor, IconComponent> = {
   info: Info,
   success: CheckCircle2,
   warning: AlertTriangle,

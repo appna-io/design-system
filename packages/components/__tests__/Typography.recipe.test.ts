@@ -50,6 +50,24 @@ describe('typographyRecipe — variant axis', () => {
     expect(cls).toContain('tracking-tight');
   });
 
+  it('display + every heading level carries font-display', () => {
+    for (const variant of ['display', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const) {
+      expect(typographyRecipe({ variant })).toContain('font-display');
+    }
+  });
+
+  it('body / supporting variants do NOT carry font-display — they inherit the body face', () => {
+    for (const variant of ['body', 'bodyLarge', 'bodySmall', 'caption', 'overline'] as const) {
+      expect(typographyRecipe({ variant })).not.toContain('font-display');
+    }
+  });
+
+  it('code still pins font-mono, not the display face', () => {
+    const cls = typographyRecipe({ variant: 'code' });
+    expect(cls).toContain('font-mono');
+    expect(cls).not.toContain('font-display');
+  });
+
   it('caption is muted by default', () => {
     expect(typographyRecipe({ variant: 'caption' })).toContain('text-fg-muted');
   });

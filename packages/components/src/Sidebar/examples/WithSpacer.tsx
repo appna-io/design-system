@@ -11,7 +11,7 @@ export default function WithSpacer() {
   return (
     <Div
       height={460}
-      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+      className="overflow-hidden rounded-md border border-border-subtle"
     >
       <Sidebar ariaLabel="Spacer example" variant="bordered" width={240}>
         <Sidebar.Item href="/" icon={<HomeIcon />}>

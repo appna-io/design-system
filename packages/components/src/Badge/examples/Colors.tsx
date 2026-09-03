@@ -20,7 +20,7 @@ export default function Colors() {
           <Typography
             variant="caption"
             weight="medium"
-            color="muted"
+            color="fg.muted"
             sx={{ textTransform: 'uppercase', letterSpacing: 'wide', width: '4rem' }}
           >
             {variant}

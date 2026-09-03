@@ -5,7 +5,7 @@ export default function OnHover() {
     <Div display="flex" gap={12} flexWrap="wrap">
       <Div
         p={4}
-        bg="primary.50"
+        bg="primary.subtle"
         fg="primary.contrast"
         radius="md"
         cursor="pointer"

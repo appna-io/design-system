@@ -47,7 +47,7 @@ export default function FormInside() {
                 />
               </Div>
               {submitted ? (
-                <Typography variant="bodySmall" color="fg.success">
+                <Typography variant="bodySmall" color="success">
                   Created: {submitted}
                 </Typography>
               ) : null}

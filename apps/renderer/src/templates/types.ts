@@ -1,3 +1,4 @@
+import type { ThemeOverride } from '@apx-ui/ds';
 import type { ComponentType } from 'react';
 
 /**
@@ -55,6 +56,15 @@ export interface TemplateMeta {
   preferredMode?: 'light' | 'dark';
   /** Author / studio credit shown subtly on the gallery card. */
   credit?: string;
+  /**
+   * Brand theme scoped to this template only — a deep-partial theme override (palette, type,
+   * radii, shadows), applied through a scoped `<ThemeProvider>` so it reaches every DS
+   * component inside the template and nothing in the docs chrome outside it.
+   *
+   * Override only the roles the brand actually changes; everything else falls through to the
+   * active global theme. Leave undefined for a template showcasing the default DS look.
+   */
+  theme?: ThemeOverride;
   /**
    * Sections the inspector lets users pop open. Ids here must match the `id` prop
    * on the `<Inspectable>` wrappers inside the template's `Component`. The server

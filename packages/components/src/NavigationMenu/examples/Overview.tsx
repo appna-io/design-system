@@ -6,7 +6,7 @@ import { Div, NavigationMenu } from '@apx-ui/ds';
  */
 export default function Overview() {
   return (
-    <Div className="flex justify-center rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+    <Div className="flex justify-center rounded-md border border-border-subtle bg-bg-paper p-3">
       <NavigationMenu activeHref="/pricing" indicator>
         <NavigationMenu.Item>
           <NavigationMenu.Trigger>Product</NavigationMenu.Trigger>

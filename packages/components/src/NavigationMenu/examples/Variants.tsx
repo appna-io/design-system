@@ -7,12 +7,12 @@ export default function Variants() {
       {(['default', 'ghost', 'pill'] as const).map((variant) => (
         <Div
           key={variant}
-          className="rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3"
+          className="rounded-md border border-border-subtle bg-bg-paper p-3"
         >
           <Typography
             variant="caption"
             weight="semibold"
-            className="mb-2 uppercase tracking-wide text-(--sds-color-text-muted)"
+            className="mb-2 uppercase tracking-wide text-fg-muted"
           >
             variant=&quot;{variant}&quot;
           </Typography>

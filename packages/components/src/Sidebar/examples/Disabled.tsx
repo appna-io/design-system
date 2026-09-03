@@ -14,7 +14,7 @@ export default function Disabled() {
   return (
     <Div
       height={420}
-      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+      className="overflow-hidden rounded-md border border-border-subtle"
     >
       <Div display="flex" className="h-full">
         <Sidebar ariaLabel="Disabled-state example" variant="bordered" width={240}>

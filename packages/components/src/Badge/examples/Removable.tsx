@@ -24,7 +24,7 @@ export default function Removable() {
           <Typography
             as="button"
             variant="bodySmall"
-            color="muted"
+            color="fg.muted"
             sx={{ textDecoration: 'underline' }}
             onClick={() => setTags(INITIAL_TAGS)}
           >

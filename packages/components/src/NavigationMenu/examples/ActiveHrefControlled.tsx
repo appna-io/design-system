@@ -17,14 +17,14 @@ export default function ActiveHrefControlled() {
             key={path}
             type="button"
             onClick={() => setActiveHref(path)}
-            className="rounded-md border border-(--sds-color-border-subtle) px-3 py-1 text-xs font-medium hover:bg-(--sds-color-surface-subtle)"
+            className="rounded-md border border-border-subtle px-3 py-1 text-xs font-medium hover:bg-bg-subtle"
           >
             Set active to {path}
           </button>
         ))}
       </Div>
 
-      <Div className="rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+      <Div className="rounded-md border border-border-subtle bg-bg-paper p-3">
         <NavigationMenu indicator activeHref={activeHref}>
           <NavigationMenu.Item>
             <NavigationMenu.Link href="/features">Features</NavigationMenu.Link>

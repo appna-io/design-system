@@ -96,13 +96,7 @@ export function PreviewToolbar({ meta }: PreviewToolbarProps) {
 
       <Div as="span" className="hidden h-5 w-px bg-border sm:block" aria-hidden />
 
-      <Typography
-        as="span"
-        variant="caption"
-        weight="medium"
-        truncate
-        className="hidden sm:inline"
-      >
+      <Typography as="span" variant="caption" weight="medium" truncate className="hidden sm:inline">
         {meta.name}
       </Typography>
 

@@ -226,7 +226,7 @@ export const NavigationMenuLink = forwardRef<HTMLAnchorElement, NavigationMenuLi
         <span className="flex min-w-0 flex-1 flex-col gap-0.5 text-start">
           <span className="truncate font-medium">{children}</span>
           {description ? (
-            <span className="truncate text-xs text-(--sds-color-text-muted)">{description}</span>
+            <span className="truncate text-xs text-fg-muted">{description}</span>
           ) : null}
         </span>
         {isActive ? (
@@ -262,7 +262,7 @@ export const NavigationMenuLink = forwardRef<HTMLAnchorElement, NavigationMenuLi
           ) : null}
           <Slottable>{children as ReactElement}</Slottable>
           {description ? (
-            <span className="truncate text-xs text-(--sds-color-text-muted)">{description}</span>
+            <span className="truncate text-xs text-fg-muted">{description}</span>
           ) : null}
           {isActive ? <span className="sr-only">{ctx.translations.activeItem}</span> : null}
         </Slot>

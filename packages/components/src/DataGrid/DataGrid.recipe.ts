@@ -137,7 +137,7 @@ export const dataGridThRecipe = cv({
       end: 'text-end',
     },
     sortable: {
-      true: 'cursor-pointer hover:bg-bg-emphasis/40',
+      true: 'cursor-pointer hover:bg-neutral-subtle/40',
       false: '',
     },
     sortActive: {
@@ -194,7 +194,7 @@ export const dataGridTbodyRecipe = cv({
       solid: '',
       outline: '',
       striped:
-        '[&>tr:nth-child(even)>td]:bg-bg-subtle/50 [&>tr:nth-child(even):hover>td]:bg-bg-emphasis/40',
+        '[&>tr:nth-child(even)>td]:bg-bg-subtle/50 [&>tr:nth-child(even):hover>td]:bg-neutral-subtle/40',
       minimal: '',
     },
   },
@@ -244,7 +244,7 @@ export const dataGridTrRecipe = cv({
       state: 'selected',
       color: 'primary',
       class:
-        '[&>td]:bg-primary-subtle/60 [&>td:first-child]:shadow-[inset_2px_0_0_0_var(--sds-primary)]',
+        '[&>td]:bg-primary-subtle/60 [&>td:first-child]:shadow-[inset_2px_0_0_0_var(--sds-palette-primary-main)]',
     },
     {
       state: 'default',
@@ -255,7 +255,7 @@ export const dataGridTrRecipe = cv({
       state: 'selected',
       color: 'secondary',
       class:
-        '[&>td]:bg-secondary-subtle/60 [&>td:first-child]:shadow-[inset_2px_0_0_0_var(--sds-secondary)]',
+        '[&>td]:bg-secondary-subtle/60 [&>td:first-child]:shadow-[inset_2px_0_0_0_var(--sds-palette-secondary-main)]',
     },
     {
       state: 'default',
@@ -266,7 +266,7 @@ export const dataGridTrRecipe = cv({
       state: 'selected',
       color: 'success',
       class:
-        '[&>td]:bg-success-subtle/60 [&>td:first-child]:shadow-[inset_2px_0_0_0_var(--sds-success)]',
+        '[&>td]:bg-success-subtle/60 [&>td:first-child]:shadow-[inset_2px_0_0_0_var(--sds-palette-success-main)]',
     },
     {
       state: 'default',
@@ -277,7 +277,7 @@ export const dataGridTrRecipe = cv({
       state: 'selected',
       color: 'warning',
       class:
-        '[&>td]:bg-warning-subtle/60 [&>td:first-child]:shadow-[inset_2px_0_0_0_var(--sds-warning)]',
+        '[&>td]:bg-warning-subtle/60 [&>td:first-child]:shadow-[inset_2px_0_0_0_var(--sds-palette-warning-main)]',
     },
     {
       state: 'default',
@@ -288,7 +288,7 @@ export const dataGridTrRecipe = cv({
       state: 'selected',
       color: 'danger',
       class:
-        '[&>td]:bg-danger-subtle/60 [&>td:first-child]:shadow-[inset_2px_0_0_0_var(--sds-danger)]',
+        '[&>td]:bg-danger-subtle/60 [&>td:first-child]:shadow-[inset_2px_0_0_0_var(--sds-palette-danger-main)]',
     },
     {
       state: 'default',
@@ -299,18 +299,18 @@ export const dataGridTrRecipe = cv({
       state: 'selected',
       color: 'info',
       class:
-        '[&>td]:bg-info-subtle/60 [&>td:first-child]:shadow-[inset_2px_0_0_0_var(--sds-info)]',
+        '[&>td]:bg-info-subtle/60 [&>td:first-child]:shadow-[inset_2px_0_0_0_var(--sds-palette-info-main)]',
     },
     {
       state: 'default',
       color: 'neutral',
-      class: 'hover:[&>td]:bg-bg-emphasis/30',
+      class: 'hover:[&>td]:bg-neutral-subtle/30',
     },
     {
       state: 'selected',
       color: 'neutral',
       class:
-        '[&>td]:bg-bg-emphasis/40 [&>td:first-child]:shadow-[inset_2px_0_0_0_var(--sds-fg-muted)]',
+        '[&>td]:bg-neutral-subtle/40 [&>td:first-child]:shadow-[inset_2px_0_0_0_var(--sds-palette-foreground-muted)]',
     },
   ],
   defaultVariants: { interactive: false, state: 'default', color: 'primary' },
@@ -399,7 +399,7 @@ export const dataGridSelectionBarRecipe = cv({
  * the end of the cell (`ms-auto`) and shows a dot indicator when a filter is active.
  */
 export const dataGridFilterButtonRecipe = cv({
-  base: 'relative inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-sm text-fg-muted hover:bg-bg-emphasis/40 hover:text-fg-default focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
+  base: 'relative inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-sm text-fg-muted hover:bg-neutral-subtle/40 hover:text-fg-default focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
   variants: {
     active: {
       true: 'text-primary after:absolute after:right-1 after:top-1 after:h-1.5 after:w-1.5 after:rounded-full after:bg-primary',
@@ -546,7 +546,7 @@ export const dataGridErrorRowRecipe = cv({
 });
 
 export const dataGridTdRecipe = cv({
-  base: 'whitespace-nowrap align-middle text-fg-default focus:outline-none focus-visible:relative focus-visible:z-[1] focus-visible:shadow-[inset_0_0_0_2px_var(--sds-focus)]',
+  base: 'whitespace-nowrap align-middle text-fg-default focus:outline-none focus-visible:relative focus-visible:z-[1] focus-visible:shadow-[inset_0_0_0_2px_var(--sds-focus-ring)]',
   variants: {
     density: {
       compact: 'h-8 px-3 py-1 text-xs',

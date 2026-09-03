@@ -248,12 +248,17 @@ export const cardRecipes = {
   }),
 
   body: cv({
+    // Top padding is applied only when the body is the card's FIRST child. A body that follows
+    // a `<Card.Header>` / `<Card.Media>` stays flush (those slots already own the gap above
+    // them, and a media block must bleed into the body edge-to-edge), while a card built from
+    // a bare `<Card.Body>` — a perfectly ordinary composition — no longer renders its content
+    // jammed against the card's top border.
     base: 'text-fg-default',
     variants: {
       size: {
-        sm: 'px-3 pb-3',
-        md: 'px-4 pb-4',
-        lg: 'px-6 pb-6',
+        sm: 'px-3 pb-3 first:pt-3',
+        md: 'px-4 pb-4 first:pt-4',
+        lg: 'px-6 pb-6 first:pt-6',
       },
     },
     defaultVariants: { size: 'md' },

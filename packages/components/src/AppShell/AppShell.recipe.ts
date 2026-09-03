@@ -5,9 +5,16 @@ import { cv } from '@apx-ui/engine';
  * tokens that match the rest of the design system. The actual `grid-template-areas` and
  * `grid-template-columns` are computed inline in `AppShell.tsx` because they depend on which
  * slots are present (a 1-slot layout differs from a 4-slot layout in shape, not just chrome).
+ *
+ * **Color tokens** use the shipped Tailwind preset utilities (`bg-bg-paper`, `bg-bg-subtle`,
+ * `text-fg`, `border-border-subtle`, …), which resolve to `--sds-palette-*` and so re-tint with
+ * the active theme. These were previously written as `bg-(--sds-color-surface-default)` — a
+ * pre-preset naming *and* Tailwind v4 syntax, which on Tailwind 3 compiled to nothing at all, so
+ * the component shipped with no surface or border colors. Same migration Rating / TagsInput /
+ * EmptyState already went through.
  */
 export const appShellRecipe = cv({
-  base: 'relative grid min-h-screen w-full bg-(--sds-color-surface-default) text-(--sds-color-text-default)',
+  base: 'relative grid min-h-screen w-full bg-bg-paper text-fg',
   variants: {
     layout: {
       default: '',
@@ -22,13 +29,13 @@ export const appShellRecipe = cv({
  * top of the viewport; the `variant` axis swaps between three visual treatments.
  */
 export const appShellHeaderRecipe = cv({
-  base: '[grid-area:header] flex items-center min-w-0 bg-(--sds-color-surface-default) z-30',
+  base: '[grid-area:header] flex items-center min-w-0 bg-bg-paper z-30',
   variants: {
     variant: {
-      default: 'border-b border-(--sds-color-border-subtle) px-4',
-      bordered: 'border-b border-(--sds-color-border-default) px-4',
+      default: 'border-b border-border-subtle px-4',
+      bordered: 'border-b border-border px-4',
       floating:
-        'm-3 rounded-xl border border-(--sds-color-border-subtle) bg-(--sds-color-surface-raised) px-4 shadow-md',
+        'm-3 rounded-xl border border-border-subtle bg-bg-paper px-4 shadow-md',
     },
     sticky: {
       true: 'sticky top-0',
@@ -44,13 +51,13 @@ export const appShellHeaderRecipe = cv({
  * aware so the visible separation always falls between sidebar and main.
  */
 export const appShellSidebarRecipe = cv({
-  base: '[grid-area:sidebar] flex flex-col min-w-0 bg-(--sds-color-surface-default) overflow-y-auto transition-[width] duration-200 ease-out',
+  base: '[grid-area:sidebar] flex flex-col min-w-0 bg-bg-paper overflow-y-auto transition-[width] duration-200 ease-out',
   variants: {
     position: {
       // When the sidebar is on the logical-start side, draw the inner edge on the end side
       // (the side facing main).
-      start: 'border-e border-(--sds-color-border-subtle)',
-      end: 'border-s border-(--sds-color-border-subtle)',
+      start: 'border-e border-border-subtle',
+      end: 'border-s border-border-subtle',
     },
     collapsed: {
       true: 'sds-sidebar-collapsed',
@@ -65,11 +72,11 @@ export const appShellSidebarRecipe = cv({
  * opposite logical side from the sidebar (handled by the consumer's prop default at the root).
  */
 export const appShellAsideRecipe = cv({
-  base: '[grid-area:aside] flex flex-col min-w-0 bg-(--sds-color-surface-default) overflow-y-auto',
+  base: '[grid-area:aside] flex flex-col min-w-0 bg-bg-paper overflow-y-auto',
   variants: {
     position: {
-      start: 'border-e border-(--sds-color-border-subtle)',
-      end: 'border-s border-(--sds-color-border-subtle)',
+      start: 'border-e border-border-subtle',
+      end: 'border-s border-border-subtle',
     },
   },
   defaultVariants: { position: 'end' },
@@ -115,7 +122,7 @@ export const appShellMainRecipe = cv({
  * layout via `<HStack>` etc.
  */
 export const appShellFooterRecipe = cv({
-  base: '[grid-area:footer] flex items-center min-w-0 border-t border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) px-4 py-3 text-sm text-(--sds-color-text-muted)',
+  base: '[grid-area:footer] flex items-center min-w-0 border-t border-border-subtle bg-bg-paper px-4 py-3 text-sm text-fg-muted',
   variants: {},
   defaultVariants: {},
 });
@@ -126,5 +133,5 @@ export const appShellFooterRecipe = cv({
  * link is positioned at the top of the document, not the leading edge.
  */
 export const appShellSkipLinkRecipe = cv({
-  base: 'sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:rounded-md focus:bg-(--sds-color-surface-default) focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-(--sds-color-text-default) focus:shadow-lg focus:ring-2 focus:ring-(--sds-color-border-default) focus:outline-none',
+  base: 'sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:rounded-md focus:bg-bg-paper focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-fg focus:shadow-lg focus:ring-2 focus:ring-border focus:outline-none',
 });

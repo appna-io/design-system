@@ -33,8 +33,13 @@ export type TypographyLineHeight = 'none' | 'tight' | 'snug' | 'normal' | 'relax
 /** Typography token keys for the letter-spacing axis. Falls back to any raw CSS value. */
 export type TypographyLetterSpacing = 'tight' | 'normal' | 'wide' | 'wider';
 
-/** Typography token keys for the font-family axis. Falls back to any raw CSS value. */
-export type TypographyFontFamily = 'sans' | 'mono';
+/**
+ * Typography token keys for the font-family axis. Falls back to any raw CSS value.
+ *
+ * `display` is the heading / brand face; it falls back to the sans stack when the theme doesn't
+ * define one, so it is always safe to ask for.
+ */
+export type TypographyFontFamily = 'sans' | 'mono' | 'display';
 
 /** Friendly `align` shortcut keys (mapped to `textAlign`). */
 export type TypographyAlign = 'left' | 'center' | 'right' | 'justify';

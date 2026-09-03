@@ -58,12 +58,19 @@ export const TYPOGRAPHY_VAR_PREFIX = {
 } as const;
 
 /**
- * `fontFamily` is the odd one out — token names are short (`sans` / `mono`) and resolve to
- * `--sds-font-sans` / `--sds-font-mono` (the existing flatten layout in `themeToCssVars`).
+ * `fontFamily` is the odd one out — token names are short (`sans` / `mono` / `display`) and
+ * resolve to `--sds-font-sans` / `--sds-font-mono` / `--sds-font-display` (the existing flatten
+ * layout in `themeToCssVars`).
+ *
+ * `display` carries an inline fallback rather than a bare var: the slot is optional on
+ * `TypographyShape`, so a theme that never sets it would otherwise produce an
+ * invalid-at-computed-value-time declaration. The fallback makes "unset display" mean "use the
+ * body face", explicitly.
  */
 export const FONT_FAMILY_VARS = {
   sans: '--sds-font-sans',
   mono: '--sds-font-mono',
+  display: '--sds-font-display, var(--sds-font-sans)',
 } as const;
 
 export type TypographyTokenProp = keyof typeof TYPOGRAPHY_VAR_PREFIX | 'fontFamily';

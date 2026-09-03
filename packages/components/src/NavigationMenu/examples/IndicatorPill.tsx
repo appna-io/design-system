@@ -8,7 +8,7 @@ import { Div, NavigationMenu } from '@apx-ui/ds';
  */
 export default function IndicatorPill() {
   return (
-    <Div className="rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3">
+    <Div className="rounded-md border border-border-subtle bg-bg-paper p-3">
       <NavigationMenu indicator indicatorVariant="pill" variant="pill" activeHref="/docs">
         <NavigationMenu.Item>
           <NavigationMenu.Link href="/features">Features</NavigationMenu.Link>

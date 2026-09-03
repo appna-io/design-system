@@ -13,9 +13,9 @@ export default function MobileCollapse() {
       display="flex"
       flexDirection="column"
       gap="3"
-      className="rounded-md border border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) p-3"
+      className="rounded-md border border-border-subtle bg-bg-paper p-3"
     >
-      <Typography variant="caption" className="text-(--sds-color-text-muted)">
+      <Typography variant="caption" className="text-fg-muted">
         Resize the viewport below 768px (md) to see the menu hide. The hamburger
         slot under the mobile breakpoint is the AppShell&apos;s responsibility.
       </Typography>

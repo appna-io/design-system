@@ -1,6 +1,6 @@
 import { transitionTokens } from '@apx-ui/engine';
 
-import type { DrawerSide } from './Drawer.types';
+import type { DrawerPhysicalSide } from './Drawer.types';
 
 /**
  * Drawer animation — two configs:
@@ -41,7 +41,7 @@ interface DrawerContentMotion {
   transition: { duration: number; ease: [number, number, number, number] };
 }
 
-export function drawerContentMotion(side: DrawerSide): DrawerContentMotion {
+export function drawerContentMotion(side: DrawerPhysicalSide): DrawerContentMotion {
   const hidden: { x?: string; y?: string } =
     side === 'left'
       ? { x: '-100%' }

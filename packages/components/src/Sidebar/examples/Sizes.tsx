@@ -27,12 +27,12 @@ export default function Sizes() {
         <Div
           key={size}
           height={260}
-          className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+          className="overflow-hidden rounded-md border border-border-subtle"
         >
           <Typography
             variant="caption"
             color="fg.muted"
-            className="border-b border-(--sds-color-border-subtle) bg-(--sds-color-surface-default) px-3 py-1.5 font-mono"
+            className="border-b border-border-subtle bg-bg-paper px-3 py-1.5 font-mono"
           >
             size=&quot;{size}&quot;
           </Typography>

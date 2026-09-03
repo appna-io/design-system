@@ -27,7 +27,7 @@ export default function CustomDayRender() {
             as="span"
             className={[
               'flex h-8 w-8 items-center justify-center rounded-md tabular-nums',
-              ctx.isSelected ? 'bg-primary text-fg-onPrimary' : 'hover:bg-bg-subtle',
+              ctx.isSelected ? 'bg-primary text-primary-contrast' : 'hover:bg-bg-subtle',
               ctx.isOutside ? 'text-fg-muted/40' : '',
             ].join(' ')}
           >

@@ -521,7 +521,9 @@ export type {
   DrawerFooterAlign,
   DrawerFooterProps,
   DrawerHeaderProps,
+  DrawerLogicalSide,
   DrawerOverlay,
+  DrawerPhysicalSide,
   DrawerProps,
   DrawerSide,
   DrawerSize,
@@ -1213,6 +1215,9 @@ export type {
   StepperVariant,
   StepStatus,
 } from './Stepper';
+
+export { Surface, surfaceRecipe, invertedPaletteVars, surfaceCaptureVars } from './Surface';
+export type { SurfaceProps, SurfaceTone } from './Surface';
 
 export { Switch } from './Switch/Switch';
 export type {

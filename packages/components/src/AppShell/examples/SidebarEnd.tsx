@@ -2,7 +2,7 @@ import { AppShell, Div, HStack, Stack, Typography } from '@apx-ui/ds';
 
 export default function SidebarEnd() {
   return (
-    <Div className="h-[420px] overflow-hidden rounded-md border border-(--sds-color-border-subtle)">
+    <Div className="h-[420px] overflow-hidden rounded-md border border-border-subtle">
       <AppShell
         header={
           <HStack gap={3} className="w-full">
@@ -14,9 +14,9 @@ export default function SidebarEnd() {
         }
         sidebar={
           <Stack gap={1} className="p-3">
-            <a href="#comments" className="px-2 py-1 rounded hover:bg-(--sds-color-surface-subtle)">💬 Comments</a>
-            <a href="#properties" className="px-2 py-1 rounded hover:bg-(--sds-color-surface-subtle)">🎛 Properties</a>
-            <a href="#history" className="px-2 py-1 rounded hover:bg-(--sds-color-surface-subtle)">📜 History</a>
+            <a href="#comments" className="px-2 py-1 rounded hover:bg-bg-subtle">💬 Comments</a>
+            <a href="#properties" className="px-2 py-1 rounded hover:bg-bg-subtle">🎛 Properties</a>
+            <a href="#history" className="px-2 py-1 rounded hover:bg-bg-subtle">📜 History</a>
           </Stack>
         }
         sidebarPosition="end"

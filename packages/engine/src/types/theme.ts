@@ -30,7 +30,12 @@ export interface ThemeShape {
 }
 
 export interface TypographyShape {
-  fontFamily: { sans: string; mono: string };
+  /**
+   * `display` is the heading / brand face. Optional, and falls back to `sans` everywhere it is
+   * consumed — so a theme that doesn't set it looks exactly as it did before the slot existed,
+   * and a serif-display + sans-body brand is one token away.
+   */
+  fontFamily: { sans: string; mono: string; display?: string };
   fontSize: Record<string, string>;
   fontWeight: Record<string, number>;
   lineHeight: Record<string, number | string>;

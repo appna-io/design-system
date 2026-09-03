@@ -91,3 +91,59 @@ describe('icon snapshots (lock visual output)', () => {
     });
   }
 });
+
+/**
+ * Directional icons (#16). An arrow that means "next" points *left* in an RTL page. Left
+ * un-mirrored it isn't merely ugly — it points at the previous item, so the control lies about
+ * what it does.
+ *
+ * The mirroring itself is one CSS rule in `@apx-ui/theme`'s `styles/reset.css`; this package
+ * only stamps the attribute it keys on, which is what lets `@apx-ui/icons` stay installable with
+ * no design-system dependency. So what's testable here is the marking, and — more importantly —
+ * that the marking is applied on *semantic* grounds rather than to anything arrow-shaped.
+ */
+describe('directional icons', () => {
+  const DIRECTIONAL = ['ArrowRight', 'ChevronRight'];
+
+  it('marks exactly the reading-order glyphs, and nothing else', () => {
+    const marked = ICON_MANIFEST.filter((e) => e.directional).map((e) => e.name);
+    expect(marked.sort()).toEqual([...DIRECTIONAL].sort());
+  });
+
+  it('stamps the attribute the reset rule keys on', () => {
+    for (const entry of ICON_MANIFEST.filter((e) => e.directional)) {
+      expect(renderToStaticMarkup(createElement(entry.Component))).toContain(
+        'data-apx-icon-directional',
+      );
+    }
+  });
+
+  it('leaves every other icon unmarked', () => {
+    for (const entry of ICON_MANIFEST.filter((e) => !e.directional)) {
+      expect(
+        renderToStaticMarkup(createElement(entry.Component)),
+        entry.name,
+      ).not.toContain('data-apx-icon-directional');
+    }
+  });
+
+  it('does not mark glyphs that are merely handed rather than directional', () => {
+    // `Search`, `Repeat` and `Scissors` have a visual handedness but mean the same thing either
+    // way; `ExternalLink` / `ArrowUpRight` point *out of the page*, a fixed convention rather
+    // than a position in the reading flow. Mirroring any of these is churn at best.
+    const byName = Object.fromEntries(ICON_MANIFEST.map((e) => [e.name, e]));
+    for (const name of ['Search', 'Repeat', 'Scissors', 'ExternalLink', 'ArrowUpRight']) {
+      expect(byName[name]?.directional, name).toBeUndefined();
+    }
+  });
+
+  it('defaults to non-directional, and opts in explicitly', () => {
+    const Plain = createIcon('Plain', createElement('path', { d: 'M0 0h24' }));
+    const Marked = createIcon('Marked', createElement('path', { d: 'M0 0h24' }), {
+      directional: true,
+    });
+    expect(renderToStaticMarkup(createElement(Plain))).not.toContain('data-apx-icon-directional');
+    expect(renderToStaticMarkup(createElement(Marked))).toContain('data-apx-icon-directional');
+  });
+});
+

@@ -71,11 +71,16 @@ export function Inspectable({ id, label, children, className }: InspectableProps
         'group/inspectable relative outline-none',
         // Outline + cursor only kick in when inspector mode is engaged. The
         // outline rides on a box-shadow so it sits inside the section's own
-        // padding and doesn't push siblings around. Tokenized color so it
-        // tracks the active theme variant.
+        // padding and doesn't push siblings around.
+        //
+        // The color must be `--sds-palette-primary-main`, NOT `--sds-palette-primary`:
+        // `themeToCssVars` flattens the palette to one var per role *slot*
+        // (`-main`, `-hover`, `-subtle`, …) and never emits a bare role var. Pointing at
+        // the bare name resolved to nothing, the whole `box-shadow` declaration was
+        // dropped, and the hover outline silently never drew — only the label badge did.
         active && 'cursor-zoom-in transition-shadow',
         active &&
-          'hover:[box-shadow:inset_0_0_0_2px_var(--sds-palette-primary)] focus-visible:[box-shadow:inset_0_0_0_2px_var(--sds-palette-primary)]',
+          'hover:[box-shadow:inset_0_0_0_2px_var(--sds-palette-primary-main)] focus-visible:[box-shadow:inset_0_0_0_2px_var(--sds-palette-primary-main)]',
         className,
       )}
     >

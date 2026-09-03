@@ -12,7 +12,7 @@ export default function WithCollapsibleSections() {
   return (
     <Div
       height={480}
-      className="overflow-hidden rounded-md border border-(--sds-color-border-subtle)"
+      className="overflow-hidden rounded-md border border-border-subtle"
     >
       <Sidebar
         ariaLabel="Collapsible navigation"

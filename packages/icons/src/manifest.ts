@@ -1,3 +1,4 @@
+import { ArrowRight } from './icons/ArrowRight';
 import { ArrowUpRight } from './icons/ArrowUpRight';
 import { Award } from './icons/Award';
 import { BadgeCheck } from './icons/BadgeCheck';
@@ -6,24 +7,35 @@ import { ChevronDown } from './icons/ChevronDown';
 import { ChevronRight } from './icons/ChevronRight';
 import { Clock } from './icons/Clock';
 import { Close } from './icons/Close';
+import { Coffee } from './icons/Coffee';
 import { ErrorCircle } from './icons/ErrorCircle';
 import { ExternalLink } from './icons/ExternalLink';
 import { Fingerprint } from './icons/Fingerprint';
+import { Flame } from './icons/Flame';
+import { Globe } from './icons/Globe';
 import { GraduationCap } from './icons/GraduationCap';
 import { Heart } from './icons/Heart';
 import { Info } from './icons/Info';
 import { KeyRound } from './icons/KeyRound';
+import { Leaf } from './icons/Leaf';
 import { Mail } from './icons/Mail';
 import { MapPin } from './icons/MapPin';
+import { Menu } from './icons/Menu';
 import { Minus } from './icons/Minus';
 import { Phone } from './icons/Phone';
 import { Plus } from './icons/Plus';
+import { Repeat } from './icons/Repeat';
+import { Scissors } from './icons/Scissors';
 import { Search } from './icons/Search';
 import { ShieldCheck } from './icons/ShieldCheck';
+import { ShoppingBag } from './icons/ShoppingBag';
 import { Smartphone } from './icons/Smartphone';
 import { Smile } from './icons/Smile';
 import { Star } from './icons/Star';
+import { Trash } from './icons/Trash';
+import { Truck } from './icons/Truck';
 import { Warning } from './icons/Warning';
+import { Zap } from './icons/Zap';
 import type { IconComponent } from './types';
 
 /**
@@ -46,9 +58,27 @@ export interface IconManifestEntry {
   description: string;
   /** Search synonyms — keep these lowercase. */
   keywords: readonly string[];
+  /**
+   * `true` when the glyph's meaning depends on reading order, so it mirrors under `dir="rtl"`
+   * (see `createIcon`'s `directional` option).
+   *
+   * The bar is **semantic**, not visual. `ArrowRight` and `ChevronRight` mean "next / onward",
+   * which is leftward in an RTL page — those mirror. `Search`, `Repeat` and `Scissors` merely
+   * happen to have a handedness and mean the same thing either way; mirroring them is churn.
+   * `ExternalLink` and `ArrowUpRight` are deliberately excluded too: their arrow points *out of
+   * the page*, a fixed convention users recognise, not a position in the reading flow.
+   */
+  directional?: boolean;
 }
 
 export const ICON_MANIFEST: readonly IconManifestEntry[] = [
+  {
+    name: 'ArrowRight',
+    Component: ArrowRight,
+    description: 'Right-pointing arrow for forward navigation and inline CTAs.',
+    keywords: ['arrow', 'right', 'next', 'forward', 'continue', 'cta'],
+    directional: true,
+  },
   {
     name: 'ArrowUpRight',
     Component: ArrowUpRight,
@@ -84,6 +114,7 @@ export const ICON_MANIFEST: readonly IconManifestEntry[] = [
     Component: ChevronRight,
     description: 'Right-pointing chevron, used for navigation affordances.',
     keywords: ['chevron', 'right', 'next', 'forward', 'caret', 'arrow'],
+    directional: true,
   },
   {
     name: 'Clock',
@@ -96,6 +127,12 @@ export const ICON_MANIFEST: readonly IconManifestEntry[] = [
     Component: Close,
     description: 'X mark used for dismissing dialogs, banners, and tags.',
     keywords: ['close', 'x', 'dismiss', 'cancel', 'remove'],
+  },
+  {
+    name: 'Coffee',
+    Component: Coffee,
+    description: 'Coffee cup for cafés, roasteries, and beverage menus.',
+    keywords: ['coffee', 'cup', 'mug', 'cafe', 'drink', 'espresso', 'beans'],
   },
   {
     name: 'ErrorCircle',
@@ -114,6 +151,18 @@ export const ICON_MANIFEST: readonly IconManifestEntry[] = [
     Component: Fingerprint,
     description: 'Fingerprint used for biometric and security features.',
     keywords: ['fingerprint', 'biometric', 'security', 'identity', 'touch id'],
+  },
+  {
+    name: 'Flame',
+    Component: Flame,
+    description: 'Flame used for roast levels, heat, and trending content.',
+    keywords: ['flame', 'fire', 'roast', 'heat', 'hot', 'trending'],
+  },
+  {
+    name: 'Globe',
+    Component: Globe,
+    description: 'Globe for worldwide shipping, origins, and language pickers.',
+    keywords: ['globe', 'world', 'international', 'shipping', 'origin', 'language'],
   },
   {
     name: 'GraduationCap',
@@ -140,6 +189,12 @@ export const ICON_MANIFEST: readonly IconManifestEntry[] = [
     keywords: ['key', 'access', 'unlock', 'password', 'credential', 'security'],
   },
   {
+    name: 'Leaf',
+    Component: Leaf,
+    description: 'Leaf for organic, sustainable, and single-origin sourcing.',
+    keywords: ['leaf', 'organic', 'plant', 'sustainable', 'natural', 'eco'],
+  },
+  {
     name: 'Mail',
     Component: Mail,
     description: 'Envelope for email addresses and contact channels.',
@@ -150,6 +205,12 @@ export const ICON_MANIFEST: readonly IconManifestEntry[] = [
     Component: MapPin,
     description: 'Map pin for addresses, locations, and directions.',
     keywords: ['map', 'pin', 'location', 'address', 'place', 'directions'],
+  },
+  {
+    name: 'Menu',
+    Component: Menu,
+    description: 'Three-line hamburger that opens a compact navigation menu.',
+    keywords: ['menu', 'hamburger', 'navigation', 'bars', 'drawer', 'more'],
   },
   {
     name: 'Minus',
@@ -170,6 +231,18 @@ export const ICON_MANIFEST: readonly IconManifestEntry[] = [
     keywords: ['plus', 'add', 'new', 'increment', 'create', 'expand'],
   },
   {
+    name: 'Repeat',
+    Component: Repeat,
+    description: 'Looping arrows for subscriptions, renewals, and recurring orders.',
+    keywords: ['repeat', 'loop', 'subscription', 'recurring', 'renew', 'sync'],
+  },
+  {
+    name: 'Scissors',
+    Component: Scissors,
+    description: 'Open shears for barbers, salons, grooming menus, and trim / cut actions.',
+    keywords: ['scissors', 'shears', 'barber', 'salon', 'haircut', 'trim', 'cut', 'grooming'],
+  },
+  {
     name: 'Search',
     Component: Search,
     description: 'Magnifying glass used in search inputs and command palettes.',
@@ -180,6 +253,12 @@ export const ICON_MANIFEST: readonly IconManifestEntry[] = [
     Component: ShieldCheck,
     description: 'Shield with a check mark for safety and protection guarantees.',
     keywords: ['shield', 'security', 'safety', 'protection', 'verified', 'guarantee'],
+  },
+  {
+    name: 'ShoppingBag',
+    Component: ShoppingBag,
+    description: 'Shopping bag for carts, checkout, and commerce entry points.',
+    keywords: ['shopping', 'bag', 'cart', 'basket', 'store', 'checkout', 'commerce'],
   },
   {
     name: 'Smartphone',
@@ -200,9 +279,27 @@ export const ICON_MANIFEST: readonly IconManifestEntry[] = [
     keywords: ['star', 'rating', 'favorite', 'featured', 'review', 'quality'],
   },
   {
+    name: 'Trash',
+    Component: Trash,
+    description: 'Trash can for destructive removal of an item.',
+    keywords: ['trash', 'delete', 'remove', 'bin', 'discard'],
+  },
+  {
+    name: 'Truck',
+    Component: Truck,
+    description: 'Delivery truck for shipping, dispatch, and fulfilment.',
+    keywords: ['truck', 'shipping', 'delivery', 'dispatch', 'freight', 'fulfilment'],
+  },
+  {
     name: 'Warning',
     Component: Warning,
     description: 'Triangle warning used for cautionary messages.',
     keywords: ['warning', 'caution', 'alert', 'attention'],
+  },
+  {
+    name: 'Zap',
+    Component: Zap,
+    description: 'Lightning bolt for speed, energy, and instant actions.',
+    keywords: ['zap', 'lightning', 'bolt', 'fast', 'speed', 'energy', 'instant'],
   },
 ] as const;

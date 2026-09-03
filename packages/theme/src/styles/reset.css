@@ -38,3 +38,19 @@
     scroll-behavior: auto !important;
   }
 }
+/*
+ * Mirror direction-dependent icons under RTL.
+ *
+ * `@apx-ui/icons` marks a glyph with `data-apx-icon-directional` when its meaning depends on
+ * reading order. An arrow that means "next" points left in Arabic — left un-mirrored it doesn't
+ * merely look wrong, it points at the previous item. The attribute is all the icons package
+ * emits: the rule lives here so that package stays installable on its own with no dependency on
+ * the design system.
+ *
+ * `[dir='rtl']` rather than `:root[dir='rtl']` on purpose — `<DirectionProvider>` and
+ * `<ThemeProvider scope>` both set `dir` on a wrapper, not on `<html>`, so an RTL region inside
+ * an LTR page has to mirror too.
+ */
+[dir='rtl'] [data-apx-icon-directional] {
+  transform: scaleX(-1);
+}
