@@ -1,6 +1,6 @@
 {
   "name": "@apx-ui/tokens",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Design token definitions for apx-ds",
   "license": "MIT",
   "publishConfig": {
