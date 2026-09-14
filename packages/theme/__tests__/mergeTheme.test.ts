@@ -16,7 +16,12 @@ describe('mergeTheme', () => {
     expect(result.palette.light.primary.main).toBe('#ff0000');
     expect(result.palette.light.primary.contrast).toBe(defaultTheme.palette.light.primary.contrast);
     expect(result.palette.light.secondary.main).toBe(defaultTheme.palette.light.secondary.main);
-    expect(result.palette.dark.primary.main).toBe(defaultTheme.palette.dark.primary.main);
+    // Dark is NOT left at the DS default. A brand that overrides only `palette.light` gets a
+    // derived dark palette — see `deriveDarkPalette`. Keeping the default here is what made a
+    // green-branded template render generic indigo in dark mode.
+    expect(result.palette.dark.primary.main).not.toBe(defaultTheme.palette.dark.primary.main);
+    // Status roles carry no brand identity, so they still inherit.
+    expect(result.palette.dark.danger.main).toBe(defaultTheme.palette.dark.danger.main);
   });
 
   it('applies multiple overrides left-to-right (later wins)', () => {

@@ -95,12 +95,22 @@ export { useMediaQuery, type UseMediaQueryOptions } from './hooks/useMediaQuery'
 
 // motion
 export {
+  defaultViewport,
   motionPresets,
+  resolveTransition,
+  toMotionEase,
   transitionTokens,
   useReducedMotion,
+  type CubicBezierPoints,
+  type MotionDurationToken,
+  type MotionEaseToken,
+  type MotionEasing,
   type MotionPresetName,
+  type ResolvedTransition,
   type SimpleVariant,
+  type TransitionInput,
   type TransitionTokens,
+  type ViewportOptions,
 } from './motion';
 
 // registry
@@ -133,6 +143,7 @@ export {
 } from './focus-trap';
 export { useEscapeStack, type UseEscapeStackOptions } from './escape-stack';
 export { useOutsideClick, type UseOutsideClickOptions } from './useOutsideClick';
+export { useScrollProgress, type ScrollProgressOptions } from './useScrollProgress';
 export { useScrollLock } from './useScrollLock';
 export { mergeRefs } from './mergeRefs';
 

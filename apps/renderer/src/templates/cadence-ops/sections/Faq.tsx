@@ -1,6 +1,5 @@
-import { Accordion, Div } from '@apx-ui/ds';
+import { Accordion, Div, SectionHeading } from '@apx-ui/ds';
 
-import { SectionHeading } from '../SectionHeading';
 import { faqSection, faqs } from '../data';
 
 /**

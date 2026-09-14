@@ -1,11 +1,18 @@
-import { Div, Divider, Typography } from '@apx-ui/ds';
+import { Div, Divider, Surface, Typography } from '@apx-ui/ds';
 
 import { BrandMark } from '../BrandMark';
 import { footer, footerLinks, socials } from '../data';
 
 /**
- * Three-column espresso footer. Like the ValueProps band it inverts the palette rather than
- * naming colours: the surface is `primary` and the type is `primary.contrast`.
+ * Three-column espresso footer, on the same `<Surface tone="primary">` as the ValueProps and
+ * Newsletter bands.
+ *
+ * It used to name `color="primary.contrast"` nine times and fake a muted step with `opacity-80`.
+ * Both were the same workaround: `primary.contrast` is the *ink slot of the primary role*, and
+ * using it to mean "the text colour on this dark band" only works because the band happens to be
+ * primary — it breaks the moment the band changes, and it cannot express a muted step at all,
+ * which is why the opacity was there. The tone provides `foreground.default` and
+ * `foreground.muted` directly, so every one of them is now a plain token.
  *
  * The copyright year is computed at render, matching the source's `new Date().getFullYear()`.
  */
@@ -13,7 +20,7 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <Div as="footer" className="border-t border-border bg-primary text-primary-contrast">
+    <Surface as="footer" tone="primary" className="border-t border-border">
       <Div className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         <Div className="grid gap-10 md:grid-cols-3">
           <Div>
@@ -21,8 +28,8 @@ export function SiteFooter() {
             <Typography
               variant="bodySmall"
               lineHeight="relaxed"
-              color="primary.contrast"
-              className="mt-3 max-w-xs opacity-80"
+              color="fg.muted"
+              className="mt-3 max-w-xs"
             >
               {footer.blurb}
             </Typography>
@@ -37,8 +44,8 @@ export function SiteFooter() {
                     actLike="a"
                     href={link.href}
                     variant="bodySmall"
-                    color="primary.contrast"
-                    className="opacity-80 transition hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-contrast"
+                    color="fg.muted"
+                    className="transition hover:text-fg"
                   >
                     {link.label}
                   </Typography>
@@ -55,8 +62,8 @@ export function SiteFooter() {
                   actLike="a"
                   href={`mailto:${footer.email}`}
                   variant="bodySmall"
-                  color="primary.contrast"
-                  className="opacity-80 transition hover:opacity-100"
+                  color="fg.muted"
+                  className="transition hover:text-fg"
                 >
                   {footer.email}
                 </Typography>
@@ -64,16 +71,14 @@ export function SiteFooter() {
               <Typography
                 as="li"
                 variant="bodySmall"
-                color="primary.contrast"
-                className="opacity-80"
+                color="fg.muted"
               >
                 {footer.hours}
               </Typography>
               <Typography
                 as="li"
                 variant="bodySmall"
-                color="primary.contrast"
-                className="opacity-80"
+                color="fg.muted"
               >
                 {footer.location}
               </Typography>
@@ -89,8 +94,8 @@ export function SiteFooter() {
                   rel="noopener noreferrer"
                   aria-label={social.name}
                   variant="bodySmall"
-                  color="primary.contrast"
-                  className="opacity-80 transition hover:opacity-100"
+                  color="fg.muted"
+                  className="transition hover:text-fg"
                 >
                   {social.label}
                 </Typography>
@@ -99,18 +104,18 @@ export function SiteFooter() {
           </Div>
         </Div>
 
-        <Divider className="mt-10 bg-primary-border" />
+        <Divider className="mt-10" />
 
         <Typography
           variant="caption"
           align="center"
-          color="primary.contrast"
-          className="mt-6 block opacity-60"
+          color="fg.muted"
+          className="mt-6 block"
         >
           {footer.copyright(year)}
         </Typography>
       </Div>
-    </Div>
+    </Surface>
   );
 }
 
@@ -122,7 +127,6 @@ function FooterColumnTitle({ children }: { children: string }) {
       weight="semibold"
       transform="upper"
       letterSpacing="wider"
-      color="primary.contrast"
     >
       {children}
     </Typography>

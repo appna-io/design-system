@@ -318,3 +318,36 @@ describe('ColorPicker — contrast chip', () => {
     expect(chip).toHaveAttribute('data-level', 'AAA');
   });
 });
+describe('ColorPicker — preset swatch respects reduced motion', () => {
+  // The bug: the swatch carried `transition-transform … motion-reduce:transition-none` alongside a
+  // bare `hover:scale-110`. Suppressing the *transition* leaves the *transform* — so a
+  // reduced-motion user still got the 110% growth, it just snapped there instead of easing. The
+  // handling looked present and did the opposite of its intent.
+  it('gates both the transform and its transition on motion-safe', async () => {
+    const user = userEvent.setup();
+    render(
+      <ColorPicker defaultValue="#000000" presets={['#ff0000', '#00ff00']} presetsOnly ariaLabel="x" />,
+    );
+    await user.click(getTrigger());
+
+    const swatch = document.querySelector<HTMLElement>('[data-preset-index]');
+
+    // No early return: if the swatch isn't found the test must FAIL, not quietly pass. An
+    // escape hatch here made the first version of this test green against the very bug it was
+    // written to catch.
+    expect(swatch, 'preset swatch not rendered — selector is stale').not.toBeNull();
+
+    const classes = swatch!.className.split(/\s+/);
+    const scale = classes.find((c) => c.includes('scale-110'));
+    const transition = classes.find((c) => c.includes('transition-transform'));
+
+    expect(scale, 'the swatch should still scale on hover').toBeDefined();
+    expect(scale!.startsWith('motion-safe:')).toBe(true);
+    expect(transition).toBeDefined();
+    expect(transition!.startsWith('motion-safe:')).toBe(true);
+
+    // And nothing left behind that tries to *undo* motion — an undo rule sits at the same
+    // specificity as the rule it beats, so it only wins by emission order.
+    expect(classes.some((c) => c.startsWith('motion-reduce:'))).toBe(false);
+  });
+});

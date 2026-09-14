@@ -1,7 +1,6 @@
 import { Clock, MapPin, Repeat, Zap } from '@apx-ui/icons';
-import { Div, Timeline } from '@apx-ui/ds';
+import { Div, SectionHeading, Timeline } from '@apx-ui/ds';
 
-import { SectionHeading } from '../SectionHeading';
 import { workflowSection, workflowSteps, type FeatureIcon } from '../data';
 
 /**

@@ -1,5 +1,11 @@
 import type { CSSProperties, ElementType, HTMLAttributes, ReactNode, Ref } from 'react';
-import type { MotionPresetName, Sx } from '@apx-ui/engine';
+import type {
+  MotionDurationToken,
+  MotionEaseToken,
+  MotionPresetName,
+  Sx,
+  ViewportOptions,
+} from '@apx-ui/engine';
 
 import type { DivGradient } from './gradient';
 
@@ -222,6 +228,51 @@ export interface DivOwnProps {
    * Skipped when `asChild` is true.
    */
   animation?: DivAnimation | undefined;
+  /**
+   * Defer `animation` until the element scrolls into view, instead of running it on mount.
+   *
+   * Without this, every animated element on a page finishes its entrance before the user has
+   * scrolled to it — so a long marketing page animates entirely off-screen and reads as static.
+   * Pass `true` for the DS defaults (`once: true`, `amount: 0.25`, and a `-64px` bottom margin so
+   * the reveal starts just before the element reaches the fold), or an object to tune them.
+   *
+   * Ignored when `animation` is absent, when `asChild` is set, and under reduced motion — where
+   * the element renders plain and fully visible rather than waiting for a trigger it will never
+   * receive.
+   *
+   * @example
+   *   <Div animation="riseIn" animateOnView />
+   *   <Div animation="fadeIn" animateOnView={{ once: false, amount: 0.5 }} />
+   */
+  animateOnView?: boolean | ViewportOptions | undefined;
+  /** Seconds to wait before the animation starts. Composes with `stagger` on an ancestor. */
+  animationDelay?: number | undefined;
+  /**
+   * Animation length — seconds, or a motion token name (`'fast'` · `'normal'` · `'slow'`).
+   * Token names resolve through `@apx-ui/tokens`, so a theme-level motion change reaches here.
+   */
+  animationDuration?: number | MotionDurationToken | undefined;
+  /**
+   * Easing — a token name (`'standard'` · `'emphasized'` · `'decelerate'` · `'accelerate'` ·
+   * `'linear'`) or any raw CSS easing string.
+   */
+  animationEase?: string | MotionEaseToken | undefined;
+  /**
+   * Cascade descendant `<Div animation="…">` elements instead of firing them together: the number
+   * of seconds between each one starting.
+   *
+   * The children need no extra props — they opt in simply by having an `animation`. Combine with
+   * `animateOnView` on this element to make the whole group reveal on scroll as one unit, which
+   * is the common case for a card grid or a feature list.
+   *
+   * @example
+   *   <Div stagger={0.08} animateOnView>
+   *     {items.map((i) => <Div key={i.id} animation="riseIn">…</Div>)}
+   *   </Div>
+   */
+  stagger?: number | undefined;
+  /** Seconds to wait before the first staggered child starts. Requires `stagger`. */
+  staggerDelay?: number | undefined;
   /**
    * Shortcut for `display: flex; align-items: center; justify-content: center;`. Explicit
    * style props win — if any of the three keys is also supplied, the consumer value is kept.

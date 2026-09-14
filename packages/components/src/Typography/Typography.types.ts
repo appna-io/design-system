@@ -2,12 +2,23 @@ import type { CSSProperties } from 'react';
 import type { DivProps } from '../Div';
 
 /**
- * The 13 shipped variants. Headings (`h1`–`h6`) map onto their semantic counterparts; `display`
- * is the oversize visual hero variant; the three `body*` variants cover paragraph density; the
- * three supporting variants cover accent text (`caption`, `overline`, `code`).
+ * The 16 shipped variants. Headings (`h1`–`h6`) map onto their semantic counterparts; the four
+ * `display*` variants are the oversize visual hero sizes; the three `body*` variants cover
+ * paragraph density; the three supporting variants cover accent text (`caption`, `overline`,
+ * `code`).
+ *
+ * `display` is fixed-size (3rem) and stays for product UI. `displayLg` / `displayXl` /
+ * `display2Xl` are **fluid** — they scale continuously with the viewport instead of snapping at
+ * breakpoints, which is what a marketing headline wants. Reach for `display2Xl` on a hero,
+ * `displayXl` on a large section opener, `displayLg` where a heading should feel oversized
+ * without dominating.
  */
 export type TypographyVariant =
   | 'display'
+  | 'displayMd'
+  | 'displayLg'
+  | 'displayXl'
+  | 'display2Xl'
   | 'h1'
   | 'h2'
   | 'h3'
@@ -22,7 +33,23 @@ export type TypographyVariant =
   | 'code';
 
 /** Typography token keys for the size axis. Falls back to any raw CSS value. */
-export type TypographyFontSize = 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl';
+export type TypographyFontSize =
+  | 'xs'
+  | 'sm'
+  | 'base'
+  | 'lg'
+  | 'xl'
+  | '2xl'
+  | '3xl'
+  | '4xl'
+  | '5xl'
+  | '6xl'
+  | '7xl'
+  | '8xl'
+  | 'display-md'
+  | 'display-lg'
+  | 'display-xl'
+  | 'display-2xl';
 
 /** Typography token keys for the weight axis. Falls back to any numeric/CSS value. */
 export type TypographyWeight = 'normal' | 'medium' | 'semibold' | 'bold';
@@ -31,7 +58,7 @@ export type TypographyWeight = 'normal' | 'medium' | 'semibold' | 'bold';
 export type TypographyLineHeight = 'none' | 'tight' | 'snug' | 'normal' | 'relaxed';
 
 /** Typography token keys for the letter-spacing axis. Falls back to any raw CSS value. */
-export type TypographyLetterSpacing = 'tight' | 'normal' | 'wide' | 'wider';
+export type TypographyLetterSpacing = 'tighter' | 'tight' | 'normal' | 'wide' | 'wider';
 
 /**
  * Typography token keys for the font-family axis. Falls back to any raw CSS value.
@@ -60,6 +87,31 @@ export type TypographyDecoration = 'none' | 'underline' | 'line-through';
 export interface TypographyOwnProps {
   /** Visual + semantic variant. Default `'body'`. */
   variant?: TypographyVariant | undefined;
+  /**
+   * The **visual scale only**, with no element attached.
+   *
+   * `variant` drives two things — the type scale *and* the rendered element — so the most natural
+   * way to ask for a size makes a semantic promise you never meant:
+   *
+   * ```tsx
+   * <Typography variant="h4">{clientName}</Typography>   // emits a real <h4>
+   * ```
+   *
+   * That shipped an `h1 → h4` skip and eight phantom subheadings on a page whose "headings" were
+   * a list of company names. Nothing showed it: the file reads correctly, the design is right,
+   * the tests pass. It is visible only in the rendered outline.
+   *
+   * So `size` is the same scale with the promise removed. It renders a `<span>` unless `as` says
+   * otherwise, and the rule is short enough to remember:
+   *
+   * > **`variant` makes a semantic promise. `size` doesn't.**
+   *
+   * ```tsx
+   * <Typography size="h4">{clientName}</Typography>      // h4's scale, no heading
+   * <Typography variant="h4">{sectionTitle}</Typography> // an actual h4
+   * ```
+   */
+  size?: TypographyVariant | undefined;
 
   /** Token (`'xs'`–`'5xl'`) or any raw CSS font-size value. */
   fontSize?: TypographyFontSize | (string & {}) | number | undefined;
@@ -69,7 +121,7 @@ export interface TypographyOwnProps {
   fontWeight?: TypographyWeight | (string & {}) | number | undefined;
   /** Token (`'none'`–`'relaxed'`) or any raw CSS line-height value. */
   lineHeight?: TypographyLineHeight | (string & {}) | number | undefined;
-  /** Token (`'tight'`–`'wider'`) or any raw CSS letter-spacing value. */
+  /** Token (`'tighter'`–`'wider'`) or any raw CSS letter-spacing value. */
   letterSpacing?: TypographyLetterSpacing | (string & {}) | undefined;
   /** Token (`'sans'` / `'mono'`) or any raw CSS font-family stack. */
   fontFamily?: TypographyFontFamily | (string & {}) | undefined;

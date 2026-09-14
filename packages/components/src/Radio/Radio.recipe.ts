@@ -42,7 +42,7 @@ export const radioRecipes = {
     base: [
       // Layout — fixed-aspect circle that owns its size so the dot can be a centered ::before.
       'relative shrink-0 inline-flex items-center justify-center rounded-full',
-      'border border-border bg-bg-paper',
+      'border border-border-control bg-bg-paper',
       'transition-[background-color,border-color,box-shadow] duration-fast ease-standard',
       // Focus ring lands on the *peer*-focused hidden input, so the visible affordance follows
       // keyboard focus exactly. Color is layered in via compoundVariants below.

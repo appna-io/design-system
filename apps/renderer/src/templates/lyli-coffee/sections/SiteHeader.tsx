@@ -35,7 +35,7 @@ export function SiteHeader() {
               variant="bodySmall"
               weight="medium"
               color="fg.muted"
-              className="rounded-md transition hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+              className="rounded-md transition hover:text-fg"
             >
               {link.label}
             </Typography>
@@ -71,7 +71,7 @@ export function SiteHeader() {
                     weight="medium"
                     color="fg.muted"
                     onClick={() => setOpen(false)}
-                    className="rounded-lg px-3 py-2 transition hover:bg-bg-subtle hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                    className="rounded-lg px-3 py-2 transition hover:bg-bg-subtle hover:text-fg"
                   >
                     {link.label}
                   </Typography>

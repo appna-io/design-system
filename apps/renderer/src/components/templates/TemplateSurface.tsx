@@ -9,6 +9,8 @@ import {
 } from '@apx-ui/ds';
 import { type ReactNode } from 'react';
 
+import { useTemplateSeed } from './TemplateSeedContext';
+
 import { TemplateThemePanel } from './TemplateThemePanel';
 
 interface TemplateSurfaceProps {
@@ -39,12 +41,29 @@ interface TemplateSurfaceProps {
  * are never persisted — leaving the page resets it to the template's own defaults. Mode,
  * direction and variant are inherited from the ancestor, so the preview toolbar's toggles keep
  * working inside a branded template.
+ *
+ * **Opening mode / variant.** `TemplateMeta` has always declared `preferredMode` and
+ * `preferredVariant`, but nothing read them — a dark-first template opened in whatever mode the
+ * docs happened to be in, which for a design built on a near-black canvas is not a preference
+ * being ignored so much as the wrong page. `<TemplateSeedProvider>` honours them on entry while
+ * still releasing to the toolbar the moment the user touches it; this component only *applies*
+ * what that provider resolved, so the toolbar can report the identical value.
  */
 export function TemplateSurface({ theme, children }: TemplateSurfaceProps) {
   const { dir } = useThemeDirection();
+  // The seed is owned by `<TemplateSeedProvider>` above, so the toolbar can report the same value
+  // this scope applies — see TemplateSeedContext for why that has to be shared rather than local.
+  const seed = useTemplateSeed();
+  const seededMode = seed?.mode ?? undefined;
+  const seededVariant = seed?.variant ?? undefined;
 
   return (
-    <ThemeProvider scope defaultOverrides={theme ?? {}}>
+    <ThemeProvider
+      scope
+      defaultOverrides={theme ?? {}}
+      defaultMode={seededMode}
+      defaultVariant={seededVariant}
+    >
       <DirectionProvider dir={dir}>
         <Div dir={dir}>{children}</Div>
         <TemplateThemePanel />

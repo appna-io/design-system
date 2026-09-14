@@ -23,24 +23,34 @@ import { mergeTheme, type ThemeOverride } from './mergeTheme';
 import { detectPlatform } from './platform';
 import { themeToCssVars } from './themeToCssVars';
 
+/**
+ * Every optional prop is written `?: T | undefined` rather than bare `?: T`.
+ *
+ * The workspace compiles with `exactOptionalPropertyTypes`, under which a bare `?:` means the key
+ * may be *absent* but may not be *present and undefined*. That makes conditional props
+ * (`defaultMode={pinned ? 'dark' : undefined}`) a type error and forces callers into conditional
+ * spreads — which is exactly the pattern this provider invites, since "pin this axis, or inherit
+ * it" is the choice a scoped provider exists to express. The rest of the DS already writes props
+ * this way; this interface was the outlier.
+ */
 export interface ThemeProviderProps {
   /** A theme produced by `defineTheme(...)`. If omitted, `defaultTheme` is used. */
-  theme?: ThemeShape;
+  theme?: ThemeShape | undefined;
   /**
    * Initial mode setting before any persisted value is read. Defaults to `'system'`.
    * On a `scope`d provider, passing this **pins** the mode instead of inheriting it — see `scope`.
    */
-  defaultMode?: ModeSetting;
+  defaultMode?: ModeSetting | undefined;
   /** Initial direction before any persisted value is read. Defaults to the theme's `dir`. */
-  defaultDir?: Direction;
+  defaultDir?: Direction | undefined;
   /** Initial variant before any persisted value is read. Defaults to the theme's `variant`. */
-  defaultVariant?: string;
+  defaultVariant?: string | undefined;
   /**
    * Initial platform setting before any persisted value is read. Defaults to `'auto'` (browser
    * sniffing). Pass `'apple'` or `'other'` to pin — useful for screenshot tests, design
    * reviews, or apps that want to opt out of detection entirely.
    */
-  defaultPlatform?: PlatformSetting;
+  defaultPlatform?: PlatformSetting | undefined;
   /**
    * Initial runtime overrides before any persisted value is read. Lets you ship a default
    * "flavour" without redefining the whole theme — e.g. `{ palette: { light: { primary: { main: '#ff5722' } } } }`.
@@ -50,7 +60,7 @@ export interface ThemeProviderProps {
    * beyond the provider's own subtree, so `useThemeOverrides()` cannot reach it — pass the
    * controlled `overrides` prop instead.
    */
-  defaultOverrides?: ThemeOverride;
+  defaultOverrides?: ThemeOverride | undefined;
   /**
    * Controlled runtime overrides. When set, this is the override layer and the provider keeps no
    * state of its own; `onOverridesChange` reports what an inner `useThemeOverrides()` call tried
@@ -63,9 +73,9 @@ export interface ThemeProviderProps {
    * would repaint the whole app. Lifting the overrides to the parent and passing them down here
    * is how an external control drives one scope and nothing else.
    */
-  overrides?: ThemeOverride;
+  overrides?: ThemeOverride | undefined;
   /** Called with the next override object whenever something inside asks to change it. */
-  onOverridesChange?: (overrides: ThemeOverride) => void;
+  onOverridesChange?: ((overrides: ThemeOverride) => void) | undefined;
   /**
    * Confine this theme to its own subtree instead of the document.
    *
@@ -94,18 +104,18 @@ export interface ThemeProviderProps {
    *  - **No pre-paint script** — `<ThemeScript />` only writes `<html>`, so a scoped subtree
    *    renders in its light palette until mount. Pinning `defaultMode` also skips that flash.
    */
-  scope?: boolean;
+  scope?: boolean | undefined;
   /**
    * `localStorage` key. Set to `null` to disable persistence. Defaults to `'sds-theme'` — or to
    * `null` when `scope` is set (see `scope`).
    * The provider persists `mode`, `dir`, `variant`, `platform`, and `overrides` under
    * `${key}-mode`, `${key}-dir`, `${key}-variant`, `${key}-platform`, `${key}-overrides`.
    */
-  storageKey?: string | null;
+  storageKey?: string | null | undefined;
   /** Whether to inject the generated CSS variables into a `<style>` tag. Default `true`. */
-  injectCss?: boolean;
+  injectCss?: boolean | undefined;
   /** Skip mounting transitions while switching mode (`color-scheme` flash mitigation). Default `true`. */
-  disableTransitionOnChange?: boolean;
+  disableTransitionOnChange?: boolean | undefined;
   children: ReactNode;
 }
 

@@ -9,11 +9,11 @@ export default function Overview() {
   return (
     <Div display="flex" flexDirection="column" gap="6">
       <Surface as="section" className="rounded-lg border border-border p-6">
-        <Band label="tone=&quot;default&quot;" />
+        <Band label='tone="default"' />
       </Surface>
 
       <Surface as="section" tone="inverted" className="rounded-lg p-6">
-        <Band label="tone=&quot;inverted&quot;" />
+        <Band label='tone="inverted"' />
       </Surface>
     </Div>
   );

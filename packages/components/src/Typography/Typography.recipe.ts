@@ -28,6 +28,14 @@ export const typographyRecipe = cv({
   variants: {
     variant: {
       display: 'font-display text-5xl font-bold leading-tight tracking-tight',
+      // The fluid marketing sizes. `leading-none` rather than `leading-tight`: at 80px+ a 1.25
+      // line height opens a gap wide enough to read as two separate lines rather than one
+      // headline. `tracking-tighter` for the same optical reason — letter-spacing has to shrink
+      // as type grows or the counters look loose.
+      displayMd: 'font-display text-display-md font-bold leading-tight tracking-tight',
+      displayLg: 'font-display text-display-lg font-bold leading-none tracking-tighter',
+      displayXl: 'font-display text-display-xl font-bold leading-none tracking-tighter',
+      display2Xl: 'font-display text-display-2xl font-bold leading-none tracking-tighter',
       h1: 'font-display text-4xl font-semibold leading-tight tracking-tight',
       h2: 'font-display text-3xl font-semibold leading-tight tracking-tight',
       h3: 'font-display text-2xl font-semibold leading-snug',

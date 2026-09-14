@@ -21,7 +21,13 @@ export function HeroPreview() {
       <Card.Body>
         <Div className="flex items-start justify-between gap-4">
           <Div>
-            <Typography as="h3" variant="h4" weight="semibold" className="text-base">
+            {/* `as="span"`, not a heading — and the same applies to every label below.
+                This is a *fictional dashboard inside a product shot*: chrome in a picture, not a
+                section of this document. As headings they sat directly under the page's `h1` and
+                skipped h2 entirely, so a screen reader navigating by heading landed inside the
+                mockup as though it were part of the page. Visual sizes are unchanged; only the
+                outline is. */}
+            <Typography size="h4" weight="semibold" className="block text-base">
               {heroPreview.boardTitle}
             </Typography>
             <Div className="mt-1.5 flex items-center gap-2">
@@ -59,8 +65,10 @@ export function HeroPreview() {
           ))}
         </Div>
 
+        {/* Same reasoning as the board title above: a column label inside the mockup, not a
+            section of this document. */}
         <Typography
-          as="h4"
+          as="span"
           variant="caption"
           weight="semibold"
           transform="upper"

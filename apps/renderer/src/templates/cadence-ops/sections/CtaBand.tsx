@@ -1,32 +1,26 @@
 import { ArrowRight } from '@apx-ui/icons';
-import { Button, Div, Typography } from '@apx-ui/ds';
+import { Button, Div, SectionHeading, Surface, Typography } from '@apx-ui/ds';
 
-import { SectionHeading } from '../SectionHeading';
 import { ctaBand } from '../data';
 
 /**
- * Closing band on the inverted surface. Like the other templates' dark bands it swaps palette
- * *roles* — surface `primary`, type `primary.contrast` — rather than naming colours, so
- * recolouring the primary role re-skins it along with the buttons and the brand tile.
+ * Closing band on the brand fill.
  *
- * The secondary action needs the contrast token inline: `ButtonColor` has no inverse / on-dark
- * role, so an outlined light button on a primary fill cannot be expressed through the prop API.
- * Same DS gap [#10](/issues/10) records, minimum surface area.
+ * `<Surface tone="primary">` establishes the ground, so everything inside is written exactly as it
+ * would be on a white page: the heading reads plain `foreground` tokens, and both buttons ask for
+ * `color="neutral"` — which the tone has re-pointed at the brand's contrast slot, giving the white
+ * fill / violet label pair this band wants. Previously the two buttons and the heading's chip each
+ * carried an inline `style` reaching for `var(--sds-palette-primary-contrast)`, because the DS had
+ * no on-brand role to ask for.
  */
-const ON_PRIMARY_OUTLINE = {
-  borderColor: 'var(--sds-palette-primary-contrast)',
-  color: 'var(--sds-palette-primary-contrast)',
-} as const;
-
-/** The matching solid: contrast fill, primary text. Same gap, same reason. */
-const ON_PRIMARY_SOLID = {
-  backgroundColor: 'var(--sds-palette-primary-contrast)',
-  color: 'var(--sds-palette-primary-main)',
-} as const;
-
 export function CtaBand() {
   return (
-    <Div as="section" id="demo" className="relative overflow-hidden bg-primary py-20 lg:py-24">
+    <Surface
+      as="section"
+      tone="primary"
+      id="demo"
+      className="relative overflow-hidden py-20 lg:py-24"
+    >
       <Div
         decorative
         gradient={{
@@ -39,24 +33,24 @@ export function CtaBand() {
       />
 
       <Div className="relative mx-auto w-full max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-        <SectionHeading eyebrow="Get started" title={ctaBand.title} body={ctaBand.body} onDark />
+        <SectionHeading eyebrow="Get started" title={ctaBand.title} body={ctaBand.body} />
 
         <Div className="mt-10 flex flex-wrap justify-center gap-3">
-          <Button size="lg" style={ON_PRIMARY_SOLID} asChild>
+          <Button size="lg" color="neutral" asChild>
             <a href={ctaBand.primaryCta.href} className="inline-flex items-center gap-2">
               {ctaBand.primaryCta.label}
               <ArrowRight size={18} />
             </a>
           </Button>
-          <Button size="lg" variant="outline" style={ON_PRIMARY_OUTLINE} asChild>
+          <Button size="lg" variant="outline" color="neutral" asChild>
             <a href={ctaBand.secondaryCta.href}>{ctaBand.secondaryCta.label}</a>
           </Button>
         </Div>
 
-        <Typography variant="bodySmall" color="primary.contrast" className="mt-6 block opacity-70">
+        <Typography variant="bodySmall" color="fg.muted" className="mt-6 block">
           {ctaBand.footnote}
         </Typography>
       </Div>
-    </Div>
+    </Surface>
   );
 }

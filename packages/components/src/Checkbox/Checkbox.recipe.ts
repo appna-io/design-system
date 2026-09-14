@@ -35,7 +35,7 @@ export const checkboxRecipes = {
   control: cv({
     base: [
       'relative shrink-0 inline-flex items-center justify-center',
-      'border border-border bg-bg-paper text-transparent',
+      'border border-border-control bg-bg-paper text-transparent',
       'transition-[background-color,border-color,color,box-shadow] duration-fast ease-standard',
       'outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-bg',
       'data-[invalid=true]:border-danger data-[invalid=true]:peer-focus-visible:ring-danger',

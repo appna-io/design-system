@@ -47,8 +47,30 @@ export type RadiusScale = Record<string, string>;
 export type ShadowScale = Record<string, string>;
 
 export interface MotionShape {
-  duration: { fast: number; normal: number; slow: number };
-  ease: { standard: string; emphasized: string; decelerate: string; accelerate: string };
+  /**
+   * `fast`/`normal`/`slow` are interaction timings (150–300ms). `slower`/`deliberate` are the
+   * reveal end of the scale (500/700ms) — a section entering the viewport is a different event
+   * from a control acknowledging a click, and reads as twitchy at interaction speed.
+   */
+  duration: {
+    fast: number;
+    normal: number;
+    slow: number;
+    slower: number;
+    deliberate: number;
+  };
+  /**
+   * The first four are UI-functional. `expressive` (overshoot) and `soft` (long-tail decelerate)
+   * are the reveal curves — see the notes in `@apx-ui/tokens`' motion tokens.
+   */
+  ease: {
+    standard: string;
+    emphasized: string;
+    decelerate: string;
+    accelerate: string;
+    expressive: string;
+    soft: string;
+  };
   reduceMotion: 'system' | 'always' | 'never';
 }
 

@@ -8,6 +8,27 @@
  * After that, classes like `bg-primary`, `text-primary-contrast`, `hover:bg-primary-hover`,
  * `rounded-md`, `shadow-md`, and `duration-normal` all resolve to the DS variables — meaning
  * mode/variant switching is a no-op for those classes (the var changes, the class doesn't).
+ *
+ * ## Also set `future.hoverOnlyWhenSupported`
+ *
+ *     export default {
+ *       future: { hoverOnlyWhenSupported: true },   // ← NOT optional; see below
+ *       presets: [apxTailwindPreset],
+ *       content: [...],
+ *     };
+ *
+ * On touch, `:hover` latches after a tap and never releases — there is no pointer-leave event to
+ * end it. Without the flag, a tapped Card stays lifted and a tapped ColorPicker swatch stays
+ * enlarged for the rest of the session, with no gesture available to undo it. With it, Tailwind
+ * wraps every `hover:` utility in `@media (hover: hover)`; measured on this repo that moved 100 of
+ * 102 hover rules behind the guard. (The two it can't reach are arbitrary variants like
+ * `[&>tr:hover>td]:…`, where the `:hover` is inside a raw selector rather than the `hover:`
+ * variant — both cosmetic, and one is a scrollbar, which touch doesn't have.)
+ *
+ * **This preset cannot set it for you, and that is a Tailwind limitation rather than a choice.**
+ * `resolveConfig` does not merge `future` from presets — verified by measurement: the flag set
+ * here produced 0 guarded rules, the same flag in the consumer's own config produced 102. So it
+ * has to be a line in every consuming app's config.
  */
 
 type TailwindColorScale = Record<string, string>;
@@ -79,6 +100,9 @@ export const apxTailwindPreset = {
           default: alphaAware('border-default'),
           subtle: alphaAware('border-subtle'),
           strong: alphaAware('border-strong'),
+          // `border-control` — an interactive control's edge, held to WCAG 1.4.11's 3:1. See the
+          // note on `BorderColors.control`.
+          control: alphaAware('border-control'),
         },
         // `--sds-overlay` is a scalar token, not a palette path, and already carries its own
         // alpha (`rgba(0,0,0,.5)`). Left as a bare var deliberately — `bg-overlay/50` would be
@@ -117,18 +141,65 @@ export const apxTailwindPreset = {
         xl: 'var(--sds-shadows-xl)',
         '2xl': 'var(--sds-shadows-2xl)',
         inner: 'var(--sds-shadows-inner)',
+        // Palette-tinted elevation — see the note on these tokens in `@apx-ui/tokens`.
+        ambient: 'var(--sds-shadows-ambient)',
+        glow: 'var(--sds-shadows-glow)',
+      },
+      // Type scale + tracking come from the theme so a brand override actually reaches the
+      // recipes. Before this, `text-5xl` and `tracking-tight` were Tailwind's built-ins while
+      // `<Typography fontSize="5xl">` read the DS var — the same name resolving two ways, and a
+      // theme that retuned its type scale changed only one of them.
+      fontSize: {
+        xs: 'var(--sds-font-size-xs)',
+        sm: 'var(--sds-font-size-sm)',
+        base: 'var(--sds-font-size-base)',
+        lg: 'var(--sds-font-size-lg)',
+        xl: 'var(--sds-font-size-xl)',
+        '2xl': 'var(--sds-font-size-2xl)',
+        '3xl': 'var(--sds-font-size-3xl)',
+        '4xl': 'var(--sds-font-size-4xl)',
+        '5xl': 'var(--sds-font-size-5xl)',
+        '6xl': 'var(--sds-font-size-6xl)',
+        '7xl': 'var(--sds-font-size-7xl)',
+        '8xl': 'var(--sds-font-size-8xl)',
+        // Fluid marketing steps — `text-display-xl` instead of a hand-written clamp().
+        'display-md': 'var(--sds-font-size-display-md)',
+        'display-lg': 'var(--sds-font-size-display-lg)',
+        'display-xl': 'var(--sds-font-size-display-xl)',
+        'display-2xl': 'var(--sds-font-size-display-2xl)',
+      },
+      letterSpacing: {
+        tighter: 'var(--sds-letter-spacing-tighter)',
+        tight: 'var(--sds-letter-spacing-tight)',
+        normal: 'var(--sds-letter-spacing-normal)',
+        wide: 'var(--sds-letter-spacing-wide)',
+        wider: 'var(--sds-letter-spacing-wider)',
       },
       transitionDuration: {
         fast: 'var(--sds-duration-fast)',
         DEFAULT: 'var(--sds-duration-normal)',
         normal: 'var(--sds-duration-normal)',
         slow: 'var(--sds-duration-slow)',
+        // The reveal end of the scale. `duration-*` utilities exist for CSS-driven motion; the
+        // JS side reaches the same numbers through `transitionTokens` in the engine.
+        slower: 'var(--sds-duration-slower)',
+        deliberate: 'var(--sds-duration-deliberate)',
       },
       transitionTimingFunction: {
         standard: 'var(--sds-ease-standard)',
         emphasized: 'var(--sds-ease-emphasized)',
         decelerate: 'var(--sds-ease-decelerate)',
         accelerate: 'var(--sds-ease-accelerate)',
+        expressive: 'var(--sds-ease-expressive)',
+        soft: 'var(--sds-ease-soft)',
+      },
+      outlineColor: {
+        // Paired with `ringColor` below. Outline-based focus rings are the right default for
+        // *text* links: `ring-*` is implemented as a box-shadow, so on a theme whose shadows are
+        // hard offsets (katana, vantage-studio) a shadow ring lands diagonally off the element.
+        // An outline cannot collide with a component's own box-shadow.
+        DEFAULT: alphaAwareVar('--sds-focus-ring'),
+        focus: alphaAwareVar('--sds-focus-ring'),
       },
       ringColor: {
         // Alpha-aware like the rest: `ring-focus/40` for a softened focus ring is a reasonable
@@ -261,6 +332,28 @@ export const apxTailwindPreset = {
           '0%, 100%': { transform: 'translate3d(0, 0, 0)' },
           '50%': { transform: 'translate3d(2%, 4px, 0)' },
         },
+        // Marquee — the seamless horizontal loop. The track renders its children TWICE and this
+        // keyframe slides it by exactly one copy, so the instant copy A has fully exited, copy B
+        // sits pixel-for-pixel where A began and the restart is invisible.
+        //
+        // `--sds-marquee-distance` is the MEASURED width of one copy plus the gap that follows it,
+        // written inline by the component. It has to be measured rather than expressed as a
+        // percentage for two reasons: it lands exactly on the seam (a percentage of the track is
+        // half a gap short, which shows as a hitch once per cycle), and the component needs the
+        // number anyway to turn a px-per-second speed into a duration — a rate being the only unit
+        // under which bands of different lengths travel at the same visible speed.
+        //
+        // The `50%` fallback is the pre-measurement frame (SSR, first paint): approximately right,
+        // and far better than a band that sits still until JS lands.
+        'marquee-x': {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(calc(-1 * var(--sds-marquee-distance, 50%)))' },
+        },
+        // Marquee — the vertical counterpart, on the block axis.
+        'marquee-y': {
+          from: { transform: 'translateY(0)' },
+          to: { transform: 'translateY(calc(-1 * var(--sds-marquee-distance, 50%)))' },
+        },
       },
       animation: {
         'badge-pulse': 'badge-pulse 1.4s ease-in-out infinite',
@@ -285,6 +378,14 @@ export const apxTailwindPreset = {
         'splash-particle-breathe': 'splash-particle-breathe 2.4s ease-in-out infinite',
         'splash-wave': 'splash-wave 6s ease-in-out infinite',
         'splash-wave-back': 'splash-wave-back 8s ease-in-out infinite',
+        // Marquee — `linear` and `infinite` are not stylistic choices here. Any easing would
+        // accelerate and decelerate within each cycle, which makes the seam legible as a stutter;
+        // linear is the only timing function under which a looped translate reads as continuous
+        // travel. The duration here is only a placeholder — the component always overrides
+        // `animation-duration` inline, computing it from the measured distance and the
+        // `ambientMotion.speed` rate.
+        'marquee-x': 'marquee-x 40s linear infinite',
+        'marquee-y': 'marquee-y 40s linear infinite',
       },
     },
   },

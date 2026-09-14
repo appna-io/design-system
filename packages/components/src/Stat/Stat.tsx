@@ -9,6 +9,7 @@ import { Spinner } from '../Spinner/Spinner';
 import { StatContext, useStatContext } from './Stat.context';
 import { deltaPresentation } from './deltaPresentation';
 import { formatValue } from './formatValue';
+import { useCountUp } from './useCountUp';
 import {
   statCaptionRecipe,
   statDeltaRecipe,
@@ -266,6 +267,7 @@ function StatImpl(props: StatProps, ref: React.ForwardedRef<HTMLElement>): React
     colorize = 'auto',
     loading = false,
     error,
+    countUp = false,
     children,
     as,
     asChild = false,
@@ -351,18 +353,38 @@ function StatImpl(props: StatProps, ref: React.ForwardedRef<HTMLElement>): React
   // ignored — the consumer opted in to manual composition.
   const isCompound = hasStatSubcomponent(children);
 
+  // A count-up only makes sense for a resolved numeric value in the prop-driven form. Counting a
+  // `loading` tile has nothing to count to, and counting an `error` tile would animate a number
+  // that isn't being shown.
+  const countUpActive =
+    countUp && !isCompound && typeof value === 'number' && !loading && error === undefined;
+
+  // Hooks run unconditionally; `countUpActive` decides whether the hook does anything.
+  const { ref: countRef, value: countedValue } = useCountUp(
+    typeof value === 'number' ? value : 0,
+    countUpActive,
+  );
+
   // Synthesise an aria-label for the prop-driven form so the whole tile announces in one go:
   // "Revenue, $12,400, up 12.3%". Compound mode leaves the children to handle their own
   // semantics — we don't second-guess the consumer's chosen layout.
-  const formattedValue = !isCompound
-    ? formatValue({
-        value,
-        format,
-        currency,
-        ...(fractionDigits !== undefined ? { fractionDigits } : {}),
-        ...(locale !== undefined ? { locale } : {}),
-      })
-    : undefined;
+  const formatOptions = {
+    format,
+    currency,
+    ...(fractionDigits !== undefined ? { fractionDigits } : {}),
+    ...(locale !== undefined ? { locale } : {}),
+  };
+
+  // The FINAL value, always — this is what the accessible name is built from.
+  const formattedValue = !isCompound ? formatValue({ value, ...formatOptions }) : undefined;
+
+  // What's painted. During a count-up this is the intermediate frame, run through the same
+  // formatter so a currency stat counts in currency and a compact one counts in compact — the
+  // digits never change shape mid-animation, which they would if the tween emitted raw numbers
+  // and only the final frame were formatted.
+  const displayedValue = countUpActive
+    ? formatValue({ value: countedValue, ...formatOptions })
+    : formattedValue;
 
   const ariaLabelParts: string[] = [];
   if (!isCompound) {
@@ -404,12 +426,17 @@ function StatImpl(props: StatProps, ref: React.ForwardedRef<HTMLElement>): React
     }
     return (
       <span
+        // The ref is what the count-up observes for viewport entry — the value element itself,
+        // so a tall tile whose label is on screen but whose number isn't doesn't start counting
+        // something the user can't see.
+        ref={countUpActive ? countRef : undefined}
         dir="auto"
         className={valueClass}
         data-stat-value=""
         data-tone={valueTone}
+        {...(countUpActive ? { 'data-counting': '' } : {})}
       >
-        {formattedValue}
+        {displayedValue}
       </span>
     );
   };

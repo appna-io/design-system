@@ -16,13 +16,19 @@ const VALUE_CLASS = 'font-display text-3xl sm:text-4xl';
 export function Metrics() {
   return (
     <Div as="section" className="border-y border-border-subtle bg-bg-subtle">
-      <Div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
+      <Div
+        stagger={0.09}
+        animateOnView
+        className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8"
+      >
         {metrics.map((metric) => (
-          <Stat key={metric.label} variant="minimal" size="lg">
-            <Stat.Value className={VALUE_CLASS}>{metric.value}</Stat.Value>
-            <Stat.Label>{metric.label}</Stat.Label>
-            <Stat.Caption>{metric.caption}</Stat.Caption>
-          </Stat>
+          <Div key={metric.label} animation="riseIn" animationDuration="slow">
+            <Stat variant="minimal" size="lg">
+              <Stat.Value className={VALUE_CLASS}>{metric.value}</Stat.Value>
+              <Stat.Label>{metric.label}</Stat.Label>
+              <Stat.Caption>{metric.caption}</Stat.Caption>
+            </Stat>
+          </Div>
         ))}
       </Div>
     </Div>

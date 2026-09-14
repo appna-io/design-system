@@ -15,6 +15,7 @@ import {
   appShellSidebarRecipe,
   appShellSkipLinkRecipe,
 } from './AppShell.recipe';
+import { useHeaderScrollState } from './useHeaderScrollState';
 import type {
   AppShellContextValue,
   AppShellMainConfig,
@@ -97,6 +98,8 @@ export const AppShell = forwardRef<HTMLDivElement, AppShellProps>(function AppSh
     headerHeight = 56,
     headerSticky = true,
     headerVariant = 'default',
+    headerScroll = 'none',
+    headerReduceMotion,
     headerOffset = 0,
 
     asidePosition = 'end',
@@ -253,11 +256,13 @@ export const AppShell = forwardRef<HTMLDivElement, AppShellProps>(function AppSh
     props: { layout, className, sx, style },
   });
 
+  const headerScrollState = useHeaderScrollState(headerScroll, headerReduceMotion);
+
   const { className: headerClass } = useThemedClasses({
     recipe: appShellHeaderRecipe,
     componentName: 'AppShell',
     slot: 'header',
-    props: { variant: headerVariant, sticky: headerSticky },
+    props: { variant: headerVariant, sticky: headerSticky, scroll: headerScroll },
   });
 
   const { className: sidebarClass } = useThemedClasses({
@@ -343,7 +348,16 @@ export const AppShell = forwardRef<HTMLDivElement, AppShellProps>(function AppSh
         {...rest}
       >
         {hasHeader ? (
-          <header className={headerClass} data-appshell-header="">
+          <header
+            ref={headerScrollState.ref as React.RefObject<HTMLElement>}
+            className={headerClass}
+            data-appshell-header=""
+            // Exposed as attributes, not just as classes, so a consumer can style their own
+            // content off the header's state — a logo that shrinks, a CTA that appears — without
+            // re-implementing the scroll listener next to ours.
+            data-scrolled={headerScrollState.scrolled || undefined}
+            data-hidden={headerScrollState.hidden || undefined}
+          >
             {header}
           </header>
         ) : null}

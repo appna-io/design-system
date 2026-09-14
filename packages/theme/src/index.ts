@@ -2,6 +2,14 @@ export { ThemeProvider, type ThemeProviderProps } from './ThemeProvider';
 export { ThemeScript, type ThemeScriptProps } from './ThemeScript';
 export { defineTheme } from './defineTheme';
 export { mergeTheme, type ThemeOverride, type DeepPartial } from './mergeTheme';
+// The colour maths itself now lives in `@apx-ui/tokens`; `deriveDarkPalette` re-exports it so
+// this barrel's surface is unchanged for existing consumers.
+export { deriveDarkPalette, contrastRatio, hexToHsl, hslToHex } from './deriveDarkPalette';
+export {
+  auditPaletteContrast,
+  formatContrastFailures,
+  type ContrastFailure,
+} from './auditPaletteContrast';
 export { themeToCssVars, type ThemeToCssVarsOptions } from './themeToCssVars';
 export { detectPlatform, DETECT_PLATFORM_EXPR, type ThemePlatform } from './platform';
 
@@ -22,6 +30,7 @@ export {
   useThemeOverrides,
   useThemeDirection,
   useThemedClasses,
+  useComponentDefaults,
   type UseModeReturn,
   type UseVariantReturn,
   type UsePlatformReturn,

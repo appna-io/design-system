@@ -45,15 +45,7 @@ export function Hero() {
             {hero.eyebrow}
           </Badge>
 
-          <Typography
-            as="h1"
-            variant="display"
-            weight="bold"
-            lineHeight="none"
-            letterSpacing="tight"
-            fontFamily="display"
-            className="mt-6 text-4xl sm:text-5xl lg:text-6xl"
-          >
+          <Typography as="h1" variant="displayXl" className="mt-6">
             {hero.title}
           </Typography>
 

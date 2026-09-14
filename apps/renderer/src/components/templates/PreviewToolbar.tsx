@@ -7,7 +7,7 @@ import { Div, Typography } from '@apx-ui/ds';
 
 import type { TemplateMeta } from '../../templates';
 import { DirectionToggle } from '../chrome/DirectionToggle';
-import { ModeToggle } from '../chrome/ModeToggle';
+import { PreviewModeToggle } from './PreviewModeToggle';
 import { VariantSelect } from '../chrome/VariantSelect';
 import { cn } from '../primitives/cn';
 import { InspectorButton, useOptionalInspector } from './inspector';
@@ -105,7 +105,7 @@ export function PreviewToolbar({ meta }: PreviewToolbarProps) {
       <Div className="flex items-center gap-2">
         <VariantSelect />
         <DirectionToggle />
-        <ModeToggle />
+        <PreviewModeToggle />
       </Div>
 
       {/* Inspector button renders only when an <InspectorProvider> is in the tree —

@@ -31,8 +31,7 @@ export function BrandMark({ size = 'md', as = 'a' }: BrandMarkProps) {
       className="inline-flex rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
     >
       <Typography
-        as="span"
-        variant="h4"
+        size="h4"
         weight="bold"
         fontFamily="display"
         transform="upper"

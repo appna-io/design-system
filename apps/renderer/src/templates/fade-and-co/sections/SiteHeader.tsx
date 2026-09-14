@@ -34,7 +34,7 @@ export function SiteHeader() {
               transform="upper"
               letterSpacing="wider"
               color="foreground.muted"
-              className="rounded-sm transition hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+              className="rounded-sm transition hover:text-fg"
             >
               {link.label}
             </Typography>
@@ -46,7 +46,7 @@ export function SiteHeader() {
             variant="bodySmall"
             weight="semibold"
             color="foreground.default"
-            className="hidden items-center gap-2 rounded-sm transition hover:text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary lg:inline-flex"
+            className="hidden items-center gap-2 rounded-sm transition hover:text-secondary lg:inline-flex"
           >
             <Phone size={16} />
             {headerPhone.label}
@@ -85,7 +85,7 @@ export function SiteHeader() {
                     letterSpacing="wide"
                     color="foreground.muted"
                     onClick={() => setOpen(false)}
-                    className="rounded-sm px-3 py-2 transition hover:bg-bg-subtle hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                    className="rounded-sm px-3 py-2 transition hover:bg-bg-subtle hover:text-fg"
                   >
                     {link.label}
                   </Typography>

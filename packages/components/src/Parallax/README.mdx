@@ -1,0 +1,63 @@
+# Parallax
+
+A scroll-linked layer that drifts against the scroll, for hero backdrops and decorative imagery.
+
+<ExampleBlock for="Basic" title="The backdrop moves; the copy does not" />
+
+```tsx
+import { Parallax } from 'apx-ds';
+
+<Div className="relative overflow-hidden">
+  <Parallax speed={-0.08} className="absolute inset-x-0 -top-[10%] h-[120%]">
+    <Image src="/hero.jpg" alt="" />
+  </Parallax>
+  <Div className="relative">…copy, which stays locked to the surface…</Div>
+</Div>
+```
+
+## For backgrounds, never for content
+
+Wrap the atmosphere — a backdrop, a decorative image, a gradient wash. **Never body copy or a heading.**
+
+Text moving at a different rate from the surface it sits on is hard to read while scrolling, and it's the clearest tell of a template that reached for an effect instead of a design. If a section needs more presence, it needs better contrast or better type, not a second rate of motion.
+
+## The speed ceiling is enforced
+
+<ExampleBlock for="SpeedCeiling" title="A layer asking for 0.5 renders identically to one asking for 0.1" />
+
+`speed` is clamped to **±0.1** — a tenth of the distance the layer travels through the viewport. This is a bound in code, not a note in the docs, and that's deliberate: a documented limit holds until the first template that wants *just a bit more*, and parallax is exactly the effect where a bit more is the whole difference between a page that feels deep and one that feels cheap. Past that point the layer visibly disagrees with the scroll gesture, and the page stops feeling like a surface being moved.
+
+It's an accessibility bound as much as a taste one. Large parallax is a vestibular trigger for people who would never think to enable `prefers-reduced-motion` — so the ceiling has to hold for everyone, not only for those who asked.
+
+Negative values drift against the scroll (the usual "background lags behind" reading); positive drift with it. A non-finite `speed` falls back to no drift and warns.
+
+## Reduced motion
+
+Under `prefers-reduced-motion: reduce` the layer renders at its **neutral** position with no transform at all, and no scroll listener is ever attached.
+
+Worth spelling out why neutral and not zero-progress: `useScrollProgress` freezes at `0.5`, its midpoint, rather than at `0`. `0` is one *end* of the range — the maximum displacement — so a hook that froze there would park every backdrop at its most extreme offset forever. That reads as a layout bug, not as motion being switched off.
+
+## API
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | — | The layer to displace. Backgrounds and imagery only. |
+| `speed` | `number` | `-0.06` | Drift as a fraction of travel. Clamped to ±0.1. Negative drifts against the scroll. |
+| `reduceMotion` | `boolean` | — | Force the reduced-motion behaviour on/off, bypassing the media query. For tests and docs. |
+| `as` | `'div' \| 'span'` | `'div'` | Element rendered for the wrapper. |
+| `className` / `style` / `sx` | — | — | Standard escape hatches. |
+
+## Layout notes
+
+The wrapper only sets a `transform` — it owns no positioning of its own, so the drift is composited and never triggers layout.
+
+Two things the consumer must supply:
+
+- **A clipping ancestor.** The layer moves beyond its authored box, so the parent needs `overflow-hidden` or the drift shows as an edge.
+- **Overscan.** Size the layer slightly larger than its container (`-top-[10%] h-[120%]` in the example above) so there's material to reveal at both ends of the drift.
+
+## `useScrollProgress`
+
+`Parallax` is a thin consumer of `useScrollProgress(ref)` from `@apx-ui/engine`, which returns an element's progress through the viewport as `0` → `1`: `0` when its top reaches the viewport bottom, `1` when its bottom leaves the top. Reach for the hook directly for other scroll-linked effects — a docs reading-progress bar, a scrubbed image sequence.
+
+It uses a passive `scroll` listener coalesced into one `requestAnimationFrame` per frame rather than `IntersectionObserver`, which reports threshold *crossings* rather than a continuous position and would need an impractical number of thresholds to scrub smoothly.

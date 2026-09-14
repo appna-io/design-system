@@ -67,7 +67,7 @@ export function Booking() {
               href={contact.phone.href}
               variant="body"
               weight="semibold"
-              className="inline-flex items-center gap-2 rounded-sm transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+              className="inline-flex items-center gap-2 rounded-sm transition hover:opacity-80"
             >
               <Phone size={18} />
               {contact.phone.label}

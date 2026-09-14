@@ -26,7 +26,7 @@ export function BrandMark({ size = 'md', as = 'a' }: BrandMarkProps) {
       {...(as === 'a' ? { href: '/' } : {})}
       className="inline-flex rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
     >
-      <Typography as="span" variant="h3" weight="bold" fontFamily="display" className={SIZES[size]}>
+      <Typography size="h3" weight="bold" fontFamily="display" className={SIZES[size]}>
         {brand.name}
         <Typography as="span" color="secondary" fontFamily="inherit">
           {brand.punctuation}

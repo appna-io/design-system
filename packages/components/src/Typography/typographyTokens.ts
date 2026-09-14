@@ -27,6 +27,13 @@ export const TYPOGRAPHY_TOKEN_TABLES = {
     '3xl': true,
     '4xl': true,
     '5xl': true,
+    '6xl': true,
+    '7xl': true,
+    '8xl': true,
+    'display-md': true,
+    'display-lg': true,
+    'display-xl': true,
+    'display-2xl': true,
   },
   fontWeight: {
     normal: true,
@@ -42,6 +49,7 @@ export const TYPOGRAPHY_TOKEN_TABLES = {
     relaxed: true,
   },
   letterSpacing: {
+    tighter: true,
     tight: true,
     normal: true,
     wide: true,

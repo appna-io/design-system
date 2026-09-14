@@ -31,6 +31,7 @@ export {
 export type {
   AppShellBreakpoint,
   AppShellContextValue,
+  AppShellHeaderScroll,
   AppShellHeaderVariant,
   AppShellLayout,
   AppShellMainConfig,
@@ -678,10 +679,42 @@ export type {
 } from './Icon';
 
 export { Image } from './Image';
-export type { ImageFit, ImageProps, ImageRadius, ImageShadow } from './Image';
+export type {
+  ImageFit,
+  ImageHoverEffect,
+  ImageProps,
+  ImageRadius,
+  ImageShadow,
+} from './Image';
 
 export { Input } from './Input/Input';
 export type { InputProps, InputVariant, InputSize, InputColor } from './Input/Input.types';
+
+export { Marquee } from './Marquee';
+export type {
+  MarqueeDirection,
+  MarqueeGap,
+  MarqueeProps,
+  MarqueeSpeed,
+} from './Marquee';
+export { Reveal } from './Reveal';
+export type { RevealDelay, RevealPreset, RevealProps, RevealStagger } from './Reveal';
+export { Section } from './Section';
+export { SectionHeading } from './SectionHeading';
+export type {
+  SectionHeadingEyebrow,
+  SectionHeadingEyebrowStyle,
+  SectionHeadingProps,
+  SectionHeadingSize,
+  SectionIntroLike,
+} from './SectionHeading';
+export type {
+  SectionAtmosphere,
+  SectionAtmosphereAnchor,
+  SectionProps,
+  SectionRhythm,
+  SectionWidth,
+} from './Section';
 
 export { Menu } from './Menu';
 export type {
@@ -771,6 +804,9 @@ export type {
   NumberInputVariant,
   StepperPosition,
 } from './NumberInput';
+
+export { Parallax } from './Parallax';
+export type { ParallaxProps } from './Parallax';
 
 export { Popover } from './Popover';
 export type {
@@ -1216,7 +1252,15 @@ export type {
   StepStatus,
 } from './Stepper';
 
-export { Surface, surfaceRecipe, invertedPaletteVars, surfaceCaptureVars } from './Surface';
+export {
+  Surface,
+  surfaceRecipe,
+  invertedPaletteVars,
+  primaryPaletteVars,
+  secondaryPaletteVars,
+  surfaceCaptureVars,
+  tonePaletteVars,
+} from './Surface';
 export type { SurfaceProps, SurfaceTone } from './Surface';
 
 export { Switch } from './Switch/Switch';

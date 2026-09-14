@@ -36,11 +36,10 @@ export function Hero() {
 
           <Typography
             as="h1"
-            variant="display"
-            weight="bold"
+            variant="displayXl"
             lineHeight="tight"
-            fontFamily="display"
-            className="mt-4 text-4xl sm:text-5xl lg:text-6xl"
+            letterSpacing="tight"
+            className="mt-4"
           >
             {hero.title}
           </Typography>

@@ -45,8 +45,7 @@ function ServiceRow({ service }: { service: Service }) {
     <Div className="border-t border-border py-6">
       <Div as="dt" className="flex items-baseline justify-between gap-6">
         <Typography
-          as="span"
-          variant="h4"
+          size="h4"
           weight="semibold"
           fontFamily="display"
           className="text-xl"
@@ -75,7 +74,7 @@ function ServiceRow({ service }: { service: Service }) {
           >
             {formatDuration(service.duration)}
           </Typography>
-          <Typography as="span" variant="h4" weight="bold" fontFamily="display" className="text-xl">
+          <Typography size="h4" weight="bold" fontFamily="display" className="text-xl">
             {formatPrice(service.price)}
           </Typography>
         </Div>

@@ -107,6 +107,19 @@ const theme = {
    * full pills and the barbershop's hard 2px corners. All three are the same token block with
    * different values, which is the argument the gallery exists to make.
    */
+  /**
+   * Section headings here are centred and sit at the quieter `sectionCompact` step — 30 → 44px,
+   * which is the ladder this page had hand-written as `text-3xl sm:text-4xl lg:text-[2.75rem]`
+   * before the token existed. Set once, so no section has to restate it.
+   */
+  components: {
+    SectionHeading: {
+      defaultProps: {
+        align: 'center',
+        size: 'sectionCompact',
+      },
+    },
+  },
   radius: {
     md: '0.625rem',
     lg: '0.875rem',

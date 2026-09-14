@@ -18,6 +18,8 @@ export const statRecipe = cv({
       sm: 'gap-0.5',
       md: 'gap-1',
       lg: 'gap-1.5',
+      // More air under a 4rem numeral: the label has to read as a caption, not as a second line.
+      display: 'gap-3',
     },
     align: {
       start: 'items-start text-start',
@@ -36,6 +38,7 @@ export const statHeaderRecipe = cv({
       sm: 'text-xs',
       md: 'text-sm',
       lg: 'text-sm',
+      display: 'text-sm',
     },
   },
   defaultVariants: { size: 'md' },
@@ -48,6 +51,7 @@ export const statIconRecipe = cv({
       sm: '[&_svg]:size-3.5',
       md: '[&_svg]:size-4',
       lg: '[&_svg]:size-5',
+      display: '[&_svg]:size-6',
     },
   },
   defaultVariants: { size: 'md' },
@@ -85,6 +89,10 @@ export const statValueRecipe = cv({
       sm: 'text-lg',
       md: 'text-2xl',
       lg: 'text-4xl',
+      // The marketing step. `font-display` is the whole point — a numbers band set in the body
+      // face reads as a dashboard that wandered onto a landing page. `leading-none` because at
+      // this size the default line box adds visible space above the digits.
+      display: 'font-display text-5xl leading-none tracking-tighter lg:text-6xl',
     },
     tone: {
       neutral: '',

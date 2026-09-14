@@ -41,8 +41,37 @@ export const appShellHeaderRecipe = cv({
       true: 'sticky top-0',
       false: '',
     },
+    /**
+     * The scroll-driven treatment. Two things are deliberate here:
+     *
+     * **`condense` is not gated on `motion-safe`.** It is a *state* change — a border and a
+     * backdrop appearing once real content is behind the header — that happens to be animated. A
+     * reduced-motion user still needs the header to become legible; suppressing it would leave
+     * chrome floating transparently over the content it no longer sits on. Only the transition's
+     * smoothness is theirs to lose, not the state.
+     *
+     * **`reveal`'s translate IS gated.** Chrome that moves itself off-screen is exactly the
+     * unrequested motion the preference is about, and the hook already refuses to compute a
+     * hidden state under it — so this class simply never has anything to apply.
+     */
+    scroll: {
+      none: '',
+      condense: [
+        'transition-[background-color,border-color,box-shadow,backdrop-filter]',
+        'duration-normal ease-standard',
+        'data-[scrolled]:border-border data-[scrolled]:bg-bg-paper/85',
+        'data-[scrolled]:shadow-ambient data-[scrolled]:backdrop-blur-md',
+      ].join(' '),
+      reveal: [
+        'transition-[transform,background-color,border-color,box-shadow,backdrop-filter]',
+        'duration-normal ease-standard will-change-transform',
+        'data-[scrolled]:border-border data-[scrolled]:bg-bg-paper/85',
+        'data-[scrolled]:shadow-ambient data-[scrolled]:backdrop-blur-md',
+        'data-[hidden]:-translate-y-full',
+      ].join(' '),
+    },
   },
-  defaultVariants: { variant: 'default', sticky: true },
+  defaultVariants: { variant: 'default', sticky: true, scroll: 'none' },
 });
 
 /**

@@ -7,6 +7,7 @@ import {
   SourceModal,
 } from '../../../components/templates/inspector';
 import { PreviewToolbar } from '../../../components/templates/PreviewToolbar';
+import { TemplateSeedProvider } from '../../../components/templates/TemplateSeedContext';
 import { TemplateSurface } from '../../../components/templates/TemplateSurface';
 import { loadInspectableSources } from '../../../lib/templateInspector';
 import { getTemplateBySlug, getTemplateSlugs } from '../../../templates';
@@ -51,12 +52,22 @@ export default async function TemplatePreviewPage({ params }: PreviewPageProps) 
 
   return (
     <InspectorProvider sources={sources}>
-      <TemplateSurface theme={meta.theme}>
-        <Component />
-      </TemplateSurface>
-      <InspectorBanner />
-      <SourceModal />
-      <PreviewToolbar meta={meta} />
+      {/*
+        The seed provider wraps BOTH the surface and the toolbar on purpose: the surface applies
+        the template's opening mode/variant, and the toolbar has to report the same value. Keeping
+        it local to the surface is what let the two disagree on entry — see #11.
+      */}
+      <TemplateSeedProvider
+        preferredMode={meta.preferredMode}
+        preferredVariant={meta.preferredVariant}
+      >
+        <TemplateSurface theme={meta.theme}>
+          <Component />
+        </TemplateSurface>
+        <InspectorBanner />
+        <SourceModal />
+        <PreviewToolbar meta={meta} />
+      </TemplateSeedProvider>
     </InspectorProvider>
   );
 }

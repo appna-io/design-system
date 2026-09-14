@@ -21,6 +21,7 @@ export { isBelowBreakpoint, useBreakpointBelow } from './useBreakpoint';
 export type {
   AppShellBreakpoint,
   AppShellContextValue,
+  AppShellHeaderScroll,
   AppShellHeaderVariant,
   AppShellLayout,
   AppShellMainConfig,

@@ -14,18 +14,21 @@ export const lightPalette: PaletteShape = {
     border: '#c7d2fe',
   },
   secondary: {
-    main: '#0ea5e9',
+    // Shifted two steps down the sky ramp (was `#0ea5e9`). A white label on sky-500 is 2.77:1 —
+    // the worst contrast in the DS, and unreadable. sky-700 carries it at 5.93:1.
+    main: '#0369a1',
     contrast: '#ffffff',
-    hover: '#0284c7',
-    active: '#0369a1',
+    hover: '#075985',
+    active: '#0c4a6e',
     subtle: '#e0f2fe',
     border: '#bae6fd',
   },
   success: {
-    main: '#16a34a',
+    // One step down the green ramp (was `#16a34a`, 3.30:1 with white — large-text only).
+    main: '#15803d',
     contrast: '#ffffff',
-    hover: '#15803d',
-    active: '#166534',
+    hover: '#166534',
+    active: '#14532d',
     subtle: '#dcfce7',
     border: '#bbf7d0',
   },
@@ -33,7 +36,10 @@ export const lightPalette: PaletteShape = {
     main: '#f59e0b',
     contrast: '#111827',
     hover: '#d97706',
-    active: '#b45309',
+    // Capped rather than continuing down the amber ramp. `warning` is the one light role with a
+    // DARK label, so its ramp works backwards from the others: every step darker costs contrast
+    // instead of gaining it, and amber-700 (`#b45309`) had fallen to 3.53:1.
+    active: '#c67210',
     subtle: '#fef3c7',
     border: '#fde68a',
   },
@@ -69,12 +75,35 @@ export const lightPalette: PaletteShape = {
   foreground: {
     default: '#18181b',
     muted: '#52525b',
-    subtle: '#71717a',
+    /**
+     * Small metadata text — a caption, a footnote, a timestamp.
+     *
+     * Sized down from `muted` rather than lightened from it: the old value (`#71717a` in both
+     * modes) measured 4.40:1 on the light subtle panel and 3.08:1 on the dark one, under the
+     * 4.5:1 body-text floor in exactly the place it is most used. Small text is where a near-miss
+     * is least defensible, so this clears the floor on `background.subtle` — the *lightest* ground
+     * it can land on in light mode and the *darkest* in dark — which means it clears it
+     * everywhere.
+     */
+    subtle: '#67676f',
   },
   border: {
     default: '#e4e4e7',
     subtle: '#f4f4f5',
     strong: '#a1a1aa',
+    /**
+     * The edge of an interactive control — an input, a select, a checkbox.
+     *
+     * Separate from `default` because the two have irreconcilable requirements. A control's
+     * boundary is a **non-text UI component** under WCAG 1.4.11 and must clear 3:1, or the user
+     * cannot see where the field is. A card outline is decoration and has no minimum — and at 3:1
+     * it stops reading as a hairline and starts shouting.
+     *
+     * One role cannot be both, which is why `default` measured 1.27:1 in light and 1.91:1 in dark
+     * while being used for both jobs. Raising it would have failed the cards; leaving it failed
+     * the inputs. Splitting the role is the only answer that does not trade one for the other.
+     */
+    control: '#8a8a93',
   },
   overlay: 'rgba(0, 0, 0, 0.5)',
   focusRing: '#4f46e5',

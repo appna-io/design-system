@@ -23,6 +23,12 @@ export type AppShellSidePosition = 'start' | 'end';
 export type AppShellHeaderVariant = 'default' | 'bordered' | 'floating';
 
 /**
+ * Header scroll behaviour. See `AppShellProps.headerScroll` for why `'reveal'` exists but is not
+ * the default.
+ */
+export type AppShellHeaderScroll = 'none' | 'condense' | 'reveal';
+
+/**
  * Breakpoint at which the sidebar collapses to a `<Drawer>`. Matches the engine's tailwind-
  * native breakpoint vocabulary. Below this threshold the sidebar is removed from the grid and
  * mounted as a slide-in drawer; above it, the sidebar lives in-grid (with optional rail
@@ -121,6 +127,33 @@ export interface AppShellProps
   headerSticky?: boolean;
   /** @default 'default' */
   headerVariant?: AppShellHeaderVariant;
+  /**
+   * How the header reacts to page scroll.
+   *
+   * - `'none'` — inert. The default, because an app shell's header is chrome, not a marketing
+   *   surface; changing it on scroll is a landing-page idiom.
+   * - `'condense'` — gains a border, a solid background and a blur once the page is past the fold.
+   *   This is the house style for templates: a header pinned transparently over a hero has to
+   *   become legible once real content is behind it.
+   * - `'reveal'` — additionally hides on scroll down and returns on scroll up.
+   *
+   * `'reveal'` is offered but is deliberately **not** the house style. It removes the nav at the
+   * exact moment a fast-scrolling user is reaching for it, and it takes away the fixed orientation
+   * anchor that some users rely on to know where they are. Fine as an option, wrong as a default.
+   * It is also suppressed entirely under `prefers-reduced-motion`, where it degrades to
+   * `'condense'`.
+   *
+   * The header carries `data-scrolled` / `data-hidden` attributes in either mode, so a consumer
+   * can hang their own styles off the state without re-implementing the listener.
+   *
+   * @default 'none'
+   */
+  headerScroll?: AppShellHeaderScroll;
+  /**
+   * Force the reduced-motion behaviour on (`true`) or off (`false`), bypassing the media query.
+   * For tests and side-by-side documentation.
+   */
+  headerReduceMotion?: boolean;
   /** Additional top offset for OS toolbars (Electron / Tauri) in px. @default 0 */
   headerOffset?: number;
 

@@ -33,10 +33,10 @@ export const textareaRecipe = cv({
   ].join(' '),
   variants: {
     variant: {
-      outline: 'border-border bg-bg-paper',
+      outline: 'border-border-control bg-bg-paper',
       solid: 'border-transparent bg-bg-subtle',
       ghost: 'border-transparent bg-transparent',
-      underline: 'border-0 border-b border-border bg-transparent',
+      underline: 'border-0 border-b border-border-control bg-transparent',
     },
     size: {
       sm: 'text-sm rounded-sm',

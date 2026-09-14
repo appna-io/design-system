@@ -70,12 +70,66 @@ utility class that the JIT scanner picks up at build time.
 
 ### Animation
 
-| Prop        | Type                                                                       | Behavior                                                                                                                  |
-| ----------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `animation` | `'fadeIn' \| 'scaleIn' \| 'slideInFromBottom' \| 'slideInFromTop'`         | Wraps the element via `motion.create(...)` and applies the matching engine preset. `useReducedMotion()` short-circuits to a plain element. |
+| Prop                | Type                                                        | Behavior                                                                                                                    |
+| ------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `animation`         | `'fadeIn' \| 'scaleIn' \| 'slideInFromBottom' \| 'slideInFromTop' \| 'slideInFromLeft' \| 'slideInFromRight' \| 'riseIn' \| 'blurIn' \| 'zoomIn'` | Wraps the element via `motion.create(...)` and applies the matching engine preset. `useReducedMotion()` short-circuits to a plain element. |
+| `animateOnView`     | `boolean \| { once?, amount?, margin? }`                    | Defer the animation until the element scrolls into view. `true` uses the DS defaults (`once: true`, `amount: 0.25`, `-64px` bottom margin). |
+| `animationDelay`    | `number`                                                     | Seconds before this element starts.                                                                                          |
+| `animationDuration` | `number \| 'fast' \| 'normal' \| 'slow'`                  | Token names resolve through `@apx-ui/tokens`, so a theme motion change reaches here.                                         |
+| `animationEase`     | `'standard' \| 'emphasized' \| 'decelerate' \| 'accelerate' \| 'linear' \| string` | Token name or any raw CSS easing string.                                        |
+| `stagger`           | `number`                                                     | Cascade descendant animated `<Div>`s, this many seconds apart. Children opt in just by having an `animation`.                |
+| `staggerDelay`      | `number`                                                     | Seconds before the first staggered child starts. Requires `stagger`.                                                         |
 
 The `pressScale` preset is **not** exposed here — it's a `whileTap` interaction that belongs on
 a trigger element (`<Button>`) instead.
+
+#### Scroll reveal
+
+Without `animateOnView` the animation runs on **mount** — so everything below the fold finishes
+animating before the user ever scrolls to it, and a long page reads as static. `animateOnView`
+moves the trigger to the viewport:
+
+```tsx
+<Div animation="riseIn" animateOnView>
+  Reveals as it enters
+</Div>
+
+<Div animation="fadeIn" animateOnView={{ once: false, amount: 0.5 }}>
+  Re-reveals every time, once half-visible
+</Div>
+```
+
+#### Stagger
+
+A `stagger` parent cascades its animated descendants. The children need no extra props — having
+an `animation` is the opt-in:
+
+```tsx
+<Div stagger={0.08} staggerDelay={0.1} animateOnView>
+  {features.map((f) => (
+    <Div key={f.id} animation="riseIn">
+      <FeatureCard {...f} />
+    </Div>
+  ))}
+</Div>
+```
+
+This works through ordinary wrapper markup — the cascade travels by React context, not by DOM
+adjacency, so grid wrappers and layout `<div>`s in between don't break it. Groups also nest: an
+inner `stagger` both inherits its start from the outer group and sequences its own children.
+
+The mechanism matters if you write custom children: a stagger participant declares Motion
+`variants` and deliberately **omits** `initial` / `animate`, because an explicit `animate` prop
+outranks the inherited variant label and would silently detach the child from the parent's
+timeline — making `stagger` look like it does nothing.
+
+#### Reduced motion
+
+Every path above is gated on `useReducedMotion()`. When it's on, `<Div>` renders a **plain
+element with no motion props at all** — which is the only safe answer for a scroll reveal, since
+a viewport trigger that never fires would otherwise leave content pinned at `opacity: 0`. A
+`stagger` parent also stops publishing its orchestration context, so its children fall back to
+plain elements too.
 
 ### Shortcuts
 
@@ -160,6 +214,7 @@ Classes layer the same way:
 <ExampleBlock for="HideOn" title="HideOn — hide from breakpoint upward" />
 <ExampleBlock for="DisplayOn" title="DisplayOn — reveal from breakpoint upward" />
 <ExampleBlock for="Animation" title="Animation — opt-in motion presets" />
+<ExampleBlock for="ScrollReveal" title="ScrollReveal — animateOnView + stagger" />
 <ExampleBlock for="Gradient" title="Gradient — theme-aware backdrop via the `decorative` + `gradient` shortcuts" />
 <ExampleBlock for="ActLikeButton" title="ActLike button — real <button> with onClick + pseudo hooks" />
 <ExampleBlock for="ActLikeAnchor" title="ActLike anchor — real <a> with href" />

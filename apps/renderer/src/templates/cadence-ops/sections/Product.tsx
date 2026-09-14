@@ -1,7 +1,6 @@
 import { Check } from '@apx-ui/icons';
-import { Card, Div, Tabs, Typography } from '@apx-ui/ds';
+import { Card, Div, SectionHeading, Tabs, Typography } from '@apx-ui/ds';
 
-import { SectionHeading } from '../SectionHeading';
 import { productSection, productTabs } from '../data';
 
 /**

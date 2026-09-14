@@ -3,8 +3,10 @@
 import {
   Slot,
   cn,
+  defaultViewport,
   forwardRef,
   motionPresets,
+  resolveTransition,
   sxToStyle,
   useReducedMotion,
   warn,
@@ -14,6 +16,11 @@ import { motion } from 'motion/react';
 import { createElement, type CSSProperties, type ElementType } from 'react';
 
 import { divRecipe } from './Div.recipe';
+import {
+  DIV_VARIANT_LABELS,
+  DivStaggerProvider,
+  useDivOrchestrated,
+} from './DivStaggerContext';
 
 /**
  * Motion components, memoised per element type.
@@ -25,6 +32,12 @@ import { divRecipe } from './Div.recipe';
  * render. Caching by element type keeps one stable identity per tag for the app's lifetime.
  */
 const motionElementCache = new Map<ElementType, ElementType>();
+
+/**
+ * Hoisted so the provider's `value` is referentially stable. A fresh `{ orchestrating: true }`
+ * object each render would re-notify every consumer in the subtree on every parent render.
+ */
+const STAGGER_ON = { orchestrating: true } as const;
 
 function motionElementFor(element: ElementType): ElementType {
   const cached = motionElementCache.get(element);
@@ -86,6 +99,12 @@ export const Div = forwardRef<HTMLElement, DivProps>(function Div(props, ref) {
     actLike,
     asChild = false,
     animation,
+    animateOnView,
+    animationDelay,
+    animationDuration,
+    animationEase,
+    stagger,
+    staggerDelay,
     centered = false,
     decorative = false,
     gradient,
@@ -127,10 +146,34 @@ export const Div = forwardRef<HTMLElement, DivProps>(function Div(props, ref) {
         'DIV_ANIM_ASCHILD',
       );
     }
+    if (stagger != null && asChild) {
+      warn(
+        false,
+        'Div: `stagger` is ignored when `asChild` is set — no motion element is rendered, so there is nothing to orchestrate the children from. Drop `asChild`.',
+        'DIV_STAGGER_ASCHILD',
+      );
+    }
+    if (animateOnView && !animation && stagger == null) {
+      warn(
+        false,
+        'Div: `animateOnView` needs something to trigger — add an `animation` preset, or a `stagger` to orchestrate animated children.',
+        'DIV_ONVIEW_NO_ANIM',
+      );
+    }
+    if (staggerDelay != null && stagger == null) {
+      warn(
+        false,
+        'Div: `staggerDelay` requires `stagger` — it delays the first staggered child, so without `stagger` there is no sequence to delay. Use `animationDelay` to delay this element itself.',
+        'DIV_STAGGERDELAY_NO_STAGGER',
+      );
+    }
   }
 
   // Hooks MUST run unconditionally (rules of hooks). All branching happens AFTER these calls.
   const reduced = useReducedMotion();
+  // Read BEFORE this element decides its own role: a stagger group that is itself inside another
+  // stagger group must participate in the outer cascade while orchestrating its own children.
+  const orchestratedByAncestor = useDivOrchestrated();
   const { className: themedCls } = useThemedClasses({
     recipe: divRecipe,
     componentName: 'Div',
@@ -214,21 +257,100 @@ export const Div = forwardRef<HTMLElement, DivProps>(function Div(props, ref) {
   // `actLike` wins over `as` when both are set (warned above).
   const ResolvedElement: ElementType = actLike ?? as ?? 'div';
 
-  if (animation && !reduced) {
+  const orchestrates = typeof stagger === 'number';
+
+  // Reduced motion falls through to the plain element below — which is the whole point: a
+  // viewport-triggered reveal that never receives its trigger would leave the content pinned at
+  // `opacity: 0` forever, so reduced-motion users must get fully-visible markup, not a paused
+  // animation.
+  if ((animation || orchestrates) && !reduced) {
     const MotionElement = motionElementFor(ResolvedElement);
-    const variant = motionPresets[animation];
-    return createElement(
+    const preset = animation ? motionPresets[animation] : undefined;
+
+    const transition = resolveTransition({
+      delay: animationDelay,
+      duration: animationDuration,
+      ease: animationEase,
+      staggerChildren: orchestrates ? stagger : undefined,
+      delayChildren: orchestrates ? staggerDelay : undefined,
+    });
+
+    const viewport = animateOnView
+      ? animateOnView === true
+        ? defaultViewport
+        : { ...defaultViewport, ...animateOnView }
+      : undefined;
+
+    // Three mutually exclusive roles, and the distinction is load-bearing:
+    //
+    //   participant  — an ancestor is cascading us. We declare `variants` and MUST NOT declare
+    //                  `initial`/`animate`: an explicit `animate` outranks the inherited variant
+    //                  label, which silently severs this element from the parent's timeline and
+    //                  makes `staggerChildren` look like it does nothing.
+    //   orchestrator — we drive the cascade: same variant map, plus we supply the label ourselves.
+    //   standalone   — the original behaviour, animating straight from the preset.
+    const usesVariants = orchestratedByAncestor || orchestrates;
+
+    let motionProps: Record<string, unknown>;
+
+    if (usesVariants) {
+      const variants = {
+        [DIV_VARIANT_LABELS.hidden]: preset?.initial ?? {},
+        [DIV_VARIANT_LABELS.visible]: {
+          ...(preset?.animate ?? {}),
+          ...(transition ? { transition } : {}),
+        },
+        [DIV_VARIANT_LABELS.exit]: preset?.exit ?? {},
+      };
+
+      motionProps = { variants };
+
+      // A participant stays silent on `initial`/`animate` so the ancestor's label reaches it.
+      // An orchestrator that is NOT itself a participant has to start the sequence.
+      if (!orchestratedByAncestor) {
+        motionProps['initial'] = DIV_VARIANT_LABELS.hidden;
+        motionProps['exit'] = DIV_VARIANT_LABELS.exit;
+        if (viewport) {
+          motionProps['whileInView'] = DIV_VARIANT_LABELS.visible;
+          motionProps['viewport'] = viewport;
+        } else {
+          motionProps['animate'] = DIV_VARIANT_LABELS.visible;
+        }
+      }
+    } else {
+      const variant = preset!;
+      motionProps = {
+        initial: variant.initial,
+        exit: variant.exit,
+        ...(transition ? { transition } : {}),
+      };
+      if (viewport) {
+        motionProps['whileInView'] = variant.animate;
+        motionProps['viewport'] = viewport;
+      } else {
+        motionProps['animate'] = variant.animate;
+      }
+    }
+
+    const element = createElement(
       MotionElement as ElementType,
       {
         ref,
         className: finalCls || undefined,
         style: finalStyle,
-        initial: variant.initial,
-        animate: variant.animate,
-        exit: variant.exit,
+        ...motionProps,
         ...mergedRest,
       },
       children,
+    );
+
+    // Only an orchestrator opens the provider. A participant deliberately leaves the existing
+    // value in place so the cascade keeps reaching further descendants through ordinary
+    // non-animated wrapper markup.
+    return orchestrates ? (
+      <DivStaggerProvider value={STAGGER_ON}>{element}</DivStaggerProvider>
+    ) : (
+      element
     );
   }
 

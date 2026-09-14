@@ -2,6 +2,7 @@ export type { IconComponent, IconProps } from './types';
 export { createIcon, type CreateIconOptions } from './createIcon';
 export { ICON_MANIFEST, type IconManifestEntry } from './manifest';
 
+export { ArrowDown } from './icons/ArrowDown';
 export { ArrowRight } from './icons/ArrowRight';
 export { ArrowUpRight } from './icons/ArrowUpRight';
 export { Award } from './icons/Award';

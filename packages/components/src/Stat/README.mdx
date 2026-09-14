@@ -139,6 +139,30 @@ Strings and `ReactNode` values pass through untouched, so pre-formatted values s
 
 ---
 
+## Count-up
+
+<ExampleBlock for="CountUp" title="A by-the-numbers band that rolls up on scroll" />
+
+```tsx
+<Stat label="Annual revenue" value={12400} format="currency" countUp />
+```
+
+`countUp` rolls a numeric value from zero when the **value element** scrolls into view — not the tile, so a tall card whose label is visible but whose number isn't doesn't start counting something the reader can't see.
+
+Four things it gets right, each of which is a way this effect is usually done wrong:
+
+**It counts in the output format.** Every intermediate frame runs through the same formatter as the final value, so a `format="currency"` stat counts in currency instead of counting in raw digits and snapping to a `$` string on the last frame.
+
+**It fires once.** A stat that re-counts every time you scroll back past it is a distraction rather than a delight — the same reasoning behind `once: true` on scroll reveals.
+
+**The digits are tabular.** Without `tabular-nums` the number's width changes on nearly every frame and the whole tile jitters. That was already true of `Stat`; `countUp` is what makes it load-bearing.
+
+**It's purely visual.** The accessible name is always built from the **final** value, so assistive tech announces `"Revenue, $12,400"` from the first render — it never narrates the animation.
+
+Under `prefers-reduced-motion: reduce` the final value renders immediately, with nothing observed. Same if `IntersectionObserver` is unavailable: the fallback is the **real number**, never zero. A page of stats stuck at `0` would look entirely intact — a plausible number is a worse failure than a visibly broken one.
+
+`countUp` is ignored for non-numeric values, for `loading` tiles, and for `error` tiles.
+
 ## States
 
 ### Loading

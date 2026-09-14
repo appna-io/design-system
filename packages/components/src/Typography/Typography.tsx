@@ -1,6 +1,6 @@
 'use client';
 
-import { cn, forwardRef } from '@apx-ui/engine';
+import { cn, forwardRef, warn } from '@apx-ui/engine';
 import { useThemedClasses } from '@apx-ui/theme';
 import { type CSSProperties } from 'react';
 
@@ -92,12 +92,49 @@ function lineClampStyle(n: number): CSSProperties {
  *   <Typography lineClamp={3}>Multi-line clamped text…</Typography>
  *   <Typography variant="caption" italic align="center">Centered italic caption</Typography>
  */
+/**
+ * Focus treatment applied automatically when `Typography` renders as something a keyboard user
+ * can land on.
+ *
+ * ## Why this is a default and not a prop
+ *
+ * `Typography actLike="a"` is how every template writes a text link — footer nav, social links,
+ * inline links. Before this, the component contributed no focus styling at all, so each call site
+ * hand-wrote its own ring, and the ones that forgot shipped a link a keyboard user cannot see
+ * themselves on. That happened in four templates, including one written by an author who had
+ * *correctly* hoisted the ring into a shared constant in the very same template — right in one
+ * file, forgotten in the next. A rule that relies on remembering is the wrong mechanism for
+ * something that fails silently.
+ *
+ * ## Why `outline` and not `ring`
+ *
+ * Tailwind's `ring-*` is implemented as a `box-shadow`. A theme whose shadows are hard offsets —
+ * `katana`, or a brutalist template — renders that ring displaced diagonally from the element, so
+ * the focus indicator points at the wrong place. `outline` follows the border box and cannot
+ * collide with a component's own `box-shadow`. `Button` keeps its ring because it also carries a
+ * ring *offset* colour that has to match its fill; a text link has no fill to match.
+ */
+const INTERACTIVE_FOCUS =
+  'outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus rounded-xs';
+
+/**
+ * True when this Typography will render something focusable. Covers the element it resolves to
+ * (`a` / `button`) and the `href`-carrying case, which is how `actLike="a"` is always used —
+ * a bare `<a>` with no `href` is not in the tab order and does not need an indicator.
+ */
+function isInteractive(element: unknown, rest: Record<string, unknown>): boolean {
+  if (element === 'button') return true;
+  if (element === 'a') return rest.href !== undefined;
+  return false;
+}
+
 export const Typography = forwardRef<HTMLElement, TypographyProps>(function Typography(
   props,
   ref,
 ) {
   const {
-    variant = 'body',
+    variant,
+    size,
     as,
     actLike,
     fontSize,
@@ -119,10 +156,20 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(function Typo
 
   // Recipe → variant class string. We pass `className: undefined` here and merge the consumer
   // className ourselves below so the precedence stays predictable (recipe → consumer className).
+  // `size` is the same scale with the semantic promise removed — see the prop's note. When both
+  // are given, `variant` wins and the pair is flagged: asking for one scale two ways means one of
+  // them is not doing what its author thinks.
+  warn(
+    !(variant !== undefined && size !== undefined),
+    'Typography: `variant` and `size` both set. `variant` wins. Use `variant` when the element is a real heading, `size` when you only want the scale.',
+  );
+
+  const resolvedVariant = variant ?? size ?? 'body';
+
   const { className: recipeCls } = useThemedClasses({
     recipe: typographyRecipe,
     componentName: 'Typography',
-    props: { variant, className: undefined, sx: undefined, style: undefined },
+    props: { variant: resolvedVariant, className: undefined, sx: undefined, style: undefined },
   });
 
   // Build the typography-specific inline-style chunk. Each key is added only when its source
@@ -167,14 +214,22 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(function Typo
 
   // Element pick: consumer-supplied `as`/`actLike` wins over the variant default (Div's existing
   // `actLike` > `as` dev-warning machinery kicks in if both are present).
-  const variantElement = VARIANT_TO_ELEMENT[variant];
+  // Only `variant` carries an element. A bare `size` renders a `<span>` — the whole point is that
+  // it promises nothing about the document outline. With neither, the default is unchanged: a
+  // plain `<Typography>` is still a paragraph.
+  const variantElement =
+    variant !== undefined
+      ? VARIANT_TO_ELEMENT[variant]
+      : size !== undefined
+        ? 'span'
+        : VARIANT_TO_ELEMENT['body'];
   const elementForDiv = actLike ?? as ?? variantElement;
 
   return (
     <Div
       ref={ref}
       as={elementForDiv}
-      className={cn(recipeCls, className)}
+      className={cn(recipeCls, isInteractive(elementForDiv, rest) && INTERACTIVE_FOCUS, className)}
       style={mergedStyle}
       {...rest}
     />

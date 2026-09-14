@@ -53,7 +53,7 @@ function BeanCard({ bean }: { bean: Bean }) {
 
       <Card.Body className="pt-5">
         <Div className="flex items-start justify-between gap-2">
-          <Typography as="h3" variant="h4" weight="semibold" fontFamily="display">
+          <Typography as="h3" size="h4" weight="semibold" fontFamily="display">
             {bean.name}
           </Typography>
           <Badge variant="soft" color="secondary" shape="pill" size="sm" className="shrink-0">

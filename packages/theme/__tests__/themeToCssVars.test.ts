@@ -1,3 +1,4 @@
+import { darkPalette, lightPalette } from '@apx-ui/tokens';
 import { describe, expect, it } from 'vitest';
 import { defineTheme } from '../src/defineTheme';
 import { themeToCssVars } from '../src/themeToCssVars';
@@ -7,15 +8,36 @@ describe('themeToCssVars', () => {
 
   it('emits a :root block with palette + scale variables', () => {
     expect(css).toContain(':root {');
-    expect(css).toContain('--sds-palette-primary-main: #4f46e5;');
+    expect(css).toContain(`--sds-palette-primary-main: ${lightPalette.primary.main};`);
     expect(css).toContain('--sds-radius-md: 0.375rem;');
     expect(css).toContain('--sds-font-sans:');
     expect(css).toContain('--sds-duration-normal: 200ms;');
   });
 
+  it('emits every duration in the scale, including ones added after this test was written', () => {
+    // Regression guard. These were hand-enumerated by name, so `slower` and `deliberate` were
+    // added to the token scale and silently never reached CSS — a `duration-slower` utility
+    // resolved to an undefined var, the animation fell back to the browser default, and nothing
+    // errored anywhere. Iterating means a new duration token is reachable the moment it exists.
+    expect(css).toContain('--sds-duration-fast: 150ms;');
+    expect(css).toContain('--sds-duration-slower: 500ms;');
+    expect(css).toContain('--sds-duration-deliberate: 700ms;');
+  });
+
+  it('emits a custom duration token a consumer theme invents', () => {
+    const custom = themeToCssVars(
+      defineTheme({ motion: { duration: { glacial: 2400 } } } as never),
+    );
+    expect(custom).toContain('--sds-duration-glacial: 2400ms;');
+  });
+
   it("emits a dark-mode block via [data-mode='dark']", () => {
     expect(css).toContain(":root[data-mode='dark'] {");
-    expect(css).toContain('--sds-palette-primary-main: #6366f1;');
+    // Asserted against the token, not a literal hex. What this test means is "the dark block
+    // carries the DARK palette's values" — pinning the hex made it a second, accidental snapshot
+    // of the palette, so every legitimate colour change failed it for the wrong reason.
+    expect(css).toContain(`--sds-palette-primary-main: ${darkPalette.primary.main};`);
+    expect(darkPalette.primary.main).not.toBe(lightPalette.primary.main);
   });
 
   it('emits variant blocks for tetsu, origami, and katana', () => {

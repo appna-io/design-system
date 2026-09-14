@@ -6,5 +6,13 @@
  */
 export { Surface } from './Surface';
 export { surfaceRecipe } from './Surface.recipe';
-export { invertedPaletteVars, surfaceCaptureVars } from './Surface.tone';
+export {
+  invertedPaletteVars,
+  primaryPaletteVars,
+  secondaryPaletteVars,
+  surfaceCaptureVars,
+  toneNeedsCapture,
+  tonePaletteVars,
+} from './Surface.tone';
 export type { SurfaceProps, SurfaceTone } from './Surface.types';
+export { SurfaceToneContext, useSurfaceTone, toneOwnsItsGround } from './SurfaceToneContext';

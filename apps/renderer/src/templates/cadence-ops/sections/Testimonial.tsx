@@ -20,7 +20,12 @@ export function Testimonial() {
         </Badge>
 
         <Typography as="blockquote" className="mt-8 block">
+          {/* `as="p"`, not the `h3` the variant would have picked on its own. A pull quote is not
+              a section heading — and this one sat *inside* a `<blockquote>`, so the outline
+              carried a heading nested in a quotation. `variant` is the type scale; the element is
+              a separate decision (#13). */}
           <Typography
+            as="p"
             variant="h3"
             weight="medium"
             lineHeight="snug"

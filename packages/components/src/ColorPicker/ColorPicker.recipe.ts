@@ -187,9 +187,13 @@ const presetsGrid = cv({
 const preset = cv({
   base: [
     'relative h-6 w-6 rounded-md border border-border-subtle shadow-inner',
-    'outline-none transition-transform duration-fast ease-standard motion-reduce:transition-none',
+    // `motion-safe:` on BOTH the transition and the transform. Gating only the transition — which
+    // is what `motion-reduce:transition-none` did here — suppresses the easing and leaves the
+    // scale: the swatch still grew to 110%, it just snapped there instead. A reduced-motion user
+    // got the movement without the smoothing, which is the opposite of the intent.
+    'outline-none motion-safe:transition-transform duration-fast ease-standard',
     'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-focus',
-    'hover:scale-110 cursor-pointer',
+    'motion-safe:hover:scale-110 cursor-pointer',
     "bg-[image:repeating-conic-gradient(var(--sds-palette-background-subtle)_0%_25%,transparent_0%_50%)] bg-[length:6px_6px]",
     'data-[selected=true]:ring-2 data-[selected=true]:ring-focus data-[selected=true]:ring-offset-2',
   ].join(' '),

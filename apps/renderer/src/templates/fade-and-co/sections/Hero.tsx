@@ -1,4 +1,4 @@
-import { Button, Div, Image, Typography } from '@apx-ui/ds';
+import { Button, Div, Image, Surface, Typography } from '@apx-ui/ds';
 
 import { hero } from '../data';
 
@@ -11,20 +11,16 @@ import { hero } from '../data';
  * literal `rgba()`: recolour `primary` and the wash follows, which is the whole point of the
  * page being theme-driven. It is layered over the image and under the content by DOM order —
  * every layer is `absolute inset-0` inside the same `relative` section.
+ *
+ * The section is a `<Surface tone="primary">`, which is what lets the copy and the secondary CTA
+ * be written with no colour at all: the tone points `foreground.*` at the ink's bone contrast slot
+ * and the `neutral` role at the same, so `<Button variant="outline" color="neutral">` is the
+ * bone-on-ink outline this hero used to spell out as an inline `style`. `color="secondary"` on the
+ * primary CTA is untouched by the tone — brand and status roles stay recognisable on any ground.
  */
-/**
- * Bone-on-ink outline button. `ButtonColor` has no inverse / on-dark role — every option paints
- * a chromatic fill or border, so a light-outlined button on a dark band has to reach for the
- * palette's contrast token directly. Same on-dark gap the booking band hits.
- */
-const ON_DARK_OUTLINE = {
-  borderColor: 'var(--sds-palette-primary-contrast)',
-  color: 'var(--sds-palette-primary-contrast)',
-} as const;
-
 export function Hero() {
   return (
-    <Div as="section" id="top" className="relative overflow-hidden bg-primary">
+    <Surface as="section" tone="primary" id="top" className="relative overflow-hidden">
       <Div className="absolute inset-0">
         <Image
           src={hero.image.src}
@@ -71,7 +67,6 @@ export function Hero() {
             letterSpacing="tight"
             fontFamily="display"
             transform="upper"
-            color="primary.contrast"
             className="mt-6 text-5xl sm:text-6xl lg:text-7xl"
           >
             {hero.title}
@@ -80,8 +75,8 @@ export function Hero() {
           <Typography
             variant="bodyLarge"
             lineHeight="relaxed"
-            color="primary.contrast"
-            className="mt-6 max-w-lg opacity-80"
+            color="fg.muted"
+            className="mt-6 max-w-lg"
           >
             {hero.body}
           </Typography>
@@ -90,7 +85,7 @@ export function Hero() {
             <Button size="lg" color="secondary" asChild>
               <a href={hero.primaryCta.href}>{hero.primaryCta.label}</a>
             </Button>
-            <Button size="lg" variant="outline" style={ON_DARK_OUTLINE} asChild>
+            <Button size="lg" variant="outline" color="neutral" asChild>
               <a href={hero.secondaryCta.href}>{hero.secondaryCta.label}</a>
             </Button>
           </Div>
@@ -100,14 +95,13 @@ export function Hero() {
             <Typography
               variant="bodySmall"
               weight="medium"
-              color="primary.contrast"
-              className="opacity-70"
+              color="fg.muted"
             >
               {hero.status}
             </Typography>
           </Div>
         </Div>
       </Div>
-    </Div>
+    </Surface>
   );
 }

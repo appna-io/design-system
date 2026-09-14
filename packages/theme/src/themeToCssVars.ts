@@ -62,10 +62,14 @@ function partialThemeToVars(partial: Partial<ThemeShape> | ThemeVariantOverrides
   }
 
   if (p.motion) {
-    const d = p.motion.duration;
-    if (d?.fast !== undefined) out[`${TOKEN_PREFIX}-duration-fast`] = `${d.fast}ms`;
-    if (d?.normal !== undefined) out[`${TOKEN_PREFIX}-duration-normal`] = `${d.normal}ms`;
-    if (d?.slow !== undefined) out[`${TOKEN_PREFIX}-duration-slow`] = `${d.slow}ms`;
+    // Durations are enumerated by iteration, not by name: the scale grows (`slower`,
+    // `deliberate`), and a hand-listed set drops any new key silently — the var never gets
+    // emitted, so a `duration-slower` utility resolves to nothing and the animation falls back to
+    // the browser default with no error anywhere. They can't just go through `flatten` like the
+    // easings, because the token is a number and CSS needs the `ms` unit.
+    for (const [name, value] of Object.entries(p.motion.duration ?? {})) {
+      if (value !== undefined) out[`${TOKEN_PREFIX}-duration-${name}`] = `${value}ms`;
+    }
     if (p.motion.ease) flatten(`${TOKEN_PREFIX}-ease`, p.motion.ease, out);
   }
 

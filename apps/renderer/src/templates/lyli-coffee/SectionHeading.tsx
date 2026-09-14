@@ -5,22 +5,18 @@ import { Div, Typography } from '@apx-ui/ds';
  * identically. Shared here for the same reason the source made them CSS component classes —
  * they are one typographic unit and would always change together.
  *
- * `onDark` swaps to the inverted palette the ValueProps and Newsletter bands need, where the
- * surface is espresso and the type is cream.
+ * No `onDark` axis. The two espresso bands (ValueProps, Newsletter) are `<Surface tone="primary">`
+ * now, which re-points `foreground.*` at the cream contrast slot for everything inside — so the
+ * plain tokens below are already correct there, and saying it a second time here would be a way
+ * of letting the two drift apart.
  */
 export interface SectionHeadingProps {
   title: string;
   body?: string;
   align?: 'start' | 'center';
-  onDark?: boolean;
 }
 
-export function SectionHeading({
-  title,
-  body,
-  align = 'start',
-  onDark = false,
-}: SectionHeadingProps) {
+export function SectionHeading({ title, body, align = 'start' }: SectionHeadingProps) {
   return (
     <Div className={align === 'center' ? 'text-center' : undefined}>
       <Typography
@@ -29,7 +25,6 @@ export function SectionHeading({
         weight="semibold"
         letterSpacing="tight"
         fontFamily="display"
-        color={onDark ? 'primary.contrast' : undefined}
         className="text-3xl sm:text-4xl"
       >
         {title}
@@ -37,10 +32,8 @@ export function SectionHeading({
       {body && (
         <Typography
           variant="bodyLarge"
-          color={onDark ? 'primary.contrast' : 'fg.subtle'}
-          className={`mt-3 max-w-2xl ${align === 'center' ? 'mx-auto' : ''} ${
-            onDark ? 'opacity-80' : ''
-          }`}
+          color="fg.subtle"
+          className={`mt-3 max-w-2xl ${align === 'center' ? 'mx-auto' : ''}`}
         >
           {body}
         </Typography>

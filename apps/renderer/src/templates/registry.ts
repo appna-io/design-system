@@ -1,7 +1,12 @@
 import type { TemplateEntry } from './types';
 import { cadenceOpsTemplate } from './cadence-ops';
 import { fadeAndCoTemplate } from './fade-and-co';
+import { halyardTemplate } from './halyard';
+import { fernwoodTemplate } from './fernwood';
 import { lyliCoffeeTemplate } from './lyli-coffee';
+import { relayAtelierTemplate } from './relay-atelier';
+import { northboundTemplate } from './northbound';
+import { vantageStudioTemplate } from './vantage-studio';
 
 /**
  * The full set of preview templates. Order here drives gallery + sidebar ordering
@@ -18,6 +23,11 @@ const TEMPLATES: readonly TemplateEntry[] = [
   lyliCoffeeTemplate,
   fadeAndCoTemplate,
   cadenceOpsTemplate,
+  vantageStudioTemplate,
+  northboundTemplate,
+  halyardTemplate,
+  fernwoodTemplate,
+  relayAtelierTemplate,
 ];
 
 export function getTemplates(): readonly TemplateEntry[] {

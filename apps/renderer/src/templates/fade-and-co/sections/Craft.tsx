@@ -46,7 +46,7 @@ export function Craft() {
                     </Div>
                     <Typography
                       as="h3"
-                      variant="h4"
+                      size="h4"
                       weight="semibold"
                       fontFamily="display"
                       transform="upper"

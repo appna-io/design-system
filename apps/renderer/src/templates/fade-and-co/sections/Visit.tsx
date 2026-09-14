@@ -121,7 +121,7 @@ function ContactLink({ href, children }: { href: string; children: string }) {
       href={href}
       variant="body"
       color="foreground.muted"
-      className="rounded-sm transition hover:text-secondary-main focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+      className="rounded-sm transition hover:text-secondary-main"
     >
       {children}
     </Typography>

@@ -13,6 +13,7 @@ export { divRecipe } from './Div.recipe';
 export { buildGradientBackground } from './gradient';
 export { extractStyleProps, STYLE_PROP_KEYS } from './styleProps';
 export { buildPseudoClassName, PSEUDO_PREFIX } from './pseudoProps';
+export { DIV_VARIANT_LABELS, useDivOrchestrated } from './DivStaggerContext';
 
 export type {
   DivAnimation,
@@ -29,5 +30,6 @@ export type {
   DivGradientPosition,
   DivGradientType,
 } from './gradient';
+export type { DivStaggerContextValue } from './DivStaggerContext';
 export type { PseudoPropMap, PseudoPropName } from './pseudoProps';
 export type { ExtractStylePropsResult } from './styleProps';

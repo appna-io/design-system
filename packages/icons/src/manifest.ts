@@ -1,3 +1,4 @@
+import { ArrowDown } from './icons/ArrowDown';
 import { ArrowRight } from './icons/ArrowRight';
 import { ArrowUpRight } from './icons/ArrowUpRight';
 import { Award } from './icons/Award';
@@ -72,6 +73,12 @@ export interface IconManifestEntry {
 }
 
 export const ICON_MANIFEST: readonly IconManifestEntry[] = [
+  {
+    name: 'ArrowDown',
+    Component: ArrowDown,
+    description: 'Down-pointing arrow for scroll cues and jump-to-content affordances.',
+    keywords: ['arrow', 'down', 'scroll', 'jump', 'descend', 'more'],
+  },
   {
     name: 'ArrowRight',
     Component: ArrowRight,

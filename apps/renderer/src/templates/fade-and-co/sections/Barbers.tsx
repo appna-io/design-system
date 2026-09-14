@@ -67,7 +67,7 @@ function BarberCard({ barber }: { barber: Barber }) {
       </Card.Media>
 
       <Card.Body className="pt-5">
-        <Typography as="h3" variant="h4" weight="semibold" fontFamily="display" className="text-lg">
+        <Typography as="h3" size="h4" weight="semibold" fontFamily="display" className="text-lg">
           {barber.name}
         </Typography>
         <Typography

@@ -11,18 +11,36 @@ might one day sit on a dark band.
 
 <ExampleBlock for="Overview" title="Overview — an inverted band" />
 
+There are two kinds of band, and Surface has a tone for each. `tone="inverted"` grounds on the
+page's own ink — the dark section. `tone="primary"` / `tone="secondary"` ground on a **brand
+role** — the CTA band, the newsletter strip, the pricing highlight.
+
+<ExampleBlock for="BrandBand" title='A brand band — tone="primary"' />
+
 ## When to use
 
 - A dark hero, feature band, newsletter capture, or footer inside an otherwise light page.
-- A light card sitting inside a dark band (nest a second `Surface` — two inversions cancel).
+- A band filled with the brand colour — a closing CTA, a signup strip.
+- A light card sitting inside either kind of band (nest a second `Surface` — see below).
 - Any region that should own its background rather than inherit the page's.
+
+## Which tone
+
+| You want                            | Tone                    | The light control on it    |
+| ----------------------------------- | ----------------------- | -------------------------- |
+| a dark band on a light page         | `inverted`              | `<Button color="neutral">` |
+| a band filled with the brand colour | `primary` / `secondary` | `<Button color="neutral">` |
+| a light card inside either of those | nested `inverted`       | `<Button color="primary">` |
+
+In all three the thing inside is a plain DS component with no on-dark prop. That is the point:
+the tone changes what the tokens resolve to, so the call site stays colour-free.
 
 ## When NOT to use
 
 - You want the **whole app** dark → that's `mode` on `<ThemeProvider>`, a user preference.
 - You want a **different brand palette** for a region → that's `<ThemeProvider scope>`.
 - You just want a coloured box → `<Div bg="…">` or a `<Card>`. Surface is about what its
-  *descendants* resolve to, not about painting one rectangle.
+  _descendants_ resolve to, not about painting one rectangle.
 
 ## Anatomy
 
@@ -32,40 +50,82 @@ might one day sit on a dark band.
 ```
 
 The capture element exists for one reason. Swapping the tokens means writing
-`--sds-palette-background-default: var(--sds-palette-foreground-default)` *and* the reverse — on a
+`--sds-palette-background-default: var(--sds-palette-foreground-default)` _and_ the reverse — on a
 single element that is a custom-property **cycle**, and CSS resolves a cycle by discarding every
 property in it. The surface would render completely unstyled, with no error. So the outer element
 freezes the inherited pair under private names and the inner one reads those; inheritance is
 resolved before a child's own declarations apply, so there is no cycle. It is `display: contents`,
 so it adds no box and cannot disturb a flex or grid parent.
 
+**The brand tones do not need it.** They have no swap: they point the surface roles _at_
+`palette.<role>.main` / `.contrast`, and they never write to the brand role itself, so nothing
+references anything being redefined. `tone="primary"` is therefore a single element. There is a
+test that asserts this directly — that no brand tone declares a variable it also reads — because
+if that ever stopped being true the band would silently render unstyled.
+
 ## Props
 
-| Prop | Default | Effect |
-|------|---------|--------|
-| `tone` | `'default'` | `'inverted'` swaps the ground. `'default'` still paints `bg-bg text-fg`. |
-| `as` | `'div'` | Render a semantic element — a dark band is usually a landmark. |
-| `sx` / `style` / `className` | — | Merged after the inversion, so a caller can override one token. |
+| Prop                         | Default     | Effect                                                                                                                                          |
+| ---------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tone`                       | `'default'` | `'inverted'` swaps the ground; `'primary'` / `'secondary'` fill it with that brand role. `'default'` still paints `bg-bg text-fg`.              |
+| `as`                         | `'div'`     | Render a semantic element — a band is usually a landmark.                                                                                       |
+| `colorScheme`                | —           | Overrides the `color-scheme` a non-`default` tone declares. Set `"light"` when a brand's fill is _pale_ and its `contrast` is dark — see Notes. |
+| `sx` / `style` / `className` | —           | Merged after the tone map, so a caller can override one token.                                                                                  |
 
-## What inverts
+## What the tone remaps
 
-| | inverts | why |
-|---|---|---|
-| `background-*`, `foreground-*`, `border-*` | ✅ | the surface tokens — this is the whole point |
-| `neutral` role | ✅ | neutral is the DS's greyscale/chrome role, not a brand colour. This is what makes `<Button color="neutral">` the light button with dark text a dark band wants. |
-| `primary` / `secondary` / `success` / `warning` / `danger` / `info` | ❌ | a brand or status colour has to stay recognisable. A danger button that goes pale on a dark band is a bug. Their `contrast` slots already sit on their own fill. |
-| `--sds-focus-ring` | ✅ | the default ring is tuned for a light ground and can vanish on a dark one — leaving it would be an accessibility regression handed out by a styling feature. |
+Same table for both kinds of tone — `inverted` swaps the surface roles with each other, the brand
+tones point them at `palette.<role>.main` / `.contrast`.
 
-Every inverted value is a `color-mix()` of the **inherited** palette, never a literal colour. So a
-`Surface` inside a branded `<ThemeProvider scope>` inverts *that brand*, and inverting a dark theme
-gives you a light band on a dark page — which is why the prop is `tone="inverted"` and not
-`tone="dark"`.
+|                                                                     | remapped | why                                                                                                                                                                                                                                              |
+| ------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `background-*`, `foreground-*`, `border-*`                          | ✅       | the surface tokens — this is the whole point                                                                                                                                                                                                     |
+| `neutral` role                                                      | ✅       | neutral is the DS's greyscale/chrome role, not a brand colour. This is what makes `<Button color="neutral">` the light button with dark text a dark band wants.                                                                                  |
+| `primary` / `secondary` / `success` / `warning` / `danger` / `info` | ❌       | a brand or status colour has to stay recognisable. A danger button that goes pale on a dark band is a bug. Their `contrast` slots already sit on their own fill. A brand tone does not remap _itself_ either — that is what makes it cycle-free. |
+| `--sds-focus-ring`                                                  | ✅       | the default ring is tuned for a light ground and can vanish on a dark one — leaving it would be an accessibility regression handed out by a styling feature.                                                                                     |
+
+Every value is a `color-mix()` of the **inherited** palette, never a literal colour. So a `Surface`
+inside a branded `<ThemeProvider scope>` inverts _that brand_, and inverting a dark theme gives you
+a light band on a dark page — which is why the prop is `tone="inverted"` and not `tone="dark"`. The
+brand tones read the scoped `primary` / `secondary` roles for the same reason.
+
+## A brand tone has no muted step, on purpose
+
+A brand fill is a mid-tone; the page ink `inverted` grounds on is near-black. Measured across the
+six brand fills the shipped templates actually use, plus the DS defaults, a saturated fill has
+**about 6:1 of contrast at full ink — that is the entire budget**, where `inverted` starts from
+~16:1.
+
+So `foreground.muted` and `foreground.subtle` both resolve to a 90% blend on a brand tone, which
+is barely distinguishable from full ink. Two names, one value. That is not a rough edge to smooth
+later: on a saturated band the readable design has no muted hierarchy, and a template that wants
+one needs a darker `main`. Anything below 90% drops body copy under 4.5:1 on three of the six real
+fills — including the violet CTA band this feature was built for.
+
+Borders are measured separately, against WCAG 1.4.11's 3:1 for a UI boundary rather than 4.5:1.
+`border-default` and `border-strong` sit much closer to the ink than the foreground steps do;
+`border-subtle` is a decorative hairline and is deliberately below 3:1, because 1.4.11 does not
+apply to it and pushing it there would turn every divider into a rule.
+
+## Nesting
+
+Two inversions cancel — an inner `Surface` captures the outer's _already-inverted_ palette and
+swaps it back, so a light card inside a dark band needs no special case.
+
+The same mechanism gives you the light card inside a **brand** band, for free: nest
+`tone="inverted"` inside `tone="primary"` and it captures the band's current ink and ground —
+which the brand tone has just re-pointed at `contrast` and `main` — and swaps them. White ground,
+brand ink. No third tone.
 
 ## Notes
 
-- `[color-scheme:dark]` rides along on the inverted tone. That one isn't a token: the caret,
+- `[color-scheme:dark]` rides along on every non-`default` tone. That one isn't a token: the caret,
   `<select>` arrow, scrollbars and autofill are drawn by the browser, and without it a text input
-  in a dark band gets a black caret on a black field.
+  in a dark band gets a black caret on a black field. It is right for `inverted` always, and for a
+  brand role whose fill is saturated with a light `contrast` slot — the common case, and the DS
+  default for `primary` and `secondary`. A theme that authors a _pale_ brand fill (the default
+  `warning` role is `#f59e0b` on `#111827`, and a theme is free to make `primary` look like that)
+  should pass `colorScheme="light"`, or the field gets a white caret on a yellow ground.
 - **Translucency works** — `bg-bg-paper/10` on an inverted surface is the "glass field" treatment,
   and the `/opacity` modifier resolves correctly against DS tokens.
 - Surface needs a `<ThemeProvider>` above it, like every other DS component.
@@ -73,4 +133,5 @@ gives you a light band on a dark page — which is why the prop is `tone="invert
 ## Examples
 
 <ExampleBlock for="Overview" />
+<ExampleBlock for="BrandBand" />
 <ExampleBlock for="FormOnDark" />

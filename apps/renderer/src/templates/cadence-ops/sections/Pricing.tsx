@@ -1,6 +1,5 @@
-import { Button, Div, PricingCard } from '@apx-ui/ds';
+import { Button, Div, PricingCard, SectionHeading } from '@apx-ui/ds';
 
-import { SectionHeading } from '../SectionHeading';
 import { pricingSection, tiers } from '../data';
 
 /**

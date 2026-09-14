@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type SyntheticEvent } from 'react';
-import { Button, Div, Input, Typography } from '@apx-ui/ds';
+import { Button, Div, Input, Surface, Typography } from '@apx-ui/ds';
 
 import { SectionHeading } from '../SectionHeading';
 import { newsletter } from '../data';
@@ -14,35 +14,13 @@ import { newsletter } from '../data';
  * The source's form was a client-side no-op (`onSubmit={e => e.preventDefault()}`). Kept as a
  * no-op, but with a real success state so the section isn't a dead input.
  *
- * The input is the one place this port could not reach for a DS variant: the source styles it
- * as translucent white glass on the dark band (`bg-white/10 + backdrop-blur`), and `Input` has
- * no on-dark treatment. Filed as a DS gap rather than pretending the className is the design.
+ * Everything inside is written as it would be on a light page. `<Surface tone="primary">` does the
+ * rest: the source's translucent-white "glass" field is `Input variant="solid"`, whose `bg-bg-subtle`
+ * the tone resolves to 12% cream mixed into espresso — the same value the port previously spelled
+ * out as a `color-mix()` inline style — and the cream-on-espresso submit is `color="neutral"`,
+ * because the tone points the neutral role at the contrast slot. Both used to need raw
+ * `var(--sds-…)` at the call site, along with an arbitrary Tailwind selector for the placeholder.
  */
-/**
- * Translucent "glass" field on the dark band.
- *
- * Written with `color-mix()` against the palette token rather than Tailwind's `/opacity`
- * modifier: the DS preset maps colors to raw `var(--sds-…)` strings, which carry no
- * `<alpha-value>` placeholder, so `bg-primary-contrast/10` compiles to nothing and the field
- * renders fully transparent. `color-mix` keeps the value token-driven and theme-tracking.
- */
-const GLASS_FIELD = {
-  backgroundColor: 'color-mix(in srgb, var(--sds-palette-primary-contrast) 12%, transparent)',
-  color: 'var(--sds-palette-primary-contrast)',
-} as const;
-
-/**
- * Cream-on-espresso submit button, matching the source's `bg-cream-50 text-espresso-900`.
- *
- * `ButtonColor` has no inverse/on-dark role — every option paints a chromatic fill, so a light
- * button on a dark band has to be expressed with the palette's contrast token directly. Same
- * on-dark gap as the field above.
- */
-const INVERSE_BUTTON = {
-  backgroundColor: 'var(--sds-palette-primary-contrast)',
-  color: 'var(--sds-palette-primary-main)',
-} as const;
-
 export function Newsletter() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -54,7 +32,7 @@ export function Newsletter() {
   }
 
   return (
-    <Div as="section" className="relative overflow-hidden bg-primary py-16 lg:py-20">
+    <Surface as="section" tone="primary" className="relative overflow-hidden py-16 lg:py-20">
       <Div
         decorative
         gradient={{
@@ -65,13 +43,12 @@ export function Newsletter() {
         }}
       />
       <Div className="relative mx-auto w-full max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-        <SectionHeading title={newsletter.title} body={newsletter.body} align="center" onDark />
+        <SectionHeading title={newsletter.title} body={newsletter.body} align="center" />
 
         {submitted ? (
           <Typography
             variant="body"
             weight="medium"
-            color="primary.contrast"
             className="mx-auto mt-8 max-w-md"
             aria-live="polite"
           >
@@ -91,34 +68,32 @@ export function Newsletter() {
               required
               fullWidth
               size="lg"
-              variant="ghost"
+              variant="solid"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               placeholder={newsletter.placeholder}
               aria-label={newsletter.emailLabel}
-              style={GLASS_FIELD}
-              className="backdrop-blur [&_input]:placeholder:text-[color-mix(in_srgb,var(--sds-palette-primary-contrast)_60%,transparent)]"
+              className="backdrop-blur"
             />
-            <Button type="submit" size="lg" style={INVERSE_BUTTON} className="shrink-0">
+            <Button type="submit" size="lg" color="neutral" className="shrink-0">
               {newsletter.submitLabel}
             </Button>
           </Div>
         )}
 
-        <Typography variant="bodySmall" color="primary.contrast" className="mt-8 opacity-80">
+        <Typography variant="bodySmall" color="fg.muted" className="mt-8">
           {newsletter.footnote}{' '}
           <Typography
             actLike="a"
             href={newsletter.footnoteLink.href}
             variant="bodySmall"
             weight="semibold"
-            color="primary.contrast"
             className="underline underline-offset-4 transition hover:opacity-100"
           >
             {newsletter.footnoteLink.label}
           </Typography>
         </Typography>
       </Div>
-    </Div>
+    </Surface>
   );
 }

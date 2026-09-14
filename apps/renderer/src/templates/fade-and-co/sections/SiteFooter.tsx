@@ -118,7 +118,7 @@ function FooterLink({ href, children }: { href: string; children: string }) {
       href={href}
       variant="bodySmall"
       color="foreground.muted"
-      className="transition hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+      className="transition hover:text-fg"
     >
       {children}
     </Typography>

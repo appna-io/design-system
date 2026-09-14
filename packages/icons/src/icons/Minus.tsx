@@ -1,6 +1,3 @@
 import { createIcon } from '../createIcon';
 
-export const Minus = createIcon(
-  'Minus',
-  <path d="M5 12h14" />,
-);
+export const Minus = createIcon('Minus', <path d="M5 12h14" />);

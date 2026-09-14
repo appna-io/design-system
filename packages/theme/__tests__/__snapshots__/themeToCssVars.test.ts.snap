@@ -2,12 +2,16 @@
 
 exports[`themeToCssVars > snapshot of :root block stays stable 1`] = `
 ":root {
+  --sds-duration-deliberate: 700ms;
   --sds-duration-fast: 150ms;
   --sds-duration-normal: 200ms;
   --sds-duration-slow: 300ms;
+  --sds-duration-slower: 500ms;
   --sds-ease-accelerate: cubic-bezier(0.3, 0, 1, 1);
   --sds-ease-decelerate: cubic-bezier(0, 0, 0, 1);
   --sds-ease-emphasized: cubic-bezier(0.3, 0, 0, 1);
+  --sds-ease-expressive: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --sds-ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
   --sds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --sds-focus-ring: #4f46e5;
   --sds-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
@@ -16,7 +20,14 @@ exports[`themeToCssVars > snapshot of :root block stays stable 1`] = `
   --sds-font-size-3xl: 1.875rem;
   --sds-font-size-4xl: 2.25rem;
   --sds-font-size-5xl: 3rem;
+  --sds-font-size-6xl: 3.75rem;
+  --sds-font-size-7xl: 4.5rem;
+  --sds-font-size-8xl: 6rem;
   --sds-font-size-base: 1rem;
+  --sds-font-size-display-2xl: clamp(3.5rem, 9vw + 1rem, 7.5rem);
+  --sds-font-size-display-lg: clamp(2.5rem, 5vw + 1rem, 4rem);
+  --sds-font-size-display-md: clamp(1.875rem, 3vw + 1rem, 2.75rem);
+  --sds-font-size-display-xl: clamp(3rem, 7vw + 1rem, 5.5rem);
   --sds-font-size-lg: 1.125rem;
   --sds-font-size-sm: 0.875rem;
   --sds-font-size-xl: 1.25rem;
@@ -27,6 +38,7 @@ exports[`themeToCssVars > snapshot of :root block stays stable 1`] = `
   --sds-font-weight-semibold: 600;
   --sds-letter-spacing-normal: 0em;
   --sds-letter-spacing-tight: -0.025em;
+  --sds-letter-spacing-tighter: -0.04em;
   --sds-letter-spacing-wide: 0.025em;
   --sds-letter-spacing-wider: 0.05em;
   --sds-line-height-none: 1;
@@ -38,6 +50,7 @@ exports[`themeToCssVars > snapshot of :root block stays stable 1`] = `
   --sds-palette-background-default: #ffffff;
   --sds-palette-background-paper: #fafafa;
   --sds-palette-background-subtle: #f4f4f5;
+  --sds-palette-border-control: #8a8a93;
   --sds-palette-border-default: #e4e4e7;
   --sds-palette-border-strong: #a1a1aa;
   --sds-palette-border-subtle: #f4f4f5;
@@ -50,7 +63,7 @@ exports[`themeToCssVars > snapshot of :root block stays stable 1`] = `
   --sds-palette-focus-ring: #4f46e5;
   --sds-palette-foreground-default: #18181b;
   --sds-palette-foreground-muted: #52525b;
-  --sds-palette-foreground-subtle: #71717a;
+  --sds-palette-foreground-subtle: #67676f;
   --sds-palette-info-active: #1e40af;
   --sds-palette-info-border: #bfdbfe;
   --sds-palette-info-contrast: #ffffff;
@@ -70,19 +83,19 @@ exports[`themeToCssVars > snapshot of :root block stays stable 1`] = `
   --sds-palette-primary-hover: #4338ca;
   --sds-palette-primary-main: #4f46e5;
   --sds-palette-primary-subtle: #eef2ff;
-  --sds-palette-secondary-active: #0369a1;
+  --sds-palette-secondary-active: #0c4a6e;
   --sds-palette-secondary-border: #bae6fd;
   --sds-palette-secondary-contrast: #ffffff;
-  --sds-palette-secondary-hover: #0284c7;
-  --sds-palette-secondary-main: #0ea5e9;
+  --sds-palette-secondary-hover: #075985;
+  --sds-palette-secondary-main: #0369a1;
   --sds-palette-secondary-subtle: #e0f2fe;
-  --sds-palette-success-active: #166534;
+  --sds-palette-success-active: #14532d;
   --sds-palette-success-border: #bbf7d0;
   --sds-palette-success-contrast: #ffffff;
-  --sds-palette-success-hover: #15803d;
-  --sds-palette-success-main: #16a34a;
+  --sds-palette-success-hover: #166534;
+  --sds-palette-success-main: #15803d;
   --sds-palette-success-subtle: #dcfce7;
-  --sds-palette-warning-active: #b45309;
+  --sds-palette-warning-active: #c67210;
   --sds-palette-warning-border: #fde68a;
   --sds-palette-warning-contrast: #111827;
   --sds-palette-warning-hover: #d97706;
@@ -98,6 +111,8 @@ exports[`themeToCssVars > snapshot of :root block stays stable 1`] = `
   --sds-radius-xl: 0.75rem;
   --sds-radius-xs: 0.125rem;
   --sds-shadows-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --sds-shadows-ambient: 0 2px 4px -2px color-mix(in srgb, var(--sds-palette-foreground-default) 10%, transparent), 0 12px 32px -12px color-mix(in srgb, var(--sds-palette-foreground-default) 18%, transparent);
+  --sds-shadows-glow: 0 4px 12px -4px color-mix(in srgb, var(--sds-palette-primary-main) 28%, transparent), 0 16px 40px -12px color-mix(in srgb, var(--sds-palette-primary-main) 22%, transparent);
   --sds-shadows-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
   --sds-shadows-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --sds-shadows-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);

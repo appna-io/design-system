@@ -33,9 +33,21 @@ export interface ForegroundColors {
 
 /** Border colors. */
 export interface BorderColors {
+  /** Decorative outline — a card edge, a panel divider. No contrast minimum. */
   default: string;
+  /** The faintest hairline. Decorative only. */
   subtle: string;
+  /** An emphasised decorative boundary. */
   strong: string;
+  /**
+   * The edge of an **interactive control** — input, select, checkbox, textarea.
+   *
+   * A separate role because this one is a non-text UI component under WCAG 1.4.11 and must clear
+   * 3:1 against its background, while a card outline has no minimum and looks wrong if held to
+   * one. They were the same role, so `default` was simultaneously too light to see a field by and
+   * as dark as a card could take.
+   */
+  control: string;
 }
 
 /**

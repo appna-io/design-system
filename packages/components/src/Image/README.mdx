@@ -1,0 +1,84 @@
+# Image
+
+The content-imagery primitive. Sections render pictures through this instead of a raw `<img>`, so radius, shadow and fit stay on the token scales and a broken source degrades to a `fallback` slot rather than the browser's broken-image glyph.
+
+<ExampleBlock for="Basic" title="A basic image" />
+
+```tsx
+import { Image } from 'apx-ds';
+
+<Image src="/team.jpg" alt="The team at the 2024 offsite" aspectRatio="16/9" radius="md" />
+```
+
+- **Layout stability** — `aspectRatio` reserves the box before *and* after load, so there's no CLS.
+- **A11y** — `alt` is required at the type level. `alt=""` opts a decorative image out of the accessibility tree, using native `<img>` semantics with no extra ARIA.
+- **Failure path** — on `error`, the `fallback` node replaces the image inside a `role="img"` box that keeps the same classes, ratio and accessible name.
+
+<ExampleBlock for="AspectRatios" title="Ratios reserve the box before load" />
+<ExampleBlock for="RadiusAndShadow" title="Token-mapped radius and elevation" />
+<ExampleBlock for="Fallback" title="A failed source degrades to the fallback slot" />
+
+## Hover treatments
+
+Opt in with `hoverEffect`. Doing so wraps the image in a **frame** element, which is a real change to the rendered DOM — `hoverEffect="none"` (the default) still renders a bare `<img>` and nothing below applies.
+
+### `zoom` — the image moves, the layout doesn't
+
+<ExampleBlock for="HoverZoom" title="A product grid — hover a tile and its neighbours stay put" />
+
+The frame exists precisely so the zoom can be *contained*. Scaling a bare `<img>` grows the element, which pushes every sibling to the right of the cursor sideways — on every hover, in every product grid. Here the frame holds the layout box at a fixed size and the image scales inside it, clipped by `overflow-hidden`. Nothing outside the frame moves, and there is no reflow at all.
+
+`overflow-hidden` is also what keeps the corners honest: without it, a scaled image bleeds square corners past a rounded frame.
+
+The scale is **1.04**, and the number is the design. 1.1 reads as a stock-photo carousel; below about 1.02 nothing registers. 1.04 is the step where the image responds without announcing itself. It runs at `duration.fast` — a micro-interaction, not a reveal, and the two shouldn't share a duration.
+
+### `lift` — the whole tile rises
+
+<ExampleBlock for="HoverLift" title="4px of rise plus an elevation step" />
+
+`lift` moves the frame rather than the image: 4px of travel and one elevation step. The right pick when the image *is* the card; `zoom` is the right pick when it sits inside one.
+
+The hover elevation is `shadow-ambient`, not the plain `shadow-lg`. The default scale is black-alpha, so a lift on a dark band casts a dark shadow onto a dark ground and is invisible; `ambient` tints from `foreground-default` and therefore follows whatever ground it's on. Not `glow` — that tints from the accent and is for a deliberate one-off lift, not for every tile in a grid.
+
+### `hoverSrc` — a second source, fetched on first hover
+
+<ExampleBlock for="HoverSrc" title="The show-the-other-side pattern" />
+
+```tsx
+<Image src="/tee-front.jpg" alt="Heavyweight tee" hoverSrc="/tee-back.jpg" hoverEffect="zoom" />
+```
+
+Two things here are deliberate and both are invisible if you get them wrong:
+
+**It's a cross-fade, not a `src` swap.** Changing the attribute shows the empty frame for however long the second image takes to decode, which reads as a flicker. Two stacked elements fade between two already-decoded frames instead.
+
+**The second source is fetched on the first hover, never on mount.** A grid of 24 products would otherwise double its image payload for an interaction most visitors never perform. Once mounted it stays, so every subsequent hover is an instant fade rather than a fetch. This cost never shows up in a test or a review — only in production — which is why it's the default rather than an option.
+
+The overlay is `aria-hidden` with an empty `alt`: it shows the same subject the primary `alt` already describes, so announcing it twice would just be a duplicate in the accessibility tree.
+
+### Touch and reduced motion
+
+On touch, `:hover` **latches after a tap and never releases** — there's no pointer-leave event to end it, so an unguarded zoom would leave a tapped product card permanently enlarged for the rest of the session.
+
+That's handled globally rather than here: `future.hoverOnlyWhenSupported` in the app's Tailwind config wraps every `hover:` utility in `@media (hover: hover)`. It has to live in the consuming app's config — Tailwind doesn't merge `future` from presets, so the DS can't set it for you. See the `apxTailwindPreset` docblock.
+
+Under `prefers-reduced-motion: reduce` the transitions and transforms are dropped. `lift` keeps its elevation change — the hover still communicates, it just arrives instantly instead of animating.
+
+## API
+
+| Prop          | Type                                          | Default    | Description                                                                             |
+| ------------- | --------------------------------------------- | ---------- | ----------------------------------------------------------------------------------------- |
+| `src`         | `string`                                      | —          | Image source URL.                                                                        |
+| `alt`         | `string`                                      | —          | **Required.** `alt=""` for decorative imagery, which also removes it from the a11y tree. |
+| `aspectRatio` | `string`                                      | —          | e.g. `'16/9'`. Reserves the box before load. Moves to the frame when one is present.     |
+| `fit`         | `'cover' \| 'contain'`                        | `'cover'`  | Object-fit inside the reserved box.                                                      |
+| `radius`      | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| 'full'` | `'none'` | Token-mapped corner radius.                                                          |
+| `shadow`      | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl'`      | `'none'`   | Token-mapped elevation.                                                                  |
+| `fullWidth`   | `boolean`                                     | `true`     | Stretch to the container's width.                                                        |
+| `hoverEffect` | `'none' \| 'zoom' \| 'lift'`                  | `'none'`   | Hover treatment. Anything but `'none'` introduces the frame element.                     |
+| `hoverSrc`    | `string`                                      | —          | Second source, cross-faded in on hover, fetched on first hover.                          |
+| `fallback`    | `ReactNode`                                   | —          | Rendered in place of the image when the source fails, keeping the same box.               |
+| `loading`     | `'lazy' \| 'eager'`                           | `'lazy'`   | Native loading hint.                                                                     |
+| `className` / `style` / `sx` | —                              | —          | Standard escape hatches.                                                                 |
+
+`ref` always points at the `<img>`, framed or not.

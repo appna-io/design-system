@@ -104,6 +104,44 @@ behavior automatically based on viewport size.
 | `default` | Header occupies the main column only; sidebar extends full height | Notion, Mantine, VS Code |
 | `inset`   | Header spans every column; sidebar starts below | GitHub, Linear, Vercel  |
 
+## Header scroll state
+
+<ExampleBlock for="HeaderScroll" title="condense — the header becomes legible once content is behind it" />
+
+```tsx
+<AppShell headerScroll="condense" header={<Brand />}>…</AppShell>
+```
+
+A pinned header that never changes on scroll reads as unfinished on a marketing page: it starts transparent over a hero, and once real content is behind it, it has to become a surface. `condense` gives it a border, a translucent background and a blur past the fold.
+
+The listener lives here rather than in each template. Three templates writing it means three thresholds, three `requestAnimationFrame` loops, and three chances to forget the reduced-motion path.
+
+| value | behaviour |
+| --- | --- |
+| `'none'` | Inert. The **default** — an app shell's header is chrome, and changing it on scroll is a landing-page idiom. |
+| `'condense'` | Border, background and blur once past the fold. The house style for templates. |
+| `'reveal'` | As `condense`, plus hides on scroll down and returns on scroll up. |
+
+### `reveal` is available, and is not the house style
+
+It removes the nav at the exact moment a fast-scrolling user is reaching for it, and it takes away the fixed orientation anchor some users rely on to know where they are. Fine as an option someone opts into; wrong as a default.
+
+Its thresholds are asymmetric on purpose — **96px of committed downward scroll to hide, 8px upward to return**. Hiding should need commitment; showing should feel instant, because scrolling up usually *is* the request for the nav. Travel is measured from where the current run of scrolling began rather than from the previous frame, so a trackpad's jitter or a momentum tail can't flip it.
+
+### Reduced motion
+
+`condense` still runs. It's a *state* change that happens to be animated, and suppressing it would leave the header transparent over content it no longer sits on — a legibility bug, not a courtesy. What a reduced-motion user loses is the transition's smoothness, not the state.
+
+`reveal` does not run, and degrades to `condense`. Chrome that moves itself off-screen is precisely the unrequested motion the preference is about, and a header that stays put is strictly more usable.
+
+### Styling your own content off the state
+
+The header carries `data-scrolled` and `data-hidden`, so a logo that shrinks or a CTA that appears is your CSS hanging off the DS's listener — not a second listener next to it:
+
+```tsx
+<Typography className="text-lg group-data-[scrolled]:text-base">Northwind</Typography>
+```
+
 ## Responsive behavior
 
 - The `sidebarBreakpoint` prop (default `md` = 768px) determines when the inline sidebar

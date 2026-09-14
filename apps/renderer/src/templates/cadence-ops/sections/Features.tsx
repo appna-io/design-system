@@ -1,7 +1,6 @@
 import { Clock, MapPin, Repeat, ShieldCheck, Smartphone, Zap } from '@apx-ui/icons';
-import { Card, Div, Typography } from '@apx-ui/ds';
+import { Card, Div, SectionHeading, Typography } from '@apx-ui/ds';
 
-import { SectionHeading } from '../SectionHeading';
 import { features, featuresSection, type FeatureIcon } from '../data';
 
 /**
@@ -31,11 +30,17 @@ export function Features() {
           body={featuresSection.body}
         />
 
-        <Div as="ul" className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <Div
+          as="ul"
+          stagger={0.07}
+          staggerDelay={0.08}
+          animateOnView
+          className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {features.map((feature) => {
             const Icon = ICONS[feature.icon];
             return (
-              <Div as="li" key={feature.title}>
+              <Div as="li" key={feature.title} animation="riseIn" animationDuration="slow">
                 <Card
                   variant="solid"
                   size="lg"
@@ -46,7 +51,7 @@ export function Features() {
                     iconColor="primary"
                     iconVariant="soft"
                     title={
-                      <Typography as="h3" variant="h4" weight="semibold" className="text-lg">
+                      <Typography as="h3" size="h4" weight="semibold" className="text-lg">
                         {feature.title}
                       </Typography>
                     }

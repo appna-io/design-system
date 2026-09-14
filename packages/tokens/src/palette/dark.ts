@@ -6,10 +6,13 @@ import type { PaletteShape } from '@apx-ui/engine';
  */
 export const darkPalette: PaletteShape = {
   primary: {
-    main: '#6366f1',
-    contrast: '#ffffff',
-    hover: '#818cf8',
-    active: '#a5b4fc',
+    // Converted to the bright-fill / dark-ink pattern the four working roles below already use.
+    // It previously kept the LIGHT palette's white label while the dark ramp brightens on hover —
+    // so the label faded as the button lit up: 4.47 → 2.98 → 1.99:1, invisible by `active`.
+    main: '#818cf8',
+    contrast: '#0b0f2e',
+    hover: '#a5b4fc',
+    active: '#c7d2fe',
     subtle: '#1e1b4b',
     border: '#3730a3',
   },
@@ -38,18 +41,20 @@ export const darkPalette: PaletteShape = {
     border: '#92400e',
   },
   danger: {
-    main: '#ef4444',
-    contrast: '#ffffff',
-    hover: '#f87171',
-    active: '#fca5a5',
+    // Same conversion as `primary` — was 3.76 → 2.77 → 1.90:1 with a white label.
+    main: '#f87171',
+    contrast: '#2b0a0a',
+    hover: '#fca5a5',
+    active: '#fecaca',
     subtle: '#450a0a',
     border: '#991b1b',
   },
   info: {
-    main: '#3b82f6',
-    contrast: '#ffffff',
-    hover: '#60a5fa',
-    active: '#93c5fd',
+    // Same conversion as `primary` — was 3.68 → 2.54 → 1.80:1 with a white label.
+    main: '#60a5fa',
+    contrast: '#08172e',
+    hover: '#93c5fd',
+    active: '#bfdbfe',
     subtle: '#172554',
     border: '#1e40af',
   },
@@ -69,12 +74,35 @@ export const darkPalette: PaletteShape = {
   foreground: {
     default: '#fafafa',
     muted: '#a1a1aa',
-    subtle: '#71717a',
+    /**
+     * Small metadata text — a caption, a footnote, a timestamp.
+     *
+     * Sized down from `muted` rather than lightened from it: the old value (`#71717a` in both
+     * modes) measured 4.40:1 on the light subtle panel and 3.08:1 on the dark one, under the
+     * 4.5:1 body-text floor in exactly the place it is most used. Small text is where a near-miss
+     * is least defensible, so this clears the floor on `background.subtle` — the *lightest* ground
+     * it can land on in light mode and the *darkest* in dark — which means it clears it
+     * everywhere.
+     */
+    subtle: '#94949c',
   },
   border: {
     default: '#3f3f46',
     subtle: '#27272a',
     strong: '#52525b',
+    /**
+     * The edge of an interactive control — an input, a select, a checkbox.
+     *
+     * Separate from `default` because the two have irreconcilable requirements. A control's
+     * boundary is a **non-text UI component** under WCAG 1.4.11 and must clear 3:1, or the user
+     * cannot see where the field is. A card outline is decoration and has no minimum — and at 3:1
+     * it stops reading as a hairline and starts shouting.
+     *
+     * One role cannot be both, which is why `default` measured 1.27:1 in light and 1.91:1 in dark
+     * while being used for both jobs. Raising it would have failed the cards; leaving it failed
+     * the inputs. Splitting the role is the only answer that does not trade one for the other.
+     */
+    control: '#696973',
   },
   overlay: 'rgba(0, 0, 0, 0.7)',
   focusRing: '#818cf8',

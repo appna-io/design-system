@@ -1,0 +1,121 @@
+# Marquee
+
+A continuously scrolling band. The canonical use is a logo ticker under a hero, but it's the same primitive behind category rails, press strips and testimonial ribbons.
+
+<ExampleBlock for="Overview" title="Overview — a slow logo band and a fast, hover-pausing tag rail" />
+
+```tsx
+import { Marquee } from 'apx-ds';
+
+<Marquee speed="slow" gap={16} fade>
+  {brands.map((b) => <BrandLogo key={b.id} {...b} />)}
+</Marquee>
+```
+
+## Why it's a DS component
+
+Every template that has needed a logo band so far has hand-rolled it as a static flex row, because there was nowhere to put the alternative. That's three problems, none of which is about the visual:
+
+- The seamless loop is **arithmetic**, not styling — get the offset wrong by half a gap and the track hitches once per cycle. It should be solved once.
+- The duplicate copy the loop requires is an **accessibility hazard**: done naively it announces every logo twice and drops a second, unreachable set of links into the tab order.
+- The reduced-motion branch is the part that gets skipped, and skipping it is worse here than almost anywhere else — see below.
+
+## How the loop works
+
+The track renders its children **twice** and translates by exactly one copy on a `linear infinite` keyframe. The instant copy A has fully exited, copy B sits pixel-for-pixel where A began, so the restart is invisible.
+
+The animation itself is pure CSS — no `requestAnimationFrame`, no scroll listener, no per-frame layout. A marquee costs the same whether it's onscreen or three sections down.
+
+`linear` is not a stylistic choice: any easing accelerates and decelerates within each cycle, which makes the seam legible as a stutter.
+
+### `speed` is a rate, not a duration
+
+This is the part most marquee implementations get wrong, and it's invisible until you have two of them.
+
+A seconds-per-cycle duration is the intuitive knob and the wrong one. Give a 6-logo band and a 20-logo band the same 40-second cycle and they travel at **visibly different speeds** — the longer track has to cover three times the distance in the same time. Authors then hand-tune a duration per band, and the site's tempo drifts apart.
+
+So `speed` resolves from `ambientMotion.speed` in `@apx-ui/tokens`, which is a scale in **pixels per second**. That quantity is content-independent, so it's the one that can meaningfully be a token: every band on the site moves at the same physical speed no matter how many items it holds.
+
+The component measures its own track and derives the duration:
+
+```
+seconds = (one group's width + the gap after it) ÷ pixels-per-second
+```
+
+Measured, because CSS can't do it: deriving a duration from a distance needs a length ÷ length division, which `calc()` doesn't support. The measurement runs under a `ResizeObserver`, not once on mount — web fonts swap in and reflow the items, images load and change their intrinsic size, and the container itself changes on resize. A one-shot read captures whichever of those hadn't happened yet and leaves the band at the wrong tempo for the rest of the session.
+
+Before the first measurement lands (SSR, first paint) the track falls back to a `50%` translate at the tempo a 1440px band would get. Approximately right, and far better than a band sitting frozen until JS arrives.
+
+## Reduced motion
+
+Under `prefers-reduced-motion: reduce` a Marquee does **not** simply stop animating.
+
+A stopped marquee is a trap. The items past the container edge become unreachable, so the content is strictly worse than if it had never scrolled at all. Instead the component drops the clone and turns the container into a native scroll region — every item stays reachable by wheel, drag and keyboard, and nothing moves on its own.
+
+That's why this branch changes the **markup**, not just a class. `<ExampleBlock for="ReducedMotion" />` below shows both presentations side by side.
+
+<ExampleBlock for="ReducedMotion" title="Both presentations — animated, and the reduced-motion scroll region" />
+
+## Accessibility
+
+- The loop copy carries `inert`, not just `aria-hidden`. The clone's contents are usually links or logos: `aria-hidden` alone leaves them **focusable**, so a keyboard user tabs into a duplicate set of controls that are mid-flight toward the container edge, and the focus ring travels off-screen with them. `inert` removes them from the a11y tree *and* the tab order in one attribute.
+- The root gets no `role`. It's a presentational band; the semantics belong to whatever you put inside it. Pass `as="section"` with an `aria-label` when the band is a landmark in its own right.
+- **The track always pauses on `focus-within`**, regardless of `pauseOnHover`. Tabbing into a link inside a moving band leaves that link travelling out from under the focus ring — and the user it strands is precisely the one who can't chase it with a pointer. Pausing for a pointer is a design choice; pausing for a keyboard isn't, so it isn't gated behind one. It costs nothing on a band with nothing focusable in it, where `focus-within` simply never matches.
+- `pauseOnHover` is off by default, and should stay off for decorative bands — it's a hover *affordance*, and offering one that leads nowhere is worse than offering none. Turn it on when the items are interactive or worth reading.
+
+## API
+
+| Prop            | Type                                          | Default    | Description                                                                                     |
+| --------------- | --------------------------------------------- | ---------- | ----------------------------------------------------------------------------------------------- |
+| `children`      | `ReactNode`                                   | —          | The items to scroll. Rendered twice — once visibly, once as an inert clone.                     |
+| `direction`     | `'left' \| 'right' \| 'up' \| 'down'`         | `'left'`   | Visual travel direction. Not mirrored under RTL — see below.                                    |
+| `speed`         | `'slow' \| 'normal' \| 'fast'`                | `'normal'` | Travel rate from `ambientMotion.speed`: 24 / 36 / 58 px per second.                             |
+| `duration`      | `number`                                      | —          | Seconds per cycle, overriding `speed`. Re-introduces the content coupling `speed` removes — see above. |
+| `pauseOnHover`  | `boolean`                                     | `false`    | Freeze the track while the pointer is over the band. (Focus always pauses — see Accessibility.)  |
+| `repeat`        | `number`                                      | `1`        | Copies of the children within each half of the track. Raise it when the child set is too short to fill the container. |
+| `gap`           | `0 \| 1 \| 2 \| 3 \| 4 \| 6 \| 8 \| 12 \| 16` | `8`        | Spacing step between items.                                                                      |
+| `fade`          | `boolean`                                     | `true`     | Mask the leading and trailing edges so items dissolve rather than clip.                          |
+| `fadeWidth`     | `string`                                      | `'12%'`    | Width of each fade edge.                                                                         |
+| `reduceMotion`  | `boolean`                                     | —          | Force the reduced-motion branch on/off, bypassing the media query. For tests and side-by-side docs. |
+| `as`            | `'div' \| 'section' \| 'aside'`               | `'div'`    | Element rendered for the container.                                                              |
+| `className` / `style` / `sx` | —                                | —          | Standard escape hatches.                                                                         |
+
+## Patterns
+
+### Trust band under a hero
+
+<ExampleBlock for="LogoBand" title="A slow, faded logo band" />
+
+`fade` is what keeps this from reading as a clipped list — logos dissolve at both edges instead of being cut in half by the container.
+
+### Interactive items
+
+<ExampleBlock for="PauseOnHover" title="Quote cards that pause under the cursor" />
+
+### Speeds
+
+<ExampleBlock for="Speeds" title="The three named speeds" />
+
+The named speeds are **not** the `motion.duration` tokens. Those are 150–300**ms** — interaction timings for something that starts, resolves and stops while you watch it. A marquee cycle is 20–60 **seconds**, and resolving `speed="slow"` against a 300ms token gives a strobe. Ambient motion that never resolves is a different quantity and gets its own scale.
+
+<ExampleBlock for="SameRate" title={'Two bands of very different lengths, both at speed="slow"'} />
+
+The two bands above hold different numbers of items and finish their cycles at different times — and travel at exactly the same speed. That's the whole point of the rate model.
+
+### Direction and RTL
+
+<ExampleBlock for="Directions" title="left and right" />
+
+`direction` is the **visual** travel direction and is deliberately not flipped for RTL. A logo ticker is authored motion, not reading order — a designer asking for "logos drifting left" means left on screen in every locale. This matches how `motionPresets.slideInFromLeft` treats its offset. If you genuinely want direction-aware travel, read `useDirection()` and pick the value yourself.
+
+### Short child sets
+
+```tsx
+<Marquee repeat={3}>
+  {threeLogos}
+</Marquee>
+```
+
+The seamless loop needs the track to be at least twice the container's length. Three logos in a wide band won't manage that on their own, and the result is a visible empty stretch. `repeat` renders the children N times as siblings *inside* each group — not as nested groups — so the gap rhythm stays uniform and the two halves stay exactly equal, which is the invariant the seam depends on.
+
+Note that `repeat` does **not** change the speed: it lengthens the track, and the duration is re-derived from the new measurement, so the band still travels at its token rate.
