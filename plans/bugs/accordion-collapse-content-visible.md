@@ -57,6 +57,11 @@ collapse to zero against a padded grid item.
 
 ## Fix
 
+> **Superseded 2026-09-15** by [accordion-toggle-lag.md](./accordion-toggle-lag.md). The
+> `max-h-0 → max-h-screen` cap below hid the band but made open/close lag. The band is now
+> removed at the source: the grid item has no padding (`contentClip`), and the padding sits on
+> the region inside it.
+
 Two-layer wrapper in `Accordion.recipe.ts`:
 
 ```ts

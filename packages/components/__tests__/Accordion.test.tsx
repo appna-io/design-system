@@ -379,14 +379,12 @@ describe('Accordion — content visibility transition state', () => {
     expect(updated[0]).toHaveAttribute('data-state', 'open');
   });
 
-  // Regression for plans/bugs/accordion-collapse-content-visible.md (Ahmad, 2026-05-21).
-  // Closed wrappers must carry the `max-h-0` hard-clip + `overflow-hidden` belt-and-suspenders
-  // alongside the grid-rows trick — without the cap, closed items leaked ~`pb-{size}` of
-  // content under the trigger because `grid-template-rows: 0fr` resolves to the inner's
-  // min-content floor (≥ padding-bottom), not zero. The inner must declare `min-h-0`
-  // + `overflow-hidden` so the grid track is allowed to shrink past that floor and so its
-  // own children are clipped to the (zero-sized) cell during close.
-  it('content wrapper carries the max-h-0 + overflow-hidden hard-clip when closed', () => {
+  // Regressions for plans/bugs/accordion-collapse-content-visible.md (closed items leaked a
+  // `pb-{size}` band) and plans/bugs/accordion-toggle-lag.md (the `max-h` cap that hid that
+  // band made open/close stall). The grid track can only collapse to zero if its grid item
+  // has no padding, so the item is an unpadded clip and the padding sits on the region
+  // inside it. No `max-height` cap.
+  it('content wrapper animates grid rows only — no max-height cap', () => {
     const { container } = render(<ThreeItems />);
     const wrappers = container.querySelectorAll<HTMLDivElement>(
       'div[data-state][class*="grid-rows"]',
@@ -394,19 +392,22 @@ describe('Accordion — content visibility transition state', () => {
     expect(wrappers).toHaveLength(3);
     for (const w of wrappers) {
       expect(w).toHaveAttribute('data-state', 'closed');
-      expect(w.className).toContain('max-h-0');
       expect(w.className).toContain('overflow-hidden');
-      expect(w.className).toContain('data-[state=open]:max-h-screen');
+      expect(w.className).not.toMatch(/max-h-/);
     }
   });
 
-  it('content inner carries min-h-0 + overflow-hidden (regression: pb-N leak)', () => {
+  it('grid item is an unpadded min-h-0 clip, with the padding on the region inside it', () => {
     const { container } = render(<ThreeItems />);
     const innerRegions = container.querySelectorAll<HTMLDivElement>('[role="region"]');
     expect(innerRegions).toHaveLength(3);
     for (const region of innerRegions) {
-      expect(region.className).toContain('min-h-0');
-      expect(region.className).toContain('overflow-hidden');
+      const clip = region.parentElement!;
+      expect(clip.parentElement!.className).toContain('grid-rows');
+      expect(clip.className).toContain('min-h-0');
+      expect(clip.className).toContain('overflow-hidden');
+      expect(clip.className).not.toMatch(/\b(p|px|py|pb|pt)-/);
+      expect(region.className).toMatch(/\bpb-/);
     }
   });
 

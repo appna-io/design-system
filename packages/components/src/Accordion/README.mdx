@@ -19,7 +19,7 @@ Tree views) will reuse:
 1. **Compound state via context.** The root owns the open set; the trigger toggles
    membership; the content reads its own state. Subparts coordinate without prop drilling.
 2. **CSS-grid auto-height transitions.** The open/close animation lives entirely in CSS —
-   `grid-template-rows: 0fr → 1fr` plus `min-h-0` on the inner element. Zero JavaScript
+   `grid-template-rows: 0fr → 1fr` plus an unpadded `min-h-0` grid item. Zero JavaScript
    height measurement, zero ResizeObserver, zero `scrollHeight` reads. Smooth on long
    content, on dynamically-resizing content, and on every modern browser since 2024.
 3. **W3C ARIA accordion pattern.** Each trigger is a real `<button>` with `aria-expanded` +
@@ -183,6 +183,7 @@ defineTheme({
         item: 'border-2',
         trigger: 'rounded-md',
         content: '',
+        contentClip: '',
         contentInner: '',
         chevron: 'text-primary',
       },
@@ -191,4 +192,4 @@ defineTheme({
 });
 ```
 
-Six slot keys: `root`, `item`, `trigger`, `content`, `contentInner`, `chevron`.
+Seven slot keys: `root`, `item`, `trigger`, `content`, `contentClip`, `contentInner`, `chevron`.

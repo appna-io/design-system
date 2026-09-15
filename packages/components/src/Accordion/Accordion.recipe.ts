@@ -1,13 +1,14 @@
 import { cv } from '@apx-ui/engine';
 
 /**
- * Five recipes covering the entire visual surface of `<Accordion>` + its three subparts:
+ * Recipes covering the entire visual surface of `<Accordion>` + its three subparts:
  *
  *  - `root`            — wrapper that groups the items (border / spacing depends on variant).
  *  - `item`            — per-item chrome (border, rounded corners, soft tint, etc).
  *  - `trigger`         — the clickable header button (padding, hover, focus ring).
  *  - `content`         — the animated wrapper using the CSS `grid-rows: 0fr → 1fr` trick.
- *  - `contentInner`    — inner padding container ( `min-h-0` is required for the grid trick).
+ *  - `contentClip`     — the unpadded grid item (`min-h-0 overflow-hidden`) the track collapses.
+ *  - `contentInner`    — the padded `role="region"` inside the clip.
  *  - `chevron`         — caret rotation + size + logical-side ordering.
  *
  * The 4 variants × 7 colors compound matrix lives in `item` only — the trigger/content stay
@@ -16,7 +17,7 @@ import { cv } from '@apx-ui/engine';
  * written out flat for Tailwind's content scanner.
  *
  * The grid-rows trick (`grid grid-rows-[0fr] data-[state=open]:grid-rows-[1fr]` on `content`,
- * paired with `min-h-0` on the inner) is the modern "auto-height transition" pattern. It
+ * paired with an unpadded `min-h-0` grid item) is the modern "auto-height transition" pattern. It
  * doesn't require JS height measurement, supports content that grows asynchronously (image
  * loads, async data), and respects `prefers-reduced-motion` via Tailwind's `motion-reduce`
  * variant on the transition duration.
@@ -107,33 +108,20 @@ export const accordionTriggerRecipe = cv({
 });
 
 /**
- * The animated wrapper. The `grid-template-rows` transition between `0fr` (collapsed) and `1fr`
- * (expanded) is the modern auto-height pattern — no JS measurement, no flicker, supports
- * dynamically-resizing content. The inner element must declare `min-h-0` so the grid track can
- * shrink below the inner's intrinsic min-content height.
+ * The animated wrapper. `grid-template-rows: 0fr → 1fr` is the modern CSS-only auto-height
+ * pattern: the single row track transitions between zero and the content's intrinsic height —
+ * no JS measurement, and content that grows asynchronously (image loads, async data) just works.
  *
- * `motion-reduce:duration-[0.12s]` keeps a brief signal of state change for reduced-motion
- * users (zero-duration snaps are jarring on long lists), per Apple HIG / WAI guidance.
- */
-/**
- * The animated wrapper. We hide collapsed content with a hard `display: grid` + zero-sized
- * row track AND a zero `max-block-size` belt-and-suspenders.
+ * The track can only reach zero if its grid item has no padding or border: a box can't be
+ * shorter than its own padding, so a padded item leaves a `pb-{size}` band showing when closed
+ * (plans/bugs/accordion-collapse-content-visible.md). That's why the grid item is the unpadded
+ * `contentClip` and the padding lives one level further in, on `contentInner`.
  *
- * Why both:
- *
- * 1. `grid-template-rows: 0fr → 1fr` is the modern CSS-only auto-height pattern. The track
- *    transitions between zero and the inner's intrinsic height; no JS measurement, supports
- *    asynchronously growing children. This is what carries the smooth open/close animation.
- * 2. The grid-rows trick on its own is **not enough** to clip closed content in the wild —
- *    the row track resolves to its grid item's `min-content` floor, which (for an item with
- *    block-level padding like `pb-{size}`) is ~16 px, not zero. Even with `min-h-0` and
- *    `overflow-hidden` on the inner, browsers leak the padding band under the trigger
- *    (reproduced by Ahmad against `<Accordion>` Basic example, 2026-05-21).
- * 3. Layering `max-h-0 data-[state=open]:max-h-screen` provides the hard clip: when closed
- *    the wrapper's `max-height: 0` plus `overflow-hidden` guarantees zero visible chrome,
- *    regardless of what the grid layout decides about the row floor. When open the cap is
- *    `100vh` (well above any realistic disclosure content) so the grid-rows transition
- *    drives the animation freely under it.
+ * An earlier fix clipped that band with `max-h-0 → max-h-screen` instead. It hid the band but
+ * made the toggle lag: `max-height` animated over the full viewport height, so on close the
+ * panel stopped at the padding band for roughly half the transition before collapsing, and on
+ * open it did nothing for the first frames and then jumped
+ * (plans/bugs/accordion-toggle-lag.md). Don't reintroduce a `max-height` cap.
  *
  * `motion-reduce:duration-[120ms]` keeps a brief signal of state change for reduced-motion
  * users (zero-duration snaps are jarring on long lists), per Apple HIG / WAI guidance.
@@ -141,29 +129,29 @@ export const accordionTriggerRecipe = cv({
 export const accordionContentRecipe = cv({
   base: [
     'grid grid-rows-[0fr] data-[state=open]:grid-rows-[1fr]',
-    'max-h-0 data-[state=open]:max-h-screen',
-    'transition-[grid-template-rows,max-height] duration-normal ease-standard',
+    'transition-[grid-template-rows] duration-normal ease-standard',
     'motion-reduce:duration-[120ms]',
     'overflow-hidden',
   ].join(' '),
 });
 
 /**
- * The inner element is the grid **item**:
+ * The grid **item**. It must stay free of padding and border (see `accordionContentRecipe`):
  *
- *  - `min-h-0` overrides the default `min-height: auto` that grid items carry, so the grid
- *    track is allowed to shrink past the inner's intrinsic min-content height. Without it,
- *    the grid-rows transition would never reach zero even with the `max-h` cap above —
- *    the row would stay anchored to the inner's `pb-{size}` floor and snap to it on close.
- *  - `overflow-hidden` clips the inner's own children to the (zero-sized) grid cell during
- *    the closing transition. Belt-and-suspenders with the outer's `overflow-hidden`.
- *
- * Treat `min-h-0 overflow-hidden` here, and `max-h-0 …` + `overflow-hidden` on the outer,
- * as a single contract — removing any one re-introduces the `accordion-collapse-content-visible`
- * regression. Reported by Ahmad, 2026-05-21.
+ *  - `min-h-0` overrides the `min-height: auto` grid items get by default, so the track can
+ *    shrink below the content's min-content height.
+ *  - `overflow-hidden` clips the padded region to the shrinking cell while it closes.
+ */
+export const accordionContentClipRecipe = cv({
+  base: 'min-h-0 overflow-hidden',
+});
+
+/**
+ * The padded `role="region"` inside the clip. It takes the consumer's `className` / `sx` /
+ * `style`, so padding overrides land here without affecting the collapse.
  */
 export const accordionContentInnerRecipe = cv({
-  base: 'min-h-0 overflow-hidden text-fg',
+  base: 'text-fg',
   variants: {
     size: {
       sm: 'px-3 pb-3 text-sm',
